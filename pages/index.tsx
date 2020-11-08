@@ -53,7 +53,7 @@ const Home = () => {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <p className={styles.description}>frourio-todo-app</p>
+        <button className="btn-blue">frourio-todo-app</button>
 
         <div>
           <form style={{ textAlign: 'center' }} onSubmit={createTask}>
