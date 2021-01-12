@@ -1,7 +1,8 @@
-import { useState, useCallback, ChangeEvent } from 'react'
+import { useState, useCallback } from 'react'
 import styles from '~/styles/UserBanner.module.css'
 import { apiClient } from '~/utils/apiClient'
-import { UserInfo } from '$/types'
+import type { UserInfo } from '$/types'
+import type { ChangeEvent } from 'react'
 
 const UserBanner = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -14,7 +15,7 @@ const UserBanner = () => {
 
       setUserInfo(
         await apiClient.user.$post({
-          headers: { token },
+          headers: { authorization: token },
           body: { icon: e.target.files[0] }
         })
       )
@@ -30,31 +31,30 @@ const UserBanner = () => {
     let newToken = ''
 
     try {
-      newToken = (await apiClient.token.$post({ body: { id, pass } })).token
+      newToken = `Bearer ${(await apiClient.token.$post({ body: { id, pass } })).token}`
       setToken(newToken)
     } catch (e) {
       return alert('Login failed')
     }
 
-    setUserInfo(await apiClient.user.$get({ headers: { token: newToken } }))
+    setUserInfo(await apiClient.user.$get({ headers: { authorization: newToken } }))
     setIsLoggedIn(true)
   }, [])
 
-  const logout = useCallback(async () => {
-    await apiClient.token.delete({ headers: { token } })
+  const logout = useCallback(() => {
     setToken('')
     setIsLoggedIn(false)
-  }, [token])
+  }, [])
 
   return (
     <div className={styles.userBanner}>
       {isLoggedIn ? (
-        <div>
+        <>
           <img src={userInfo.icon} className={styles.userIcon} />
           <span>{userInfo.name}</span>
           <input type="file" accept="image/*" onChange={editIcon} />
           <button onClick={logout}>LOGOUT</button>
-        </div>
+        </>
       ) : (
         <button onClick={login}>LOGIN</button>
       )}

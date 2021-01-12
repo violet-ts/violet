@@ -1,15 +1,17 @@
 import Head from 'next/head'
-import { useCallback, useState, FormEvent, ChangeEvent } from 'react'
+import { useCallback, useState } from 'react'
 import useAspidaSWR from '@aspida/swr'
 import styles from '~/styles/Home.module.css'
 import { apiClient } from '~/utils/apiClient'
-import { Task } from '$prisma/client'
 import UserBanner from '~/components/UserBanner'
+import type { Task } from '$prisma/client'
+import type { FormEvent, ChangeEvent } from 'react'
 
 const Home = () => {
-  const { data: tasks, error, mutate: setTasks } = useAspidaSWR(apiClient.tasks)
+  const { data: tasks, error, revalidate } = useAspidaSWR(apiClient.tasks)
   const [label, setLabel] = useState('')
-  const inputLavel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
+  const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
+
   const createTask = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
@@ -17,19 +19,19 @@ const Home = () => {
 
       await apiClient.tasks.post({ body: { label } })
       setLabel('')
-      setTasks(await apiClient.tasks.$get())
+      revalidate()
     },
     [label]
   )
 
   const toggleDone = useCallback(async (task: Task) => {
     await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } })
-    setTasks(await apiClient.tasks.$get())
+    revalidate()
   }, [])
 
   const deleteTask = useCallback(async (task: Task) => {
     await apiClient.tasks._taskId(task.id).delete()
-    setTasks(await apiClient.tasks.$get())
+    revalidate()
   }, [])
 
   if (error) return <div>failed to load</div>
@@ -53,7 +55,7 @@ const Home = () => {
 
         <div>
           <form style={{ textAlign: 'center' }} onSubmit={createTask}>
-            <input value={label} type="text" onChange={inputLavel} />
+            <input value={label} type="text" onChange={inputLabel} />
             <input type="submit" value="ADD" />
           </form>
           <ul className={styles.tasks}>
