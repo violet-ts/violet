@@ -9,11 +9,7 @@ import UserBanner from '~/components/UserBanner'
 const Home = () => {
   const { data: tasks, error, mutate: setTasks } = useAspidaSWR(apiClient.tasks)
   const [label, setLabel] = useState('')
-  const inputLavel = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value),
-    []
-  )
-
+  const inputLavel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const createTask = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
@@ -61,14 +57,10 @@ const Home = () => {
             <input type="submit" value="ADD" />
           </form>
           <ul className={styles.tasks}>
-            {tasks.map((task) => (
+            {tasks.map(task => (
               <li key={task.id}>
                 <label>
-                  <input
-                    type="checkbox"
-                    checked={task.done}
-                    onChange={() => toggleDone(task)}
-                  />
+                  <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
                   <span>{task.label}</span>
                 </label>
                 <input
@@ -89,8 +81,7 @@ const Home = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
+          Powered by <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
       </footer>
     </div>
