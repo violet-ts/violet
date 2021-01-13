@@ -30,6 +30,9 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# client
+utils/$path.ts
+
 # server
 server/**/$*.ts
 server/**/*.db

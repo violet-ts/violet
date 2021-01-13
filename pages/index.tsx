@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react'
 import useAspidaSWR from '@aspida/swr'
 import styles from '~/styles/Home.module.css'
 import { apiClient } from '~/utils/apiClient'
+import { staticPath } from '~/utils/$path'
 import UserBanner from '~/components/UserBanner'
 import type { Task } from '$prisma/client'
 import type { FormEvent, ChangeEvent } from 'react'
@@ -41,7 +42,7 @@ const Home = () => {
     <div className={styles.container}>
       <Head>
         <title>frourio-todo-app</title>
-        <link rel="icon" href="/favicon.png" />
+        <link rel="icon" href={staticPath.favicon_png} />
       </Head>
 
       <main className={styles.main}>
@@ -83,7 +84,7 @@ const Home = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
+          Powered by <img src={staticPath.vercel_svg} alt="Vercel Logo" className={styles.logo} />
         </a>
       </footer>
     </div>
