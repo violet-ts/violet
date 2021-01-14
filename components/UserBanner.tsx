@@ -1,62 +1,38 @@
-import { useState, useCallback } from 'react'
+import { useCallback, useContext } from 'react'
+import firebase from 'firebase/app'
 import styles from '~/styles/UserBanner.module.css'
-import { apiClient } from '~/utils/apiClient'
-import type { UserInfo } from '$/types'
-import type { ChangeEvent } from 'react'
+import { AuthContext } from '~/contexts/Auth'
 
 const UserBanner = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [token, setToken] = useState('')
-  const [userInfo, setUserInfo] = useState({} as UserInfo)
+  const { currentUser } = useContext(AuthContext)
 
-  const editIcon = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files?.length) return
+  const googleLogin = useCallback(async () => {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    firebase.auth().signInWithRedirect(provider)
+  }, [])
 
-      setUserInfo(
-        await apiClient.user.$post({
-          headers: { authorization: token },
-          body: { icon: e.target.files[0] }
-        })
-      )
-    },
-    [token]
-  )
-
-  const login = useCallback(async () => {
-    const id = prompt('Enter the user id (See server/.env)')
-    const pass = prompt('Enter the user pass (See server/.env)')
-    if (!id || !pass) return alert('Login failed')
-
-    let newToken = ''
-
-    try {
-      newToken = `Bearer ${(await apiClient.token.$post({ body: { id, pass } })).token}`
-      setToken(newToken)
-    } catch (e) {
-      return alert('Login failed')
-    }
-
-    setUserInfo(await apiClient.user.$get({ headers: { authorization: newToken } }))
-    setIsLoggedIn(true)
+  const githubLogin = useCallback(async () => {
+    const provider = new firebase.auth.GithubAuthProvider()
+    firebase.auth().signInWithRedirect(provider)
   }, [])
 
   const logout = useCallback(() => {
-    setToken('')
-    setIsLoggedIn(false)
+    firebase.auth().signOut()
   }, [])
 
   return (
     <div className={styles.userBanner}>
-      {isLoggedIn ? (
+      {currentUser ? (
         <>
-          <img src={userInfo.icon} className={styles.userIcon} />
-          <span>{userInfo.name}</span>
-          <input type="file" accept="image/*" onChange={editIcon} />
+          <img src={currentUser.photoURL ?? ''} className={styles.userIcon} />
+          <span>{currentUser.displayName}</span>
           <button onClick={logout}>LOGOUT</button>
         </>
       ) : (
-        <button onClick={login}>LOGIN</button>
+        <>
+          <button onClick={googleLogin}>Google LOGIN</button>
+          <button onClick={githubLogin}>GitHub LOGIN</button>
+        </>
       )}
     </div>
   )

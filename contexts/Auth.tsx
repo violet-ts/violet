@@ -2,7 +2,7 @@ import Firebase from 'firebase/app'
 import 'firebase/auth'
 import { FC, createContext, useEffect, useState } from 'react'
 
-if (Firebase.apps.length === 0) {
+if (!Firebase.apps.length) {
   Firebase.initializeApp({
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
