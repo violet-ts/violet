@@ -46,7 +46,7 @@ describe('Home page', () => {
     expect(asFragment()).toMatchSnapshot()
   })
 
-  it('clicking button triggers prompt', async () => {
+  it.skip('clicking button triggers prompt', async () => {
     const { container, getByText } = render(<Home />, {})
 
     await waitForDomChange({ container: container as HTMLElement })

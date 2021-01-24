@@ -12,7 +12,10 @@ exports[`Home page matches snapshot 1`] = `
         class="userBanner"
       >
         <button>
-          LOGIN
+          Google LOGIN
+        </button>
+        <button>
+          GitHub LOGIN
         </button>
       </div>
       <h1
