@@ -1,0 +1,16 @@
+
+version: '3'
+services:
+  mysql:
+    image: mysql:8
+    restart: always
+    ports:
+      - 3306:3306
+    env_file:
+     - ./server/.env
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./server/prisma/my.cnf:/etc/mysql/conf.d/my.cnf
+volumes:
+  mysql_data:
+    driver: local
