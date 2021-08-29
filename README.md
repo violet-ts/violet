@@ -14,7 +14,18 @@ $ npm install -g firebase-tools
 $ firebase login:ci
 ```
 
-Write FIREBASE_TOKEN to `server/.env`
+Input your values to `server/.env`
+
+```sh
+FIREBASE_TOKEN=1/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+FIREBASE_API_KEY=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+FIREBASE_AUTH_DOMAIN=AAAA.firebaseapp.com
+FIREBASE_DATABASE_URL=https://AAAA.firebaseio.com
+FIREBASE_PROJECT_ID=AAAA
+FIREBASE_STORAGE_BUCKET=AAAA.appspot.com
+FIREBASE_MESSEGING_SENDER_ID=999999999999
+FIREBASE_APP_ID=1:999999999999:web:AAAAAAAAAAAAAAAAAAAAAAA
+```
 
 Install node modules:
 
@@ -42,7 +53,7 @@ $ docker-compose up -d
 
 ### login to MySQL
 ```sh
-$ docker-compose exec mysql bash -c "mysql -u user -ppass"
+$ docker-compose exec mysql bash -c "mysql -u root -proot"
 ```
 
 ### get FIREBASE_TOKEN from inside container

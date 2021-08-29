@@ -1,6 +1,7 @@
 require('dotenv').config({ path: 'server/.env' })
 
 const {
+  NODE_ENV,
   FIREBASE_API_KEY,
   FIREBASE_AUTH_DOMAIN,
   FIREBASE_DATABASE_URL,
@@ -12,6 +13,7 @@ const {
 
 module.exports = {
   env: {
+    IS_PRODUCTION: NODE_ENV === 'production',
     FIREBASE_API_KEY,
     FIREBASE_AUTH_DOMAIN,
     FIREBASE_DATABASE_URL,

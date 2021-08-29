@@ -22,7 +22,14 @@ const AuthProvider: FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<Firebase.User | null>(null)
 
   useEffect(() => {
-    Firebase.auth().onAuthStateChanged(user => {
+    const auth = Firebase.auth()
+
+    if (!process.env.IS_PRODUCTION) {
+      // @ts-expect-error hide footer warning
+      auth.useEmulator('http://localhost:9099', { disableWarnings: true })
+    }
+
+    auth.onAuthStateChanged(user => {
       setCurrentUser(user)
     })
   }, [])
