@@ -1,6 +1,6 @@
-import { depend } from 'velona'
+import type { Prisma, Task } from '$prisma/client'
 import { PrismaClient } from '@prisma/client'
-import type { Task, Prisma } from '$prisma/client'
+import { depend } from 'velona'
 
 const prisma = new PrismaClient()
 

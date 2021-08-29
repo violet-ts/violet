@@ -1,19 +1,16 @@
-import React from 'react'
-import { cache } from 'swr'
+import aspida from '@aspida/axios'
 import dotenv from 'dotenv'
 import Fastify, { FastifyInstance } from 'fastify'
 import cors from 'fastify-cors'
-import aspida from '@aspida/axios'
-import api from '~/server/api/$api'
+import React from 'react'
 import Home from '~/pages/index'
-import { render, fireEvent, waitForDomChange } from '../testUtils'
+import api from '~/server/api/$api'
+import { fireEvent, render } from '../testUtils'
 
 dotenv.config({ path: 'server/.env' })
 
 const apiClient = api(aspida(undefined, { baseURL: process.env.BASE_PATH }))
-const res = function <T extends () => any>(
-  data: ReturnType<T> extends Promise<infer S> ? S : never
-) {
+const res = function <T>(data: T extends () => Promise<infer S> ? S : never) {
   return data
 }
 
@@ -26,7 +23,7 @@ beforeAll(() => {
     reply.send(
       res<typeof apiClient.tasks.$get>([
         { id: 1, label: 'foo task', done: false },
-        { id: 2, label: 'bar task', done: true }
+        { id: 2, label: 'bar task', done: true },
       ])
     )
   })
@@ -34,27 +31,23 @@ beforeAll(() => {
   return fastify.listen(process.env.SERVER_PORT ?? 8080)
 })
 
-afterEach(() => cache.clear())
 afterAll(() => fastify.close())
 
 describe('Home page', () => {
   it('matches snapshot', async () => {
-    const { container, asFragment } = render(<Home />, {})
+    const { asFragment, findByText } = render(<Home />, {})
 
-    await waitForDomChange({ container: container as HTMLElement })
-
+    await findByText('foo task')
     expect(asFragment()).toMatchSnapshot()
   })
 
   it.skip('clicking button triggers prompt', async () => {
-    const { container, getByText } = render(<Home />, {})
-
-    await waitForDomChange({ container: container as HTMLElement })
+    const { findByText } = render(<Home />, {})
 
     window.prompt = jest.fn()
     window.alert = jest.fn()
-    fireEvent.click(getByText('LOGIN'))
 
+    fireEvent.click(await findByText('LOGIN'))
     expect(window.prompt).toHaveBeenCalledWith('Enter the user id (See server/.env)')
     expect(window.alert).toHaveBeenCalledWith('Login failed')
   })

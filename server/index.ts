@@ -1,11 +1,11 @@
-import path from 'path'
 import Fastify from 'fastify'
-import helmet from 'fastify-helmet'
 import cors from 'fastify-cors'
-import fastifyStatic from 'fastify-static'
+import helmet from 'fastify-helmet'
 import fastifyJwt from 'fastify-jwt'
-import { JWT_SECRET, SERVER_PORT, BASE_PATH } from './service/envValues'
+import fastifyStatic from 'fastify-static'
+import path from 'path'
 import server from './$server'
+import { BASE_PATH, JWT_SECRET, SERVER_PORT } from './service/envValues'
 
 const fastify = Fastify()
 
@@ -13,7 +13,7 @@ fastify.register(helmet)
 fastify.register(cors)
 fastify.register(fastifyStatic, {
   root: path.join(__dirname, 'public'),
-  prefix: BASE_PATH
+  prefix: BASE_PATH,
 })
 fastify.register(fastifyJwt, { secret: JWT_SECRET })
 

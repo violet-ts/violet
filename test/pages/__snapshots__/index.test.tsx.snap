@@ -3,13 +3,13 @@
 exports[`Home page matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="container"
+    class="Container-sc-123l0y5-0 iTnsdl"
   >
     <main
-      class="main"
+      class="StyledMain-sc-123l0y5-1 gvlsnY"
     >
       <div
-        class="userBanner"
+        class="Container-sc-1yajn28-0 bpZyLS"
       >
         <button>
           Google LOGIN
@@ -19,7 +19,7 @@ exports[`Home page matches snapshot 1`] = `
         </button>
       </div>
       <h1
-        class="title"
+        class="Title-sc-123l0y5-2 gEowef"
       >
         Welcome to 
         <a
@@ -29,7 +29,7 @@ exports[`Home page matches snapshot 1`] = `
         </a>
       </h1>
       <button
-        class="btn-blue"
+        class="StyledBtn-sc-123l0y5-3 bykqSJ"
       >
         frourio-todo-app
       </button>
@@ -47,7 +47,7 @@ exports[`Home page matches snapshot 1`] = `
           />
         </form>
         <ul
-          class="tasks"
+          class="Tasks-sc-123l0y5-4 kbgAXU"
         >
           <li>
             <label>
@@ -59,7 +59,7 @@ exports[`Home page matches snapshot 1`] = `
               </span>
             </label>
             <input
-              style="float: right;"
+              class="StyledInput-sc-123l0y5-5 cJYjcM"
               type="button"
               value="DELETE"
             />
@@ -75,7 +75,7 @@ exports[`Home page matches snapshot 1`] = `
               </span>
             </label>
             <input
-              style="float: right;"
+              class="StyledInput-sc-123l0y5-5 cJYjcM"
               type="button"
               value="DELETE"
             />
@@ -84,7 +84,7 @@ exports[`Home page matches snapshot 1`] = `
       </div>
     </main>
     <footer
-      class="footer"
+      class="StyledFooter-sc-123l0y5-6 eUeEgm"
     >
       <a
         href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -94,7 +94,7 @@ exports[`Home page matches snapshot 1`] = `
         Powered by 
         <img
           alt="Vercel Logo"
-          class="logo"
+          class="Logo-sc-123l0y5-7 jJGxUu"
           src="/vercel.svg"
         />
       </a>

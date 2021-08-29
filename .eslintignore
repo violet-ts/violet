@@ -5,3 +5,4 @@ out
 firebase
 server/migration
 server/index.js
+$*.ts

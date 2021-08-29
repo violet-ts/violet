@@ -1,6 +1,6 @@
 import Firebase from 'firebase/app'
 import 'firebase/auth'
-import { FC, createContext, useEffect, useState } from 'react'
+import { createContext, FC, useEffect, useState } from 'react'
 
 if (!Firebase.apps.length) {
   Firebase.initializeApp({
@@ -9,12 +9,12 @@ if (!Firebase.apps.length) {
     projectId: process.env.FIREBASE_PROJECT_ID,
     storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
     messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.FIREBASE_APP_ID
+    appId: process.env.FIREBASE_APP_ID,
   })
 }
 
 const AuthContext = createContext<{ currentUser: Firebase.User | null }>({
-  currentUser: null
+  currentUser: null,
 })
 
 const AuthProvider: FC = ({ children }) => {
@@ -28,7 +28,7 @@ const AuthProvider: FC = ({ children }) => {
       auth.useEmulator('http://localhost:9099', { disableWarnings: true })
     }
 
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged((user) => {
       setCurrentUser(user)
     })
   }, [])

@@ -5,36 +5,41 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:prettier/recommended',
-    'prettier/@typescript-eslint'
+    'prettier',
   ],
   plugins: ['@typescript-eslint', 'react'],
   parser: '@typescript-eslint/parser',
   env: {
     browser: true,
     node: true,
-    es6: true
+    es6: true,
   },
   settings: {
     react: {
-      version: 'detect'
-    }
+      version: 'detect',
+    },
   },
   parserOptions: {
     sourceType: 'module',
     ecmaFeatures: {
-      jsx: true
-    }
+      jsx: true,
+    },
   },
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': [2, { ignore: ['children'] }],
-    '@typescript-eslint/explicit-module-boundary-types': 'off'
+    complexity: ['error', 5],
+    'max-depth': ['error', 1],
+    'max-nested-callbacks': ['error', 2],
+    'max-lines': ['error', 200],
+    'prefer-template': 'error',
+    'import/order': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
   },
   overrides: [
     {
       files: ['*.js'],
-      rules: { '@typescript-eslint/no-var-requires': ['off'] }
-    }
-  ]
+      rules: { '@typescript-eslint/no-var-requires': ['off'] },
+    },
+  ],
 }

@@ -1,6 +1,6 @@
+import { Multipart } from 'fastify-multipart'
 import fs from 'fs'
 import path from 'path'
-import { Multipart } from 'fastify-multipart'
 import { API_ORIGIN, BASE_PATH, USER_ID, USER_PASS } from './envValues'
 
 const iconsDir = 'public/icons'
@@ -10,9 +10,9 @@ const userInfo = {
   icon: createIconURL(
     fs
       .readdirSync(path.resolve(iconsDir))
-      .filter(n => n !== 'dummy.svg')
+      .filter((n) => n !== 'dummy.svg')
       .pop() ?? 'dummy.svg'
-  )
+  ),
 }
 
 export const validateUser = (id: string, pass: string) => id === USER_ID && pass === USER_PASS
