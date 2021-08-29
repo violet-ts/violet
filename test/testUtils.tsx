@@ -2,7 +2,6 @@ import { render } from '@testing-library/react'
 import React from 'react'
 import { SWRConfig } from 'swr'
 
-// eslint-disable-next-line react/prop-types
 const Providers: React.FC = ({ children }) => (
   <SWRConfig value={{ dedupingInterval: 0 }}>{children}</SWRConfig>
 )
