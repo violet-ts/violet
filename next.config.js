@@ -20,4 +20,5 @@ module.exports = {
     FIREBASE_MESSEGING_SENDER_ID,
     FIREBASE_APP_ID,
   },
+  pageExtensions: ['page.tsx'],
 }

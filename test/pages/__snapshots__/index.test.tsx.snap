@@ -3,13 +3,13 @@
 exports[`Home page matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="Container-sc-123l0y5-0 iTnsdl"
+    class="Container-sc-43yzvd-0 dkQagz"
   >
     <main
-      class="StyledMain-sc-123l0y5-1 gvlsnY"
+      class="StyledMain-sc-43yzvd-1 okrpK"
     >
       <div
-        class="Container-sc-i07ig9-0 fyDghc"
+        class="Container-sc-o2zdss-0 hgsMPa"
       >
         <button>
           Google LOGIN
@@ -19,7 +19,7 @@ exports[`Home page matches snapshot 1`] = `
         </button>
       </div>
       <h1
-        class="Title-sc-123l0y5-2 gEowef"
+        class="Title-sc-43yzvd-2 eJRhzF"
       >
         Welcome to 
         <a
@@ -46,7 +46,7 @@ exports[`Home page matches snapshot 1`] = `
           />
         </form>
         <ul
-          class="Tasks-sc-123l0y5-3 fReAbH"
+          class="Tasks-sc-43yzvd-3 dbfABN"
         >
           <li>
             <label>
@@ -58,7 +58,7 @@ exports[`Home page matches snapshot 1`] = `
               </span>
             </label>
             <input
-              class="StyledInput-sc-123l0y5-4 fvymzl"
+              class="StyledInput-sc-43yzvd-4 dJjLOz"
               type="button"
               value="DELETE"
             />
@@ -78,7 +78,7 @@ exports[`Home page matches snapshot 1`] = `
               </span>
             </label>
             <input
-              class="StyledInput-sc-123l0y5-4 fvymzl"
+              class="StyledInput-sc-43yzvd-4 dJjLOz"
               type="button"
               value="DELETE"
             />
@@ -87,7 +87,7 @@ exports[`Home page matches snapshot 1`] = `
       </div>
     </main>
     <footer
-      class="StyledFooter-sc-123l0y5-5 jKxaON"
+      class="StyledFooter-sc-43yzvd-5 lojTXT"
     >
       <a
         href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -97,7 +97,7 @@ exports[`Home page matches snapshot 1`] = `
         Powered by 
         <img
           alt="Vercel Logo"
-          class="Logo-sc-123l0y5-6 EJYBH"
+          class="Logo-sc-43yzvd-6 brCmQJ"
           src="/vercel.svg"
         />
       </a>

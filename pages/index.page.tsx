@@ -2,12 +2,12 @@ import type { Task } from '$prisma/client'
 import useAspidaSWR from '@aspida/swr'
 import Head from 'next/head'
 import type { ChangeEvent, FormEvent } from 'react'
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
-import UserBanner from '~/components/pages/index/UserBanner'
 import { staticPath } from '~/utils/$path'
 import { apiClient } from '~/utils/apiClient'
+import UserBanner from './components/UserBanner'
 
 const Container = styled.div`
   min-height: 100vh;
@@ -131,16 +131,16 @@ const Home = () => {
           </form>
           <Tasks>
             {tasks.map((task, i) => (
-              <>
+              <React.Fragment key={task.id}>
                 {i > 0 && <Spacer axis="y" size={12} />}
-                <li key={task.id}>
+                <li>
                   <label>
                     <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
                     <span>{task.label}</span>
                   </label>
                   <StyledInput type="button" value="DELETE" onClick={() => deleteTask(task)} />
                 </li>
-              </>
+              </React.Fragment>
             ))}
           </Tasks>
         </div>

@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import Fastify, { FastifyInstance } from 'fastify'
 import cors from 'fastify-cors'
 import React from 'react'
-import Home from '~/pages/index'
+import Home from '~/pages/index.page'
 import api from '~/server/api/$api'
 import { fireEvent, render } from '../testUtils'
 
