@@ -41,3 +41,7 @@ server/database.json
 server/.upload
 server/public/icons/*
 !server/public/icons/dammy.svg
+
+# firebase
+firebase-debug.log
+firebase/config/
