@@ -1,5 +1,5 @@
-
 version: '3'
+
 services:
   mysql:
     image: mysql:8
@@ -11,6 +11,22 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./server/prisma/my.cnf:/etc/mysql/conf.d/my.cnf
+  firebase:
+    build:
+      context: ./firebase
+      dockerfile: Dockerfile
+    volumes:
+      - ./firebase/emulators:/opt/workspace:cached
+      - ./firebase/bin/:/root/.cache:cached
+      - ./firebase/config/:/root/.config:cached
+    ports:
+      - 9099:9099 # Auth
+      - 4000:4000 # Emulator Suite UI
+    env_file:
+     - ./server/.env
+    working_dir: /opt/workspace
+    command: firebase emulators:start
+
 volumes:
   mysql_data:
     driver: local

@@ -2,5 +2,6 @@ node_modules
 .next
 dist
 out
+firebase
 server/migration
 server/index.js
