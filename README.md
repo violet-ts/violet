@@ -14,6 +14,25 @@ $ npm install -g firebase-tools
 $ firebase login:ci
 ```
 
+※ firebase login:ciが失敗した場合
+```sh
+$ yarn add firebase-tools --dev
+```
+package.jsonのScriptキーに以下を追加  
+※すでに記述されている場合は不要
+```
+script: {
+　　...
+　　"login:firebase": "firebase login:ci"
+}
+```
+Get FIREBASE_TOKEN
+```sh
+$ yarn login:firebase
+```
+自分のgoogleアカウントでログインしてターミナルに表示されているトークンをコピー
+
+
 Input your values to `server/.env`
 
 ```sh
@@ -25,6 +44,18 @@ FIREBASE_PROJECT_ID=AAAA
 FIREBASE_STORAGE_BUCKET=AAAA.appspot.com
 FIREBASE_MESSEGING_SENDER_ID=999999999999
 FIREBASE_APP_ID=1:999999999999:web:AAAAAAAAAAAAAAAAAAAAAAA
+```
+
+上記の値に対してfirebaseのアプリ作成時に表示されていたfirebase configの値を当てめていく
+```sh
+FIREBASE_TOKEN={自分のgoogleアカウントでログインしてターミナルに表示されていたトークン}
+FIREBASE_API_KEY={apiKey}
+FIREBASE_AUTH_DOMAIN={authDomain}
+FIREBASE_DATABASE_URL=https://{projectId}.firebaseio.com
+FIREBASE_PROJECT_ID={projectId}
+FIREBASE_STORAGE_BUCKET={storageBucket}
+FIREBASE_MESSEGING_SENDER_ID={messagingSenderId}
+FIREBASE_APP_ID={appId}
 ```
 
 Install node modules:
