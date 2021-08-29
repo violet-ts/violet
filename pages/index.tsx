@@ -4,7 +4,8 @@ import Head from 'next/head'
 import type { ChangeEvent, FormEvent } from 'react'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import UserBanner from '~/components/UserBanner'
+import { Spacer } from '~/components/atoms/Spacer'
+import UserBanner from '~/components/pages/index/UserBanner'
 import { staticPath } from '~/utils/$path'
 import { apiClient } from '~/utils/apiClient'
 
@@ -43,12 +44,6 @@ const Title = styled.h1`
   }
 `
 
-const StyledBtn = styled.button`
-  color: #fff;
-  background: #00f;
-  border: none;
-`
-
 const Tasks = styled.ul`
   width: 300px;
   padding: 0;
@@ -57,7 +52,6 @@ const Tasks = styled.ul`
   text-align: left;
 
   > li {
-    margin-top: 10px;
     border-bottom: 1px solid #eee;
   }
 `
@@ -129,23 +123,24 @@ const Home = () => {
         <Title>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </Title>
-
-        <StyledBtn>frourio-todo-app</StyledBtn>
-
+        <Spacer axis="y" size={16} />
         <div>
           <form style={{ textAlign: 'center' }} onSubmit={createTask}>
             <input value={label} type="text" onChange={inputLabel} />
             <input type="submit" value="ADD" />
           </form>
           <Tasks>
-            {tasks.map((task) => (
-              <li key={task.id}>
-                <label>
-                  <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
-                  <span>{task.label}</span>
-                </label>
-                <StyledInput type="button" value="DELETE" onClick={() => deleteTask(task)} />
-              </li>
+            {tasks.map((task, i) => (
+              <>
+                {i > 0 && <Spacer axis="y" size={12} />}
+                <li key={task.id}>
+                  <label>
+                    <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
+                    <span>{task.label}</span>
+                  </label>
+                  <StyledInput type="button" value="DELETE" onClick={() => deleteTask(task)} />
+                </li>
+              </>
             ))}
           </Tasks>
         </div>
