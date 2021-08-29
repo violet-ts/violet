@@ -9,7 +9,7 @@ import type { Task } from '$prisma/client'
 import type { FormEvent, ChangeEvent } from 'react'
 
 const Home = () => {
-  const { data: tasks, error, revalidate } = useAspidaSWR(apiClient.tasks)
+  const { data: tasks, error, mutate } = useAspidaSWR(apiClient.tasks)
   const [label, setLabel] = useState('')
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
 
@@ -20,19 +20,19 @@ const Home = () => {
 
       await apiClient.tasks.post({ body: { label } })
       setLabel('')
-      revalidate()
+      mutate()
     },
     [label]
   )
 
   const toggleDone = useCallback(async (task: Task) => {
     await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } })
-    revalidate()
+    mutate()
   }, [])
 
   const deleteTask = useCallback(async (task: Task) => {
     await apiClient.tasks._taskId(task.id).delete()
-    revalidate()
+    mutate()
   }, [])
 
   if (error) return <div>failed to load</div>
