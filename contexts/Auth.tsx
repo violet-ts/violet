@@ -1,9 +1,9 @@
-import Firebase from 'firebase/app'
-import 'firebase/auth'
+import { getApps, initializeApp } from 'firebase/app'
+import { connectAuthEmulator, getAuth, User } from 'firebase/auth'
 import { createContext, FC, useEffect, useState } from 'react'
 
-if (!Firebase.apps.length) {
-  Firebase.initializeApp({
+if (!getApps().length) {
+  initializeApp({
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
     projectId: process.env.FIREBASE_PROJECT_ID,
@@ -13,19 +13,18 @@ if (!Firebase.apps.length) {
   })
 }
 
-const AuthContext = createContext<{ currentUser: Firebase.User | null }>({
+const AuthContext = createContext<{ currentUser: User | null }>({
   currentUser: null,
 })
 
 const AuthProvider: FC = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<Firebase.User | null>(null)
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
 
   useEffect(() => {
-    const auth = Firebase.auth()
+    const auth = getAuth()
 
     if (!process.env.IS_PRODUCTION) {
-      // @ts-expect-error hide footer warning
-      auth.useEmulator('http://localhost:9099', { disableWarnings: true })
+      connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
     }
 
     auth.onAuthStateChanged((user) => {

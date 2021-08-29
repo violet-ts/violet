@@ -1,4 +1,10 @@
-import firebase from 'firebase/app'
+import {
+  getAuth,
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  signOut,
+} from 'firebase/auth'
 import { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { AuthContext } from '~/contexts/Auth'
@@ -20,18 +26,18 @@ const Icon = styled.img`
 const UserBanner = () => {
   const { currentUser } = useContext(AuthContext)
 
-  const googleLogin = useCallback(async () => {
-    const provider = new firebase.auth.GoogleAuthProvider()
-    firebase.auth().signInWithRedirect(provider)
+  const googleLogin = useCallback(() => {
+    const provider = new GoogleAuthProvider()
+    signInWithRedirect(getAuth(), provider)
   }, [])
 
   const githubLogin = useCallback(async () => {
-    const provider = new firebase.auth.GithubAuthProvider()
-    firebase.auth().signInWithRedirect(provider)
+    const provider = new GithubAuthProvider()
+    signInWithRedirect(getAuth(), provider)
   }, [])
 
   const logout = useCallback(() => {
-    firebase.auth().signOut()
+    signOut(getAuth())
   }, [])
 
   return (
