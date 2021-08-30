@@ -13,11 +13,11 @@ if (!getApps().length) {
   })
 }
 
-const AuthContext = createContext<{ currentUser: User | null }>({
+export const AuthContext = createContext<{ currentUser: User | null }>({
   currentUser: null,
 })
 
-const AuthProvider: FC = ({ children }) => {
+export const AuthProvider: FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
 
   useEffect(() => {
@@ -34,5 +34,3 @@ const AuthProvider: FC = ({ children }) => {
 
   return <AuthContext.Provider value={{ currentUser }}>{children}</AuthContext.Provider>
 }
-
-export { AuthContext, AuthProvider }

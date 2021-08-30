@@ -1,4 +1,4 @@
-import aspida from '@aspida/axios'
+import aspida from '@aspida/fetch'
 import dotenv from 'dotenv'
 import Fastify, { FastifyInstance } from 'fastify'
 import cors from 'fastify-cors'

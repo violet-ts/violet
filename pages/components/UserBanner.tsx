@@ -23,7 +23,7 @@ const Icon = styled.img`
   vertical-align: bottom;
 `
 
-const UserBanner = () => {
+export const UserBanner = () => {
   const { currentUser } = useContext(AuthContext)
 
   const googleLogin = useCallback(() => {
@@ -57,5 +57,3 @@ const UserBanner = () => {
     </Container>
   )
 }
-
-export default UserBanner

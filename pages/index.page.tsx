@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
 import { staticPath } from '~/utils/$path'
 import { apiClient } from '~/utils/apiClient'
-import UserBanner from './components/UserBanner'
+import { UserBanner } from './components/UserBanner'
 
 const Container = styled.div`
   min-height: 100vh;

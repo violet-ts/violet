@@ -6,6 +6,7 @@ const config: { projects: Config.InitialOptions[] } = {
   projects: [
     {
       testPathIgnorePatterns: ['<rootDir>/server'],
+      setupFiles: ['./test/setup.js'],
       testEnvironment: 'jsdom',
       transform: {
         '^.+\\.tsx$': 'babel-jest',
