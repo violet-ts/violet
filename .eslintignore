@@ -2,7 +2,7 @@ node_modules
 .next
 dist
 out
-firebase
+docker
 server/migration
 server/index.js
 $*.ts

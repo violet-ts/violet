@@ -7,25 +7,41 @@ services:
     ports:
       - 3306:3306
     env_file:
-     - ./server/.env
+      - ./server/.env
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./server/prisma/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+
   firebase:
     build:
-      context: ./firebase
+      context: ./docker/firebase
       dockerfile: Dockerfile
+    restart: always
     volumes:
-      - ./firebase/emulators:/opt/workspace:cached
-      - ./firebase/bin/:/root/.cache:cached
-      - ./firebase/config/:/root/.config:cached
+      - ./docker/firebase:/opt/workspace:cached
     ports:
       - 9099:9099 # Auth
       - 4000:4000 # Emulator Suite UI
     env_file:
-     - ./server/.env
+      - ./server/.env
     working_dir: /opt/workspace
     command: firebase emulators:start
+
+  minio:
+    image: minio/minio
+    restart: always
+    ports:
+      - 9000:9000 # Storage
+      - 9001:9001 # Console
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./docker/minio/data:/data
+      - ./docker/minio/policies:/policies
+    entrypoint: sh
+    command: >
+      -c "cp -r /policies/* /data/.minio.sys/;
+      /usr/bin/minio server /data --console-address :9001;"
 
 volumes:
   mysql_data:

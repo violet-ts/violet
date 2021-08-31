@@ -44,4 +44,9 @@ server/public/icons/*
 
 # firebase
 firebase-debug.log
-firebase/config/
+
+# docker
+docker/firebase/config/
+docker/minio/config/
+docker/minio/data/*
+!docker/minio/data/static
