@@ -25,7 +25,7 @@ services:
     env_file:
       - ./server/.env
     working_dir: /opt/workspace
-    command: firebase emulators:start
+    command: firebase emulators:start --import=seeder
 
   minio:
     image: minio/minio

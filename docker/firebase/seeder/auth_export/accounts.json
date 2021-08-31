@@ -1,0 +1,87 @@
+{
+  "kind": "identitytoolkit#DownloadAccountResponse",
+  "users": [
+    {
+      "localId": "GFx4TSSSXeqghjtSqOvsEtxYhjpe",
+      "createdAt": "1630403457658",
+      "lastLoginAt": "1630403457658",
+      "photoUrl": "http://placekitten.com/350",
+      "screenName": "none display name user",
+      "email": "none-display-name-user@gmail.com",
+      "emailVerified": true,
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "7921831548971828524578315393771784521318",
+          "federatedId": "7921831548971828524578315393771784521318",
+          "photoUrl": "http://placekitten.com/350",
+          "email": "none-display-name-user@gmail.com",
+          "screenName": "none display name user"
+        }
+      ],
+      "lastRefreshAt": "2021-08-31T09:50:57.658Z"
+    },
+    {
+      "localId": "MexqvXJEdc14HHBY7q9JOwj7mEv4",
+      "createdAt": "1630403508260",
+      "lastLoginAt": "1630403508260",
+      "displayName": "None Profile Photo User",
+      "screenName": "none profile photo user",
+      "email": "none-profile-photo-user@gmail.com",
+      "emailVerified": true,
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "5016684373268327072042181580414306639862",
+          "federatedId": "5016684373268327072042181580414306639862",
+          "displayName": "None Profile Photo User",
+          "email": "none-profile-photo-user@gmail.com",
+          "screenName": "none profile photo user"
+        }
+      ],
+      "lastRefreshAt": "2021-08-31T09:51:48.260Z"
+    },
+    {
+      "localId": "VOmtlvYiZRgOSrlKeqpghTvDLPRr",
+      "createdAt": "1630403229760",
+      "lastLoginAt": "1630403229760",
+      "displayName": "All Option User",
+      "photoUrl": "http://placekitten.com/250",
+      "screenName": "all option user",
+      "email": "all-option-user@gmail.com",
+      "emailVerified": true,
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "3204597305242289311180954322204766861670",
+          "federatedId": "3204597305242289311180954322204766861670",
+          "displayName": "All Option User",
+          "photoUrl": "http://placekitten.com/250",
+          "email": "all-option-user@gmail.com",
+          "screenName": "all option user"
+        }
+      ],
+      "lastRefreshAt": "2021-08-31T09:47:09.760Z"
+    },
+    {
+      "localId": "d9jb36O7aEmSg33srJiFjwZ3UCiZ",
+      "createdAt": "1630403411096",
+      "lastLoginAt": "1630403411096",
+      "displayName": "None Screen Name User",
+      "photoUrl": "http://placekitten.com/300",
+      "email": "none-screen-name-user@gmail.com",
+      "emailVerified": true,
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "2419491370314786930312727172295354903091",
+          "federatedId": "2419491370314786930312727172295354903091",
+          "displayName": "None Screen Name User",
+          "photoUrl": "http://placekitten.com/300",
+          "email": "none-screen-name-user@gmail.com"
+        }
+      ],
+      "lastRefreshAt": "2021-08-31T09:50:11.096Z"
+    }
+  ]
+}

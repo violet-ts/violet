@@ -1,10 +1,4 @@
-import {
-  getAuth,
-  GithubAuthProvider,
-  GoogleAuthProvider,
-  signInWithRedirect,
-  signOut,
-} from 'firebase/auth'
+import { getAuth, GoogleAuthProvider, signInWithRedirect, signOut } from 'firebase/auth'
 import { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { AuthContext } from '~/contexts/Auth'
@@ -31,11 +25,6 @@ export const UserBanner = () => {
     signInWithRedirect(getAuth(), provider)
   }, [])
 
-  const githubLogin = useCallback(async () => {
-    const provider = new GithubAuthProvider()
-    signInWithRedirect(getAuth(), provider)
-  }, [])
-
   const logout = useCallback(() => {
     signOut(getAuth())
   }, [])
@@ -49,10 +38,7 @@ export const UserBanner = () => {
           <button onClick={logout}>LOGOUT</button>
         </>
       ) : (
-        <>
-          <button onClick={googleLogin}>Google LOGIN</button>
-          <button onClick={githubLogin}>GitHub LOGIN</button>
-        </>
+        <button onClick={googleLogin}>Google LOGIN</button>
       )}
     </Container>
   )
