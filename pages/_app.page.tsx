@@ -1,12 +1,13 @@
 import type { AppProps } from 'next/app'
 import { createGlobalStyle } from 'styled-components'
+import { ApiProvider } from '~/contexts/Api'
 import { AuthProvider } from '../contexts/Auth'
 
 const GlobalStyle = createGlobalStyle`
 * {
+  box-sizing: border-box;
   padding: 0;
   margin: 0;
-  box-sizing: border-box;
 }
 
 html,
@@ -23,10 +24,14 @@ a {
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
+    <>
       <GlobalStyle />
-      <Component {...pageProps} />
-    </AuthProvider>
+      <AuthProvider>
+        <ApiProvider>
+          <Component {...pageProps} />
+        </ApiProvider>
+      </AuthProvider>
+    </>
   )
 }
 

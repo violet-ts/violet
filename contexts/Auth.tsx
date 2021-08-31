@@ -1,6 +1,6 @@
 import { getApps, initializeApp } from 'firebase/app'
 import { connectAuthEmulator, getAuth, User } from 'firebase/auth'
-import { createContext, FC, useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 if (!getApps().length) {
   initializeApp({
@@ -17,7 +17,7 @@ export const AuthContext = createContext<{ currentUser: User | null }>({
   currentUser: null,
 })
 
-export const AuthProvider: FC = ({ children }) => {
+export const AuthProvider: React.FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
 
   useEffect(() => {
