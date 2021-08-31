@@ -10,27 +10,27 @@ import { apiClient } from '~/utils/apiClient'
 import { UserBanner } from './components/UserBanner'
 
 const Container = styled.div`
-  min-height: 100vh;
-  padding: 0 0.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0 0.5rem;
 `
 
 const StyledMain = styled.main`
-  padding: 5rem 0;
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  padding: 5rem 0;
 `
 
 const Title = styled.h1`
-  text-align: center;
-  line-height: 1.15;
   font-size: 4rem;
+  line-height: 1.15;
+  text-align: center;
 
   a {
     color: #0070f3;
@@ -48,8 +48,8 @@ const Tasks = styled.ul`
   width: 300px;
   padding: 0;
   margin: 20px auto 0;
-  list-style-type: none;
   text-align: left;
+  list-style-type: none;
 
   > li {
     border-bottom: 1px solid #eee;
@@ -61,23 +61,23 @@ const StyledInput = styled.input`
 `
 
 const StyledFooter = styled.footer`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100px;
   border-top: 1px solid #eaeaea;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
   a {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
   }
 `
 
 const Logo = styled.img`
-  margin-left: 0.5rem;
   height: 1em;
+  margin-left: 0.5rem;
 `
 
 const Home = () => {

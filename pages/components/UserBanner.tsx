@@ -13,8 +13,8 @@ const Container = styled.div`
 const Icon = styled.img`
   width: 32px;
   height: 32px;
-  background: #ddd;
   vertical-align: bottom;
+  background: #ddd;
 `
 
 export const UserBanner = () => {
