@@ -4,11 +4,11 @@ import { usePathVal } from '~/hooks/usePathVal'
 
 const ProjectPage = () => {
   const pathVal = usePathVal(['projectId'])
-  const { BrowserLayout, layoutData, layoutError } = useBrowserLayout(pathVal)
+  const { BrowserLayout, layoutProps, layoutError } = useBrowserLayout(pathVal)
 
-  if (!layoutData) return <Fetching error={layoutError} />
+  if (!layoutProps) return <Fetching error={layoutError} />
 
-  return <BrowserLayout data={layoutData}>sample text</BrowserLayout>
+  return <BrowserLayout {...layoutProps}>sample text</BrowserLayout>
 }
 
 export default ProjectPage

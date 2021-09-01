@@ -7,6 +7,7 @@ import { SelectableStyle } from '../SelectableStyle'
 
 const Container = styled.div`
   display: flex;
+  height: 40px;
   overflow: auto;
   user-select: none;
   background: ${colors.violet}${alphaLevel[1]};
@@ -36,6 +37,7 @@ export const TabBar = (props: {
     if (!props.selectedWork) return
 
     setOpenedWork(props.selectedWork)
+
     tabWorks.every((w) => w.id !== props.selectedWork?.id) &&
       setTabWorks([...tabWorks, props.selectedWork])
   }, [props.selectedWork, tabWorks])

@@ -1,5 +1,10 @@
 import type { DeskId, ProjectId, WorkId } from './branded'
 
+export type ApiProjectSummary = {
+  id: ProjectId
+  name: string
+}
+
 export type ApiTreeWork = {
   id: WorkId
   name: string

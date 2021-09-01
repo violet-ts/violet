@@ -6,7 +6,7 @@ const validateParams = (params: { projectId: string }) => params as { projectId:
 
 export default defineController(() => ({
   get: ({ params }) => {
-    const body = getTree(validateParams(params))
+    const body = getTree(validateParams(params).projectId)
 
     return body ? { status: 200, body } : { status: 404 }
   },
