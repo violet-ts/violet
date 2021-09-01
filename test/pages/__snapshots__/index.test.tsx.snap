@@ -3,10 +3,10 @@
 exports[`Home page matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="Container-sc-43yzvd-0 dkQagz"
+    class="Container-sc-43yzvd-0 dVSdUP"
   >
     <main
-      class="StyledMain-sc-43yzvd-1 okrpK"
+      class="StyledMain-sc-43yzvd-1 mMuSq"
     >
       <div
         class="Container-sc-o2zdss-0 hgsMPa"
@@ -14,12 +14,9 @@ exports[`Home page matches snapshot 1`] = `
         <button>
           Google LOGIN
         </button>
-        <button>
-          GitHub LOGIN
-        </button>
       </div>
       <h1
-        class="Title-sc-43yzvd-2 eJRhzF"
+        class="Title-sc-43yzvd-2 jMLCrV"
       >
         Welcome to 
         <a
@@ -46,7 +43,7 @@ exports[`Home page matches snapshot 1`] = `
           />
         </form>
         <ul
-          class="Tasks-sc-43yzvd-3 dbfABN"
+          class="Tasks-sc-43yzvd-3 izlyjp"
         >
           <li>
             <label>
@@ -87,7 +84,7 @@ exports[`Home page matches snapshot 1`] = `
       </div>
     </main>
     <footer
-      class="StyledFooter-sc-43yzvd-5 lojTXT"
+      class="StyledFooter-sc-43yzvd-5 MAqtv"
     >
       <a
         href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -97,7 +94,7 @@ exports[`Home page matches snapshot 1`] = `
         Powered by 
         <img
           alt="Vercel Logo"
-          class="Logo-sc-43yzvd-6 brCmQJ"
+          class="Logo-sc-43yzvd-6 lmsmDN"
           src="/vercel.svg"
         />
       </a>

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { alphaList, colors } from '~/utils/constants'
+import { alphaLevel, colors } from '~/utils/constants'
 import { Portal } from './Portal'
 
 const Container = styled.div`
@@ -8,7 +8,7 @@ const Container = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: ${colors.black}${alphaList[8]};
+  background: ${colors.black}${alphaLevel[8]};
 `
 
 const Loader = styled.div`

@@ -1,12 +1,11 @@
 import type { Task } from '$prisma/client'
-import useAspidaSWR from '@aspida/swr'
 import Head from 'next/head'
-import type { ChangeEvent, FormEvent } from 'react'
-import React, { useCallback, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
+import { Fetching } from '~/components/organisms/Fetching'
+import { useApi } from '~/hooks'
 import { staticPath } from '~/utils/$path'
-import { apiClient } from '~/utils/apiClient'
 import { UserBanner } from './components/UserBanner'
 
 const Container = styled.div`
@@ -81,7 +80,8 @@ const Logo = styled.img`
 `
 
 const Home = () => {
-  const { data: tasks, error, mutate } = useAspidaSWR(apiClient.tasks)
+  const { api, useAspidaSWR, onErr } = useApi()
+  const { data: tasks, error, mutate } = useAspidaSWR(api.tasks)
   const [label, setLabel] = useState('')
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
 
@@ -90,7 +90,10 @@ const Home = () => {
       e.preventDefault()
       if (!label) return
 
-      await apiClient.tasks.post({ body: { label } })
+      const res = await api.tasks.post({ body: { label } }).catch(onErr)
+
+      if (!res) return
+
       setLabel('')
       mutate()
     },
@@ -98,17 +101,21 @@ const Home = () => {
   )
 
   const toggleDone = useCallback(async (task: Task) => {
-    await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } })
-    mutate()
+    const res = await api.tasks
+      ._taskId(task.id)
+      .patch({ body: { done: !task.done } })
+      .catch(onErr)
+
+    if (res) mutate()
   }, [])
 
   const deleteTask = useCallback(async (task: Task) => {
-    await apiClient.tasks._taskId(task.id).delete()
-    mutate()
+    const res = await api.tasks._taskId(task.id).delete().catch(onErr)
+
+    if (res) mutate()
   }, [])
 
-  if (error) return <div>failed to load</div>
-  if (!tasks) return <div>loading...</div>
+  if (!tasks) return <Fetching error={error} />
 
   return (
     <Container>

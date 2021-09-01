@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 const Conrtainer = styled.div.attrs<{ width: number }>((props) => ({
@@ -36,7 +36,7 @@ const MIN_WIDTH = 100
 const clampX = (width: number) =>
   Math.min(window.innerWidth - MIN_WIDTH, Math.max(MIN_WIDTH, width))
 
-export const LeftColumn: FC = ({ children }) => {
+export const LeftColumn: React.FC = ({ children }) => {
   const [width, setWidth] = useState(300)
   const [isResizing, setIsResizing] = useState(false)
   const [diffX, setDiffX] = useState(0)
