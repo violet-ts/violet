@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { colors } from '~/utils/constants'
 
 const Conrtainer = styled.div.attrs<{ width: number }>((props) => ({
   style: { width: `${props.width}px` },
@@ -20,7 +21,7 @@ const ResizeHandle = styled.div`
   transition: background 0.2s;
 
   &:hover {
-    background: #00f;
+    background: ${colors.blue};
   }
 `
 

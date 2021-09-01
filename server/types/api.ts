@@ -1,22 +1,20 @@
-import type { OwnerId, ProjectId, WorkId } from './branded'
+import type { DeskId, ProjectId, WorkId } from './branded'
 
 export type ApiTreeWork = {
   id: WorkId
   name: string
   ext?: string
-  key: string
+  path: string
 }
 
-export type ApiTreeProject = {
-  id: ProjectId
+export type ApiTreeDesk = {
+  id: DeskId
   name: string
   works: ApiTreeWork[]
 }
 
-export type ApiTreeOwner = {
-  id: OwnerId
+export type ApiTree = {
+  id: ProjectId
   name: string
-  projects: ApiTreeProject[]
+  desks: ApiTreeDesk[]
 }
-
-export type ApiTree = ApiTreeOwner[]

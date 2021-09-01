@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
 import styled from 'styled-components'
 import { useApi } from '~/hooks'
-import type { ApiTree, OwnerId, ProjectId } from '~/server/types'
+import type { ApiTree, ProjectId } from '~/server/types'
 import { Explorer } from './Explorer'
 import { LeftColumn } from './LeftColumn'
 import { WorkTabBar } from './WorkTabBar'
@@ -34,11 +34,9 @@ const BrowserLayout = ({ data, children }: PropsWithChildren<{ data: ApiTree }>)
   )
 }
 
-export const useBrowserLayout = (params: { projectId: ProjectId; ownerId: OwnerId }) => {
+export const useBrowserLayout = (params: { projectId: ProjectId }) => {
   const { api, useAspidaSWR } = useApi()
-  const { data, error, mutate } = useAspidaSWR(
-    api.tree._ownerId(params.ownerId)._projectId(params.projectId)
-  )
+  const { data, error, mutate } = useAspidaSWR(api.tree._projectId(params.projectId))
 
   return { BrowserLayout, layoutData: data, layoutError: error, mutateLayout: mutate }
 }

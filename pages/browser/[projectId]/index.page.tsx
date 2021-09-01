@@ -3,7 +3,7 @@ import { Fetching } from '~/components/organisms/Fetching'
 import { usePathVal } from '~/hooks/usePathVal'
 
 const ProjectPage = () => {
-  const pathVal = usePathVal(['ownerId', 'projectId'])
+  const pathVal = usePathVal(['projectId'])
   const { BrowserLayout, layoutData, layoutError } = useBrowserLayout(pathVal)
 
   if (!layoutData) return <Fetching error={layoutError} />

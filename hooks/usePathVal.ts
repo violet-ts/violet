@@ -1,9 +1,8 @@
 import { useRouter } from 'next/dist/client/router'
-import type { OwnerId, ProjectId } from '~/server/types'
+import type { ProjectId } from '~/server/types'
 
 type BrandedTypes = {
   projectId: ProjectId
-  ownerId: OwnerId
 }
 
 export const usePathVal = <T extends (keyof BrandedTypes)[]>(keys: T) => {
