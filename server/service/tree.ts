@@ -1,4 +1,4 @@
-import type { ApiTree, DeskId, ProjectId, WorkId } from '$/types'
+import type { ApiTreeProject, DeskId, ProjectId, WorkId } from '$/types'
 
 const desks = [
   {
@@ -21,6 +21,6 @@ const desks = [
   },
 ]
 
-export const getTree = (args: { projectId: ProjectId }): ApiTree | undefined => {
-  return { id: args.projectId, name: 'frourio project', desks }
+export const getTree = (args: { projectId: ProjectId }): ApiTreeProject | undefined => {
+  return { id: args.projectId, name: 'frourio PJ', desks }
 }

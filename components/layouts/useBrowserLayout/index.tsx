@@ -1,10 +1,10 @@
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useState } from 'react'
 import styled from 'styled-components'
 import { useApi } from '~/hooks'
-import type { ApiTree, ProjectId } from '~/server/types'
+import type { ApiTreeProject, ApiTreeWork, ProjectId } from '~/server/types'
 import { Explorer } from './Explorer'
 import { LeftColumn } from './LeftColumn'
-import { WorkTabBar } from './WorkTabBar'
+import { TabBar } from './TabBar'
 
 const Container = styled.div`
   position: fixed;
@@ -20,14 +20,16 @@ const MainColumn = styled.div`
   height: 100%;
 `
 
-const BrowserLayout = ({ data, children }: PropsWithChildren<{ data: ApiTree }>) => {
+const BrowserLayout = ({ data, children }: PropsWithChildren<{ data: ApiTreeProject }>) => {
+  const [selecteWork, setSelectedWork] = useState<ApiTreeWork>()
+
   return (
     <Container>
       <LeftColumn>
-        <Explorer tree={data} />
+        <Explorer project={data} selectedWork={selecteWork} onSelect={setSelectedWork} />
       </LeftColumn>
       <MainColumn>
-        <WorkTabBar />
+        <TabBar project={data} selectedWork={selecteWork} onSelect={setSelectedWork} />
         <div>{children}</div>
       </MainColumn>
     </Container>

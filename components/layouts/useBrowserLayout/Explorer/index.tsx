@@ -1,34 +1,19 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
-import type { ApiTree, ApiTreeWork } from '~/server/types'
-import { getWorkFullName } from '~/utils'
+import type { ApiTreeProject, ApiTreeWork } from '~/server/types'
+import { getDeskByWork, getWorkFullName } from '~/utils'
 import { alphaLevel, colors, fontSizes } from '~/utils/constants'
 import { CellName } from './CellName'
 import { DirectoryCell } from './DirectoryCell'
+import { DeskData, DirData, WorkData } from './types'
 import { WorkCell } from './WorkCell'
-
-export type WorkData = {
-  type: 'work'
-  depth: number
-  fullPath: string
-  selected: boolean
-} & ApiTreeWork
-
-export type DirData = {
-  type: 'dir'
-  depth: number
-  fullPath: string
-  selected: boolean
-  opened?: boolean
-  name: string
-  children: (DirData | WorkData)[]
-}
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  user-select: none;
   background: ${colors.violet}${alphaLevel[1]};
 `
 
@@ -39,7 +24,6 @@ const ProjectName = styled.div`
 const TreeViewer = styled.div`
   flex: 1;
   overflow: auto;
-  user-select: none;
 `
 
 type OpenedFullPathes = Record<string, boolean | undefined>
@@ -49,7 +33,6 @@ type Params = {
   selectedFullPath: string
   works: ApiTreeWork[]
   path: string
-  depth: number
 }
 
 const createData = (params: Params): [DirData | WorkData, number] => {
@@ -59,7 +42,6 @@ const createData = (params: Params): [DirData | WorkData, number] => {
     return [
       {
         type: 'work',
-        depth: params.depth,
         fullPath,
         selected: params.selectedFullPath === fullPath,
         ...params.works[0],
@@ -72,14 +54,12 @@ const createData = (params: Params): [DirData | WorkData, number] => {
   const [children, n] = nestWorks({
     ...params,
     path: `${params.path}/${name}`,
-    depth: params.depth + 1,
   })
   const fullPath = `${params.deskName}${params.path}/${name}`
 
   return [
     {
       type: 'dir',
-      depth: params.depth,
       fullPath,
       selected: params.selectedFullPath === fullPath,
       opened: params.openedFullPathes[fullPath],
@@ -103,46 +83,74 @@ const nestWorks = (params: Params) => {
   return [nested, n] as const
 }
 
-export const Explorer = ({ tree }: { tree: ApiTree }) => {
+export const Explorer = ({
+  project,
+  selectedWork,
+  onSelect,
+}: {
+  project: ApiTreeProject
+  selectedWork?: ApiTreeWork
+  onSelect: (work?: ApiTreeWork) => void
+}) => {
   const [openedFullPathes, setOpenedFullPathes] = useState<OpenedFullPathes>({})
-  const [selectedFullPath, setSelectedFullPath] = useState(tree.desks[0]?.name ?? '')
-  const onClickCellName = (fullPath: string) => {
-    setSelectedFullPath(fullPath)
-    setOpenedFullPathes((f) => ({ ...f, [fullPath]: !f[fullPath] }))
+  const [selectedData, setSelectedData] = useState<DeskData | DirData | WorkData>()
+  const onClickCellName = (data: DeskData | DirData | WorkData) => {
+    if (data.type === 'work' && selectedData?.fullPath === data.fullPath) return
+
+    onSelect(data.type === 'work' ? data : undefined)
+    setSelectedData(data)
+    setOpenedFullPathes((f) => ({ ...f, [data.fullPath]: !f[data.fullPath] }))
   }
   const nestedDesks = useMemo(
     () =>
-      tree.desks.map(({ works, ...d }) => ({
+      project.desks.map<DeskData>(({ works, ...d }) => ({
+        type: 'desk',
         ...d,
-        nestedWorks: nestWorks({
+        fullPath: d.name,
+        data: nestWorks({
           deskName: d.name,
           openedFullPathes,
-          selectedFullPath,
+          selectedFullPath: selectedData?.fullPath ?? '',
           works,
           path: '',
-          depth: 2,
         })[0],
       })),
-    [tree.desks, openedFullPathes, selectedFullPath]
+    [project.desks, openedFullPathes, selectedData]
   )
+
+  useEffect(() => {
+    if (!selectedWork) return
+
+    const fullPath = `${getDeskByWork(project.desks, selectedWork).name}${
+      selectedWork.path
+    }/${getWorkFullName(selectedWork)}`
+
+    setSelectedData({ type: 'work', ...selectedWork, fullPath, selected: true })
+    setOpenedFullPathes((f) =>
+      Object.keys(f).reduce<OpenedFullPathes>(
+        (p, k) => ({ ...p, [k]: fullPath.startsWith(k) || f[k] }),
+        {}
+      )
+    )
+  }, [project.desks, selectedWork])
 
   return (
     <Container>
-      <ProjectName>{tree.name}</ProjectName>
+      <ProjectName>{project.name}</ProjectName>
       <Spacer axis="y" size={16} />
       <TreeViewer>
         {nestedDesks.map((desk) => (
           <React.Fragment key={desk.id}>
             <CellName
-              depth={1}
+              fullPath={desk.fullPath}
               name={desk.name}
-              selected={selectedFullPath === desk.name}
-              opened={openedFullPathes[desk.name]}
+              selected={selectedData?.fullPath === desk.fullPath}
+              opened={openedFullPathes[desk.fullPath]}
               bold
-              onClick={() => onClickCellName(desk.name)}
+              onClick={() => onClickCellName(desk)}
             />
             {openedFullPathes[desk.name] &&
-              desk.nestedWorks.map((d, i) =>
+              desk.data.map((d, i) =>
                 d.type === 'dir' ? (
                   <DirectoryCell key={i} dir={d} onClickCellName={onClickCellName} />
                 ) : (

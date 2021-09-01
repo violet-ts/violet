@@ -1,20 +1,13 @@
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
-import { alphaLevel, colors, fontSizes } from '~/utils/constants'
-
-const alpha = (selected: boolean) => (selected ? alphaLevel[3] : alphaLevel[2])
+import { colors, fontSizes } from '~/utils/constants'
+import { SelectableStyle } from '../SelectableStyle'
 
 const Container = styled.div<{ depth: number; selected: boolean; bold?: boolean }>`
   padding: 6px 8px;
   padding-left: ${(props) => props.depth * 8}px;
   font-weight: ${(props) => (props.bold ? 'bold' : 'normal')};
-  cursor: pointer;
-  background: ${(props) => (props.selected ? `${colors.violet}${alpha(true)}` : 'none')};
-  transition: background 0.2s;
-
-  :hover {
-    background: ${colors.violet}${(props) => alpha(props.selected)};
-  }
+  ${SelectableStyle};
 `
 
 const Label = styled.div`
@@ -55,9 +48,9 @@ const getIconValue = (name: string): { label: string; color: string } =>
   }[name.split('.').pop() ?? ''] ?? { label: 'fi', color: colors.gray })
 
 export const CellName = (props: {
-  depth: number
   name: string
   selected: boolean
+  fullPath: string
   isWork?: boolean
   opened?: boolean
   bold?: boolean
@@ -65,7 +58,7 @@ export const CellName = (props: {
 }) => {
   return (
     <Container
-      depth={props.depth}
+      depth={props.fullPath.split('/').length + 1}
       selected={props.selected}
       bold={props.bold}
       onClick={props.onClick}

@@ -13,7 +13,7 @@ export type ApiTreeDesk = {
   works: ApiTreeWork[]
 }
 
-export type ApiTree = {
+export type ApiTreeProject = {
   id: ProjectId
   name: string
   desks: ApiTreeDesk[]

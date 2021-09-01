@@ -1,7 +1,7 @@
-import type { ApiTree } from '$/types'
+import type { ApiTreeProject } from '$/types'
 
 export type Methods = {
   get: {
-    resBody: ApiTree
+    resBody: ApiTreeProject
   }
 }

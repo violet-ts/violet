@@ -1,5 +1,5 @@
-import type { DirData } from './'
 import { CellName } from './CellName'
+import type { DirData, WorkData } from './types'
 import { WorkCell } from './WorkCell'
 
 export const DirectoryCell = ({
@@ -7,16 +7,16 @@ export const DirectoryCell = ({
   onClickCellName,
 }: {
   dir: DirData
-  onClickCellName: (fullPath: string) => void
+  onClickCellName: (data: DirData | WorkData) => void
 }) => {
   return (
     <div>
       <CellName
-        depth={dir.depth}
+        fullPath={dir.fullPath}
         selected={dir.selected}
         opened={dir.opened}
         name={dir.name}
-        onClick={() => onClickCellName(dir.fullPath)}
+        onClick={() => onClickCellName(dir)}
       />
       {dir.opened &&
         dir.children.map((d, i) =>
