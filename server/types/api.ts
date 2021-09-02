@@ -1,4 +1,4 @@
-import type { DeskId, ProjectId, WorkId } from './branded'
+import type { DeskId, EditionId, ProjectId, RevisionId, WorkId } from './branded'
 
 export type ApiProjectSummary = {
   id: ProjectId
@@ -22,4 +22,16 @@ export type ApiTreeProject = {
   id: ProjectId
   name: string
   desks: ApiTreeDesk[]
+}
+
+export type ApiWorkDetail = {
+  id: WorkId
+  name: string
+  ext?: string
+  revisions: {
+    id: RevisionId
+    editions: {
+      id: EditionId
+    }[]
+  }[]
 }
