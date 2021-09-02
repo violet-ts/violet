@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
-import { colors, fontSizes } from '~/utils/constants'
+import { colors } from '~/utils/constants'
+import { ExtIcon } from '../ExtIcon'
 import { SelectableStyle } from '../SelectableStyle'
 
 const Container = styled.div<{ depth: number; selected: boolean; bold?: boolean }>`
@@ -26,27 +27,6 @@ const Arrow = styled.div<{ opened?: boolean }>`
   transform: rotate(${(props) => (props.opened ? '' : '-')}45deg);
 `
 
-const ExtIcon = styled.span<{ color: string }>`
-  display: inline-block;
-  width: 20px;
-  padding: 2px 0 4px;
-  font-size: ${fontSizes.mini};
-  color: ${colors.white};
-  text-align: center;
-  vertical-align: bottom;
-  background: ${(props) => props.color};
-  border-radius: 4px;
-`
-
-const getIconValue = (name: string): { label: string; color: string } =>
-  ({
-    word: { label: 'wd', color: colors.blue },
-    xlsx: { label: 'xl', color: colors.green },
-    jpg: { label: 'jg', color: colors.yellow },
-    htaccess: { label: 'ht', color: colors.red },
-    gitignore: { label: 'gi', color: colors.gray },
-  }[name.split('.').pop() ?? ''] ?? { label: 'fi', color: colors.gray })
-
 export const CellName = (props: {
   name: string
   selected: boolean
@@ -58,7 +38,7 @@ export const CellName = (props: {
 }) => {
   return (
     <Container
-      depth={props.fullPath.split('/').length + 1}
+      depth={props.fullPath.split('/').length}
       selected={props.selected}
       bold={props.bold}
       onClick={props.onClick}
@@ -66,9 +46,7 @@ export const CellName = (props: {
       <Label>
         {props.isWork ? (
           <>
-            <ExtIcon color={getIconValue(props.name).color}>
-              {getIconValue(props.name).label}
-            </ExtIcon>
+            <ExtIcon name={props.name} />
             <Spacer axis="x" size={6} />
           </>
         ) : (

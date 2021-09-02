@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { Spacer } from '~/components/atoms/Spacer'
 import { ApiTreeProject, ApiTreeWork } from '~/server/types'
 import { getWorkFullName } from '~/utils'
 import { alphaLevel, colors } from '~/utils/constants'
+import { ExtIcon } from '../ExtIcon'
 import { SelectableStyle } from '../SelectableStyle'
 
 const Container = styled.div`
   display: flex;
-  height: 40px;
+  height: 41px;
   overflow: auto;
   user-select: none;
   background: ${colors.violet}${alphaLevel[1]};
+  border-bottom: 1px solid ${colors.violet}${alphaLevel[3]};
 `
 
 const Tab = styled.div`
@@ -46,7 +49,9 @@ export const TabBar = (props: {
     <Container>
       {tabWorks.map((w) => (
         <Tab key={w.id} selected={openedWork?.id === w.id} onClick={() => props.onSelect(w)}>
-          {getWorkFullName(w)}
+          <ExtIcon name={getWorkFullName(w)} />
+          <Spacer axis="x" size={6} />
+          <span>{getWorkFullName(w)}</span>
         </Tab>
       ))}
     </Container>

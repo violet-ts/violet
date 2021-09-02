@@ -5,6 +5,7 @@ import { useApi } from '~/hooks'
 import type { ApiProjectSummary, ApiTreeProject, ApiTreeWork, ProjectId } from '~/server/types'
 import { Explorer } from './Explorer'
 import { LeftColumn } from './LeftColumn'
+import { ProjectBar } from './ProjectBar'
 import { TabBar } from './TabBar'
 
 const Container = styled.div`
@@ -26,11 +27,12 @@ type Props = {
   summaries: ApiProjectSummary[]
 }
 
-const BrowserLayout = ({ project, children }: PropsWithChildren<Props>) => {
+const BrowserLayout = ({ project, summaries, children }: PropsWithChildren<Props>) => {
   const [selecteWork, setSelectedWork] = useState<ApiTreeWork>()
 
   return (
     <Container>
+      <ProjectBar summaries={summaries} projectId={project.id} />
       <LeftColumn>
         <Explorer project={project} selectedWork={selecteWork} onSelect={setSelectedWork} />
       </LeftColumn>

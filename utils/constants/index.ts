@@ -8,6 +8,7 @@ export const colors = {
   green: '#00bb00',
   red: '#bb0000',
   yellow: '#bbbb00',
+  transparent: 'transparent',
 } as const
 
 export const alphaLevel = ['', '19', '22', '4B', '64', '7D', '96', 'AF', 'C8', 'E1', 'ff'] as const

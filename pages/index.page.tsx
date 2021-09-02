@@ -1,4 +1,5 @@
 import type { Task } from '$prisma/client'
+import useAspidaSWR from '@aspida/swr'
 import Head from 'next/head'
 import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react'
 import styled from 'styled-components'
@@ -80,7 +81,7 @@ const Logo = styled.img`
 `
 
 const Home = () => {
-  const { api, useAspidaSWR, onErr } = useApi()
+  const { api, onErr } = useApi()
   const { data: tasks, error, mutate } = useAspidaSWR(api.tasks)
   const [label, setLabel] = useState('')
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])

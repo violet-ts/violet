@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { colors } from '~/utils/constants'
+import { alphaLevel, colors } from '~/utils/constants'
 
-const Conrtainer = styled.div.attrs<{ width: number }>((props) => ({
+const Container = styled.div.attrs<{ width: number }>((props) => ({
   style: { width: `${props.width}px` },
 }))<{
   width: number
 }>`
   position: relative;
   height: 100%;
+  border-right: 1px solid ${colors.violet}${alphaLevel[3]};
 `
 
 const ResizeHandle = styled.div`
@@ -64,11 +65,11 @@ export const LeftColumn: React.FC = ({ children }) => {
   }, [])
 
   return (
-    <Conrtainer width={width}>
+    <Container width={width}>
       {children}
       <ResizeHandle onMouseDown={start} onMouseMove={move} onMouseUp={() => setIsResizing(false)}>
         {isResizing && <MovableArea />}
       </ResizeHandle>
-    </Conrtainer>
+    </Container>
   )
 }

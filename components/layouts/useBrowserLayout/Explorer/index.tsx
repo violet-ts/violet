@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { Spacer } from '~/components/atoms/Spacer'
 import type { ApiTreeProject, ApiTreeWork } from '~/server/types'
 import { getDeskByWork, getWorkFullName } from '~/utils'
 import { alphaLevel, colors, fontSizes } from '~/utils/constants'
@@ -18,7 +17,9 @@ const Container = styled.div`
 `
 
 const ProjectName = styled.div`
+  padding: 12px;
   font-size: ${fontSizes.midium};
+  font-weight: bold;
 `
 
 const TreeViewer = styled.div`
@@ -137,7 +138,6 @@ export const Explorer = ({
   return (
     <Container>
       <ProjectName>{project.name}</ProjectName>
-      <Spacer axis="y" size={16} />
       <TreeViewer>
         {nestedDesks.map((desk) => (
           <React.Fragment key={desk.id}>
