@@ -1,9 +1,13 @@
-import type { ApiTreeProject, DeskId, ProjectId, ResisteredUserId, WorkId } from '$/types'
+import type { ApiDesk, ApiProject, DeskId, ProjectId, WorkId } from '$/types'
 
-const projects: ApiTreeProject[] = [
+const projects: ApiProject[] = [
+  { id: 'frourio' as ProjectId, name: 'frourio PJ' },
+  { id: 'violet' as ProjectId, name: 'Violet PJ' },
+]
+
+const desks: { projectId: ProjectId; desks: ApiDesk[] }[] = [
   {
-    id: 'frourio' as ProjectId,
-    name: 'frourio PJ',
+    projectId: projects[0].id,
     desks: [
       {
         id: 'desk_1' as DeskId,
@@ -26,8 +30,7 @@ const projects: ApiTreeProject[] = [
     ],
   },
   {
-    id: 'violet' as ProjectId,
-    name: 'Violet PJ',
+    projectId: projects[1].id,
     desks: [
       {
         id: 'desk_1' as DeskId,
@@ -51,21 +54,6 @@ const projects: ApiTreeProject[] = [
   },
 ]
 
-const resisteredUsers = [
-  { id: 'foo', projectIds: ['frourio', 'violet'] } as {
-    id: ResisteredUserId
-    projectIds: ProjectId[]
-  },
-]
-
-export const getTree = (projectId: ProjectId): ApiTreeProject | undefined => {
-  return projects.find((p) => p.id === projectId) ?? projects[0]
-}
-
-export const getProjects = (resisteredUserId?: ResisteredUserId) => {
-  return (
-    resisteredUsers.find((u) => u.id === resisteredUserId)?.projectIds ?? ['frourio', 'violet']
-  )
-    .map((id) => projects.filter((p) => p.id === id)[0])
-    .map(({ id, name }) => ({ id, name }))
-}
+export const getProjects = () => projects
+export const getDesks = (projectId: ProjectId) =>
+  desks.find((d) => d.projectId === projectId)?.desks

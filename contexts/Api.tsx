@@ -4,9 +4,7 @@ import $api from '~/server/api/$api'
 
 export const ApiContext = createContext({
   api: $api(aspida()),
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setToken: (() => {}) as (token: string) => void,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   deleteToken: () => {},
 })
 

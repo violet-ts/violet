@@ -1,7 +1,7 @@
-import type { ApiProjectSummary } from '$/types'
+import type { ApiProject } from '$/types'
 
 export type Methods = {
   get: {
-    resBody: ApiProjectSummary[]
+    resBody: ApiProject[]
   }
 }

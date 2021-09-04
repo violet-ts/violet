@@ -5,4 +5,5 @@ export type DeskId = Branded<string, '__deskId'>
 export type WorkId = Branded<string, '__workId'>
 export type RevisionId = Branded<string, '__revisionId'>
 export type EditionId = Branded<string, '__editionId'>
+export type MessageId = Branded<string, '__messageId'>
 export type ResisteredUserId = Branded<string, '__resisteredUserId'>

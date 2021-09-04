@@ -1,10 +1,10 @@
+import type { BrowserWork } from '~/server/types'
 import { getWorkFullName } from '~/utils'
 import { CellName } from './CellName'
-import type { DirData, WorkData } from './types'
 
 export const WorkCell = (props: {
-  work: WorkData
-  onClickCellName: (data: DirData | WorkData) => void
+  work: BrowserWork
+  onClickCellName: (data: BrowserWork) => void
 }) => {
   return (
     <CellName

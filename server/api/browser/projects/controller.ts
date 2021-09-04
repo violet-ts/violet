@@ -1,4 +1,4 @@
-import { getProjects } from '$/service/tree'
+import { getProjects } from '$/service/browser'
 import { defineController } from './$relay'
 
 export default defineController(() => ({

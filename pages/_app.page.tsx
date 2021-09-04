@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app'
 import { createGlobalStyle } from 'styled-components'
 import { ApiProvider } from '~/contexts/Api'
+import { BrowserProvider } from '~/contexts/Browser'
 import { fontSizes } from '~/utils/constants'
 import { AuthProvider } from '../contexts/Auth'
 
@@ -31,7 +32,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <GlobalStyle />
       <AuthProvider>
         <ApiProvider>
-          <Component {...pageProps} />
+          <BrowserProvider>
+            <Component {...pageProps} />
+          </BrowserProvider>
         </ApiProvider>
       </AuthProvider>
     </>

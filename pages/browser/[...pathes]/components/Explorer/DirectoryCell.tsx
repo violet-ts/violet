@@ -1,13 +1,13 @@
+import type { BrowserDir, BrowserWork } from '~/server/types'
 import { CellName } from './CellName'
-import type { DirData, WorkData } from './types'
 import { WorkCell } from './WorkCell'
 
 export const DirectoryCell = ({
   dir,
   onClickCellName,
 }: {
-  dir: DirData
-  onClickCellName: (data: DirData | WorkData) => void
+  dir: BrowserDir
+  onClickCellName: (data: BrowserDir | BrowserWork) => void
 }) => {
   return (
     <div>

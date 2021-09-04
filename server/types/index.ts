@@ -1,5 +1,6 @@
 export * from './api'
 export * from './branded'
+export * from './client'
 
 export type UserInfo = {
   id: string
