@@ -10,7 +10,7 @@ import type {
   ProjectApiData,
 } from '~/server/types'
 import { getWorkFullName } from '~/utils'
-import { alphaLevel, colors, fontSizes } from '~/utils/constants'
+import { fontSizes } from '~/utils/constants'
 import { CellName } from './CellName'
 import { DirectoryCell } from './DirectoryCell'
 import { WorkCell } from './WorkCell'
@@ -20,7 +20,6 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
   user-select: none;
-  background: ${colors.violet}${alphaLevel[1]};
 `
 
 const ProjectName = styled.div`

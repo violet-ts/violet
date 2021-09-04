@@ -11,11 +11,10 @@ const Container = styled.div`
   height: 100%;
   padding: 6px;
   user-select: none;
-  background: ${colors.violet}${alphaLevel[1]};
-  border-right: 1px solid ${colors.violet}${alphaLevel[3]};
+  border-right: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 
-const alpha = (selected: boolean) => (selected ? alphaLevel[6] : alphaLevel[3])
+const alpha = (selected: boolean) => (selected ? alphaLevel[5] : alphaLevel[3])
 
 const IconWrapper = styled.a<{ selected: boolean }>`
   display: inline-block;

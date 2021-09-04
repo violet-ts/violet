@@ -3,7 +3,7 @@ import { alphaLevel, colors } from '~/utils/constants'
 
 export type SelectableStyleProps = { selected: boolean }
 
-const alpha = (selected: boolean) => (selected ? alphaLevel[3] : alphaLevel[2])
+const alpha = (selected: boolean) => (selected ? alphaLevel[2] : alphaLevel[1])
 
 export const SelectableStyle = css<SelectableStyleProps>`
   cursor: pointer;

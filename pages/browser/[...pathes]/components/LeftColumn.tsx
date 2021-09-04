@@ -9,7 +9,7 @@ const Container = styled.div.attrs<{ width: number }>((props) => ({
 }>`
   position: relative;
   height: 100%;
-  border-right: 1px solid ${colors.violet}${alphaLevel[3]};
+  border-right: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 
 const ResizeHandle = styled.div`

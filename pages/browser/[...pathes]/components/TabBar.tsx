@@ -11,12 +11,12 @@ const Container = styled.div`
   height: 41px;
   overflow: auto;
   user-select: none;
-  background: ${colors.violet}${alphaLevel[1]};
-  border-bottom: 1px solid ${colors.violet}${alphaLevel[3]};
+  border-bottom: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 
 const Tab = styled.div`
   padding: 12px;
+  border-right: 1px solid ${colors.violet}${alphaLevel[2]};
   ${SelectableStyle};
 `
 
