@@ -34,7 +34,7 @@ const TreeViewer = styled.div`
 `
 
 type Params = {
-  deskName: string
+  prefixPath: string
   openedFullPathDict: OpenedFullPathDict
   selectedFullPath: string
   apiWorks: ApiDesk['works']
@@ -43,7 +43,7 @@ type Params = {
 
 const createData = (params: Params): [BrowserDir | BrowserWork, number] => {
   if (params.apiWorks[0].path === params.path) {
-    const fullPath = `${params.deskName}${params.path}/${getWorkFullName(params.apiWorks[0])}`
+    const fullPath = `${params.prefixPath}${params.path}/${getWorkFullName(params.apiWorks[0])}`
 
     return [
       {
@@ -61,7 +61,7 @@ const createData = (params: Params): [BrowserDir | BrowserWork, number] => {
     ...params,
     path: `${params.path}/${name}`,
   })
-  const fullPath = `${params.deskName}${params.path}/${name}`
+  const fullPath = `${params.prefixPath}${params.path}/${name}`
 
   return [
     {
@@ -92,42 +92,20 @@ const nestWorks = (params: Params) => {
 export const Explorer = ({
   projectApiData,
   project,
-  updateProject,
 }: {
   projectApiData: ProjectApiData
   project: BrowserProject
-  updateProject: (project: BrowserProject) => void
 }) => {
-  const onClickCellName = (data: BrowserDesk | BrowserDir | BrowserWork) => {
-    if (data.type === 'work' && project.selectedFullPath === data.fullPath) return
-
-    updateProject({
-      ...project,
-      ...(data.type === 'work'
-        ? {
-            openedTab: data,
-            tabs: project.tabs.some((t) => t.id === data.id)
-              ? project.tabs
-              : [...project.tabs, data],
-          }
-        : undefined),
-      selectedFullPath: data.fullPath,
-      openedFullPathDict: {
-        ...project.openedFullPathDict,
-        [data.fullPath]: !project.openedFullPathDict[data.fullPath],
-      },
-    })
-  }
   const nestedDesks = useMemo(
     () =>
       projectApiData.desks.map<BrowserDesk>(({ works, ...d }) => ({
         type: 'desk',
         ...d,
-        fullPath: d.name,
+        fullPath: `${project.id}/${d.name}`,
         opened: false,
         selected: false,
         children: nestWorks({
-          deskName: d.name,
+          prefixPath: `${project.id}/${d.name}`,
           openedFullPathDict: project.openedFullPathDict,
           selectedFullPath: project.selectedFullPath ?? '',
           apiWorks: works,
@@ -149,15 +127,10 @@ export const Explorer = ({
               selected={project.selectedFullPath === desk.fullPath}
               opened={project.openedFullPathDict[desk.fullPath]}
               bold
-              onClick={() => onClickCellName(desk)}
             />
             {project.openedFullPathDict[desk.fullPath] &&
               desk.children.map((d, i) =>
-                d.type === 'dir' ? (
-                  <DirectoryCell key={i} dir={d} onClickCellName={onClickCellName} />
-                ) : (
-                  <WorkCell key={i} work={d} onClickCellName={onClickCellName} />
-                )
+                d.type === 'dir' ? <DirectoryCell key={i} dir={d} /> : <WorkCell key={i} work={d} />
               )}
           </React.Fragment>
         ))}

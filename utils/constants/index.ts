@@ -24,3 +24,5 @@ export const fontSizes = {
   huge: '28px',
   massive: '32px',
 } as const
+
+export const forceToggleHash = '#forceToggle'

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import styled from 'styled-components'
-import type { BrowserApiWholeData, ProjectId } from '~/server/types'
+import type { BrowserProject, ProjectId } from '~/server/types'
 import { pagesPath } from '~/utils/$path'
 import { alphaLevel, colors, fontSizes } from '~/utils/constants'
 
@@ -44,11 +44,15 @@ const Icon = styled.div`
   border-radius: 6px;
 `
 
-export const ProjectBar = (props: { apiWholeData: BrowserApiWholeData; projectId: ProjectId }) => {
+export const ProjectBar = (props: { projects: BrowserProject[]; projectId: ProjectId }) => {
   return (
     <Container>
-      {props.apiWholeData.projects?.map((p) => (
-        <Link key={p.id} href={pagesPath.browser._pathes([p.id]).$url()} passHref>
+      {props.projects.map((p) => (
+        <Link
+          key={p.id}
+          href={pagesPath.browser._pathes(p.selectedFullPath.split('/')).$url()}
+          passHref
+        >
           <IconWrapper title={p.name} selected={p.id === props.projectId}>
             <Icon>{p.name.slice(0, 2)}</Icon>
           </IconWrapper>

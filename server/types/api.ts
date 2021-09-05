@@ -5,15 +5,17 @@ export type ApiProject = {
   name: string
 }
 
+export type ApiWork = {
+  id: WorkId
+  name: string
+  ext?: string
+  path: string
+}
+
 export type ApiDesk = {
   id: DeskId
   name: string
-  works: {
-    id: WorkId
-    name: string
-    ext?: string
-    path: string
-  }[]
+  works: ApiWork[]
 }
 
 export type ApiRevision = {

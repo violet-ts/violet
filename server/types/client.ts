@@ -1,5 +1,5 @@
-import { ApiDesk } from './api'
-import type { DeskId, EditionId, ProjectId, RevisionId } from './branded'
+import type { ApiProject, ApiWork } from './api'
+import type { DeskId, EditionId, RevisionId, WorkId } from './branded'
 
 export type ErowserEdition = {
   id: EditionId
@@ -14,7 +14,7 @@ export type BrowserWork = {
   type: 'work'
   fullPath: string
   selected: boolean
-} & ApiDesk['works'][number]
+} & ApiWork
 
 export type BrowserDir = {
   type: 'dir'
@@ -38,9 +38,8 @@ export type BrowserDesk = {
 export type OpenedFullPathDict = Record<string, boolean | undefined>
 
 export type BrowserProject = {
-  id: ProjectId
-  tabs: BrowserWork[]
-  openedTab: BrowserWork | undefined
-  selectedFullPath: string | undefined
+  tabs: ApiWork[]
+  openedTabId: WorkId | undefined
+  selectedFullPath: string
   openedFullPathDict: OpenedFullPathDict
-}
+} & ApiProject

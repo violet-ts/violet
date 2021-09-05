@@ -1,10 +1,13 @@
+import Link from 'next/link'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
-import { colors } from '~/utils/constants'
+import { pagesPath } from '~/utils/$path'
+import { colors, forceToggleHash } from '~/utils/constants'
 import { ExtIcon } from '../ExtIcon'
 import { SelectableStyle } from '../SelectableStyle'
 
-const Container = styled.div<{ depth: number; selected: boolean; bold?: boolean }>`
+const Container = styled.a<{ depth: number; selected: boolean; bold?: boolean }>`
+  display: block;
   padding: 6px 8px;
   padding-left: ${(props) => props.depth * 8}px;
   font-weight: ${(props) => (props.bold ? 'bold' : 'normal')};
@@ -34,29 +37,33 @@ export const CellName = (props: {
   isWork?: boolean
   opened?: boolean
   bold?: boolean
-  onClick: () => void
 }) => {
+  const pathChunks = props.fullPath.split('/')
+
   return (
-    <Container
-      depth={props.fullPath.split('/').length}
-      selected={props.selected}
-      bold={props.bold}
-      onClick={props.onClick}
+    <Link
+      href={pagesPath.browser
+        ._pathes(pathChunks)
+        .$url(props.selected && !props.isWork ? { hash: forceToggleHash } : undefined)}
+      replace={props.selected}
+      passHref
     >
-      <Label>
-        {props.isWork ? (
-          <>
-            <ExtIcon name={props.name} />
-            <Spacer axis="x" size={6} />
-          </>
-        ) : (
-          <>
-            <Arrow opened={props.opened} />
-            <Spacer axis="x" size={18} />
-          </>
-        )}
-        {props.name}
-      </Label>
-    </Container>
+      <Container depth={pathChunks.length - 1} selected={props.selected} bold={props.bold}>
+        <Label>
+          {props.isWork ? (
+            <>
+              <ExtIcon name={props.name} />
+              <Spacer axis="x" size={6} />
+            </>
+          ) : (
+            <>
+              <Arrow opened={props.opened} />
+              <Spacer axis="x" size={18} />
+            </>
+          )}
+          {props.name}
+        </Label>
+      </Container>
+    </Link>
   )
 }

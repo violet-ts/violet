@@ -39,18 +39,18 @@ const StreamBarColumn = styled.div`
 `
 
 const ProjectPage = () => {
-  const { error, apiWholeData, projectApiData, project, updateProject } = usePage()
+  const { error, projectApiData, projects, currentProject } = usePage()
 
-  if (!projectApiData) return <Fetching error={error} />
+  if (!projectApiData || !currentProject) return <Fetching error={error} />
 
   return (
     <Container>
-      <ProjectBar apiWholeData={apiWholeData} projectId={projectApiData.projectId} />
+      <ProjectBar projects={projects} projectId={projectApiData.projectId} />
       <LeftColumn>
-        <Explorer projectApiData={projectApiData} project={project} updateProject={updateProject} />
+        <Explorer projectApiData={projectApiData} project={currentProject} />
       </LeftColumn>
       <MainColumn>
-        <TabBar project={project} updateProject={updateProject} />
+        <TabBar project={currentProject} projectApiData={projectApiData} />
         <MainContent>
           <ViewerColumn></ViewerColumn>
           <StreamBarColumn>
