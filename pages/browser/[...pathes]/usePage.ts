@@ -7,8 +7,12 @@ import type { ApiWork, BrowserProject, ProjectApiData, ProjectId } from '~/serve
 import { getWorkFullName } from '~/utils'
 import { forceToggleHash } from '~/utils/constants'
 
-const findWork = (projectApiData: ProjectApiData | undefined, deskName: string, path: string) =>
-  projectApiData?.desks
+const findWork = (
+  projectApiData: ProjectApiData,
+  deskName: string | undefined,
+  path: string | undefined
+) =>
+  projectApiData.desks
     .find((d) => d.name === deskName)
     ?.works.find((w) => `${w.path}/${getWorkFullName(w)}` === path)
 
@@ -36,7 +40,7 @@ const getOpenedFullPathDict = (
       }
 }
 
-const getTabParams = (project: BrowserProject, work?: ApiWork) =>
+const getTabParams = (project: BrowserProject, work: ApiWork | undefined) =>
   work
     ? {
         openedTabId: work.id,
@@ -44,43 +48,24 @@ const getTabParams = (project: BrowserProject, work?: ApiWork) =>
       }
     : undefined
 
-export const usePage = () => {
-  const { projects, apiWholeData, updateProjects, updateProject, updateApiWholeData } =
-    useContext(BrowserContext)
-  const { query, asPath, replace } = useRouter()
-  const projectId = (Array.isArray(query.pathes) ? query.pathes[0] : '') as ProjectId
-  const deskName = Array.isArray(query.pathes) ? query.pathes[1] : ''
-  const path =
-    Array.isArray(query.pathes) && query.pathes.length > 2
-      ? `/${query.pathes.slice(2).join('/')}`
-      : ''
-  const enabled = !!projectId
+const useFetch = (projectId: ProjectId | undefined, currentProject: BrowserProject | undefined) => {
+  const { apiWholeData, updateProjects, updateApiWholeData } = useContext(BrowserContext)
   const { api } = useApi()
+  const enabled = !!projectId
   const projectsRes = useAspidaSWR(api.browser.projects, { enabled })
-  const desksRes = useAspidaSWR(api.browser.projects._projectId(projectId), { enabled })
-  const currentProject = useMemo(() => projects.find((p) => p.id === projectId), [projects])
-  const projectApiData = useMemo((): ProjectApiData | undefined => {
-    const data = apiWholeData.projects?.find((p) => p.id === projectId)
-    const desks = apiWholeData.desksList.find((d) => d.projectId === projectId)?.desks
-
-    return (
-      data &&
-      desks && {
-        projectId,
-        name: data.name,
-        desks,
-        revisionsList: apiWholeData.revisionsList.filter((d) => d.projectId === projectId),
-        messagesList: apiWholeData.messagesList.filter((d) => d.projectId === projectId),
-      }
-    )
-  }, [apiWholeData, projectId])
+  const desksRes = useAspidaSWR(api.browser.projects._projectId(projectId ?? ''), { enabled })
+  const revisionsRes = useAspidaSWR(
+    api.browser.works._workId(currentProject?.openedTabId ?? '').revisions,
+    { enabled: !!currentProject?.openedTabId }
+  )
 
   useEffect(() => {
-    if (!projectsRes.data) return
+    const projectsData = projectsRes.data
+    if (!projectsData) return
 
-    updateApiWholeData('projects', projectsRes.data)
+    updateApiWholeData('projects', projectsData)
     updateProjects(
-      projectsRes.data.map((d) => ({
+      projectsData.map((d) => ({
         ...d,
         tabs: [],
         openedFullPathDict: {},
@@ -93,6 +78,7 @@ export const usePage = () => {
   useEffect(() => {
     const desksData = desksRes.data
     if (!desksData) return
+
     updateApiWholeData(
       'desksList',
       apiWholeData.desksList.some((d) => d.projectId === desksData.projectId)
@@ -102,14 +88,80 @@ export const usePage = () => {
   }, [desksRes.data])
 
   useEffect(() => {
-    const selectedFullPath = `${currentProject?.id}/${deskName}${path}`
+    const revisionsData = revisionsRes.data
+    if (!revisionsData) return
+
+    updateApiWholeData(
+      'revisionsList',
+      apiWholeData.revisionsList.some((r) => r.workId === revisionsData.workId)
+        ? apiWholeData.revisionsList.map((r) =>
+            r.workId === revisionsData.workId ? revisionsData : r
+          )
+        : [...apiWholeData.revisionsList, revisionsData]
+    )
+  }, [revisionsRes.data])
+
+  return { error: [projectsRes.error, desksRes.error, revisionsRes.error].find(Boolean) }
+}
+
+const usePathValues = (): {
+  projectId: ProjectId | undefined
+  deskName: string | undefined
+  path: string | undefined
+} => {
+  const {
+    query: { pathes },
+  } = useRouter()
+  if (!Array.isArray(pathes)) return { projectId: undefined, deskName: undefined, path: undefined }
+
+  const projectId = pathes[0] as ProjectId
+  const deskName = pathes.length > 1 ? pathes[1] : undefined
+  const path = pathes.length > 2 ? `/${pathes.slice(2).join('/')}` : undefined
+
+  return { projectId, deskName, path }
+}
+
+const getFullPath = (
+  projectId: ProjectId,
+  deskName: string | undefined,
+  path: string | undefined
+) => `${projectId}${deskName ? `/${deskName}` : ''}${path ?? ''}`
+
+export const usePage = () => {
+  const { projects, apiWholeData, updateProject } = useContext(BrowserContext)
+  const { asPath, replace } = useRouter()
+  const { projectId, deskName, path } = usePathValues()
+  const currentProject = useMemo(
+    () => projects.find((p) => p.id === projectId),
+    [projects, projectId]
+  )
+  const { error } = useFetch(projectId, currentProject)
+  const projectApiData = useMemo((): ProjectApiData | undefined => {
+    if (!currentProject) return
+
+    const data = apiWholeData.projects?.find((p) => p.id === currentProject.id)
+    const desks = apiWholeData.desksList.find((d) => d.projectId === currentProject.id)?.desks
+
+    return (
+      data &&
+      desks && {
+        projectId: currentProject.id,
+        name: data.name,
+        desks,
+        revisions: apiWholeData.revisionsList.find((d) => d.workId === currentProject.openedTabId)
+          ?.revisions,
+        messages: undefined,
+      }
+    )
+  }, [apiWholeData, currentProject])
+
+  useEffect(() => {
+    if (!currentProject || !projectApiData) return
+
+    const selectedFullPath = getFullPath(currentProject.id, deskName, path)
     const forceToggle = asPath.endsWith(forceToggleHash)
 
-    if (
-      !projectApiData ||
-      !currentProject ||
-      [!forceToggle, currentProject.selectedFullPath === selectedFullPath].every(Boolean)
-    ) {
+    if ([!forceToggle, currentProject.selectedFullPath === selectedFullPath].every(Boolean)) {
       return
     }
 
@@ -126,7 +178,7 @@ export const usePage = () => {
   }, [currentProject, deskName, path, asPath, projectApiData])
 
   return {
-    error: [projectsRes.error, desksRes.error].find(Boolean),
+    error,
     projectApiData,
     projects,
     currentProject,

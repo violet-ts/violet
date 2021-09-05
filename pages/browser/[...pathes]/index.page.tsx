@@ -1,8 +1,10 @@
 import styled from 'styled-components'
 import { Fetching } from '~/components/organisms/Fetching'
+import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
 import { LeftColumn } from './components/LeftColumn'
 import { ProjectBar } from './components/ProjectBar'
+import { Revision } from './components/Revision'
 import { StreamBar } from './components/StreamBar'
 import { TabBar } from './components/TabBar'
 import { usePage } from './usePage'
@@ -28,7 +30,7 @@ const MainContent = styled.div`
   height: 100%;
 `
 
-const ViewerColumn = styled.div`
+const RevisionColumn = styled.div`
   flex: 1;
   height: 100%;
 `
@@ -52,10 +54,22 @@ const ProjectPage = () => {
       <MainColumn>
         <TabBar project={currentProject} projectApiData={projectApiData} />
         <MainContent>
-          <ViewerColumn></ViewerColumn>
-          <StreamBarColumn>
-            <StreamBar />
-          </StreamBarColumn>
+          {projectApiData.revisions ? (
+            projectApiData.revisions.length ? (
+              <>
+                <RevisionColumn>
+                  <Revision />
+                </RevisionColumn>
+                <StreamBarColumn>
+                  <StreamBar />
+                </StreamBarColumn>
+              </>
+            ) : (
+              <EmptyWork />
+            )
+          ) : (
+            <div>Choose work</div>
+          )}
         </MainContent>
       </MainColumn>
     </Container>

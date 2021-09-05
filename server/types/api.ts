@@ -41,6 +41,6 @@ export type ProjectApiData = {
   projectId: ProjectId
   name: string
   desks: ApiDesk[]
-  revisionsList: { workId: WorkId; revisions: ApiRevision[] }[]
-  messagesList: { revisionId: RevisionId; messages: ApiMessage[] }[]
+  revisions: ApiRevision[] | undefined
+  messages: ApiMessage[] | undefined
 }
