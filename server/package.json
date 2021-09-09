@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.29.0",
+    "@aws-sdk/s3-request-presigner": "^3.30.0",
     "@prisma/client": "^2.30.0",
     "class-validator": "^0.13.1",
     "dotenv": "^10.0.0",
