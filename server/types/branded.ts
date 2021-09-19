@@ -7,3 +7,4 @@ export type RevisionId = Branded<string, '__revisionId'>
 export type EditionId = Branded<string, '__editionId'>
 export type MessageId = Branded<string, '__messageId'>
 export type ResisteredUserId = Branded<string, '__resisteredUserId'>
+export type ReplyId = Branded<string, '__replyId'>

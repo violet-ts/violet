@@ -88,6 +88,7 @@ export const createRevision = (workId: WorkId) => {
   const newRevision: ApiRevision = {
     id: `${workId}-${revisions.length}` as RevisionId,
     editions: [],
+    messages: [],
   }
   revisions.push(newRevision)
 
