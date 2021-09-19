@@ -1,8 +1,10 @@
 import type {
   ApiDesk,
+  ApiMessage,
   ApiProject,
   ApiRevision,
   DeskId,
+  MessageId,
   ProjectId,
   RevisionId,
   WorkId,
@@ -63,7 +65,17 @@ const desks: { projectId: ProjectId; desks: ApiDesk[] }[] = [
 ]
 
 const revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevision[] }[] = [
-  { projectId: projects[0].id, workId: 'work_1' as WorkId, revisions: [] },
+  {
+    projectId: projects[0].id,
+    workId: 'work_1' as WorkId,
+    revisions: [
+      {
+        id: 'revision_123456' as RevisionId,
+        editions: [],
+        messages: [{ id: 'message_1' as MessageId }],
+      },
+    ],
+  },
   { projectId: projects[0].id, workId: 'work_2' as WorkId, revisions: [] },
   { projectId: projects[0].id, workId: 'work_3' as WorkId, revisions: [] },
   { projectId: projects[0].id, workId: 'work_4' as WorkId, revisions: [] },
@@ -75,6 +87,21 @@ const revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevis
   { projectId: projects[1].id, workId: 'work_10' as WorkId, revisions: [] },
   { projectId: projects[1].id, workId: 'work_11' as WorkId, revisions: [] },
   { projectId: projects[1].id, workId: 'work_12' as WorkId, revisions: [] },
+]
+
+const messageList: { revisionId: ApiRevision['id']; messages: ApiMessage[] }[] = [
+  {
+    revisionId: 'revision_1' as RevisionId,
+    messages: [
+      {
+        id: 'message_1' as MessageId,
+        content: 'reviewreviewreviw',
+        submitDate: Date.now(),
+        userName: 'violet',
+        replyList: [],
+      },
+    ],
+  },
 ]
 
 export const getProjects = () => projects
@@ -93,4 +120,8 @@ export const createRevision = (workId: WorkId) => {
   revisions.push(newRevision)
 
   return newRevision
+}
+export const getMessages = (revisionId: RevisionId) => {
+  const messages = messageList.find((m) => m.revisionId === revisionId)
+  return messages
 }
