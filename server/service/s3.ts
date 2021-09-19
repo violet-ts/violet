@@ -1,7 +1,12 @@
 import { GetObjectCommand, ListBucketsCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { depend } from 'velona'
-import { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_ENDPOINT, S3_REGION } from './envValues'
+import {
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  S3_ENDPOINT,
+  S3_REGION,
+} from '../utils/envValues'
 
 let s3Client: S3Client
 

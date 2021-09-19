@@ -1,7 +1,7 @@
 import { Multipart } from 'fastify-multipart'
 import fs from 'fs'
 import path from 'path'
-import { API_ORIGIN, BASE_PATH, USER_ID, USER_PASS } from './envValues'
+import { API_ORIGIN, BASE_PATH, USER_ID, USER_PASS } from '../utils/envValues'
 
 const iconsDir = 'public/icons'
 const createIconURL = (name: string) => `${API_ORIGIN}${BASE_PATH}/icons/${name}`
