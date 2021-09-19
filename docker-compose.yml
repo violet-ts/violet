@@ -13,9 +13,7 @@ services:
       - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
 
   firebase:
-    build:
-      context: ./docker/firebase
-      dockerfile: Dockerfile
+    build: ./docker/firebase
     restart: always
     volumes:
       - ./docker/firebase:/opt/workspace:cached
