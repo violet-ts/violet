@@ -44,7 +44,7 @@ model Edition {
 model Message {
   id          Int      @id @default(autoincrement())
   cotent      String
-  submitData  DateTime @default(now())
+  createdAt   DateTime @default(now())
   userName    String
   revision    Revision @relation(fields: [revisionId], references:[id])
   revisionId  Int
@@ -54,7 +54,7 @@ model Message {
 model Reply {
   id          Int      @id @default(autoincrement())
   content     String
-  replyDate   DateTime
+  createdAt   DateTime
   userName    String
   message     Message  @relation(fields: [messageId],references:[id])
   messageId   Int

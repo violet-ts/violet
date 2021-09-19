@@ -26,7 +26,14 @@ CREATE TABLE `Work` (
 -- CreateTable
 CREATE TABLE `Revision` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `editionsId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Edition` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `revisionId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -35,19 +42,37 @@ CREATE TABLE `Revision` (
 CREATE TABLE `Message` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `cotent` VARCHAR(191) NOT NULL,
-    `submitData` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `userName` VARCHAR(191) NOT NULL,
+    `revisionId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `User` (
+CREATE TABLE `Reply` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `email` VARCHAR(191) NOT NULL,
-    `name` VARCHAR(191) NOT NULL,
-    `role` ENUM('ADMIN', 'USER', 'READONLY') NOT NULL DEFAULT 'USER',
+    `content` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL,
+    `userName` VARCHAR(191) NOT NULL,
+    `messageId` INTEGER NOT NULL,
 
-    UNIQUE INDEX `User.email_unique`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `SignedUser` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Edition` ADD FOREIGN KEY (`revisionId`) REFERENCES `Revision`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Message` ADD FOREIGN KEY (`revisionId`) REFERENCES `Revision`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Reply` ADD FOREIGN KEY (`messageId`) REFERENCES `Message`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
