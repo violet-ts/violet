@@ -12,3 +12,55 @@ model Task {
   label String
   done  Boolean @default(false)
 }
+
+model Project {
+  id Int               @id @default(autoincrement())
+  projectName String
+}
+
+model Desk{
+  id Int               @id @default(autoincrement())
+  deskName    String
+}
+
+model Work {
+  id          Int      @id @default(autoincrement())
+  workName    String
+  path        String
+}
+
+model Revision {
+  id          Int      @id @default(autoincrement())
+  editions    Edition[]
+  message     Message[]
+}
+
+model Edition {
+  id          Int      @id @default(autoincrement())
+  revision    Revision @relation(fields: [revisionId], references:[id])
+  revisionId  Int
+}
+
+model Message {
+  id          Int      @id @default(autoincrement())
+  cotent      String
+  submitData  DateTime @default(now())
+  userName    String
+  revision    Revision @relation(fields: [revisionId], references:[id])
+  revisionId  Int
+  reply       Reply[]
+}
+
+model Reply {
+  id          Int      @id @default(autoincrement())
+  content     String
+  replyDate   DateTime
+  userName    String
+  message     Message  @relation(fields: [messageId],references:[id])
+  messageId   Int
+}
+
+model SignedUser{
+  id          Int      @id @default(autoincrement())
+  name        String
+}
