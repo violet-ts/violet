@@ -39,7 +39,7 @@ export type ApiRevision = {
 export type ApiMessage = {
   id: MessageId
   content: string
-  submitDate: number
+  createdAt: number
   userName: string
   replyList: { replyId: ReplyId; replys: ApiReply[] }[]
 }
@@ -47,7 +47,7 @@ export type ApiMessage = {
 export type ApiReply = {
   id: ReplyId
   content: string
-  replyDate: number
+  createdAt: number
   userName: string
 }
 

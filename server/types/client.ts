@@ -4,14 +4,14 @@ import type { DeskId, EditionId, MessageId, RevisionId, WorkId } from './branded
 export type BrowserReply = {
   id: MessageId
   contents: string
-  replyDate: number
+  cratedAt: number
   userName: string
 }
 
 export type BrowserMessage = {
   id: MessageId
   contents: string
-  submitDate: number
+  createdAt: number
   userName: string
   replys: BrowserReply[]
 }
