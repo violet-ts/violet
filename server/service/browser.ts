@@ -91,7 +91,7 @@ const revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevis
 
 const messageList: { revisionId: ApiRevision['id']; messages: ApiMessage[] }[] = [
   {
-    revisionId: 'revision_1' as RevisionId,
+    revisionId: 'revision_123456' as RevisionId,
     messages: [
       {
         id: 'message_1' as MessageId,
@@ -123,5 +123,6 @@ export const createRevision = (workId: WorkId) => {
 }
 export const getMessages = (revisionId: RevisionId) => {
   const messages = messageList.find((m) => m.revisionId === revisionId)
+  console.log(messages)
   return messages
 }

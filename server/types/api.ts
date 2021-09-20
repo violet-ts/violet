@@ -55,7 +55,7 @@ export type BrowserApiWholeData = {
   projects: ApiProject[]
   desksList: { projectId: ProjectId; desks: ApiDesk[] }[]
   revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevision[] }[]
-  messagesList: { projectId: ProjectId; revisionId: RevisionId; messages: ApiMessage[] }[]
+  messagesList: { revisionId: RevisionId; messages: ApiMessage[] }[]
 }
 
 export type ProjectApiData = {
