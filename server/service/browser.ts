@@ -96,7 +96,7 @@ const messageList: { revisionId: ApiRevision['id']; messages: ApiMessage[] }[] =
       {
         id: 'message_1' as MessageId,
         content: 'reviewreviewreviw',
-        submitDate: Date.now(),
+        createdAt: Date.now(),
         userName: 'violet',
         replyList: [],
       },
@@ -123,6 +123,5 @@ export const createRevision = (workId: WorkId) => {
 }
 export const getMessages = (revisionId: RevisionId) => {
   const messages = messageList.find((m) => m.revisionId === revisionId)
-  console.log(messages)
   return messages
 }
