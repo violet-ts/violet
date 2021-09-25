@@ -24,16 +24,12 @@
     "start:server": "npm start --prefix server",
     "test": "npm run build:types && jest",
     "typecheck": "npm run build:types && tsc --noEmit && tsc --noEmit -p server",
-    "login:firebase": "firebase login:ci",
-    "prisma:seed": "prisma db seed --schema=./server/prisma/seed.ts --preview-feature"
+    "login:firebase": "firebase login:ci"
   },
   "prettier": {
     "printWidth": 100,
     "semi": false,
     "singleQuote": true
-  },
-  "prisma": {
-    "seed": "ts-node --project ./server/seed.tsconfig.json -r tsconfig-paths/register ./server/prisma/seed.ts"
   },
   "dependencies": {
     "@aspida/fetch": "^1.7.1",
