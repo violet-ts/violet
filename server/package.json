@@ -16,11 +16,7 @@
     "pm2:delete": "pm2 delete pm2.config.json",
     "pm2:logs": "pm2 logs",
     "pm2:monit": "pm2 monit",
-    "start": "cross-env NODE_ENV=production node index.js",
-    "prisma:seed": "prisma db seed --preview-feature"
-  },
-  "prisma": {
-    "seed": "ts-node -r tsconfig-paths/register ./prisma/seed.ts"
+    "start": "cross-env NODE_ENV=production node index.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.29.0",
