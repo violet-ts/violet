@@ -3,8 +3,8 @@ import { ApiMessage, RevisionId } from '$/types'
 import { defineController } from './$relay'
 
 export default defineController(() => ({
-  get: ({ params }) => {
-    const messages = getMessages(params.revisionId as RevisionId)
+  get: async ({ params }) => {
+    const messages = await getMessages(params.revisionId as RevisionId)
     return messages ? { status: 200, body: messages } : { status: 404 }
   },
   post: async ({ params, body }) => {
