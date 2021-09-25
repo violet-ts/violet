@@ -1,5 +1,5 @@
 import { createMessage, getMessages } from '$/service/browser'
-import { ApiMessage, RevisionId } from '$/types'
+import { RevisionId } from '$/types'
 import { defineController } from './$relay'
 
 export default defineController(() => ({
@@ -10,8 +10,8 @@ export default defineController(() => ({
   post: async ({ params, body }) => {
     const messages = await createMessage(
       params.revisionId as RevisionId,
-      body.content as ApiMessage['content'],
-      body.userName as ApiMessage['userName']
+      body.content,
+      body.userName
     )
     return messages ? { status: 200, body: messages } : { status: 404 }
   },

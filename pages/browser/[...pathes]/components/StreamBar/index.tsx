@@ -80,7 +80,7 @@ export const StreamBar = ({
 
       setMessage('')
     },
-    [content]
+    [content, project, projectApiData]
   )
 
   return (

@@ -91,21 +91,6 @@ const revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevis
   { projectId: projects[1].id, workId: 'work_12' as WorkId, revisions: [] },
 ]
 
-const messageList: { revisionId: ApiRevision['id']; messages: ApiMessage[] }[] = [
-  {
-    revisionId: 'revision_123456' as RevisionId,
-    messages: [
-      {
-        id: 'message_1' as MessageId,
-        content: 'reviewreviewreviw',
-        createdAt: Date.now(),
-        userName: 'violet',
-        replys: [],
-      },
-    ],
-  },
-]
-
 const prisma = new PrismaClient()
 export const getProjects = () => projects
 export const getDesks = (projectId: ProjectId) =>
@@ -125,25 +110,16 @@ export const createRevision = (workId: WorkId) => {
   return newRevision
 }
 export const getMessages = async (revisionId: RevisionId) => {
-  const dbMessages = await prisma.message.findMany({
-    where: {
-      revisionId: revisionId,
-    },
-  })
+  const dbMessages = await prisma.message.findMany({ where: { revisionId: revisionId } })
   if (!dbMessages) return
-
-  const messages: ApiMessage[] = []
-  for (let i = 0; i < dbMessages.length; i++) {
-    const m = {
-      id: dbMessages[i].messageId as MessageId,
-      content: dbMessages[i].content,
-      createdAt: dbMessages[i].createdAt.getDay(),
-      userName: dbMessages[i].userName,
-      replys: [],
-    }
-    messages.push(m)
-  }
-
+  const messages = dbMessages.map<ApiMessage>((m) => ({
+    ...m,
+    id: m.messageId as MessageId,
+    content: m.content,
+    createdAt: Math.floor(m.createdAt.getTime() / 1000),
+    userName: m.userName,
+    replys: [],
+  }))
   return { revisionId, messages }
 }
 export const createMessage = async (
@@ -160,18 +136,12 @@ export const createMessage = async (
       revisionId: revisionId,
     },
   })
-
-  const newMessage = await prisma.message.findFirst({
-    where: {
-      messageId: id,
-    },
-  })
-
+  const newMessage = await prisma.message.findFirst({ where: { messageId: id } })
   if (!newMessage) return
   const apiMessage: ApiMessage = {
     id: newMessage.messageId as MessageId,
     content: newMessage.content,
-    createdAt: newMessage.createdAt.getDate(),
+    createdAt: Math.floor(newMessage.createdAt.getTime() / 1000),
     userName: newMessage.userName,
     replys: [],
   }

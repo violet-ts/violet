@@ -5,10 +5,7 @@ export type Methods = {
     resBody: { revisionId: RevisionId; messages: ApiMessage[] }
   }
   post: {
-    reqBody: {
-      content: ApiMessage['content']
-      userName: ApiMessage['userName']
-    }
+    reqBody: Pick<ApiMessage, 'content' | 'userName'>
     resBody: ApiMessage
   }
 }
