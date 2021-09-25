@@ -124,19 +124,27 @@ export const createRevision = (workId: WorkId) => {
 
   return newRevision
 }
-export const getMessages = (revisionId: RevisionId) => {
-  const messages = messageList.find((m) => m.revisionId === revisionId)
-  return messages
-}
-const getMessageIdWithSameRevisionId = (revisionId: RevisionId) => {
-  return prisma.revision.findFirst({
+export const getMessages = async (revisionId: RevisionId) => {
+  const messages = await prisma.message.findMany({
     where: {
       revisionId: revisionId,
     },
-    select: {
-      message: true,
-    },
   })
+  if (!messages) return
+
+  const apiMessage: ApiMessage[] = []
+  for (let i = 0; i < messages.length; i++) {
+    const m = {
+      id: messages[i].messageId as MessageId,
+      content: messages[i].content,
+      createdAt: messages[i].createdAt.getDay(),
+      userName: messages[i].userName,
+      replys: [],
+    }
+    apiMessage.push(m)
+  }
+
+  return apiMessage
 }
 export const createMessage = async (
   revisionId: RevisionId,
@@ -144,7 +152,6 @@ export const createMessage = async (
   userName: ApiMessage['userName']
 ) => {
   const id = uuid()
-  console.log('id', id)
   await prisma.message.create({
     data: {
       messageId: id,
@@ -153,7 +160,7 @@ export const createMessage = async (
       revisionId: revisionId,
     },
   })
-  console.log('id', id)
+
   const newMessage = await prisma.message.findFirst({
     where: {
       messageId: id,
@@ -161,14 +168,6 @@ export const createMessage = async (
   })
 
   if (!newMessage) return
-  const replyIds = await prisma.reply.findMany({
-    where: {
-      messageId: newMessage?.messageId,
-    },
-    select: {
-      replyId: true,
-    },
-  })
   const apiMessage: ApiMessage = {
     id: newMessage.messageId as MessageId,
     content: newMessage.content,

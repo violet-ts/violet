@@ -70,7 +70,6 @@ export const StreamBar = ({
       if (!project.openedTabId) return
       if (!projectApiData.revisions) return
 
-      console.log('postMessage', content)
       const res = api.browser.works
         ._workId(project.openedTabId)
         .revisions._revisionId(projectApiData.revisions.slice(-1)[0].id)

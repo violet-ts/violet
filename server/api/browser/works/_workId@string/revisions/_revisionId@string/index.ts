@@ -1,8 +1,8 @@
-import type { ApiMessage, RevisionId } from '$/types'
+import type { ApiMessage } from '$/types'
 
 export type Methods = {
   get: {
-    resBody: { revisionId: RevisionId; messages: ApiMessage[] }
+    resBody: ApiMessage[]
   }
   post: {
     reqBody: {
