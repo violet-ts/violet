@@ -9,6 +9,8 @@ import type {
   RevisionId,
   WorkId,
 } from '$/types'
+import { PrismaClient } from '.prisma/client'
+import { uuid } from 'uuidv4'
 
 const projects: ApiProject[] = [
   { id: 'frourio' as ProjectId, name: 'frourio PJ' },
@@ -98,12 +100,13 @@ const messageList: { revisionId: ApiRevision['id']; messages: ApiMessage[] }[] =
         content: 'reviewreviewreviw',
         createdAt: Date.now(),
         userName: 'violet',
-        replyList: [],
+        replys: [],
       },
     ],
   },
 ]
 
+const prisma = new PrismaClient()
 export const getProjects = () => projects
 export const getDesks = (projectId: ProjectId) =>
   desks.find((d) => d.projectId === projectId)?.desks
@@ -124,4 +127,54 @@ export const createRevision = (workId: WorkId) => {
 export const getMessages = (revisionId: RevisionId) => {
   const messages = messageList.find((m) => m.revisionId === revisionId)
   return messages
+}
+const getMessageIdWithSameRevisionId = (revisionId: RevisionId) => {
+  return prisma.revision.findFirst({
+    where: {
+      revisionId: revisionId,
+    },
+    select: {
+      message: true,
+    },
+  })
+}
+export const createMessage = async (
+  revisionId: RevisionId,
+  content: ApiMessage['content'],
+  userName: ApiMessage['userName']
+) => {
+  const id = uuid()
+  console.log('id', id)
+  await prisma.message.create({
+    data: {
+      messageId: id,
+      content: content,
+      userName: userName,
+      revisionId: revisionId,
+    },
+  })
+  console.log('id', id)
+  const newMessage = await prisma.message.findFirst({
+    where: {
+      messageId: id,
+    },
+  })
+
+  if (!newMessage) return
+  const replyIds = await prisma.reply.findMany({
+    where: {
+      messageId: newMessage?.messageId,
+    },
+    select: {
+      replyId: true,
+    },
+  })
+  const apiMessage: ApiMessage = {
+    id: newMessage.messageId as MessageId,
+    content: newMessage.content,
+    createdAt: newMessage.createdAt.getDate(),
+    userName: newMessage.userName,
+    replys: [],
+  }
+  return apiMessage
 }

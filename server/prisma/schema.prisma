@@ -57,7 +57,7 @@ model Edition {
 
 model Message {
   messageId   String   @id @default(uuid())
-  cotent      String
+  content      String
   createdAt   DateTime @default(now())
   userName    String
   revision    Revision @relation(fields: [revisionId], references:[revisionId])

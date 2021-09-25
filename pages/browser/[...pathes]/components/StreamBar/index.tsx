@@ -1,4 +1,7 @@
+import { ChangeEvent, FormEvent, useCallback, useState } from 'react'
 import styled from 'styled-components'
+import { useApi } from '~/hooks'
+import { BrowserProject, ProjectApiData } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
 
 const Container = styled.div`
@@ -46,13 +49,47 @@ const SubmitIcon = styled.button`
     border-bottom: 4px solid transparent;
   }
 `
-export const StreamBar = () => {
+export const StreamBar = ({
+  project,
+  projectApiData,
+}: {
+  project: BrowserProject
+  projectApiData: ProjectApiData
+}) => {
+  const { api, onErr } = useApi()
+  const [content, setMessage] = useState('')
+  const inputMessage = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => setMessage(e.target.value),
+    []
+  )
+  const userName = 'Test Name'
+  const postMessage = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault()
+      if (!content) return
+      if (!project.openedTabId) return
+      if (!projectApiData.revisions) return
+
+      console.log('postMessage', content)
+      const res = api.browser.works
+        ._workId(project.openedTabId)
+        .revisions._revisionId(projectApiData.revisions.slice(-1)[0].id)
+        .post({ body: { content, userName } })
+        .catch(onErr)
+
+      if (!res) return
+
+      setMessage('')
+    },
+    [content]
+  )
+
   return (
     <Container>
       <StreamBox />
       <MessageBox>
-        <InputForm placeholder="message" type="text" />
-        <SubmitIcon />
+        <InputForm placeholder="message" type="text" value={content} onChange={inputMessage} />
+        <SubmitIcon type="submit" onClick={postMessage} />
       </MessageBox>
     </Container>
   )
