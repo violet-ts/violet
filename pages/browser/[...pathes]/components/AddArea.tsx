@@ -28,14 +28,12 @@ const StyledFileAdd = styled.i`
     height: 6px;
     color: #333;
     content: '';
-    transition: opacity 0.5s;
   }
   ::before {
     top: 5px;
     left: 3px;
     width: 2px;
     background: #333;
-    transition: opacity 0.5s;
   }
   ::after {
     top: -1px;
@@ -47,13 +45,6 @@ const StyledFileAdd = styled.i`
 
   :hover {
     opacity: 1;
-    &::after,
-    &::before {
-      opacity: 1;
-    }
-    &::before {
-      opacity: 1;
-    }
   }
 `
 
@@ -81,7 +72,6 @@ const StyledFolderAdd = styled.i`
     display: block;
     color: #333;
     content: '';
-    transition: opacity 0.5s;
   }
   &::before {
     top: 4px;
@@ -89,7 +79,6 @@ const StyledFolderAdd = styled.i`
     width: 6px;
     height: 2px;
     background: #333;
-    transition: opacity 0.5s;
   }
   &::after {
     top: -5px;
@@ -105,13 +94,6 @@ const StyledFolderAdd = styled.i`
 
   :hover {
     opacity: 1;
-    &::after,
-    &::before {
-      opacity: 1;
-    }
-    &::before {
-      opacity: 1;
-    }
   }
 `
 
