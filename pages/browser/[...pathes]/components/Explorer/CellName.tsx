@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
 import { pagesPath } from '~/utils/$path'
 import { colors, forceToggleHash } from '~/utils/constants'
+import { AddArea } from '../AddArea'
 import { ExtIcon } from '../ExtIcon'
 import { SelectableStyle } from '../SelectableStyle'
 
@@ -59,6 +60,7 @@ export const CellName = (props: {
             <>
               <Arrow opened={props.opened} />
               <Spacer axis="x" size={18} />
+              <AddArea />
             </>
           )}
           {props.name}
