@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useCallback, useState } from 'react'
+import React, { FormEvent, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { useApi } from '~/hooks'
 import { BrowserProject, ProjectApiData } from '~/server/types'
@@ -21,7 +21,7 @@ const MessageBox = styled.div`
   flex-shrink: 0;
   padding: 8px;
 `
-const InputForm = styled.input`
+const InputForm = styled.textarea`
   width: 100%;
   min-height: 120px;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
@@ -63,10 +63,7 @@ export const StreamBar = ({
 }) => {
   const { api, onErr } = useApi()
   const [content, setMessage] = useState('')
-  const inputMessage = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => setMessage(e.target.value),
-    []
-  )
+
   const userName = 'Test Name'
   const postMessage = useCallback(
     async (e: FormEvent) => {
@@ -74,7 +71,6 @@ export const StreamBar = ({
       if (!content) return
       if (!project.openedTabId) return
       if (!projectApiData.revisions) return
-      console.log('mesages: ', projectApiData.messages)
       const res = api.browser.works
         ._workId(project.openedTabId)
         .revisions._revisionId(projectApiData.revisions.slice(-1)[0].id)
@@ -95,7 +91,11 @@ export const StreamBar = ({
           projectApiData.messages.map((d, i) => <CommentBlock key={i} message={d} />)}
       </StreamBox>
       <MessageBox>
-        <InputForm placeholder="message" type="text" value={content} onChange={inputMessage} />
+        <InputForm
+          placeholder="message"
+          value={content}
+          onChange={(e) => setMessage(e.target.value)}
+        />
         <SubmitIcon type="submit" onClick={postMessage} />
       </MessageBox>
     </Container>
