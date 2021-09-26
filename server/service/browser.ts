@@ -110,7 +110,10 @@ export const createRevision = (workId: WorkId) => {
   return newRevision
 }
 export const getMessages = async (revisionId: RevisionId) => {
-  const dbMessages = await prisma.message.findMany({ where: { revisionId: revisionId } })
+  const dbMessages = await prisma.message.findMany({
+    where: { revisionId: revisionId },
+    orderBy: { createdAt: 'asc' },
+  })
   if (!dbMessages) return
   const messages = dbMessages.map<ApiMessage>((m) => ({
     ...m,
