@@ -1,5 +1,5 @@
 import { createMessage, getMessages } from '$/service/browser'
-import { RevisionId } from '$/types'
+import type { RevisionId } from '$/types'
 import { defineController } from './$relay'
 
 export default defineController(() => ({

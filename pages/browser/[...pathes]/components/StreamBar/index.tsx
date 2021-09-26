@@ -1,7 +1,8 @@
-import React, { FormEvent, useCallback, useState } from 'react'
+import type { FormEvent } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { useApi } from '~/hooks'
-import { BrowserProject, ProjectApiData } from '~/server/types'
+import type { BrowserProject, ProjectApiData } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
 import { CommentBlock } from './CommentBlock'
 

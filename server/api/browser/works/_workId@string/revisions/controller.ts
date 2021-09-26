@@ -1,5 +1,5 @@
 import { createRevision, getRevisions } from '$/service/browser'
-import { WorkId } from '$/types'
+import type { WorkId } from '$/types'
 import { defineController } from './$relay'
 
 export default defineController(() => ({

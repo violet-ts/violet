@@ -36,6 +36,7 @@ module.exports = {
     'import/order': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/consistent-type-imports': 'error',
   },
   overrides: [
     {

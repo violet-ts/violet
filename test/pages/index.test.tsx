@@ -1,6 +1,7 @@
 import aspida from '@aspida/fetch'
 import dotenv from 'dotenv'
-import Fastify, { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
+import Fastify from 'fastify'
 import cors from 'fastify-cors'
 import React from 'react'
 import Home from '~/pages/index.page'

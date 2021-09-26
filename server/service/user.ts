@@ -1,4 +1,4 @@
-import { Multipart } from 'fastify-multipart'
+import type { Multipart } from 'fastify-multipart'
 import fs from 'fs'
 import path from 'path'
 import { API_ORIGIN, BASE_PATH, USER_ID, USER_PASS } from '../utils/envValues'
