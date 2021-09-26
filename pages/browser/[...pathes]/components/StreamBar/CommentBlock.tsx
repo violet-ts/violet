@@ -21,9 +21,7 @@ const Message = styled.div`
 export const CommentBlock = (props: { message: ApiMessage }) => {
   return (
     <Container>
-      <>
-        <MessageHeader message={props.message} />
-      </>
+      <MessageHeader message={props.message} />
       <Message>{props.message.content}</Message>
     </Container>
   )
