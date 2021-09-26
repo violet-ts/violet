@@ -1,12 +1,16 @@
 import type {
   ApiDesk,
+  ApiMessage,
   ApiProject,
   ApiRevision,
   DeskId,
+  MessageId,
   ProjectId,
   RevisionId,
   WorkId,
 } from '$/types'
+import { PrismaClient } from '.prisma/client'
+import { uuid } from 'uuidv4'
 
 const projects: ApiProject[] = [
   { id: 'frourio' as ProjectId, name: 'frourio PJ' },
@@ -63,7 +67,17 @@ const desks: { projectId: ProjectId; desks: ApiDesk[] }[] = [
 ]
 
 const revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevision[] }[] = [
-  { projectId: projects[0].id, workId: 'work_1' as WorkId, revisions: [] },
+  {
+    projectId: projects[0].id,
+    workId: 'work_1' as WorkId,
+    revisions: [
+      {
+        id: 'revision_123456' as RevisionId,
+        editions: [],
+        messages: [{ id: 'message_1' as MessageId }],
+      },
+    ],
+  },
   { projectId: projects[0].id, workId: 'work_2' as WorkId, revisions: [] },
   { projectId: projects[0].id, workId: 'work_3' as WorkId, revisions: [] },
   { projectId: projects[0].id, workId: 'work_4' as WorkId, revisions: [] },
@@ -77,6 +91,7 @@ const revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevis
   { projectId: projects[1].id, workId: 'work_12' as WorkId, revisions: [] },
 ]
 
+const prisma = new PrismaClient()
 export const getProjects = () => projects
 export const getDesks = (projectId: ProjectId) =>
   desks.find((d) => d.projectId === projectId)?.desks
@@ -88,8 +103,47 @@ export const createRevision = (workId: WorkId) => {
   const newRevision: ApiRevision = {
     id: `${workId}-${revisions.length}` as RevisionId,
     editions: [],
+    messages: [],
   }
   revisions.push(newRevision)
 
   return newRevision
+}
+export const getMessages = async (revisionId: RevisionId) => {
+  const dbMessages = await prisma.message.findMany({ where: { revisionId: revisionId } })
+  if (!dbMessages) return
+  const messages = dbMessages.map<ApiMessage>((m) => ({
+    ...m,
+    id: m.messageId as MessageId,
+    content: m.content,
+    createdAt: Math.floor(m.createdAt.getTime() / 1000),
+    userName: m.userName,
+    replys: [],
+  }))
+  return { revisionId, messages }
+}
+export const createMessage = async (
+  revisionId: RevisionId,
+  content: ApiMessage['content'],
+  userName: ApiMessage['userName']
+) => {
+  const id = uuid()
+  await prisma.message.create({
+    data: {
+      messageId: id,
+      content: content,
+      userName: userName,
+      revisionId: revisionId,
+    },
+  })
+  const newMessage = await prisma.message.findFirst({ where: { messageId: id } })
+  if (!newMessage) return
+  const apiMessage: ApiMessage = {
+    id: newMessage.messageId as MessageId,
+    content: newMessage.content,
+    createdAt: Math.floor(newMessage.createdAt.getTime() / 1000),
+    userName: newMessage.userName,
+    replys: [],
+  }
+  return apiMessage
 }

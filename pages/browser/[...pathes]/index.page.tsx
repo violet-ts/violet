@@ -61,7 +61,7 @@ const ProjectPage = () => {
                   <Revision />
                 </RevisionColumn>
                 <StreamBarColumn>
-                  <StreamBar />
+                  <StreamBar project={currentProject} projectApiData={projectApiData} />
                 </StreamBarColumn>
               </>
             ) : (

@@ -1,4 +1,12 @@
-import type { DeskId, EditionId, MessageId, ProjectId, RevisionId, WorkId } from './branded'
+import type {
+  DeskId,
+  EditionId,
+  MessageId,
+  ProjectId,
+  ReplyId,
+  RevisionId,
+  WorkId,
+} from './branded'
 
 export type ApiProject = {
   id: ProjectId
@@ -23,18 +31,31 @@ export type ApiRevision = {
   editions: {
     id: EditionId
   }[]
+  messages: {
+    id: MessageId
+  }[]
 }
 
 export type ApiMessage = {
   id: MessageId
   content: string
+  createdAt: number
+  userName: string
+  replys: { id: ReplyId }[]
+}
+
+export type ApiReply = {
+  id: ReplyId
+  content: string
+  createdAt: number
+  userName: string
 }
 
 export type BrowserApiWholeData = {
   projects: ApiProject[]
   desksList: { projectId: ProjectId; desks: ApiDesk[] }[]
   revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevision[] }[]
-  messagesList: { projectId: ProjectId; revisionId: RevisionId; messages: ApiMessage[] }[]
+  messagesList: { revisionId: RevisionId; messages: ApiMessage[] }[]
 }
 
 export type ProjectApiData = {

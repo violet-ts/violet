@@ -1,11 +1,10 @@
-import useAspidaSWR from '@aspida/swr'
 import { useRouter } from 'next/dist/client/router'
 import { useContext, useEffect, useMemo } from 'react'
 import { BrowserContext } from '~/contexts/Browser'
-import { useApi } from '~/hooks'
 import type { ApiWork, BrowserProject, ProjectApiData, ProjectId } from '~/server/types'
 import { getWorkFullName } from '~/utils'
 import { forceToggleHash } from '~/utils/constants'
+import { useFetch } from './useFetch'
 
 const findWork = (
   projectApiData: ProjectApiData,
@@ -47,62 +46,6 @@ const getTabParams = (project: BrowserProject, work: ApiWork | undefined) =>
         tabs: project.tabs.some((t) => t.id === work.id) ? project.tabs : [...project.tabs, work],
       }
     : undefined
-
-const useFetch = (projectId: ProjectId | undefined, currentProject: BrowserProject | undefined) => {
-  const { apiWholeData, updateProjects, updateApiWholeData } = useContext(BrowserContext)
-  const { api } = useApi()
-  const enabled = !!projectId
-  const projectsRes = useAspidaSWR(api.browser.projects, { enabled })
-  const desksRes = useAspidaSWR(api.browser.projects._projectId(projectId ?? ''), { enabled })
-  const revisionsRes = useAspidaSWR(
-    api.browser.works._workId(currentProject?.openedTabId ?? '').revisions,
-    { enabled: !!currentProject?.openedTabId }
-  )
-
-  useEffect(() => {
-    const projectsData = projectsRes.data
-    if (!projectsData) return
-
-    updateApiWholeData('projects', projectsData)
-    updateProjects(
-      projectsData.map((d) => ({
-        ...d,
-        tabs: [],
-        openedFullPathDict: {},
-        openedTabId: undefined,
-        selectedFullPath: d.id,
-      }))
-    )
-  }, [projectsRes.data])
-
-  useEffect(() => {
-    const desksData = desksRes.data
-    if (!desksData) return
-
-    updateApiWholeData(
-      'desksList',
-      apiWholeData.desksList.some((d) => d.projectId === desksData.projectId)
-        ? apiWholeData.desksList.map((d) => (d.projectId === desksData.projectId ? desksData : d))
-        : [...apiWholeData.desksList, desksData]
-    )
-  }, [desksRes.data])
-
-  useEffect(() => {
-    const revisionsData = revisionsRes.data
-    if (!revisionsData) return
-
-    updateApiWholeData(
-      'revisionsList',
-      apiWholeData.revisionsList.some((r) => r.workId === revisionsData.workId)
-        ? apiWholeData.revisionsList.map((r) =>
-            r.workId === revisionsData.workId ? revisionsData : r
-          )
-        : [...apiWholeData.revisionsList, revisionsData]
-    )
-  }, [revisionsRes.data])
-
-  return { error: [projectsRes.error, desksRes.error, revisionsRes.error].find(Boolean) }
-}
 
 const usePathValues = (): {
   projectId: ProjectId | undefined

@@ -1,13 +1,29 @@
 import type { ApiProject, ApiWork } from './api'
-import type { DeskId, EditionId, RevisionId, WorkId } from './branded'
+import type { DeskId, EditionId, MessageId, RevisionId, WorkId } from './branded'
 
-export type ErowserEdition = {
+export type BrowserReply = {
+  id: MessageId
+  contents: string
+  cratedAt: number
+  userName: string
+}
+
+export type BrowserMessage = {
+  id: MessageId
+  contents: string
+  createdAt: number
+  userName: string
+  replys: BrowserReply[]
+}
+
+export type BrowserEdition = {
   id: EditionId
 }
 
 export type BrowserRevision = {
   id: RevisionId
-  editions: ErowserEdition[]
+  editions: BrowserEdition[]
+  messages: BrowserMessage[]
 }
 
 export type BrowserWork = {
