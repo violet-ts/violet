@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import React from 'react'
 import styled from 'styled-components'
 import type { ApiMessage } from '~/server/types'
@@ -32,20 +33,14 @@ const CreateAt = styled.span`
 `
 
 export const MessageHeader = (props: { message: ApiMessage }) => {
-  const timeStamp = new Date(props.message.createdAt * 1000)
-  const hh = `0${timeStamp.getHours()}`.slice(-2)
-  const mm = `0${timeStamp.getMinutes()}`.slice(-2)
-  const ss = `0${timeStamp.getSeconds()}`.slice(-2)
-  const createAt = `${timeStamp.getFullYear()}/${timeStamp.getMonth() + 1}/${timeStamp.getDate()}
-   ${hh}:${mm}:${ss}`
+  const timeStamp = dayjs(props.message.createdAt * 1000)
+  const createAt = dayjs(timeStamp).format('YYYY/MM/DD HH:mm:ss')
   const src = 'https://placehold.jp/32x32.png'
   return (
     <Container>
-      <>
-        <Icon src={src} />
-        <UserName>{props.message.userName}</UserName>
-        <CreateAt>{createAt}</CreateAt>
-      </>
+      <Icon src={src} />
+      <UserName>{props.message.userName}</UserName>
+      <CreateAt>{createAt}</CreateAt>
     </Container>
   )
 }
