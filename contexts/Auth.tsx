@@ -1,5 +1,6 @@
 import { getApps, initializeApp } from 'firebase/app'
-import { connectAuthEmulator, getAuth, User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
+import { connectAuthEmulator, getAuth } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
 
 if (!getApps().length) {

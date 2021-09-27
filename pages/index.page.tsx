@@ -1,7 +1,8 @@
 import type { Task } from '$prisma/client'
 import useAspidaSWR from '@aspida/swr'
 import Head from 'next/head'
-import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react'
+import type { ChangeEvent, FormEvent } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
 import { Fetching } from '~/components/organisms/Fetching'
@@ -139,7 +140,7 @@ const Home = () => {
           </form>
           <Tasks>
             {tasks.map((task, i) => (
-              <React.Fragment key={task.id}>
+              <Fragment key={task.id}>
                 {i > 0 && <Spacer axis="y" size={12} />}
                 <li>
                   <label>
@@ -148,7 +149,7 @@ const Home = () => {
                   </label>
                   <StyledInput type="button" value="DELETE" onClick={() => deleteTask(task)} />
                 </li>
-              </React.Fragment>
+              </Fragment>
             ))}
           </Tasks>
         </div>
