@@ -84,7 +84,9 @@ export const usePage = () => {
 
     const data = apiWholeData.projects?.find((p) => p.id === currentProject.id)
     const desks = apiWholeData.desksList.find((d) => d.projectId === currentProject.id)?.desks
-    const revisionId = apiWholeData.revisionsList.map((d) => d.revisions.slice(-1)[0].id)[0]
+    const revisions = apiWholeData.revisionsList.find(
+      (d) => d.workId === currentProject.openedTabId
+    )?.revisions
 
     return (
       data &&
@@ -92,9 +94,10 @@ export const usePage = () => {
         projectId: currentProject.id,
         name: data.name,
         desks,
-        revisions: apiWholeData.revisionsList.find((d) => d.workId === currentProject.openedTabId)
-          ?.revisions,
-        messages: apiWholeData.messagesList.find((d) => d.revisionId === revisionId)?.messages,
+        revisions: revisions,
+        messages: apiWholeData.messagesList.find(
+          (d) => d.revisionId === revisions?.slice(-1)[0]?.id
+        )?.messages,
       }
     )
   }, [apiWholeData, currentProject])
