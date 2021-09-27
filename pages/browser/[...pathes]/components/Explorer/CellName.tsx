@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
 import { pagesPath } from '~/utils/$path'
@@ -31,6 +32,12 @@ const Arrow = styled.div<{ opened?: boolean }>`
   transform: rotate(${(props) => (props.opened ? '' : '-')}45deg);
 `
 
+const NewFileFolderArea = styled.div<{ depth: number }>`
+  display: block;
+  padding: 6px 8px;
+  padding-left: ${(props) => props.depth * 8}px;
+`
+
 export const CellName = (props: {
   name: string
   selected: boolean
@@ -40,7 +47,12 @@ export const CellName = (props: {
   bold?: boolean
 }) => {
   const pathChunks = props.fullPath.split('/')
+  const [isClickNewAdd, setIsClickNewAdd] = useState(false)
 
+  const isClick = () => {
+    console.log('check')
+    setIsClickNewAdd(true)
+  }
   return (
     <Link
       href={pagesPath.browser
@@ -60,11 +72,20 @@ export const CellName = (props: {
             <>
               <Arrow opened={props.opened} />
               <Spacer axis="x" size={18} />
-              <AddArea />
+              <AddArea isFolder={() => isClick()} />
             </>
           )}
           {props.name}
         </Label>
+        {isClickNewAdd ? (
+          <>
+            <NewFileFolderArea depth={pathChunks.length - 1}>
+              <input type="text" />
+            </NewFileFolderArea>
+          </>
+        ) : (
+          <></>
+        )}
       </Container>
     </Link>
   )
