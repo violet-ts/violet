@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback, useState } from 'react'
+import React, { FormEvent, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useApi } from '~/hooks'
 import { BrowserProject, ProjectApiData } from '~/server/types'
@@ -63,6 +63,7 @@ export const StreamBar = ({
 }) => {
   const { api, onErr } = useApi()
   const [content, setMessage] = useState('')
+  const scrollBottomRef = useRef<HTMLDivElement>(null)
 
   const userName = 'Test Name'
   const postMessage = useCallback(
@@ -71,7 +72,7 @@ export const StreamBar = ({
       if (!content) return
       if (!project.openedTabId) return
       if (!projectApiData.revisions) return
-      const res = api.browser.works
+      const res = await api.browser.works
         ._workId(project.openedTabId)
         .revisions._revisionId(projectApiData.revisions.slice(-1)[0].id)
         .post({ body: { content, userName } })
@@ -79,16 +80,21 @@ export const StreamBar = ({
 
       if (!res) return
 
+      projectApiData.messages?.push(res.body)
       setMessage('')
     },
     [content, project, projectApiData]
   )
+  useEffect(() => {
+    scrollBottomRef?.current?.scrollIntoView()
+  }, [projectApiData.messages?.length])
 
   return (
     <Container>
       <StreamBox>
         {projectApiData.messages &&
           projectApiData.messages.map((d, i) => <CommentBlock key={i} message={d} />)}
+        <div ref={scrollBottomRef} />
       </StreamBox>
       <MessageBox>
         <InputForm
