@@ -25,10 +25,20 @@ const MessageBox = styled.div`
 const InputForm = styled.textarea`
   width: 100%;
   min-height: 120px;
+  resize: none;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
   ::placeholder {
     color: ${colors.violet}${alphaLevel[2]};
   }
+`
+const ClickableArea = styled.button`
+  position: fixed;
+  right: 8px;
+  bottom: 8px;
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  border: none;
 `
 const SubmitIcon = styled.button`
   position: fixed;
@@ -42,7 +52,7 @@ const SubmitIcon = styled.button`
   box-shadow: 0 0 0 2px, inset -2px 0 0;
   transform: rotate(-45deg);
   ::before {
-    position: absolute;
+    position: fixed;
     top: -4px;
     left: -14px;
     box-sizing: border-box;
@@ -67,7 +77,7 @@ export const StreamBar = ({
   const scrollBottomRef = useRef<HTMLDivElement>(null)
 
   const userName = 'Test Name'
-  const postMessage = useCallback(
+  const submitMessage = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
       if (!content) return
@@ -103,7 +113,9 @@ export const StreamBar = ({
           value={content}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <SubmitIcon type="submit" onClick={postMessage} />
+        <ClickableArea type="submit" onClick={submitMessage}>
+          <SubmitIcon />
+        </ClickableArea>
       </MessageBox>
     </Container>
   )
