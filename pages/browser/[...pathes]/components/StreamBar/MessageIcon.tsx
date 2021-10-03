@@ -1,11 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Spacer } from '~/components/atoms/Spacer'
 
-const IconContaner = styled.div`
-  display: flex;
-  flex-direction: column;
-`
 const ClickableArea = styled.button`
   width: 24px;
   height: 32px;
@@ -38,11 +33,8 @@ const SubmitIcon = styled.div`
 `
 export const MessageIcon = (props: { onClick: () => void }) => {
   return (
-    <IconContaner>
-      <Spacer axis="y" size={48} />
-      <ClickableArea type="submit" onClick={() => props.onClick()}>
-        <SubmitIcon />
-      </ClickableArea>
-    </IconContaner>
+    <ClickableArea onClick={() => props.onClick()}>
+      <SubmitIcon />
+    </ClickableArea>
   )
 }

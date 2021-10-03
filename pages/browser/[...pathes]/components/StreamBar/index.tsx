@@ -133,7 +133,7 @@ export const StreamBar = ({
           value={content}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <ClickableArea type="submit" onClick={submitMessage}>
+        <ClickableArea onClick={submitMessage}>
           <SubmitIcon />
         </ClickableArea>
       </MessageBox>

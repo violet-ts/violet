@@ -6,7 +6,6 @@ import { MessageIcon } from './MessageIcon'
 
 const Container = styled.div`
   display: flex;
-  flex-direction: row;
 `
 const InputForm = styled.textarea`
   width: 100%;
@@ -28,8 +27,10 @@ export const ReplyMessageBox = () => {
       <Spacer axis="x" size={4} />
       <InputForm placeholder="reply" value={content} onChange={(e) => setMessage(e.target.value)} />
       <Spacer axis="x" size={8} />
-      <Spacer axis="y" size={40} />
-      <MessageIcon onClick={replyButtonClick} />
+      <div>
+        <Spacer axis="y" size={48} />
+        <MessageIcon onClick={replyButtonClick} />
+      </div>
     </Container>
   )
 }
