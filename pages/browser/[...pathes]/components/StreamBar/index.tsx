@@ -136,7 +136,7 @@ export const StreamBar = ({
         ._workId(project.openedTabId)
         .revisions._revisionId(revisionId)
         ._messageId(messageId)
-        .post({ body: { content, userName } })
+        .replies.post({ body: { content, userName } })
         .catch(onErr)
 
       if (!replyRes) return
