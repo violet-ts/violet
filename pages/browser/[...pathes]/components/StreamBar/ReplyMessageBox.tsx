@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { Spacer } from '~/components/atoms/Spacer'
 import { alphaLevel, colors } from '~/utils/constants'
-import { ArrowTopLeftO } from './MessageIcon'
+import { MessageIcon } from './MessageIcon'
 
 const Container = styled.div`
   display: flex;
@@ -10,7 +11,6 @@ const Container = styled.div`
 const InputForm = styled.textarea`
   width: 100%;
   min-height: 64px;
-  margin: 4px;
   resize: none;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
   ::placeholder {
@@ -20,15 +20,16 @@ const InputForm = styled.textarea`
 
 export const ReplyMessageBox = () => {
   const [content, setMessage] = useState('')
-  const [isClick, setIsClick] = useState(false)
   const replyButtonClick = () => {
-    setIsClick(true)
     setMessage('')
   }
   return (
     <Container>
+      <Spacer axis="x" size={4} />
       <InputForm placeholder="reply" value={content} onChange={(e) => setMessage(e.target.value)} />
-      <ArrowTopLeftO click={replyButtonClick} />
+      <Spacer axis="x" size={8} />
+      <Spacer axis="y" size={40} />
+      <MessageIcon onClick={replyButtonClick} />
     </Container>
   )
 }

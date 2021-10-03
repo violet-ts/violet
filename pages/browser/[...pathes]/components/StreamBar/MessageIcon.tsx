@@ -1,14 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Spacer } from '~/components/atoms/Spacer'
 
+const IconContaner = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 const ClickableArea = styled.button`
-  width: 32px;
+  width: 24px;
   height: 32px;
-  margin-top: 32px;
+  cursor: pointer;
   background-color: transparent;
   border: none;
 `
-const SubmitIcon = styled.button`
+const SubmitIcon = styled.div`
+  position: relative;
   width: 16px;
   height: 4px;
   border-right: solid transparent;
@@ -16,10 +22,10 @@ const SubmitIcon = styled.button`
   border-bottom-right-radius: 1px;
   box-shadow: 0 0 0 2px, inset -2px 0 0;
   transform: rotate(-45deg);
-  ::after {
+  ::before {
     position: absolute;
-    top: -4px;
-    left: -14px;
+    top: -2px;
+    left: -12px;
     box-sizing: border-box;
     display: block;
     width: 8px;
@@ -30,12 +36,13 @@ const SubmitIcon = styled.button`
     border-bottom: 4px solid transparent;
   }
 `
-export const ArrowTopLeftO = (props: { click: () => void }) => {
+export const MessageIcon = (props: { onClick: () => void }) => {
   return (
-    <div>
-      <ClickableArea type="submit" onClick={() => props.click()}>
+    <IconContaner>
+      <Spacer axis="y" size={48} />
+      <ClickableArea type="submit" onClick={() => props.onClick()}>
         <SubmitIcon />
       </ClickableArea>
-    </div>
+    </IconContaner>
   )
 }
