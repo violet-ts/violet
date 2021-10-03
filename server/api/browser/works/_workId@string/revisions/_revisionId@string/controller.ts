@@ -1,4 +1,4 @@
-import { createMessage, getMessages } from '$/service/browser'
+import { createMessage, getMessages } from '$/service/stream'
 import type { RevisionId } from '$/types'
 import { defineController } from './$relay'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
-import type { ApiMessage } from '~/server/types'
+import type { ApiMessage, MessageId } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
 import { MessageHeader } from './MessageHeader'
 import { ReplyMessageBox } from './ReplyMessageBox'
@@ -20,12 +20,19 @@ const Message = styled.div`
   margin-left: 36px;
 `
 
-export const CommentBlock = (props: { message: ApiMessage }) => {
+export const CommentBlock = (props: {
+  message: ApiMessage
+  reply: (messageId: MessageId, content: string) => Promise<void>
+}) => {
+  const reply = (content: string) => {
+    props.reply(props.message.id, content)
+  }
+
   return (
     <Container>
       <MessageHeader message={props.message} />
       <Message>{props.message.content}</Message>
-      <ReplyMessageBox />
+      <ReplyMessageBox reply={reply} />
       <Spacer axis="y" size={4} />
     </Container>
   )
