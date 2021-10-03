@@ -17,9 +17,10 @@ const InputForm = styled.textarea`
   }
 `
 
-export const ReplyMessageBox = () => {
+export const ReplyMessageBox = (props: { reply: (content: string) => void }) => {
   const [content, setMessage] = useState('')
   const replyButtonClick = () => {
+    props.reply(content)
     setMessage('')
   }
   return (

@@ -3,7 +3,13 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import styled from 'styled-components'
 import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
-import type { ApiMessage, BrowserProject, ProjectApiData, RevisionId } from '~/server/types'
+import type {
+  ApiMessage,
+  BrowserProject,
+  MessageId,
+  ProjectApiData,
+  RevisionId,
+} from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
 import { CommentBlock } from './CommentBlock'
 
@@ -120,11 +126,31 @@ export const StreamBar = ({
     )
   }
 
+  const submitReply = useCallback(
+    async (messageId: MessageId, content: string) => {
+      if (!content) return
+      if (!project.openedTabId) return
+      if (!projectApiData.revisions) return
+      const revisionId = projectApiData.revisions.slice(-1)[0].id
+      const replyRes = await api.browser.works
+        ._workId(project.openedTabId)
+        .revisions._revisionId(revisionId)
+        ._messageId(messageId)
+        .post({ body: { content, userName } })
+        .catch(onErr)
+
+      if (!replyRes) return
+    },
+    [content, project, projectApiData]
+  )
+
   return (
     <Container>
       <StreamBox>
         {projectApiData.messages &&
-          projectApiData.messages.map((d, i) => <CommentBlock key={i} message={d} />)}
+          projectApiData.messages.map((d, i) => (
+            <CommentBlock key={i} message={d} reply={submitReply} />
+          ))}
         <div ref={scrollBottomRef} />
       </StreamBox>
       <MessageBox>
