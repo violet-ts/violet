@@ -33,7 +33,7 @@ const SubmitIcon = styled.div`
 `
 export const MessageIcon = (props: { onClick: () => void }) => {
   return (
-    <ClickableArea onClick={() => props.onClick()}>
+    <ClickableArea onClick={props.onClick}>
       <SubmitIcon />
     </ClickableArea>
   )
