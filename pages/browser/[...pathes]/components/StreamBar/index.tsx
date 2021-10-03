@@ -1,8 +1,9 @@
 import type { FormEvent } from 'react'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
-import type { BrowserProject, ProjectApiData } from '~/server/types'
+import type { ApiMessage, BrowserProject, ProjectApiData, RevisionId } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
 import { CommentBlock } from './CommentBlock'
 
@@ -25,12 +26,23 @@ const MessageBox = styled.div`
 const InputForm = styled.textarea`
   width: 100%;
   min-height: 120px;
+  resize: none;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
   ::placeholder {
     color: ${colors.violet}${alphaLevel[2]};
   }
 `
-const SubmitIcon = styled.button`
+const ClickableArea = styled.button`
+  position: fixed;
+  right: 8px;
+  bottom: 8px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+`
+const SubmitIcon = styled.div`
   position: fixed;
   right: 16px;
   bottom: 24px;
@@ -42,9 +54,9 @@ const SubmitIcon = styled.button`
   box-shadow: 0 0 0 2px, inset -2px 0 0;
   transform: rotate(-45deg);
   ::before {
-    position: absolute;
-    top: -4px;
-    left: -14px;
+    position: fixed;
+    top: -2px;
+    left: -12px;
     box-sizing: border-box;
     display: block;
     width: 8px;
@@ -62,34 +74,58 @@ export const StreamBar = ({
   project: BrowserProject
   projectApiData: ProjectApiData
 }) => {
+  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
   const { api, onErr } = useApi()
   const [content, setMessage] = useState('')
+  const scrollBottomRef = useRef<HTMLDivElement>(null)
 
   const userName = 'Test Name'
-  const postMessage = useCallback(
+  const submitMessage = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
       if (!content) return
       if (!project.openedTabId) return
       if (!projectApiData.revisions) return
-      const res = api.browser.works
+      const revisionId = projectApiData.revisions.slice(-1)[0].id
+      await api.browser.works
         ._workId(project.openedTabId)
-        .revisions._revisionId(projectApiData.revisions.slice(-1)[0].id)
+        .revisions._revisionId(revisionId)
         .post({ body: { content, userName } })
         .catch(onErr)
 
-      if (!res) return
+      const messageRes = await api.browser.works
+        ._workId(project.openedTabId)
+        .revisions._revisionId(revisionId)
+        .$get()
 
+      if (!messageRes) return
+
+      updateMessage(messageRes)
       setMessage('')
     },
     [content, project, projectApiData]
   )
+  useEffect(() => {
+    scrollBottomRef?.current?.scrollIntoView()
+  }, [projectApiData.messages?.length])
+
+  const updateMessage = (messageRes: { revisionId: RevisionId; messages: ApiMessage[] }) => {
+    updateApiWholeData(
+      'messagesList',
+      apiWholeData.messagesList.some((r) => r.revisionId === messageRes.revisionId)
+        ? apiWholeData.messagesList.map((r) =>
+            r.revisionId === messageRes.revisionId ? messageRes : r
+          )
+        : [...apiWholeData.messagesList, messageRes]
+    )
+  }
 
   return (
     <Container>
       <StreamBox>
         {projectApiData.messages &&
           projectApiData.messages.map((d, i) => <CommentBlock key={i} message={d} />)}
+        <div ref={scrollBottomRef} />
       </StreamBox>
       <MessageBox>
         <InputForm
@@ -97,7 +133,9 @@ export const StreamBar = ({
           value={content}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <SubmitIcon type="submit" onClick={postMessage} />
+        <ClickableArea onClick={submitMessage}>
+          <SubmitIcon />
+        </ClickableArea>
       </MessageBox>
     </Container>
   )
