@@ -24,7 +24,7 @@ export const CommentBlock = (props: {
   message: ApiMessage
   replyMessage: (messageId: MessageId, content: string) => Promise<void>
 }) => {
-  const passContent = (content: string) => {
+  const sendContent = (content: string) => {
     props.replyMessage(props.message.id, content)
   }
 
@@ -32,7 +32,7 @@ export const CommentBlock = (props: {
     <Container>
       <MessageHeader message={props.message} />
       <Message>{props.message.content}</Message>
-      <ReplyMessageBox passContent={passContent} />
+      <ReplyMessageBox sendContent={sendContent} />
       <Spacer axis="y" size={4} />
     </Container>
   )

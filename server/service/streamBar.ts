@@ -1,5 +1,6 @@
 import type { ApiMessage, ApiReply, MessageId, ReplyId, RevisionId } from '$/types'
 import { PrismaClient } from '@prisma/client'
+import dayjs from 'dayjs'
 import { uuid } from 'uuidv4'
 
 const prisma = new PrismaClient()
@@ -40,7 +41,7 @@ export const createMessage = async (
   const apiMessage: ApiMessage = {
     id: newMessage.messageId as MessageId,
     content: newMessage.content,
-    createdAt: Math.floor(newMessage.createdAt.getTime() / 1000),
+    createdAt: dayjs(newMessage.createdAt).unix(),
     userName: newMessage.userName,
     replys: [],
   }
@@ -66,7 +67,7 @@ export const createReply = async (
   const apiReply: ApiReply = {
     id: newMessage.replyId as ReplyId,
     content: newMessage.content,
-    createdAt: Math.floor(newMessage.createdAt.getTime() / 1000),
+    createdAt: dayjs(newMessage.createdAt).unix(),
     userName: newMessage.userName,
   }
   return apiReply

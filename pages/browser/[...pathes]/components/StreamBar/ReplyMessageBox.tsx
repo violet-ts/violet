@@ -17,16 +17,16 @@ const InputForm = styled.textarea`
   }
 `
 
-export const ReplyMessageBox = (props: { passContent: (content: string) => void }) => {
-  const [content, setMessage] = useState('')
+export const ReplyMessageBox = (props: { sendContent: (content: string) => void }) => {
+  const [content, setContent] = useState('')
   const replyButtonClick = () => {
-    props.passContent(content)
-    setMessage('')
+    props.sendContent(content)
+    setContent('')
   }
   return (
     <Container>
       <Spacer axis="x" size={4} />
-      <InputForm placeholder="reply" value={content} onChange={(e) => setMessage(e.target.value)} />
+      <InputForm placeholder="reply" value={content} onChange={(e) => setContent(e.target.value)} />
       <Spacer axis="x" size={8} />
       <div>
         <Spacer axis="y" size={48} />
