@@ -1,4 +1,4 @@
-import { createReply } from '$/service/stream'
+import { createReply } from '$/service/streamBar'
 import type { MessageId } from '$/types'
 import { defineController } from './$relay'
 
