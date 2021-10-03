@@ -126,7 +126,7 @@ export const StreamBar = ({
     )
   }
 
-  const submitReply = useCallback(
+  const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
       if (!content) return
       if (!project.openedTabId) return
@@ -149,7 +149,7 @@ export const StreamBar = ({
       <StreamBox>
         {projectApiData.messages &&
           projectApiData.messages.map((d, i) => (
-            <CommentBlock key={i} message={d} reply={submitReply} />
+            <CommentBlock key={i} message={d} replyMessage={replyMessage} />
           ))}
         <div ref={scrollBottomRef} />
       </StreamBox>

@@ -22,17 +22,17 @@ const Message = styled.div`
 
 export const CommentBlock = (props: {
   message: ApiMessage
-  reply: (messageId: MessageId, content: string) => Promise<void>
+  replyMessage: (messageId: MessageId, content: string) => Promise<void>
 }) => {
-  const reply = (content: string) => {
-    props.reply(props.message.id, content)
+  const passContent = (content: string) => {
+    props.replyMessage(props.message.id, content)
   }
 
   return (
     <Container>
       <MessageHeader message={props.message} />
       <Message>{props.message.content}</Message>
-      <ReplyMessageBox reply={reply} />
+      <ReplyMessageBox passContent={passContent} />
       <Spacer axis="y" size={4} />
     </Container>
   )
