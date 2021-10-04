@@ -15,7 +15,7 @@ export const getMessages = async (revisionId: RevisionId) => {
     ...m,
     id: m.messageId as MessageId,
     content: m.content,
-    createdAt: Math.floor(m.createdAt.getTime() / 1000),
+    createdAt: dayjs(m.createdAt).unix(),
     userName: m.userName,
     replys: [],
   }))
@@ -46,6 +46,23 @@ export const createMessage = async (
     replys: [],
   }
   return apiMessage
+}
+
+export const getReplies = async (messageId: MessageId) => {
+  const dbReplies = await prisma.reply.findMany({
+    where: { messageId: messageId },
+    orderBy: { createdAt: 'asc' },
+  })
+  if (!dbReplies) return
+  const replies = dbReplies.map<ApiReply>((m) => ({
+    ...m,
+    id: m.replyId as ReplyId,
+    content: m.content,
+    createdAt: dayjs(m.createdAt).unix(),
+    userName: m.userName,
+    replys: [],
+  }))
+  return { messageId, replies }
 }
 
 export const createReply = async (

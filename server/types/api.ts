@@ -56,6 +56,7 @@ export type BrowserApiWholeData = {
   desksList: { projectId: ProjectId; desks: ApiDesk[] }[]
   revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevision[] }[]
   messagesList: { revisionId: RevisionId; messages: ApiMessage[] }[]
+  repliesList: { messageId: MessageId; replies: ApiReply[] }[]
 }
 
 export type ProjectApiData = {
@@ -64,4 +65,5 @@ export type ProjectApiData = {
   desks: ApiDesk[]
   revisions: ApiRevision[] | undefined
   messages: ApiMessage[] | undefined
+  replies: ApiReply[] | undefined
 }

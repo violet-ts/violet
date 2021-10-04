@@ -11,7 +11,7 @@ import type {
   RevisionId,
 } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
-import { CommentBlock } from './CommentBlock'
+import { MessageShell } from './MessageShell'
 
 const Container = styled.div`
   display: flex;
@@ -149,7 +149,7 @@ export const StreamBar = ({
       <StreamBox>
         {projectApiData.messages &&
           projectApiData.messages.map((d, i) => (
-            <CommentBlock key={i} message={d} replyMessage={replyMessage} />
+            <MessageShell key={i} message={d} replyMessage={replyMessage} />
           ))}
         <div ref={scrollBottomRef} />
       </StreamBox>
