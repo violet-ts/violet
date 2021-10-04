@@ -1,10 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
-import type { ApiMessage, MessageId } from '~/server/types'
+import type { ApiReply } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
 import { MessageHeader } from './MessageHeader'
-import { ReplyInputForm } from './ReplyInputForm'
 
 const Container = styled.div`
   display: flex;
@@ -20,20 +19,16 @@ const Message = styled.div`
   margin-left: 36px;
 `
 
-export const MessageShell = (props: {
-  message: ApiMessage
-  replyMessage: (messageId: MessageId, content: string) => Promise<void>
-}) => {
-  const sendContent = (content: string) => {
-    props.replyMessage(props.message.id, content)
-  }
-
+export const ReplyMessageCell = (props: { replies: ApiReply[] }) => {
   return (
     <Container>
-      <MessageHeader message={props.message} />
-      <Message>{props.message.content}</Message>
-      <ReplyInputForm sendContent={sendContent} />
-      <Spacer axis="y" size={4} />
+      {props.replies.map((r) => (
+        <>
+          <MessageHeader userName={r.userName} createdAt={r.createdAt} />
+          <Message>{r.content}</Message>
+          <Spacer axis="y" size={4} />
+        </>
+      ))}
     </Container>
   )
 }
