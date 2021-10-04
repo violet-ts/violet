@@ -19,6 +19,7 @@ export const BrowserProvider: React.FC = ({ children }) => {
     desksList: [],
     revisionsList: [],
     messagesList: [],
+    repliesList: [],
   })
   const updateProjects = useCallback((projects: BrowserProject[]) => {
     setProjects(projects)
