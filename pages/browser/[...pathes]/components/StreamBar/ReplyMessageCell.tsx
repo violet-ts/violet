@@ -14,6 +14,7 @@ const Message = styled.div`
   padding-right: 10px;
   margin-bottom: 12px;
   margin-left: 36px;
+  font-size: 12px;
 `
 
 export const ReplyMessageCell = (props: {
@@ -21,16 +22,17 @@ export const ReplyMessageCell = (props: {
     userName: string
     content: string
     createdAt: number
-  }
+  }[]
 }) => {
   return (
     <Container>
-      <MessageHeader
-        userName={props.replymessagecell.userName}
-        createdAt={props.replymessagecell.createdAt}
-      />
-      <Message>{props.replymessagecell.content}</Message>
-      <Spacer axis="y" size={4} />
+      {props.replymessagecell.map((r) => (
+        <>
+          <MessageHeader userName={r.userName} createdAt={r.createdAt} />
+          <Message>{r.content}</Message>
+          <Spacer axis="y" size={4} />
+        </>
+      ))}
     </Container>
   )
 }

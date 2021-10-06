@@ -38,11 +38,13 @@ export const MessageCell = (props: {
     return replies
   }
 
-  const replymessagecell = {
-    userName: 'TEST REPLY',
-    content: 'REPLY',
-    createdAt: 1633245708,
-  }
+  const replymessagecell = [
+    {
+      userName: 'TEST REPLY',
+      content: 'REPLY',
+      createdAt: 1633245708,
+    },
+  ]
 
   return (
     <Container>
