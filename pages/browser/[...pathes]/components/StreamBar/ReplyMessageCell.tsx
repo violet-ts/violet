@@ -25,16 +25,12 @@ export const ReplyMessageCell = (props: {
 }) => {
   return (
     <Container>
-      {/* {props.replies.map((r) => (
-        <> */}
       <MessageHeader
         userName={props.replymessagecell.userName}
         createdAt={props.replymessagecell.createdAt}
       />
       <Message>{props.replymessagecell.content}</Message>
       <Spacer axis="y" size={4} />
-      {/* </>
-      ))} */}
     </Container>
   )
 }
