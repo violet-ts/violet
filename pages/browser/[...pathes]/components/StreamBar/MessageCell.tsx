@@ -38,11 +38,17 @@ export const MessageCell = (props: {
     return replies
   }
 
+  const replymessagecell = {
+    userName: 'TEST REPLY',
+    content: 'REPLY',
+    createdAt: 1633245708,
+  }
+
   return (
     <Container>
       <MessageHeader userName={props.message.userName} createdAt={props.message.createdAt} />
       <Message>{props.message.content}</Message>
-      {repliesByMessageId === undefined && <ReplyMessageCell replies={repliesByMessageId} />}
+      <ReplyMessageCell replymessagecell={replymessagecell} />
       <ReplyInputForm sendContent={sendContent} />
       <Spacer axis="y" size={4} />
     </Container>

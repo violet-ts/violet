@@ -62,7 +62,6 @@ export const getReplies = async (messageId: MessageId) => {
     userName: m.userName,
     replys: [],
   }))
-  console.log('replies-> ', replies)
   return { messageId, replies }
 }
 

@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
-import type { ApiReply } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
 import { MessageHeader } from './MessageHeader'
 
@@ -19,16 +18,25 @@ const Message = styled.div`
   margin-left: 36px;
 `
 
-export const ReplyMessageCell = (props: { replies: ApiReply[] }) => {
+export const ReplyMessageCell = (props: {
+  replymessagecell: {
+    userName: string
+    content: string
+    createdAt: number
+  }
+}) => {
   return (
     <Container>
-      {props.replies.map((r) => (
-        <>
-          <MessageHeader userName={r.userName} createdAt={r.createdAt} />
-          <Message>{r.content}</Message>
-          <Spacer axis="y" size={4} />
-        </>
-      ))}
+      {/* {props.replies.map((r) => (
+        <> */}
+      <MessageHeader
+        userName={props.replymessagecell.userName}
+        createdAt={props.replymessagecell.createdAt}
+      />
+      <Message>{props.replymessagecell.content}</Message>
+      <Spacer axis="y" size={4} />
+      {/* </>
+      ))} */}
     </Container>
   )
 }
