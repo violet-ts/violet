@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
-import { alphaLevel, colors } from '~/utils/constants'
 import { MessageHeader } from './MessageHeader'
 
 const Container = styled.div`
@@ -9,7 +8,6 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
   font-size: 80%;
-  border: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const Message = styled.div`
   position: relative;
