@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import type { ChangeEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
 import { pagesPath } from '~/utils/$path'
@@ -48,19 +49,33 @@ export const CellName = (props: {
 }) => {
   const pathChunks = props.fullPath.split('/')
   const [isClickNewAdd, setIsClickNewAdd] = useState(false)
-
+  const [isFocusing, setIsFocusing] = useState(false)
+  const [label, setLabel] = useState('')
+  const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
+  const inputElement = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    inputElement.current?.focus()
+  }, [inputElement.current])
+  const href = useMemo(
+    () =>
+      pagesPath.browser
+        ._pathes(pathChunks)
+        .$url(props.selected && !props.isWork ? { hash: forceToggleHash } : undefined),
+    [props.selected, props.isWork]
+  )
   const isClick = () => {
-    console.log('check')
+    setIsFocusing(false)
     setIsClickNewAdd(true)
   }
+  const isFocus = () => {
+    if (label) {
+      setIsFocusing(false)
+    } else {
+      setIsFocusing(true)
+    }
+  }
   return (
-    <Link
-      href={pagesPath.browser
-        ._pathes(pathChunks)
-        .$url(props.selected && !props.isWork ? { hash: forceToggleHash } : undefined)}
-      replace={props.selected}
-      passHref
-    >
+    <Link href={href}>
       <Container depth={pathChunks.length - 1} selected={props.selected} bold={props.bold}>
         <Label>
           {props.isWork ? (
@@ -72,19 +87,15 @@ export const CellName = (props: {
             <>
               <Arrow opened={props.opened} />
               <Spacer axis="x" size={18} />
-              <AddArea isFolder={() => isClick()} />
+              <AddArea clickAdd={() => isClick()} />
             </>
           )}
           {props.name}
         </Label>
-        {isClickNewAdd ? (
-          <>
-            <NewFileFolderArea depth={pathChunks.length - 1}>
-              <input type="text" />
-            </NewFileFolderArea>
-          </>
-        ) : (
-          <></>
+        {isClickNewAdd && !isFocusing && (
+          <NewFileFolderArea depth={pathChunks.length - 1}>
+            <input ref={inputElement} type="text" onBlur={isFocus} onChange={inputLabel} />
+          </NewFileFolderArea>
         )}
       </Container>
     </Link>

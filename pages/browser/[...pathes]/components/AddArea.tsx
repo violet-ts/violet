@@ -97,7 +97,7 @@ const StyledFolderAdd = styled.i`
   }
 `
 
-const ShowAddArea = styled.a`
+const ShowAddArea = styled.span`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -111,11 +111,11 @@ const ShowAddArea = styled.a`
   }
 `
 
-export const AddArea = (props: { isFolder: () => void }) => {
+export const AddArea = (props: { clickAdd: () => void }) => {
   return (
     <ShowAddArea>
-      <StyledFileAdd />
-      <StyledFolderAdd onClick={() => props.isFolder()} />
+      <StyledFileAdd onClick={() => props.clickAdd()} />
+      <StyledFolderAdd onClick={() => props.clickAdd()} />
     </ShowAddArea>
   )
 }
