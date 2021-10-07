@@ -1,6 +1,5 @@
 import type {
   ApiDesk,
-  ApiMessage,
   ApiProject,
   ApiRevision,
   DeskId,
@@ -9,8 +8,6 @@ import type {
   RevisionId,
   WorkId,
 } from '$/types'
-import { PrismaClient } from '.prisma/client'
-import { uuid } from 'uuidv4'
 
 const projects: ApiProject[] = [
   { id: 'frourio' as ProjectId, name: 'frourio PJ' },
@@ -91,7 +88,6 @@ const revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevis
   { projectId: projects[1].id, workId: 'work_12' as WorkId, revisions: [] },
 ]
 
-const prisma = new PrismaClient()
 export const getProjects = () => projects
 export const getDesks = (projectId: ProjectId) =>
   desks.find((d) => d.projectId === projectId)?.desks
@@ -108,45 +104,4 @@ export const createRevision = (workId: WorkId) => {
   revisions.push(newRevision)
 
   return newRevision
-}
-export const getMessages = async (revisionId: RevisionId) => {
-  const dbMessages = await prisma.message.findMany({
-    where: { revisionId: revisionId },
-    orderBy: { createdAt: 'asc' },
-  })
-  if (!dbMessages) return
-  const messages = dbMessages.map<ApiMessage>((m) => ({
-    ...m,
-    id: m.messageId as MessageId,
-    content: m.content,
-    createdAt: Math.floor(m.createdAt.getTime() / 1000),
-    userName: m.userName,
-    replys: [],
-  }))
-  return { revisionId, messages }
-}
-export const createMessage = async (
-  revisionId: RevisionId,
-  content: ApiMessage['content'],
-  userName: ApiMessage['userName']
-) => {
-  const id = uuid()
-  await prisma.message.create({
-    data: {
-      messageId: id,
-      content: content,
-      userName: userName,
-      revisionId: revisionId,
-    },
-  })
-  const newMessage = await prisma.message.findFirst({ where: { messageId: id } })
-  if (!newMessage) return
-  const apiMessage: ApiMessage = {
-    id: newMessage.messageId as MessageId,
-    content: newMessage.content,
-    createdAt: Math.floor(newMessage.createdAt.getTime() / 1000),
-    userName: newMessage.userName,
-    replys: [],
-  }
-  return apiMessage
 }
