@@ -6,14 +6,10 @@ import { MessageHeader } from './MessageHeader'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  font-size: 80%;
 `
 const Message = styled.div`
   position: relative;
   padding-right: 10px;
-  margin-bottom: 12px;
-  margin-left: 36px;
   font-size: 12px;
 `
 
@@ -26,12 +22,14 @@ export const ReplyMessageCell = (props: {
 }) => {
   return (
     <Container>
-      {props.replymessagecell.map((r) => (
-        <>
+      {props.replymessagecell.map((r, i) => (
+        <React.Fragment key={i}>
           <MessageHeader userName={r.userName} createdAt={r.createdAt} />
-          <Message>{r.content}</Message>
-          <Spacer axis="y" size={4} />
-        </>
+          <Message>
+            <p>{r.content}</p>
+          </Message>
+          <Spacer axis="y" size={8} />
+        </React.Fragment>
       ))}
     </Container>
   )

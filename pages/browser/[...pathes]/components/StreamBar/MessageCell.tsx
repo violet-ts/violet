@@ -11,14 +11,12 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-size: 80%;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const Message = styled.div`
   position: relative;
   padding-right: 10px;
-  margin-bottom: 12px;
-  margin-left: 36px;
+  font-size: 12px;
 `
 
 export const MessageCell = (props: {
@@ -41,7 +39,8 @@ export const MessageCell = (props: {
   const replymessagecell = [
     {
       userName: 'TEST REPLY',
-      content: 'REPLY',
+      content:
+        'REPLYREPLYREPLYREPLYREPLYREPLYREPLYREPLY REPLYREPLYREPLYREPLYREPLYREPLYREPLYREPLYREPLY REPLYREPLYREPLYREPLY REPLYREPLYREPLYREPLYREPLYREPLYREPLY',
       createdAt: 1633245708,
     },
   ]
@@ -49,8 +48,14 @@ export const MessageCell = (props: {
   return (
     <Container>
       <MessageHeader userName={props.message.userName} createdAt={props.message.createdAt} />
-      <Message>{props.message.content}</Message>
-      <ReplyMessageCell replymessagecell={replymessagecell} />
+      <Message>
+        <p>{props.message.content}</p>
+      </Message>
+      <Spacer axis="x" size={16} />
+      <div>
+        <Spacer axis="y" size={16} />
+        <ReplyMessageCell replymessagecell={replymessagecell} />
+      </div>
       <ReplyInputForm sendContent={sendContent} />
       <Spacer axis="y" size={4} />
     </Container>
