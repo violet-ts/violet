@@ -10,7 +10,7 @@ import type {
   WorkId,
 } from '$/types'
 import { PrismaClient } from '.prisma/client'
-import { uuid } from 'uuidv4'
+import { v4 } from 'uuid'
 
 const projects: ApiProject[] = [
   { id: 'frourio' as ProjectId, name: 'frourio PJ' },
@@ -130,7 +130,7 @@ export const createMessage = async (
   content: ApiMessage['content'],
   userName: ApiMessage['userName']
 ) => {
-  const id = uuid()
+  const id = v4()
   await prisma.message.create({
     data: {
       messageId: id,
