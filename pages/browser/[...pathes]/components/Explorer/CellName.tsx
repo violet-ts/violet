@@ -67,7 +67,7 @@ export const CellName = (props: {
     setIsFocusing(false)
     setIsClickNewAdd(true)
   }
-  const onFocus = () => {
+  const onBlur = () => {
     setIsFocusing(!label)
   }
   return (
@@ -90,7 +90,7 @@ export const CellName = (props: {
         </Label>
         {isClickNewAdd && !isFocusing && (
           <NewFileFolderArea depth={pathChunks.length - 1}>
-            <input ref={inputElement} type="text" onBlur={onFocus} onChange={inputLabel} />
+            <input ref={inputElement} type="text" onBlur={onBlur} onChange={inputLabel} />
           </NewFileFolderArea>
         )}
       </Container>
