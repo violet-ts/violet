@@ -63,16 +63,12 @@ export const CellName = (props: {
         .$url(props.selected && !props.isWork ? { hash: forceToggleHash } : undefined),
     [props.selected, props.isWork]
   )
-  const isClick = () => {
+  const onClick = () => {
     setIsFocusing(false)
     setIsClickNewAdd(true)
   }
-  const isFocus = () => {
-    if (label) {
-      setIsFocusing(false)
-    } else {
-      setIsFocusing(true)
-    }
+  const onFocus = () => {
+    setIsFocusing(!label)
   }
   return (
     <Link href={href}>
@@ -87,14 +83,14 @@ export const CellName = (props: {
             <>
               <Arrow opened={props.opened} />
               <Spacer axis="x" size={18} />
-              <AddArea clickAdd={() => isClick()} />
+              <AddArea AddFile={onClick} AddFolder={onClick} />
             </>
           )}
           {props.name}
         </Label>
         {isClickNewAdd && !isFocusing && (
           <NewFileFolderArea depth={pathChunks.length - 1}>
-            <input ref={inputElement} type="text" onBlur={isFocus} onChange={inputLabel} />
+            <input ref={inputElement} type="text" onBlur={onFocus} onChange={inputLabel} />
           </NewFileFolderArea>
         )}
       </Container>
