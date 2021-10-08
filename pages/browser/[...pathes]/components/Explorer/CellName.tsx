@@ -83,7 +83,7 @@ export const CellName = (props: {
             <>
               <Arrow opened={props.opened} />
               <Spacer axis="x" size={18} />
-              <AddArea AddFile={onClick} AddFolder={onClick} />
+              <AddArea addFile={onClick} addFolder={onClick} />
             </>
           )}
           {props.name}
