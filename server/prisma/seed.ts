@@ -17,20 +17,6 @@ const revisionId = {
   id4: v4(),
 }
 
-const messageId = {
-  id1: v4(),
-  id2: v4(),
-  id3: v4(),
-  id4: v4(),
-}
-
-const replyId = {
-  id1: v4(),
-  id2: v4(),
-  id3: v4(),
-  id4: v4(),
-}
-
 export const main = async () => {
   await prisma.project.create({
     data: {
