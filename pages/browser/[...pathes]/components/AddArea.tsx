@@ -111,11 +111,11 @@ const ShowAddArea = styled.span`
   }
 `
 
-export const AddArea = (props: { clickAdd: () => void }) => {
+export const AddArea = (props: { AddFile: () => void; AddFolder: () => void }) => {
   return (
     <ShowAddArea>
-      <StyledFileAdd onClick={() => props.clickAdd()} />
-      <StyledFolderAdd onClick={() => props.clickAdd()} />
+      <StyledFileAdd onClick={props.AddFile} />
+      <StyledFolderAdd onClick={props.AddFolder} />
     </ShowAddArea>
   )
 }
