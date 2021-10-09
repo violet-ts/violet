@@ -1,101 +1,48 @@
 import { PrismaClient } from '@prisma/client'
-import { v4 } from 'uuid'
+import {
+  deskData,
+  deskIds,
+  projectData,
+  projectIds,
+  revisionData,
+  revisionIds,
+  workData,
+  workIds,
+} from './seedData'
 
 const prisma = new PrismaClient()
-
-const workId = {
-  id1: v4(),
-  id2: v4(),
-  id3: v4(),
-  id4: v4(),
-}
-
-const revisionId = {
-  id1: v4(),
-  id2: v4(),
-  id3: v4(),
-  id4: v4(),
-}
-
+/* eslint-disable complexity */
 export const main = async () => {
-  await prisma.project.create({
-    data: {
-      projectId: v4(),
-      projectName: 'frourio PJ',
-      desks: {
-        create: {
-          deskId: v4(),
-          deskName: 'Desk_1',
-          works: {
-            createMany: {
-              data: [
-                {
-                  workId: workId.id1,
-                  workName: 'work_1',
-                  path: '',
-                },
-                {
-                  workId: workId.id2,
-                  workName: 'work_2',
-                  path: '/path1/path2',
-                },
-              ],
-            },
-          },
-        },
+  for (const p of projectData) {
+    await prisma.project.upsert({
+      where: { projectId: projectIds.id1 || projectIds.id2 },
+      update: {},
+      create: { projectId: p.projectId, projectName: p.projectName, desks: p.desks },
+    })
+  }
+  for (const d of deskData) {
+    await prisma.desk.upsert({
+      where: { deskId: deskIds.id1 || deskIds.id2 || deskIds.id3 || deskIds.id4 },
+      update: {},
+      create: { deskId: d.deskId, deskName: d.deskName, project: d.project },
+    })
+  }
+  for (const w of workData) {
+    await prisma.work.upsert({
+      where: { workId: workIds.id1 || workIds.id2 || workIds.id3 || workIds.id4 },
+      update: {},
+      create: { workId: w.workId, workName: w.workName, path: w.path, desk: w.desk },
+    })
+  }
+  for (const r of revisionData) {
+    await prisma.revision.upsert({
+      where: {
+        revisionId: revisionIds.id1 || revisionIds.id2 || revisionIds.id3 || revisionIds.id4,
       },
-    },
-  })
-
-  await prisma.project.create({
-    data: {
-      projectId: v4(),
-      projectName: 'violet PJ',
-      desks: {
-        create: {
-          deskId: v4(),
-          deskName: 'Desk_2',
-          works: {
-            createMany: {
-              data: [
-                {
-                  workId: workId.id3,
-                  workName: 'work_3',
-                  path: '/path1/path3',
-                },
-                {
-                  workId: workId.id4,
-                  workName: 'work_4',
-                  path: '/path2/path4',
-                },
-              ],
-            },
-          },
-        },
-      },
-    },
-  })
-
-  await prisma.revision.createMany({
-    data: [
-      {
-        revisionId: revisionId.id1,
-        workId: workId.id1,
-      },
-      {
-        revisionId: revisionId.id2,
-        workId: workId.id1,
-      },
-      {
-        revisionId: revisionId.id3,
-        workId: workId.id3,
-      },
-      {
-        revisionId: revisionId.id4,
-        workId: workId.id3,
-      },
-    ],
-  })
+      update: {},
+      create: { revisionId: r.revisionId, work: r.work },
+    })
+  }
 }
 
 main()
@@ -103,6 +50,4 @@ main()
     console.error(e)
     process.exit(1)
   })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
+  .finally(() => prisma.$disconnect())
