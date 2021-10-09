@@ -138,16 +138,15 @@ export const StreamBar = ({
         .revisions._revisionId(revisionId)
         ._messageId(messageId)
         .replies.$post({ body: { content, userName } })
-        .catch(onErr)
 
       const replyRes = await api.browser.works
         ._workId(project.openedTabId)
         .revisions._revisionId(revisionId)
         ._messageId(messageId)
         .replies.$get()
+        .catch(onErr)
 
       if (!replyRes) return
-
       updateReplyMessage(replyRes)
     },
     [content, project, projectApiData]
@@ -171,7 +170,7 @@ export const StreamBar = ({
               key={i}
               message={d}
               replyMessage={replyMessage}
-              replies={apiWholeData.repliesList}
+              replies={apiWholeData.repliesList.filter((r) => r.messageId === d.id)}
             />
           ))}
         <div ref={scrollBottomRef} />

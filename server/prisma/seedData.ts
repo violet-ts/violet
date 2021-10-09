@@ -16,7 +16,7 @@ const workIds = {
   id3: 'a4d5862b-90eb-16ef-a7cd-86ea8bdcab14',
   id4: '95818d3a-4893-c7b9-b5fd-6aa837600a3d',
 }
-const revisionIds = {
+export const revisionIds = {
   id1: 'b68bf04f-70d0-52be-c3df-4a4ec0bcaad1',
   id2: '417a8b21-3d58-3d12-adfb-3904211e19c7',
   id3: '1ae8e8ec-ea6b-d356-db80-a4a271158c2f',
