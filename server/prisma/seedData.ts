@@ -1,22 +1,22 @@
 import type { Prisma } from '.prisma/client'
 
-export const projectIds = {
+const projectIds = {
   id1: '82116895-a386-8a33-f6e0-347408413e33',
   id2: 'f1ba8e31-1f45-bc16-fb72-c10355cae08b',
 }
-export const deskIds = {
+const deskIds = {
   id1: '3d978a72-8c15-47b9-3fc1-320f700a3ea4',
   id2: 'e8e8afc5-1544-5c86-3ed4-64a3c75514f9',
   id3: 'e41d88de-5987-3598-e2c3-6bf9da9a7ccf',
   id4: '51485964-226d-c8f7-3e25-a064222aa02e',
 }
-export const workIds = {
+const workIds = {
   id1: '7064c174-4ec2-6b83-6ce2-3c44d8e8c0b1',
   id2: 'e5793f6d-1a4a-a354-bf6b-0fbd7513c32e',
   id3: 'a4d5862b-90eb-16ef-a7cd-86ea8bdcab14',
   id4: '95818d3a-4893-c7b9-b5fd-6aa837600a3d',
 }
-export const revisionIds = {
+const revisionIds = {
   id1: 'b68bf04f-70d0-52be-c3df-4a4ec0bcaad1',
   id2: '417a8b21-3d58-3d12-adfb-3904211e19c7',
   id3: '1ae8e8ec-ea6b-d356-db80-a4a271158c2f',
