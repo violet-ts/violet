@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client'
 import { deskData, projectData, revisionData, workData } from './seedData'
 
 const prisma = new PrismaClient()
-/* eslint-disable complexity */
 export const main = async () => {
   await Promise.all(
     projectData.map((p) =>
