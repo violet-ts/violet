@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
+import type { ApiReply } from '~/server/types'
 import { MessageHeader } from './MessageHeader'
 
 const Container = styled.div`
@@ -9,25 +10,18 @@ const Container = styled.div`
 `
 const Message = styled.div`
   position: relative;
-  padding-right: 10px;
+  padding: 0 16px;
   font-size: 12px;
+  overflow-wrap: break-word;
 `
-
-export const ReplyMessageCell = (props: {
-  replymessagecell: {
-    userName: string
-    content: string
-    createdAt: number
-  }[]
-}) => {
+export const ReplyMessageCell = (props: { replymessagecell: ApiReply[] }) => {
   return (
     <Container>
       {props.replymessagecell.map((r, i) => (
         <React.Fragment key={i}>
           <MessageHeader userName={r.userName} createdAt={r.createdAt} />
-          <Message>
-            <p>{r.content}</p>
-          </Message>
+          <Spacer axis="y" size={8} />
+          <Message>{r.content}</Message>
           <Spacer axis="y" size={8} />
         </React.Fragment>
       ))}

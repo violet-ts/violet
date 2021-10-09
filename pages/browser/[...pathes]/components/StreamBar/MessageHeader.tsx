@@ -13,8 +13,6 @@ const Icon = styled.img`
   float: left;
   width: 36px;
   height: 36px;
-  padding: 0;
-  margin: 0;
   border-radius: 18px;
 `
 const UserName = styled.div`
