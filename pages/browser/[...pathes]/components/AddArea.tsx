@@ -20,8 +20,8 @@ const StyledFileAdd = styled.i`
   opacity: 0.3;
   transition: opacity 0.5s;
   transform: scale(var(--ggs, 1));
-  ::after,
-  ::before {
+  &::after,
+  &::before {
     position: absolute;
     box-sizing: border-box;
     display: block;
@@ -29,13 +29,13 @@ const StyledFileAdd = styled.i`
     color: #333;
     content: '';
   }
-  ::before {
+  &::before {
     top: 5px;
     left: 3px;
     width: 2px;
     background: #333;
   }
-  ::after {
+  &::after {
     top: -1px;
     right: -1px;
     width: 5px;
@@ -43,7 +43,7 @@ const StyledFileAdd = styled.i`
     border-left: 2px solid;
   }
 
-  :hover {
+  &:hover {
     opacity: 1;
   }
 `
@@ -92,12 +92,12 @@ const StyledFolderAdd = styled.i`
     border-bottom-left-radius: 0;
   }
 
-  :hover {
+  &:hover {
     opacity: 1;
   }
 `
 
-const ShowAddArea = styled.a`
+const ShowAddArea = styled.span`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -111,11 +111,11 @@ const ShowAddArea = styled.a`
   }
 `
 
-export const AddArea = () => {
+export const AddArea = (props: { addFile: () => void; addFolder: () => void }) => {
   return (
     <ShowAddArea>
-      <StyledFileAdd />
-      <StyledFolderAdd />
+      <StyledFileAdd onClick={props.addFile} />
+      <StyledFolderAdd onClick={props.addFolder} />
     </ShowAddArea>
   )
 }

@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import type { ChangeEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
 import { pagesPath } from '~/utils/$path'
@@ -31,6 +33,12 @@ const Arrow = styled.div<{ opened?: boolean }>`
   transform: rotate(${(props) => (props.opened ? '' : '-')}45deg);
 `
 
+const NewFileFolderArea = styled.div<{ depth: number }>`
+  display: block;
+  padding: 6px 8px;
+  padding-left: ${(props) => props.depth * 8}px;
+`
+
 export const CellName = (props: {
   name: string
   selected: boolean
@@ -40,15 +48,30 @@ export const CellName = (props: {
   bold?: boolean
 }) => {
   const pathChunks = props.fullPath.split('/')
-
-  return (
-    <Link
-      href={pagesPath.browser
+  const [isClickNewAdd, setIsClickNewAdd] = useState(false)
+  const [isFocusing, setIsFocusing] = useState(false)
+  const [label, setLabel] = useState('')
+  const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
+  const inputElement = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    inputElement.current?.focus()
+  }, [inputElement.current])
+  const href = useMemo(
+    () =>
+      pagesPath.browser
         ._pathes(pathChunks)
-        .$url(props.selected && !props.isWork ? { hash: forceToggleHash } : undefined)}
-      replace={props.selected}
-      passHref
-    >
+        .$url(props.selected && !props.isWork ? { hash: forceToggleHash } : undefined),
+    [props.selected, props.isWork]
+  )
+  const onClick = () => {
+    setIsFocusing(false)
+    setIsClickNewAdd(true)
+  }
+  const onBlur = () => {
+    setIsFocusing(!label)
+  }
+  return (
+    <Link href={href}>
       <Container depth={pathChunks.length - 1} selected={props.selected} bold={props.bold}>
         <Label>
           {props.isWork ? (
@@ -60,11 +83,16 @@ export const CellName = (props: {
             <>
               <Arrow opened={props.opened} />
               <Spacer axis="x" size={18} />
-              <AddArea />
+              <AddArea addFile={onClick} addFolder={onClick} />
             </>
           )}
           {props.name}
         </Label>
+        {isClickNewAdd && !isFocusing && (
+          <NewFileFolderArea depth={pathChunks.length - 1}>
+            <input ref={inputElement} type="text" onBlur={onBlur} onChange={inputLabel} />
+          </NewFileFolderArea>
+        )}
       </Container>
     </Link>
   )
