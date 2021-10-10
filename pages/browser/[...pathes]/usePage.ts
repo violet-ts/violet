@@ -100,7 +100,6 @@ export const usePage = () => {
               .find((d) => d.workId === currentProject.openedTabId)
               ?.revisions?.slice(-1)[0]?.id
         )?.messages,
-        replies: apiWholeData.repliesList.map((d) => d.replies),
       }
     )
   }, [apiWholeData, currentProject])
