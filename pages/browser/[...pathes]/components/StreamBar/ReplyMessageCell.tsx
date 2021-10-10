@@ -9,20 +9,18 @@ const Container = styled.div`
   flex-direction: column;
 `
 const Message = styled.div`
-  position: relative;
   padding: 0 16px;
   font-size: 12px;
   overflow-wrap: break-word;
 `
-export const ReplyMessageCell = (props: { replymessagecell: ApiReply[] }) => {
+export const ReplyMessageCell = (props: { replies: ApiReply[] }) => {
   return (
     <Container>
-      {props.replymessagecell.map((r, i) => (
+      {props.replies.map((r, i) => (
         <React.Fragment key={i}>
           <MessageHeader userName={r.userName} createdAt={r.createdAt} />
           <Spacer axis="y" size={8} />
           <Message>{r.content}</Message>
-          <Spacer axis="y" size={8} />
         </React.Fragment>
       ))}
     </Container>

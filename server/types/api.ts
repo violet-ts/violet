@@ -41,7 +41,7 @@ export type ApiMessage = {
   content: string
   createdAt: number
   userName: string
-  replys: { id: ReplyId }[]
+  replys: ApiReply[]
 }
 
 export type ApiReply = {
@@ -65,5 +65,5 @@ export type ProjectApiData = {
   desks: ApiDesk[]
   revisions: ApiRevision[] | undefined
   messages: ApiMessage[] | undefined
-  replies: ApiReply[][] | undefined
+  replies: ApiReply[] | undefined
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
-import type { ApiMessage, ApiReply, MessageId } from '~/server/types'
+import type { ApiMessage, MessageId } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
 import { MessageHeader } from './MessageHeader'
 import { ReplyInputForm } from './ReplyInputForm'
@@ -21,10 +21,6 @@ const Message = styled.div`
 
 export const MessageCell = (props: {
   message: ApiMessage
-  replies: {
-    messageId: MessageId
-    replies: ApiReply[]
-  }[]
   replyMessage: (messageId: MessageId, content: string) => Promise<void>
 }) => {
   const sendContent = (content: string) => {
@@ -36,16 +32,14 @@ export const MessageCell = (props: {
       <MessageHeader userName={props.message.userName} createdAt={props.message.createdAt} />
       <Spacer axis="y" size={8} />
       <Message>{props.message.content}</Message>
-      <div>
-        <Spacer axis="y" size={16} />
-        {props.replies && props.replies.length ? (
-          <ReplyMessageCell replymessagecell={props.replies[0].replies} />
-        ) : (
-          <div />
-        )}
-      </div>
+      <Spacer axis="y" size={16} />
+      {props.message.replys.length > 0 && (
+        <div>
+          <ReplyMessageCell replies={props.message.replys} />
+          <Spacer axis="y" size={8} />
+        </div>
+      )}
       <ReplyInputForm sendContent={sendContent} />
-      <Spacer axis="y" size={4} />
     </Container>
   )
 }
