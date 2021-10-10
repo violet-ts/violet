@@ -5,7 +5,6 @@ import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
 import type {
   ApiMessage,
-  ApiReply,
   BrowserProject,
   MessageId,
   ProjectApiData,
@@ -136,42 +135,27 @@ export const StreamBar = ({
       await api.browser.works
         ._workId(project.openedTabId)
         .revisions._revisionId(revisionId)
-        ._messageId(messageId)
+        .messages._messageId(messageId)
         .replies.$post({ body: { content, userName } })
 
       const replyRes = await api.browser.works
         ._workId(project.openedTabId)
         .revisions._revisionId(revisionId)
-        ._messageId(messageId)
-        .replies.$get()
+        .messages.$get()
         .catch(onErr)
 
       if (!replyRes) return
-      updateReplyMessage(replyRes)
+      updateMessage(replyRes)
     },
     [content, project, projectApiData]
   )
-
-  const updateReplyMessage = (replyRes: { messageId: MessageId; replies: ApiReply[] }) => {
-    updateApiWholeData(
-      'repliesList',
-      apiWholeData.repliesList.some((r) => r.messageId === replyRes.messageId)
-        ? apiWholeData.repliesList.map((r) => (r.messageId === replyRes.messageId ? replyRes : r))
-        : [...apiWholeData.repliesList, replyRes]
-    )
-  }
 
   return (
     <Container>
       <StreamBox>
         {projectApiData.messages &&
           projectApiData.messages.map((d, i) => (
-            <MessageCell
-              key={i}
-              message={d}
-              replyMessage={replyMessage}
-              replies={apiWholeData.repliesList.filter((r) => r.messageId === d.id)}
-            />
+            <MessageCell key={i} message={d} replyMessage={replyMessage} />
           ))}
         <div ref={scrollBottomRef} />
       </StreamBox>
