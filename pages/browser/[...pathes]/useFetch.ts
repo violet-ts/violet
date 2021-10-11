@@ -2,7 +2,7 @@ import useAspidaSWR from '@aspida/swr'
 import { useContext, useEffect } from 'react'
 import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
-import type { BrowserProject, ProjectId } from '~/server/types'
+import type { ApiProject, BrowserProject, ProjectId } from '~/server/types'
 
 export const useFetch = (
   projectId: ProjectId | undefined,
@@ -26,11 +26,14 @@ export const useFetch = (
 
   useEffect(() => {
     const projectsData = projectsRes.data
+    const projects: ApiProject[] = projectsData?.map((e) => [
+      { id: e.projectId as ProjectId, name: e.projectName },
+    ])
     if (!projectsData) return
 
-    updateApiWholeData('projects', projectsData)
+    updateApiWholeData('projects', projects)
     updateProjects(
-      projectsData.map((d) => ({
+      projects.map((d) => ({
         ...d,
         tabs: [],
         openedFullPathDict: {},

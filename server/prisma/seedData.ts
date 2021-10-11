@@ -22,21 +22,53 @@ const revisionIds = {
   id3: '1ae8e8ec-ea6b-d356-db80-a4a271158c2f',
   id4: '0b5633f7-4405-27e0-b263-2c97d600f94d',
 }
+const projectName = {
+  project1: 'Violet',
+  project2: 'frourio',
+}
+
+const deskName = {
+  desk1: 'Desk1',
+  desk2: 'Desk2',
+  desk3: 'Desk3',
+  desk4: 'Desk4',
+}
+
+const workName = {
+  work1: 'Work1',
+  work2: 'Work2',
+  work3: 'Work3',
+  work4: 'Work4',
+}
+const ext = {
+  ext1: 'word',
+  ext2: 'jpg',
+  ext3: 'xlsx',
+  ext4: '',
+}
+
+const path = {
+  path1: '',
+  path2: '/path1/path2',
+  path3: '/path2/path4/ううう',
+  path4: '/path1/path2',
+}
+
 export const projectData: Prisma.ProjectCreateInput[] = [
   {
-    projectId: projectIds.id1,
-    projectName: 'Violet',
+    id: projectIds.id1,
+    name: projectName.project1,
   },
   {
-    projectId: projectIds.id2,
-    projectName: 'frourio',
+    id: projectIds.id2,
+    name: projectName.project2,
   },
 ]
 
 export const deskData: Prisma.DeskCreateInput[] = [
   {
     deskId: deskIds.id1,
-    deskName: 'Desk1',
+    deskName: deskName.desk1,
     project: {
       connect: {
         projectId: projectIds.id1,
@@ -45,7 +77,7 @@ export const deskData: Prisma.DeskCreateInput[] = [
   },
   {
     deskId: deskIds.id2,
-    deskName: 'Desk2',
+    deskName: deskName.desk2,
     project: {
       connect: {
         projectId: projectIds.id1,
@@ -54,7 +86,7 @@ export const deskData: Prisma.DeskCreateInput[] = [
   },
   {
     deskId: deskIds.id3,
-    deskName: 'Desk3',
+    deskName: deskName.desk3,
     project: {
       connect: {
         projectId: projectIds.id2,
@@ -63,7 +95,7 @@ export const deskData: Prisma.DeskCreateInput[] = [
   },
   {
     deskId: deskIds.id4,
-    deskName: 'Desk4',
+    deskName: deskName.desk4,
     project: {
       connect: {
         projectId: projectIds.id2,
@@ -75,8 +107,9 @@ export const deskData: Prisma.DeskCreateInput[] = [
 export const workData: Prisma.WorkCreateInput[] = [
   {
     workId: workIds.id1,
-    workName: 'Work1',
-    path: '',
+    workName: workName.work1,
+    ext: ext.ext1,
+    path: path.path1,
     desk: {
       connect: {
         deskId: deskIds.id1,
@@ -85,8 +118,9 @@ export const workData: Prisma.WorkCreateInput[] = [
   },
   {
     workId: workIds.id2,
-    workName: 'Work2',
-    path: '/path1/path2',
+    workName: workName.work2,
+    ext: ext.ext2,
+    path: path.path2,
     desk: {
       connect: {
         deskId: deskIds.id2,
@@ -95,8 +129,9 @@ export const workData: Prisma.WorkCreateInput[] = [
   },
   {
     workId: workIds.id3,
-    workName: 'Work3',
-    path: '/path2/path4/ううう',
+    workName: workName.work3,
+    ext: ext.ext3,
+    path: path.path3,
     desk: {
       connect: {
         deskId: deskIds.id3,
@@ -105,8 +140,8 @@ export const workData: Prisma.WorkCreateInput[] = [
   },
   {
     workId: workIds.id4,
-    workName: 'Work4',
-    path: '/path1/path2',
+    workName: workName.work4,
+    path: path.path4,
     desk: {
       connect: {
         deskId: deskIds.id4,

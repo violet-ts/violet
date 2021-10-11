@@ -8,6 +8,11 @@ import type {
   RevisionId,
   WorkId,
 } from '$/types'
+import type { Project } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
+import { depend } from 'velona'
+
+const prisma = new PrismaClient()
 
 const projects: ApiProject[] = [
   { id: 'frourio' as ProjectId, name: 'frourio PJ' },
@@ -88,7 +93,11 @@ const revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevis
   { projectId: projects[1].id, workId: 'work_12' as WorkId, revisions: [] },
 ]
 
-export const getProjects = () => projects
+// export const getProjects = () => projects
+export const getProjects = depend(
+  { prisma: prisma as { project: { findMany(): Promise<Project[]> } } },
+  async ({ prisma }) => await prisma.project.findMany()
+)
 export const getDesks = (projectId: ProjectId) =>
   desks.find((d) => d.projectId === projectId)?.desks
 export const getRevisions = (workId: WorkId) => revisionsList.find((r) => r.workId === workId)
