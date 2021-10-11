@@ -4,23 +4,22 @@ import { Spacer } from '~/components/atoms/Spacer'
 import type { ApiMessage, MessageId } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
 import { MessageHeader } from './MessageHeader'
-import { ReplyMessageBox } from './ReplyMessageBox'
+import { ReplyInputForm } from './ReplyInputForm'
+import { ReplyMessageCell } from './ReplyMessageCell'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  font-size: 80%;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const Message = styled.div`
   position: relative;
-  padding-right: 10px;
-  margin-bottom: 12px;
-  margin-left: 36px;
+  padding: 0 16px;
+  font-size: 12px;
+  overflow-wrap: break-word;
 `
 
-export const CommentBlock = (props: {
+export const MessageCell = (props: {
   message: ApiMessage
   replyMessage: (messageId: MessageId, content: string) => Promise<void>
 }) => {
@@ -30,10 +29,17 @@ export const CommentBlock = (props: {
 
   return (
     <Container>
-      <MessageHeader message={props.message} />
+      <MessageHeader userName={props.message.userName} createdAt={props.message.createdAt} />
+      <Spacer axis="y" size={8} />
       <Message>{props.message.content}</Message>
-      <ReplyMessageBox sendContent={sendContent} />
-      <Spacer axis="y" size={4} />
+      <Spacer axis="y" size={16} />
+      {props.message.replys.length > 0 && (
+        <div>
+          <ReplyMessageCell replies={props.message.replys} />
+          <Spacer axis="y" size={8} />
+        </div>
+      )}
+      <ReplyInputForm sendContent={sendContent} />
     </Container>
   )
 }

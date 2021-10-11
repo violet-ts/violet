@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { deskData, projectData, revisionData, workData } from './seedData'
+import { messageData, replyData } from './seedStreamData'
 
 const prisma = new PrismaClient()
 export const main = async () => {
@@ -47,6 +48,38 @@ export const main = async () => {
         },
         update: {},
         create: { revisionId: r.revisionId, work: r.work },
+      })
+    )
+  )
+  await Promise.all(
+    messageData.map((m) =>
+      prisma.message.upsert({
+        where: {
+          messageId: m.messageId,
+        },
+        update: {},
+        create: {
+          messageId: m.messageId,
+          userName: m.userName,
+          content: m.content,
+          revision: m.revision,
+        },
+      })
+    )
+  )
+  await Promise.all(
+    replyData.map((r) =>
+      prisma.reply.upsert({
+        where: {
+          replyId: r.replyId,
+        },
+        update: {},
+        create: {
+          replyId: r.replyId,
+          userName: r.userName,
+          content: r.content,
+          message: r.message,
+        },
       })
     )
   )

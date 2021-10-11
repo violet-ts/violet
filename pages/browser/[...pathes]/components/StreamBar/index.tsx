@@ -11,7 +11,7 @@ import type {
   RevisionId,
 } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
-import { CommentBlock } from './CommentBlock'
+import { MessageCell } from './MessageCell'
 
 const Container = styled.div`
   display: flex;
@@ -132,14 +132,20 @@ export const StreamBar = ({
       if (!project.openedTabId) return
       if (!projectApiData.revisions) return
       const revisionId = projectApiData.revisions.slice(-1)[0].id
+      await api.browser.works
+        ._workId(project.openedTabId)
+        .revisions._revisionId(revisionId)
+        .messages._messageId(messageId)
+        .replies.$post({ body: { content, userName } })
+
       const replyRes = await api.browser.works
         ._workId(project.openedTabId)
         .revisions._revisionId(revisionId)
-        ._messageId(messageId)
-        .replies.post({ body: { content, userName } })
+        .messages.$get()
         .catch(onErr)
 
       if (!replyRes) return
+      updateMessage(replyRes)
     },
     [content, project, projectApiData]
   )
@@ -149,7 +155,7 @@ export const StreamBar = ({
       <StreamBox>
         {projectApiData.messages &&
           projectApiData.messages.map((d, i) => (
-            <CommentBlock key={i} message={d} replyMessage={replyMessage} />
+            <MessageCell key={i} message={d} replyMessage={replyMessage} />
           ))}
         <div ref={scrollBottomRef} />
       </StreamBox>

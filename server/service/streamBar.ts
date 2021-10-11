@@ -8,6 +8,7 @@ const prisma = new PrismaClient()
 export const getMessages = async (revisionId: RevisionId) => {
   const dbMessages = await prisma.message.findMany({
     where: { revisionId: revisionId },
+    include: { reply: { orderBy: { createdAt: 'asc' } } },
     orderBy: { createdAt: 'asc' },
   })
   if (!dbMessages) return
@@ -15,9 +16,14 @@ export const getMessages = async (revisionId: RevisionId) => {
     ...m,
     id: m.messageId as MessageId,
     content: m.content,
-    createdAt: Math.floor(m.createdAt.getTime() / 1000),
+    createdAt: dayjs(m.createdAt).unix(),
     userName: m.userName,
-    replys: [],
+    replys: m.reply.map((r) => ({
+      id: r.replyId as ReplyId,
+      content: r.content,
+      createdAt: dayjs(r.createdAt).unix(),
+      userName: r.userName,
+    })),
   }))
   return { revisionId, messages }
 }
@@ -63,7 +69,6 @@ export const createReply = async (
     },
   })
   const newMessage = await prisma.reply.findFirst({ where: { replyId: id } })
-  console.log(newMessage)
   if (!newMessage) return
   const apiReply: ApiReply = {
     id: newMessage.replyId as ReplyId,

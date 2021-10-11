@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
 import React from 'react'
 import styled from 'styled-components'
-import type { ApiMessage } from '~/server/types'
 
 const Container = styled.div`
   display: flex;
@@ -14,8 +13,6 @@ const Icon = styled.img`
   float: left;
   width: 36px;
   height: 36px;
-  padding: 0;
-  margin: 0;
   border-radius: 18px;
 `
 const UserName = styled.div`
@@ -32,14 +29,14 @@ const CreateAt = styled.span`
   text-align: right;
 `
 
-export const MessageHeader = (props: { message: ApiMessage }) => {
-  const timeStamp = dayjs(props.message.createdAt * 1000)
+export const MessageHeader = (props: { userName: string; createdAt: number }) => {
+  const timeStamp = dayjs(props.createdAt * 1000)
   const createAt = dayjs(timeStamp).format('YYYY/MM/DD HH:mm:ss')
   const src = 'https://placehold.jp/32x32.png'
   return (
     <Container>
       <Icon src={src} />
-      <UserName>{props.message.userName}</UserName>
+      <UserName>{props.userName}</UserName>
       <CreateAt>{createAt}</CreateAt>
     </Container>
   )
