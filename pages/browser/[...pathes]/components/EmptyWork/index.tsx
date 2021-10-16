@@ -56,7 +56,7 @@ export const EmptyWork = () => {
     }
     const targetFileType = e.target.files[0].type
     const typeList = extensions.map<string>((x) => x.type)
-    typeList.find((t) => t != targetFileType) ? setOpenAlert(true) : setDragging(false)
+    typeList.find((t) => t !== targetFileType) ? setOpenAlert(true) : setDragging(false)
     e.target.value = ''
   }
 
