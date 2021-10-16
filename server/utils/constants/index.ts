@@ -1,4 +1,4 @@
-export const extensions = [
+export const fileTypes = [
   {
     ex: '.pdf',
     type: 'application/pdf',
