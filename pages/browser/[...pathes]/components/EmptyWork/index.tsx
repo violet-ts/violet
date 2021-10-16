@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { extensions } from '~/server/utils/constants'
+import { fileTypes } from '~/server/utils/constants'
 import { colors, fontSizes } from '~/utils/constants'
 import { FileTypeAlertModal } from './FileTypeAlertModal'
 
@@ -47,16 +47,17 @@ export const EmptyWork = () => {
   const [openAlert, setOpenAlert] = useState(false)
   const dragEnter = () => setDragging(true)
   const dragLeave = () => setDragging(false)
-  const acceptExtensions = extensions.map((x) => x.ex).join()
+  const acceptExtensions = fileTypes.map((x) => x.ex).join()
   const drop = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) {
       e.target.value = ''
       setDragging(false)
       return
     }
+    console.log('extentions->', acceptExtensions)
     const targetFileType = e.target.files[0].type
-    const typeList = extensions.map<string>((x) => x.type)
-    typeList.find((t) => t !== targetFileType) ? setOpenAlert(true) : setDragging(false)
+    const typeList = fileTypes.map<string>((x) => x.type)
+    typeList.some((t) => t === targetFileType) ? setDragging(false) : setOpenAlert(true)
     e.target.value = ''
   }
 
