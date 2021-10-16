@@ -28,13 +28,15 @@ const AlertMessage = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  right: 0;
-  width: 48px;
-  height: 48px;
+  right: 8px;
+  bottom: 8px;
+  width: 56px;
+  height: 32px;
   font-size: ${fontSizes.large};
   color: ${colors.gray};
-  background-color: ${colors.transparent};
+  background-color: ${colors.violet}${alphaLevel[3]};
   border: none;
+  border-radius: 16px;
 `
 export const FileTypeAlertModal = (props: { closeModal: () => void }) => {
   const closeModal = () => {
@@ -44,7 +46,7 @@ export const FileTypeAlertModal = (props: { closeModal: () => void }) => {
     <Container onClick={closeModal}>
       <Modal open>
         <AlertMessage>UnSupported File Format!</AlertMessage>
-        <CloseButton> × </CloseButton>
+        <CloseButton> OK </CloseButton>
       </Modal>
     </Container>
   )
