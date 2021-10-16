@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { extensions } from '~/server/utils/constants'
 import { colors, fontSizes } from '~/utils/constants'
 import { FileTypeAlertModal } from './FileTypeAlertModal'
 
@@ -46,15 +47,19 @@ export const EmptyWork = () => {
   const [openAlert, setOpenAlert] = useState(false)
   const dragEnter = () => setDragging(true)
   const dragLeave = () => setDragging(false)
+  const acceptExtensions = extensions.map((x) => x.ex).join()
   const drop = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) {
-      return setDragging(false)
+      e.target.value = ''
+      setDragging(false)
+      return
     }
-    e.target.files[0].type !== 'aplication/pdf'
-      ? setOpenAlert(true)
-      : console.log('Send file to server, view PDF')
+    const targetFileType = e.target.files[0].type
+    const typeList = extensions.map<string>((x) => x.type)
+    typeList.find((t) => t != targetFileType) ? setOpenAlert(true) : setDragging(false)
     e.target.value = ''
   }
+
   const closeModal = () => {
     setDragging(false)
     setOpenAlert(false)
@@ -65,12 +70,18 @@ export const EmptyWork = () => {
       {openAlert ? (
         <FileTypeAlertModal closeModal={closeModal} />
       ) : (
-        <div>
+        <>
           <DraggingPanel dragging={dragging}>
             <DraggingFrame dragging={dragging}>Drop file to create new revision</DraggingFrame>
           </DraggingPanel>
-          <Dropper type="file" onDragEnter={dragEnter} onDragEnd={dragLeave} onChange={drop} />
-        </div>
+          <Dropper
+            type="file"
+            accept={acceptExtensions}
+            onDragEnter={dragEnter}
+            onDragEnd={dragLeave}
+            onChange={drop}
+          />
+        </>
       )}
     </Container>
   )
