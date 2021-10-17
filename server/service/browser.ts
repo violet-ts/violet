@@ -1,5 +1,6 @@
 import type {
   ApiDesk,
+  ApiProject,
   ApiRevision,
   DeskId,
   EditionId,
@@ -8,16 +9,18 @@ import type {
   WorkId,
 } from '$/types'
 import { generateId } from '$/utils/generateId'
-import type { Project } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
-import { depend } from 'velona'
 
 const prisma = new PrismaClient()
-
-export const getProjects = depend(
-  { prisma: prisma as { project: { findMany(): Promise<Project[]> } } },
-  async ({ prisma }) => await prisma.project.findMany()
-)
+export const getProjects = async () => {
+  const dbProjects = await prisma.project.findMany()
+  if (!dbProjects) return
+  const projects = dbProjects.map<ApiProject>((p) => ({
+    id: p.projectId as ProjectId,
+    name: p.projectName,
+  }))
+  return projects
+}
 export const getDesks = async (projectId: ProjectId) => {
   const dbDesk = await prisma.desk.findMany({
     where: { projectId: projectId },
