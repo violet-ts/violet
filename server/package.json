@@ -17,7 +17,7 @@
     "pm2:logs": "pm2 logs",
     "pm2:monit": "pm2 monit",
     "start": "cross-env NODE_ENV=production node index.js",
-    "prisma:seed": " prisma db seed"
+    "prisma:seed": " prisma db seed --preview-feature"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
