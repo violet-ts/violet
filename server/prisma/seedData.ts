@@ -23,8 +23,8 @@ export const revisionIds = {
   id4: '0b5633f7-4405-27e0-b263-2c97d600f94d',
 }
 const projectName = {
-  project1: 'Violet',
-  project2: 'frourio',
+  project1: 'Violet PJ',
+  project2: 'frourio PJ',
 }
 
 const deskName = {
@@ -56,12 +56,12 @@ const path = {
 
 export const projectData: Prisma.ProjectCreateInput[] = [
   {
-    id: projectIds.id1,
-    name: projectName.project1,
+    projectId: projectIds.id1,
+    projectName: projectName.project1,
   },
   {
-    id: projectIds.id2,
-    name: projectName.project2,
+    projectId: projectIds.id2,
+    projectName: projectName.project2,
   },
 ]
 
