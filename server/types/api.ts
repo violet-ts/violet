@@ -16,7 +16,7 @@ export type ApiProject = {
 export type ApiWork = {
   id: WorkId
   name: string
-  ext?: string
+  ext?: string | null
   path: string
 }
 
@@ -54,7 +54,7 @@ export type ApiReply = {
 export type BrowserApiWholeData = {
   projects: ApiProject[]
   desksList: { projectId: ProjectId; desks: ApiDesk[] }[]
-  revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevision[] }[]
+  revisionsList: { workId: WorkId; revisions: ApiRevision[] }[]
   messagesList: { revisionId: RevisionId; messages: ApiMessage[] }[]
 }
 
