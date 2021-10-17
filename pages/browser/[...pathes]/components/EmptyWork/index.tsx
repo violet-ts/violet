@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { fileTypes } from '~/server/utils/constants'
 import { colors, fontSizes } from '~/utils/constants'
+import { FileTypeAlertModal } from './FileTypeAlertModal'
 
 const Container = styled.div`
   position: relative;
@@ -42,18 +44,46 @@ const Dropper = styled.input`
 
 export const EmptyWork = () => {
   const [dragging, setDragging] = useState(false)
+  const [openAlert, setOpenAlert] = useState(false)
   const dragEnter = () => setDragging(true)
   const dragLeave = () => setDragging(false)
+  const acceptExtensions = fileTypes.map((x) => x.ex).join()
   const drop = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length !== 1) return
+    if (e.target.files?.length !== 1) {
+      e.target.value = ''
+      setDragging(false)
+      return
+    }
+    console.log('extentions->', acceptExtensions)
+    const targetFileType = e.target.files[0].type
+    const typeList = fileTypes.map<string>((x) => x.type)
+    typeList.some((t) => t === targetFileType) ? setDragging(false) : setOpenAlert(true)
+    e.target.value = ''
+  }
+
+  const closeModal = () => {
+    setDragging(false)
+    setOpenAlert(false)
   }
 
   return (
     <Container>
-      <DraggingPanel dragging={dragging}>
-        <DraggingFrame dragging={dragging}>Drop file to create new revision</DraggingFrame>
-      </DraggingPanel>
-      <Dropper type="file" onDragEnter={dragEnter} onDragLeave={dragLeave} onChange={drop} />
+      {openAlert ? (
+        <FileTypeAlertModal closeModal={closeModal} />
+      ) : (
+        <>
+          <DraggingPanel dragging={dragging}>
+            <DraggingFrame dragging={dragging}>Drop file to create new revision</DraggingFrame>
+          </DraggingPanel>
+          <Dropper
+            type="file"
+            accept={acceptExtensions}
+            onDragEnter={dragEnter}
+            onDragEnd={dragLeave}
+            onChange={drop}
+          />
+        </>
+      )}
     </Container>
   )
 }

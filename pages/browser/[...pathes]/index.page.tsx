@@ -57,6 +57,7 @@ const ProjectPage = () => {
           {projectApiData.revisions ? (
             projectApiData.revisions.length ? (
               <>
+                <TabBar project={currentProject} projectApiData={projectApiData} />
                 <RevisionColumn>
                   <Revision />
                 </RevisionColumn>
