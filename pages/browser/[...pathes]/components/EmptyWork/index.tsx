@@ -1,5 +1,8 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
+import { BrowserContext } from '~/contexts/Browser'
+import { useApi } from '~/hooks'
+import type { ApiRevision, BrowserProject, ProjectId, WorkId } from '~/server/types'
 import { fileTypes } from '~/server/utils/constants'
 import { colors, fontSizes } from '~/utils/constants'
 import { FileTypeAlertModal } from './FileTypeAlertModal'
@@ -42,23 +45,53 @@ const Dropper = styled.input`
   opacity: 0;
 `
 
-export const EmptyWork = () => {
+export const EmptyWork = ({ project }: { project: BrowserProject }) => {
+  const { api, onErr } = useApi()
+  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
   const [dragging, setDragging] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const dragEnter = () => setDragging(true)
   const dragLeave = () => setDragging(false)
   const acceptExtensions = fileTypes.map((x) => x.ex).join()
+
   const drop = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) {
       e.target.value = ''
       setDragging(false)
       return
     }
-    console.log('extentions->', acceptExtensions)
     const targetFileType = e.target.files[0].type
     const typeList = fileTypes.map<string>((x) => x.type)
-    typeList.some((t) => t === targetFileType) ? setDragging(false) : setOpenAlert(true)
+    typeList.some((t) => t === targetFileType) ? sendFormData(e.target.files) : setOpenAlert(true)
     e.target.value = ''
+  }
+  const updateRevisions = (revisionRes: {
+    projectId: ProjectId
+    workId: WorkId
+    revisions: ApiRevision[]
+  }) => {
+    updateApiWholeData(
+      'revisionsList',
+      apiWholeData.revisionsList.some((r) => r.workId === revisionRes.workId)
+        ? apiWholeData.revisionsList.map((r) => (r.workId === revisionRes.workId ? revisionRes : r))
+        : [...apiWholeData.revisionsList, revisionRes]
+    )
+  }
+  const sendFormData = async (file: HTMLInputElement['files']) => {
+    setDragging(false)
+    if (!project.openedTabId) return
+    if (!file) return
+    const newRevision = await api.browser.works
+      ._workId(project.openedTabId)
+      .revisions.$post({ body: { file: file[0] } })
+      .catch(onErr)
+
+    console.log('POST->', newRevision)
+    if (!newRevision) return
+    const revisionRes = await api.browser.works._workId(project.openedTabId).revisions.$get()
+
+    if (!revisionRes) return
+    updateRevisions(revisionRes)
   }
 
   const closeModal = () => {

@@ -7,8 +7,8 @@ export default defineController(() => ({
     const revisions = getRevisions(params.workId as WorkId)
     return revisions ? { status: 200, body: revisions } : { status: 404 }
   },
-  post: ({ params }) => {
-    const revision = createRevision(params.workId as WorkId)
+  post: async ({ params, body }) => {
+    const revision = await createRevision(params.workId as WorkId, body.file)
     return revision ? { status: 201, body: revision } : { status: 404 }
   },
 }))

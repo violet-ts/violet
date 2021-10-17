@@ -66,7 +66,7 @@ const ProjectPage = () => {
                 </StreamBarColumn>
               </>
             ) : (
-              <EmptyWork />
+              <EmptyWork project={currentProject} />
             )
           ) : (
             <div>Choose work</div>

@@ -8,6 +8,9 @@ import type {
   RevisionId,
   WorkId,
 } from '$/types'
+import { generateId } from '$/utils/generateId'
+import { PrismaClient } from '@prisma/client'
+import type { MultipartFile } from 'fastify-multipart'
 
 const projects: ApiProject[] = [
   { id: 'frourio' as ProjectId, name: 'frourio PJ' },
@@ -87,21 +90,34 @@ const revisionsList: { projectId: ProjectId; workId: WorkId; revisions: ApiRevis
   { projectId: projects[1].id, workId: 'work_11' as WorkId, revisions: [] },
   { projectId: projects[1].id, workId: 'work_12' as WorkId, revisions: [] },
 ]
-
+const prisma = new PrismaClient()
 export const getProjects = () => projects
 export const getDesks = (projectId: ProjectId) =>
   desks.find((d) => d.projectId === projectId)?.desks
 export const getRevisions = (workId: WorkId) => revisionsList.find((r) => r.workId === workId)
-export const createRevision = (workId: WorkId) => {
-  const revisions = revisionsList.find((r) => r.workId === workId)?.revisions
-  if (!revisions) return
+export const createRevision = async (workId: WorkId, file: MultipartFile) => {
+  const id = generateId()
+  await prisma.revision.create({
+    data: {
+      revisionId: id,
+      workId: workId,
+    },
+  })
+  console.log('workId->', workId)
+  const newRevision = await prisma.revision.findFirst({
+    where: { revisionId: id },
+    include: {
+      editions: true,
+      message: true,
+    },
+  })
+  if (!newRevision) return
 
-  const newRevision: ApiRevision = {
-    id: `${workId}-${revisions.length}` as RevisionId,
+  const apiRevision: ApiRevision = {
+    id: newRevision.revisionId as RevisionId,
     editions: [],
     messages: [],
   }
-  revisions.push(newRevision)
 
-  return newRevision
+  return apiRevision
 }
