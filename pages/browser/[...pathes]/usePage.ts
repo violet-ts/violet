@@ -74,10 +74,10 @@ export const usePage = () => {
   const { projects, apiWholeData, updateProject } = useContext(BrowserContext)
   const { asPath, replace } = useRouter()
   const { projectId, deskName, path } = usePathValues()
-  const currentProject = useMemo(() => projects.find((p) => p.id === projectId), [
-    projects,
-    projectId,
-  ])
+  const currentProject = useMemo(
+    () => projects.find((p) => p.id === projectId),
+    [projects, projectId]
+  )
   const { error } = useFetch(projectId, currentProject)
   const projectApiData = useMemo((): ProjectApiData | undefined => {
     if (!currentProject) return
