@@ -22,12 +22,12 @@ export const main = async () => {
     deskData.map((d) =>
       prisma.desk.upsert({
         where: { deskId: d.deskId },
+        update: {},
         create: {
           deskId: d.deskId,
           deskName: d.deskName,
           project: { connect: { projectId: d.project.connect?.projectId } },
         },
-        update: {},
       })
     )
   )
@@ -35,8 +35,8 @@ export const main = async () => {
     workData.map((w) =>
       prisma.work.upsert({
         where: { workId: w.workId },
-        create: { workId: w.workId, workName: w.workName, path: w.path, desk: w.desk },
         update: {},
+        create: { workId: w.workId, workName: w.workName, ext: w?.ext, path: w.path, desk: w.desk },
       })
     )
   )
