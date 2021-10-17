@@ -1,8 +1,8 @@
-import type { ApiRevision, ProjectId, WorkId } from '$/types'
+import type { ApiRevision, WorkId } from '$/types'
 
 export type Methods = {
   get: {
-    resBody: { projectId: ProjectId; workId: WorkId; revisions: ApiRevision[] }
+    resBody: { workId: WorkId; revisions: ApiRevision[] }
   }
   post: {
     reqFormat: FormData

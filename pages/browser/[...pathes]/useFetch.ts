@@ -26,10 +26,11 @@ export const useFetch = (
 
   useEffect(() => {
     const projectsData = projectsRes.data
-    const projects: ApiProject[] = projectsData?.map((e) => [
-      { id: e.projectId as ProjectId, name: e.projectName },
-    ])
     if (!projectsData) return
+    const projects: ApiProject[] = projectsData.map((e) => ({
+      id: e.projectId as ProjectId,
+      name: e.projectName,
+    }))
 
     updateApiWholeData('projects', projects)
     updateProjects(

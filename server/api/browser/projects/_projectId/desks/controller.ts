@@ -3,9 +3,8 @@ import type { ProjectId } from '$/types'
 import { defineController } from './$relay'
 
 export default defineController(() => ({
-  get: ({ params }) => {
-    const projectId = params.projectId as ProjectId
-    const desks = getDesks(projectId)
+  get: async ({ params }) => {
+    const desks = await getDesks(params.projectId as ProjectId)
     return desks ? { status: 200, body: desks } : { status: 404 }
   },
 }))
