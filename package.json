@@ -22,7 +22,7 @@
     "start": "run-p start:*",
     "start:client": "next start",
     "start:server": "npm start --prefix server",
-    "test": "npm run build:types && dotenv -e ./server/prisma/.env jest -i",
+    "test": "npm run build:types && jest",
     "typecheck": "npm run build:types && tsc --noEmit && tsc --noEmit -p server",
     "login:firebase": "firebase login:ci"
   },
