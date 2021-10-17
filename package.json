@@ -22,7 +22,7 @@
     "start": "run-p start:*",
     "start:client": "next start",
     "start:server": "npm start --prefix server",
-    "test": "npm run build:types && jest",
+    "test": "npm run build:types && dotenv -e ./server/prisma/.env jest -i",
     "typecheck": "npm run build:types && tsc --noEmit && tsc --noEmit -p server",
     "login:firebase": "firebase login:ci"
   },
@@ -36,6 +36,7 @@
     "@aspida/swr": "^1.7.1",
     "class-validator": "^0.13.1",
     "dayjs": "^1.10.7",
+    "dotenv-cli": "^4.0.0",
     "firebase": "^9.0.0",
     "next": "^11.1.0",
     "react": "^17.0.2",
