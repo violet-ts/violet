@@ -4,9 +4,5 @@ import type { Project } from '@prisma/client'
 export type Methods = {
   get: {
     resBody: Project[]
-    // resBody: {
-    //   id: Pick<Project, 'projectId'>
-    //   name: Pick<Project, 'projectName'>
-    // }
   }
 }
