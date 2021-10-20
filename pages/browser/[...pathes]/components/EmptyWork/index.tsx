@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
-import type { ApiRevision, BrowserProject, ProjectId, WorkId } from '~/server/types'
+import type { ApiRevision, BrowserProject, WorkId } from '~/server/types'
 import { fileTypes } from '~/server/utils/constants'
 import { colors, fontSizes } from '~/utils/constants'
 import { FileTypeAlertModal } from './FileTypeAlertModal'
@@ -65,11 +65,7 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
     typeList.some((t) => t === targetFileType) ? sendFormData(e.target.files) : setOpenAlert(true)
     e.target.value = ''
   }
-  const updateRevisions = (revisionRes: {
-    projectId: ProjectId
-    workId: WorkId
-    revisions: ApiRevision[]
-  }) => {
+  const updateRevisions = (revisionRes: { workId: WorkId; revisions: ApiRevision[] }) => {
     updateApiWholeData(
       'revisionsList',
       apiWholeData.revisionsList.some((r) => r.workId === revisionRes.workId)
