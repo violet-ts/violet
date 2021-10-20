@@ -82,7 +82,6 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
       .revisions.$post({ body: { file: file[0] } })
       .catch(onErr)
 
-    console.log('POST->', newRevision)
     if (!newRevision) return
     const revisionRes = await api.browser.works._workId(project.openedTabId).revisions.$get()
 
