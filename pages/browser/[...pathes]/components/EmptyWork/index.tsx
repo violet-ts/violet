@@ -73,7 +73,7 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
         : [...apiWholeData.revisionsList, revisionRes]
     )
   }
-  const sendFormData = async (file: HTMLInputElement['files']) => {
+  const sendFormData = async (file: FileList) => {
     setDragging(false)
     if (!project.openedTabId) return
     if (!file) return
