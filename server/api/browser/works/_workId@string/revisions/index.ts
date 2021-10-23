@@ -1,4 +1,4 @@
-import type { ApiRevision, WorkId } from '$/types'
+import type { ApiRevision, ProjectId, WorkId } from '$/types'
 
 export type Methods = {
   get: {
@@ -6,7 +6,7 @@ export type Methods = {
   }
   post: {
     reqFormat: FormData
-    reqBody: { file: Blob }
+    reqBody: { uploadFile: Blob; projectId: ProjectId }
     resBody: ApiRevision
   }
 }

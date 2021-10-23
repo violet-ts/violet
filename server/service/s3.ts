@@ -1,5 +1,11 @@
-import { GetObjectCommand, ListBucketsCommand, S3Client } from '@aws-sdk/client-s3'
+import {
+  GetObjectCommand,
+  ListBucketsCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import type { MultipartFile } from 'fastify-multipart'
 import { depend } from 'velona'
 import {
   AWS_ACCESS_KEY_ID,
@@ -36,4 +42,27 @@ export const getRevisionsSidnedUrl = depend({ getS3Client }, ({ getS3Client }) =
   getSignedUrl(getS3Client(), new GetObjectCommand({ Bucket: 'static', Key: 'sample.txt' }), {
     expiresIn: 3600,
   })
+)
+
+export const sendNewWork = depend(
+  { getS3Client },
+  async (
+    { getS3Client },
+    props: {
+      uploadFile: MultipartFile
+      path: string
+    }
+  ) => {
+    const uploadParams = {
+      Bucket: 'Violet',
+      Key: props.path,
+      Body: await props.uploadFile.toBuffer(),
+    }
+
+    const data = getS3Client()
+      .send(new PutObjectCommand(uploadParams))
+      .then((res) => res.$metadata)
+
+    return data
+  }
 )

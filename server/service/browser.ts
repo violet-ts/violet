@@ -77,3 +77,11 @@ export const createRevision = async (workId: WorkId) => {
   }
   return apiRevision
 }
+export const getDeskId = async (workId: WorkId) => {
+  const id = await prisma.work.findFirst({
+    where: { workId: workId },
+    select: { deskId: true },
+  })
+  if (!id) return
+  return id.deskId as DeskId
+}
