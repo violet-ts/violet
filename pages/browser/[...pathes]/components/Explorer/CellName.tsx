@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import type { ChangeEvent } from 'react'
+import type { ChangeEvent, FormEvent } from 'react'
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
@@ -57,8 +57,8 @@ export const CellName = (props: {
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
-  const [createNewFile, setCreateNewFile] = useState(false)
-  const [createNewFolder, setCreateNewFolder] = useState(false)
+  const [isClickAddNewFile, setIsClickAddNewFile] = useState(false)
+  const [isClickAddNewFolder, setIsClickAddNewFolder] = useState(false)
   useEffect(() => {
     inputElement.current?.focus()
   }, [inputElement.current])
@@ -74,14 +74,14 @@ export const CellName = (props: {
     setIsClickNewAdd(true)
   }
 
-  const onAddNewFile = () => {
+  const AddNewFile = () => {
     openInputField()
-    setCreateNewFile(true)
+    setIsClickAddNewFile(true)
   }
 
-  const onAddNewFolder = () => {
+  const AddNewFolder = () => {
     openInputField()
-    setCreateNewFolder(true)
+    setIsClickAddNewFolder(true)
   }
   const submitNew = async (path: string, name: string, ext?: string) => {
     if (!path) return
@@ -107,20 +107,21 @@ export const CellName = (props: {
   }
   const createNew = () => {
     const pathArray = pathChunks.filter((d) => pathChunks.indexOf(d) > 1)
-    if (createNewFile) {
+    if (isClickAddNewFile) {
       const path = `/${pathArray.join('/')}`
       const name = label.substring(0, label.lastIndexOf('.'))
       const ext = label.substring(label.lastIndexOf('.') + 1, label.length)
       submitNew(path, name, ext)
     }
-    if (createNewFolder) {
+    if (isClickAddNewFolder) {
       const path = `/${pathArray.join('/')}/${label}`
       submitNew(path, '')
     }
-    setCreateNewFile(false)
-    setCreateNewFolder(false)
+    setIsClickAddNewFile(false)
+    setIsClickAddNewFolder(false)
   }
-  const onBlur = () => {
+  const onBlur = (e: FormEvent) => {
+    e.preventDefault()
     setIsFocusing(!label)
     if (label) {
       createNew()
@@ -142,14 +143,16 @@ export const CellName = (props: {
               <>
                 <Arrow opened={props.opened} />
                 <Spacer axis="x" size={18} />
-                <AddArea addFile={onAddNewFile} addFolder={onAddNewFolder} />
+                <AddArea addFile={AddNewFile} addFolder={AddNewFolder} />
               </>
             )}
             {props.name}
           </Label>
           {isClickNewAdd && !isFocusing && (
             <NewFileFolderArea depth={pathChunks.length - 1}>
-              <input ref={inputElement} type="text" onBlur={onBlur} onChange={inputLabel} />
+              <form onSubmit={onBlur}>
+                <input ref={inputElement} type="text" onBlur={onBlur} onChange={inputLabel} />
+              </form>
             </NewFileFolderArea>
           )}
         </Container>
