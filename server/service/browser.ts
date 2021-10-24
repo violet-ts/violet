@@ -69,7 +69,6 @@ export const createRevision = async (workId: WorkId) => {
       },
     })
     .catch((e: Prisma.PrismaClientUnknownRequestError) => {
-      console.log(e)
       throw e
     })
 
@@ -85,6 +84,10 @@ export const getDeskId = async (workId: WorkId) => {
     where: { workId },
     select: { deskId: true },
   })
-  if (!data) return
+  if (!data) {
+    const notFound = 404
+    return notFound
+  }
+
   return data.deskId as DeskId
 }
