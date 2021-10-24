@@ -79,7 +79,7 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
     if (!file) return
     const newRevision = await api.browser.works
       ._workId(project.openedTabId)
-      .revisions.$post({ body: { file: file[0] } })
+      .revisions.$post({ body: { uploadFile: file[0], projectId: project.id } })
       .catch(onErr)
 
     if (!newRevision) return

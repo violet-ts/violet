@@ -5,9 +5,16 @@ import fastifyJwt from 'fastify-jwt'
 import fastifyStatic from 'fastify-static'
 import path from 'path'
 import server from './$server'
+import { createBucketIfNotExists } from './service/s3'
 import { BASE_PATH, JWT_SECRET, SERVER_PORT } from './utils/envValues'
 
 const fastify = Fastify()
+
+const startServer = async () => {
+  await createBucketIfNotExists()
+  server(fastify, { basePath: BASE_PATH })
+  fastify.listen(SERVER_PORT)
+}
 
 fastify.register(helmet)
 fastify.register(cors)
@@ -17,6 +24,4 @@ fastify.register(fastifyStatic, {
 })
 fastify.register(fastifyJwt, { secret: JWT_SECRET })
 
-server(fastify, { basePath: BASE_PATH })
-
-fastify.listen(SERVER_PORT)
+startServer()

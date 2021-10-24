@@ -59,21 +59,27 @@ export const getRevisions = async (workId: WorkId) => {
   return { workId, revisions }
 }
 export const createRevision = async (workId: WorkId) => {
-  const id = generateId()
-  await prisma.revision.create({
+  const revisionId = generateId()
+  const data = await prisma.revision.create({
     data: {
-      revisionId: id,
-      workId: workId,
+      revisionId,
+      workId,
     },
   })
-  const newRevision = await prisma.revision.findFirst({
-    where: { revisionId: id },
-  })
-  if (!newRevision) return
+
   const apiRevision: ApiRevision = {
-    id: newRevision.revisionId as RevisionId,
+    id: data.revisionId as RevisionId,
     editions: [],
     messages: [],
   }
   return apiRevision
+}
+export const getDeskId = async (workId: WorkId) => {
+  const data = await prisma.work.findFirst({
+    where: { workId },
+    select: { deskId: true },
+  })
+  if (!data) return
+
+  return data.deskId as DeskId
 }
