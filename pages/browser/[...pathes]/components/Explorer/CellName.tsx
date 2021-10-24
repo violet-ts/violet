@@ -57,8 +57,8 @@ export const CellName = (props: {
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
-  const [isClickAddNewFile, setIsClickAddNewFile] = useState(false)
-  const [isClickAddNewFolder, setIsClickAddNewFolder] = useState(false)
+  const [isClickNewAddFile, setIsClickNewAddFile] = useState(false)
+  const [isClickNewAddFolder, setIsClickNewAddFolder] = useState(false)
   useEffect(() => {
     inputElement.current?.focus()
   }, [inputElement.current])
@@ -76,12 +76,12 @@ export const CellName = (props: {
 
   const AddNewFile = () => {
     openInputField()
-    setIsClickAddNewFile(true)
+    setIsClickNewAddFile(true)
   }
 
   const AddNewFolder = () => {
     openInputField()
-    setIsClickAddNewFolder(true)
+    setIsClickNewAddFolder(true)
   }
   const submitNew = async (path: string, name: string, ext?: string) => {
     if (!path) return
@@ -107,18 +107,18 @@ export const CellName = (props: {
   }
   const createNew = () => {
     const pathArray = pathChunks.filter((d) => pathChunks.indexOf(d) > 1)
-    if (isClickAddNewFile) {
+    if (isClickNewAddFile) {
       const path = `/${pathArray.join('/')}`
       const name = label.substring(0, label.lastIndexOf('.'))
       const ext = label.substring(label.lastIndexOf('.') + 1, label.length)
       submitNew(path, name, ext)
     }
-    if (isClickAddNewFolder) {
+    if (isClickNewAddFolder) {
       const path = `/${pathArray.join('/')}/${label}`
       submitNew(path, '')
     }
-    setIsClickAddNewFile(false)
-    setIsClickAddNewFolder(false)
+    setIsClickNewAddFile(false)
+    setIsClickNewAddFolder(false)
   }
   const sendNewName = (e: FormEvent) => {
     e.preventDefault()
