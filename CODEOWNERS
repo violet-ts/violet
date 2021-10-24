@@ -1,5 +1,5 @@
 # frontend
-# TODO: ディレクトリ構造
+# TODO: ディレクトリ構造再考
 public/ @violet-ts/frontend
 pages/ @violet-ts/frontend
 hooks/ @violet-ts/frontend
@@ -30,6 +30,8 @@ server/package.json @violet-ts/security
 .github/ @violet-ts/infrastructure
 package.json @violet-ts/infrastructure
 server/package.json @violet-ts/infrastructure
+server/service/s3.ts @violet-ts/infrastructure
+server/service/aws-credential.ts @violet-ts/infrastructure
 public/ @violet-ts/infrastructure
 docker/ @violet-ts/infrastructure
 data/my.cnf.json @violet-ts/infrastructure
