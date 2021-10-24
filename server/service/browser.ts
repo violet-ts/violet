@@ -59,11 +59,11 @@ export const getRevisions = async (workId: WorkId) => {
   return { workId, revisions }
 }
 export const createRevision = async (workId: WorkId) => {
-  const id = generateId()
+  const revisionId = generateId()
   const data = await prisma.revision.create({
     data: {
-      revisionId: id,
-      workId: workId,
+      revisionId,
+      workId,
     },
   })
 

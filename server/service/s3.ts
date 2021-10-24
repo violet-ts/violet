@@ -41,6 +41,21 @@ export const listBucket = depend({ getS3Client }, ({ getS3Client }) =>
     .then((res) => res.Buckets)
 )
 
+export const createBucket = depend({ getS3Client }, ({ getS3Client }) =>
+  getS3Client()
+    .send(new CreateBucketCommand({ Bucket: S3_BUCKET }))
+    .then((res) => res.$metadata)
+)
+
+export const crateBucketIfNotExists = async () => {
+  const isBucket = await listBucket()
+  if (!isBucket?.some((b) => b.Name === S3_BUCKET)) {
+    const done = await createBucket().then((res) => res)
+    console.log('isBucket?->', done)
+    return done
+  }
+}
+
 export const getRevisionsSidnedUrl = depend({ getS3Client }, ({ getS3Client }) =>
   getSignedUrl(getS3Client(), new GetObjectCommand({ Bucket: 'static', Key: 'sample.txt' }), {
     expiresIn: 3600,
@@ -60,11 +75,6 @@ export const sendNewWork = depend(
       Bucket: S3_BUCKET,
       Key: props.path,
       Body: await props.uploadFile.toBuffer(),
-    }
-
-    const isBucket = await listBucket()
-    if (!isBucket?.some((b) => b.Name === S3_BUCKET)) {
-      await getS3Client().send(new CreateBucketCommand({ Bucket: S3_BUCKET }))
     }
 
     const data = await getS3Client()
