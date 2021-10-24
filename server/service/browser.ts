@@ -9,6 +9,7 @@ import type {
   WorkId,
 } from '$/types'
 import { generateId } from '$/utils/generateId'
+import type { Prisma } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
@@ -60,28 +61,30 @@ export const getRevisions = async (workId: WorkId) => {
 }
 export const createRevision = async (workId: WorkId) => {
   const id = generateId()
-  await prisma.revision.create({
-    data: {
-      revisionId: id,
-      workId: workId,
-    },
-  })
-  const newRevision = await prisma.revision.findFirst({
-    where: { revisionId: id },
-  })
-  if (!newRevision) return
+  const data = await prisma.revision
+    .create({
+      data: {
+        revisionId: id,
+        workId: workId,
+      },
+    })
+    .catch((e: Prisma.PrismaClientUnknownRequestError) => {
+      console.log(e)
+      throw e
+    })
+
   const apiRevision: ApiRevision = {
-    id: newRevision.revisionId as RevisionId,
+    id: data.revisionId as RevisionId,
     editions: [],
     messages: [],
   }
   return apiRevision
 }
 export const getDeskId = async (workId: WorkId) => {
-  const id = await prisma.work.findFirst({
-    where: { workId: workId },
+  const data = await prisma.work.findFirst({
+    where: { workId },
     select: { deskId: true },
   })
-  if (!id) return
-  return id.deskId as DeskId
+  if (!data) return
+  return data.deskId as DeskId
 }
