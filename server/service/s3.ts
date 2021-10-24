@@ -47,12 +47,10 @@ export const createBucket = depend({ getS3Client }, ({ getS3Client }) =>
     .then((res) => res.$metadata)
 )
 
-export const crateBucketIfNotExists = async () => {
+export const createBucketIfNotExists = async () => {
   const isBucket = await listBucket()
   if (!isBucket?.some((b) => b.Name === S3_BUCKET)) {
-    const done = await createBucket().then((res) => res)
-    console.log('isBucket?->', done)
-    return done
+    await createBucket()
   }
 }
 
