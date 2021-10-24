@@ -1,6 +1,6 @@
 import { createRevision, getDeskId, getRevisions } from '$/service/browser'
 import { sendNewWork } from '$/service/s3'
-import type { DeskId, WorkId } from '$/types'
+import type { WorkId } from '$/types'
 import { createS3SaveWorksPath } from '$/utils/s3'
 import { defineController } from './$relay'
 
@@ -12,9 +12,10 @@ export default defineController(() => ({
   post: async ({ params, body }) => {
     const revision = await createRevision(params.workId as WorkId)
     const deskId = await getDeskId(params.workId as WorkId)
+    if (deskId === undefined) return { status: 404 }
     const ids = {
       projectId: body.projectId,
-      deskId: deskId !== undefined ? deskId : ('404' as DeskId),
+      deskId: deskId,
       revisionId: revision.id,
     }
     const props = {
