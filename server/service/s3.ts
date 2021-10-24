@@ -1,3 +1,4 @@
+import type { S3SaveWorksPath } from '$/types'
 import {
   GetObjectCommand,
   ListBucketsCommand,
@@ -50,7 +51,7 @@ export const sendNewWork = depend(
     { getS3Client },
     props: {
       uploadFile: MultipartFile
-      path: string
+      path: S3SaveWorksPath
     }
   ) => {
     const uploadParams = {

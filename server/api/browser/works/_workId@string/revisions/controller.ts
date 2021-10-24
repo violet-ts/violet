@@ -1,6 +1,7 @@
 import { createRevision, getDeskId, getRevisions } from '$/service/browser'
 import { sendNewWork } from '$/service/s3'
-import type { WorkId } from '$/types'
+import type { DeskId, ProjectId, RevisionId, WorkId } from '$/types'
+import { createS3SaveWorksPath } from '$/utils/s3'
 import { defineController } from './$relay'
 
 export default defineController(() => ({
@@ -11,9 +12,14 @@ export default defineController(() => ({
   post: async ({ params, body }) => {
     const revision = await createRevision(params.workId as WorkId)
     const deskId = await getDeskId(params.workId as WorkId)
+    const ids = {
+      projectId: body.projectId as ProjectId,
+      deskId: deskId as DeskId,
+      revisionId: revision.id as RevisionId,
+    }
     const props = {
       uploadFile: body.uploadFile,
-      path: `${body.projectId}/${deskId}/revisions/${revision?.id}`,
+      path: createS3SaveWorksPath(ids),
     }
     const data = await sendNewWork(props)
     return revision && data.httpStatusCode === 200
