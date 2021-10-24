@@ -120,7 +120,7 @@ export const CellName = (props: {
     setIsClickAddNewFile(false)
     setIsClickAddNewFolder(false)
   }
-  const onBlur = (e: FormEvent) => {
+  const sendNewName = (e: FormEvent) => {
     e.preventDefault()
     setIsFocusing(!label)
     if (label) {
@@ -150,8 +150,8 @@ export const CellName = (props: {
           </Label>
           {isClickNewAdd && !isFocusing && (
             <NewFileFolderArea depth={pathChunks.length - 1}>
-              <form onSubmit={onBlur}>
-                <input ref={inputElement} type="text" onBlur={onBlur} onChange={inputLabel} />
+              <form onSubmit={sendNewName}>
+                <input ref={inputElement} type="text" onBlur={sendNewName} onChange={inputLabel} />
               </form>
             </NewFileFolderArea>
           )}
