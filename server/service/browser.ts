@@ -84,10 +84,7 @@ export const getDeskId = async (workId: WorkId) => {
     where: { workId },
     select: { deskId: true },
   })
-  if (!data) {
-    const notFound = 404
-    return notFound
-  }
+  if (!data) return
 
   return data.deskId as DeskId
 }

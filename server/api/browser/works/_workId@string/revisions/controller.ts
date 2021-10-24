@@ -14,7 +14,7 @@ export default defineController(() => ({
     const deskId = await getDeskId(params.workId as WorkId)
     const ids = {
       projectId: body.projectId,
-      deskId: deskId !== 404 ? deskId : ('404' as DeskId),
+      deskId: deskId !== undefined ? deskId : ('404' as DeskId),
       revisionId: revision.id,
     }
     const props = {
