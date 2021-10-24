@@ -3,11 +3,10 @@ import { alphaLevel, colors } from '~/utils/constants'
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
   height: 100%;
 `
-const Adjustments = styled.div`
-  height: 95%;
+const WidthAdjustments = styled.div`
+  width: 95%;
 `
 const StyledAddButton = styled.button`
   & {
@@ -47,7 +46,7 @@ const StyledAddButton = styled.button`
 export const AddButton = () => {
   return (
     <Container>
-      <Adjustments />
+      <WidthAdjustments />
       <StyledAddButton />
     </Container>
   )

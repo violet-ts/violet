@@ -21,17 +21,17 @@ const Container = styled.div`
 const MainColumn = styled.div`
   display: flex;
   flex: 1;
-  flex-direction: column;
   height: 100%;
 `
 
 const MainContent = styled.div`
   display: flex;
+  flex: 1;
+  flex-direction: column;
   height: 100%;
 `
 
-const RevisionColumn = styled.div`
-  flex: 1;
+const RevisionContent = styled.div`
   height: 100%;
 `
 
@@ -52,18 +52,14 @@ const ProjectPage = () => {
         <Explorer projectApiData={projectApiData} project={currentProject} />
       </LeftColumn>
       <MainColumn>
-        <TabBar project={currentProject} projectApiData={projectApiData} />
         <MainContent>
           {projectApiData.revisions ? (
             projectApiData.revisions.length ? (
               <>
                 <TabBar project={currentProject} projectApiData={projectApiData} />
-                <RevisionColumn>
+                <RevisionContent>
                   <Revision />
-                </RevisionColumn>
-                <StreamBarColumn>
-                  <StreamBar project={currentProject} projectApiData={projectApiData} />
-                </StreamBarColumn>
+                </RevisionContent>
               </>
             ) : (
               <EmptyWork project={currentProject} />
@@ -72,6 +68,9 @@ const ProjectPage = () => {
             <div>Choose work</div>
           )}
         </MainContent>
+        <StreamBarColumn>
+          <StreamBar project={currentProject} projectApiData={projectApiData} />
+        </StreamBarColumn>
       </MainColumn>
     </Container>
   )
