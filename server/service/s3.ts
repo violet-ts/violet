@@ -1,5 +1,6 @@
 import type { S3SaveWorksPath } from '$/types'
 import {
+  CreateBucketCommand,
   GetObjectCommand,
   ListBucketsCommand,
   PutObjectCommand,
@@ -11,6 +12,7 @@ import { depend } from 'velona'
 import {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
+  S3_BUCKET,
   S3_ENDPOINT,
   S3_REGION,
 } from '../utils/envValues'
@@ -55,12 +57,17 @@ export const sendNewWork = depend(
     }
   ) => {
     const uploadParams = {
-      Bucket: 'Violet',
+      Bucket: S3_BUCKET,
       Key: props.path,
       Body: await props.uploadFile.toBuffer(),
     }
 
-    const data = getS3Client()
+    const isBucket = await listBucket()
+    if (!isBucket?.some((b) => b.Name === S3_BUCKET)) {
+      await getS3Client().send(new CreateBucketCommand({ Bucket: S3_BUCKET }))
+    }
+
+    const data = await getS3Client()
       .send(new PutObjectCommand(uploadParams))
       .then((res) => res.$metadata)
 

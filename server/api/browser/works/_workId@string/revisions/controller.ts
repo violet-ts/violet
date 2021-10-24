@@ -15,7 +15,7 @@ export default defineController(() => ({
     if (deskId === undefined) return { status: 404 }
     const ids = {
       projectId: body.projectId,
-      deskId: deskId,
+      deskId,
       revisionId: revision.id,
     }
     const props = {
@@ -23,8 +23,6 @@ export default defineController(() => ({
       path: createS3SaveWorksPath(ids),
     }
     const data = await sendNewWork(props)
-    return revision && data.httpStatusCode === 200
-      ? { status: 201, body: revision }
-      : { status: 404 }
+    return data.httpStatusCode === 200 ? { status: 201, body: revision } : { status: 404 }
   },
 }))
