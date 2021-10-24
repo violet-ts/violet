@@ -1,4 +1,4 @@
-import type {S3SaveWorksPath} from '$/types'
+import type { S3SaveWorksPath } from '$/types'
 import {
   CreateBucketCommand,
   GetObjectCommand,
@@ -6,15 +6,11 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3'
-import {getSignedUrl} from '@aws-sdk/s3-request-presigner'
-import type {MultipartFile} from 'fastify-multipart'
-import {depend} from 'velona'
-import {
-  S3_BUCKET,
-  S3_ENDPOINT,
-  S3_REGION,
-} from '../utils/envValues'
-import {getCredentials} from './aws-credential'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import type { MultipartFile } from 'fastify-multipart'
+import { depend } from 'velona'
+import { S3_BUCKET, S3_ENDPOINT, S3_REGION } from '../utils/envValues'
+import { getCredentials } from './aws-credential'
 
 let s3Client: S3Client
 
@@ -31,15 +27,15 @@ const getS3Client = () => {
   return s3Client
 }
 
-export const listBucket = depend({getS3Client}, ({getS3Client}) =>
+export const listBucket = depend({ getS3Client }, ({ getS3Client }) =>
   getS3Client()
     .send(new ListBucketsCommand({}))
     .then((res) => res.Buckets)
 )
 
-export const createBucket = depend({getS3Client}, ({getS3Client}) =>
+export const createBucket = depend({ getS3Client }, ({ getS3Client }) =>
   getS3Client()
-    .send(new CreateBucketCommand({Bucket: S3_BUCKET}))
+    .send(new CreateBucketCommand({ Bucket: S3_BUCKET }))
     .then((res) => res.$metadata)
 )
 
@@ -50,16 +46,16 @@ export const createBucketIfNotExists = async () => {
   }
 }
 
-export const getRevisionsSidnedUrl = depend({getS3Client}, ({getS3Client}) =>
-  getSignedUrl(getS3Client(), new GetObjectCommand({Bucket: 'static', Key: 'sample.txt'}), {
+export const getRevisionsSidnedUrl = depend({ getS3Client }, ({ getS3Client }) =>
+  getSignedUrl(getS3Client(), new GetObjectCommand({ Bucket: 'static', Key: 'sample.txt' }), {
     expiresIn: 3600,
   })
 )
 
 export const sendNewWork = depend(
-  {getS3Client},
+  { getS3Client },
   async (
-    {getS3Client},
+    { getS3Client },
     props: {
       uploadFile: MultipartFile
       path: S3SaveWorksPath
