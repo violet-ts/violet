@@ -12,6 +12,9 @@ RUN ( \
 
 COPY ./server /app
 
+ENV SERVER_PORT=80
+EXPOSE 80
+
 RUN ( \
   yarn exec prisma generate \
   && yarn exec frourio \
