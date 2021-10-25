@@ -8,7 +8,7 @@ const Container = styled.div.attrs<{ width: number }>((props) => ({
   width: number
 }>`
   position: relative;
-  height: 100%;
+  height: 100vh;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 

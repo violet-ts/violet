@@ -16,7 +16,7 @@ import { MessageCell } from './MessageCell'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   border-left: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const StreamBox = styled.div`

@@ -8,7 +8,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 6px;
-  height: 100%;
+  height: 100vh;
   padding: 6px;
   user-select: none;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};

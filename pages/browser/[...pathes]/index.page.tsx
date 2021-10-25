@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Spacer } from '~/components/atoms/Spacer'
 import { Fetching } from '~/components/organisms/Fetching'
 import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
@@ -15,22 +16,25 @@ const Container = styled.div`
   left: 0;
   display: flex;
   width: 100%;
-  height: 100%;
+`
+const WorksView = styled.div`
+  width: 100%;
 `
 
 const MainColumn = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
 `
 
 const MainContent = styled.div`
   display: flex;
-  height: 100%;
+  flex: 1;
+  justify-content: right;
 `
 
-const RevisionColumn = styled.div`
+const RevisionContent = styled.div`
   flex: 1;
   height: 100%;
 `
@@ -51,28 +55,28 @@ const ProjectPage = () => {
       <LeftColumn>
         <Explorer projectApiData={projectApiData} project={currentProject} />
       </LeftColumn>
-      <MainColumn>
-        <TabBar project={currentProject} projectApiData={projectApiData} />
-        <MainContent>
-          {projectApiData.revisions ? (
-            projectApiData.revisions.length ? (
-              <>
-                <TabBar project={currentProject} projectApiData={projectApiData} />
-                <RevisionColumn>
+      <WorksView>
+        {projectApiData.revisions ? (
+          projectApiData.revisions.length ? (
+            <MainColumn>
+              <TabBar project={currentProject} projectApiData={projectApiData} />
+              <MainContent>
+                <RevisionContent>
                   <Revision />
-                </RevisionColumn>
+                </RevisionContent>
+                <Spacer axis="x" size={16} />
                 <StreamBarColumn>
                   <StreamBar project={currentProject} projectApiData={projectApiData} />
                 </StreamBarColumn>
-              </>
-            ) : (
-              <EmptyWork project={currentProject} />
-            )
+              </MainContent>
+            </MainColumn>
           ) : (
-            <div>Choose work</div>
-          )}
-        </MainContent>
-      </MainColumn>
+            <EmptyWork project={currentProject} />
+          )
+        ) : (
+          <div>Choose work</div>
+        )}
+      </WorksView>
     </Container>
   )
 }

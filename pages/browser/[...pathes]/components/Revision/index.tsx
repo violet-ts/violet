@@ -1,28 +1,26 @@
 import styled from 'styled-components'
-import { alphaLevel, colors, fontSizes } from '~/utils/constants'
+import { Spacer } from '~/components/atoms/Spacer'
+import { colors, fontSizes } from '~/utils/constants'
+import { AddButton } from './AddButton'
 
 const Container = styled.div`
-  position: relative;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-`
-
-const Header = styled.div`
-  border-bottom: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 
 const DisplayWorksArea = styled.div`
-  position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 160px;
+  flex: 1;
+  padding: 48px;
   background: ${colors.transparent};
   transition: background 0.2s, padding 0.2s;
 `
 
 const DisplayWorksFrame = styled.div`
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
   height: 100%;
@@ -35,10 +33,13 @@ const DisplayWorksFrame = styled.div`
 export const Revision = () => {
   return (
     <Container>
-      <Header></Header>
       <DisplayWorksArea>
         <DisplayWorksFrame>SHOW WORK</DisplayWorksFrame>
       </DisplayWorksArea>
+      <div>
+        <AddButton />
+      </div>
+      <Spacer axis="y" size={16} />
     </Container>
   )
 }
