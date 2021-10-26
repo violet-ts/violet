@@ -15,7 +15,7 @@ COPY ./server /app
 RUN ( \
   yarn exec prisma generate \
   && yarn exec frourio \
-  && yarn exec webpack --mode=production \
+  && yarn exec webpack -- --mode=production \
   && rm -rf ./node_modules \
   && yarn install --frozen-lockfile --production \
   && yarn cache clean \
@@ -32,6 +32,7 @@ RUN ( \
     index.ts \
     tsconfig.json \
     webpack.config.js \
+    yarn.lock \
 )
 
 ENV SERVER_PORT=80
