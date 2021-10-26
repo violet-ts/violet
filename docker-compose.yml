@@ -36,10 +36,10 @@ services:
     volumes:
       - ./docker/minio/data:/data
       - ./docker/minio/policies:/policies
-    entrypoint: sh
+    entrypoint: []
     command: >
-      -c "cp -r /policies/* /data/.minio.sys/;
-      /usr/bin/minio server /data --console-address :9001;"
+      sh -c "cp -r /policies/* /data/.minio.sys/;
+      minio server /data --console-address :9001;"
 
 volumes:
   mysql_data:
