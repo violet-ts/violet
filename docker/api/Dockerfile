@@ -36,7 +36,7 @@ RUN ( \
 )
 
 ENV SERVER_PORT=80
-ENV NODE_ENV=PRODUCTION
+ENV NODE_ENV=production
 EXPOSE 80
 
 ENTRYPOINT ["node", "/app/index.js"]
