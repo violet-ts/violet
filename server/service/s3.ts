@@ -9,7 +9,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import type { MultipartFile } from 'fastify-multipart'
 import { depend } from 'velona'
-import { S3_BUCKET, S3_ENDPOINT, S3_REGION } from '../utils/envValues'
+import { NODE_ENV, S3_BUCKET, S3_ENDPOINT, S3_REGION } from '../utils/envValues'
 import { getCredentials } from './aws-credential'
 
 let s3Client: S3Client
@@ -27,19 +27,20 @@ const getS3Client = () => {
   return s3Client
 }
 
-export const listBucket = depend({ getS3Client }, ({ getS3Client }) =>
+const listBucket = depend({ getS3Client }, ({ getS3Client }) =>
   getS3Client()
     .send(new ListBucketsCommand({}))
     .then((res) => res.Buckets)
 )
 
-export const createBucket = depend({ getS3Client }, ({ getS3Client }) =>
+const createBucket = depend({ getS3Client }, ({ getS3Client }) =>
   getS3Client()
     .send(new CreateBucketCommand({ Bucket: S3_BUCKET }))
     .then((res) => res.$metadata)
 )
 
 export const createBucketIfNotExists = async () => {
+  if (NODE_ENV === 'production') return;
   const isBucket = await listBucket()
   if (!isBucket?.some((b) => b.Name === S3_BUCKET)) {
     await createBucket()
