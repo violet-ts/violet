@@ -6,22 +6,36 @@ COPY ./server/package.json /app
 COPY ./server/yarn.lock /app
 
 RUN ( \
-  yarn install --frozen-lockfile \
+  yarn install --frozen-lockfile --production=false \
   && yarn cache clean \
 )
 
 COPY ./server /app
 
-ENV SERVER_PORT=80
-EXPOSE 80
-
 RUN ( \
   yarn exec prisma generate \
   && yarn exec frourio \
-  && yarn exec webpack --production=production \
+  && yarn exec webpack --mode=production \
   && rm -rf ./node_modules \
   && yarn install --frozen-lockfile --production \
   && yarn cache clean \
+  && rm -rf \
+    api/ \
+    prisma/ \
+    service/ \
+    test/ \
+    types/ \
+    utils/ \
+    validators/ \
+    \$server.ts \
+    .env.example \
+    index.ts \
+    tsconfig.json \
+    webpack.config.js \
 )
 
-ENTRYPOINT ["yarn", "exec", "pm2-runtime", "/app/index.js"]
+ENV SERVER_PORT=80
+ENV NODE_ENV=PRODUCTION
+EXPOSE 80
+
+ENTRYPOINT ["node", "/app/index.js"]
