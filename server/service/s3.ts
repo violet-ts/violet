@@ -53,6 +53,7 @@ export const getRevisionsSidnedUrl = depend({ getS3Client }, ({ getS3Client }) =
   })
 )
 
+// TODO: presigned URL 検討
 export const sendNewWork = depend(
   { getS3Client },
   async (
