@@ -40,7 +40,7 @@ const createBucket = depend({ getS3Client }, ({ getS3Client }) =>
 )
 
 export const createBucketIfNotExists = async () => {
-  if (NODE_ENV === 'production') return;
+  if (NODE_ENV === 'production') return
   const isBucket = await listBucket()
   if (!isBucket?.some((b) => b.Name === S3_BUCKET)) {
     await createBucket()
