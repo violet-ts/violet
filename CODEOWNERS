@@ -30,6 +30,7 @@ server/package.json @violet-ts/security
 .github/ @violet-ts/infrastructure
 package.json @violet-ts/infrastructure
 server/package.json @violet-ts/infrastructure
+server/index.ts @violet-ts/infrastructure
 server/utils/envValues.ts @violet-ts/infrastructure
 server/service/s3.ts @violet-ts/infrastructure
 server/service/aws-credential.ts @violet-ts/infrastructure
