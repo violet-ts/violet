@@ -13,7 +13,7 @@ const fastify = Fastify()
 const startServer = async () => {
   await createBucketIfNotExists()
   server(fastify, { basePath: BASE_PATH })
-  fastify.listen(SERVER_PORT)
+  fastify.listen(SERVER_PORT, '0.0.0.0')
 }
 
 fastify.register(helmet)
