@@ -22,13 +22,6 @@ fastify.register(fastifyStatic, {
   root: path.join(__dirname, 'public'),
   prefix: BASE_PATH,
 })
-fastify.route({
-  method: 'GET',
-  url: '/healthz',
-  handler: (_request, reply) => {
-    reply.send('ok')
-  }
-})
 fastify.register(fastifyJwt, { secret: JWT_SECRET })
 
 startServer()
