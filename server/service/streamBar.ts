@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 
 export const getMessages = async (revisionId: RevisionId) => {
   const dbMessages = await prisma.message.findMany({
-    where: { revisionId: revisionId },
+    where: { revisionId },
     include: { reply: { orderBy: { createdAt: 'asc' } } },
     orderBy: { createdAt: 'asc' },
   })
@@ -37,9 +37,9 @@ export const createMessage = async (
   await prisma.message.create({
     data: {
       messageId: id,
-      content: content,
-      userName: userName,
-      revisionId: revisionId,
+      content,
+      userName,
+      revisionId,
     },
   })
   const newMessage = await prisma.message.findFirst({ where: { messageId: id } })
@@ -63,9 +63,9 @@ export const createReply = async (
   await prisma.reply.create({
     data: {
       replyId: id,
-      content: content,
-      userName: userName,
-      messageId: messageId,
+      content,
+      userName,
+      messageId,
     },
   })
   const newMessage = await prisma.reply.findFirst({ where: { replyId: id } })
