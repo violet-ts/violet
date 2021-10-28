@@ -8,9 +8,8 @@ const API_ORIGIN = process.env.API_ORIGIN ?? ''
 const AWS_ACCESS_KEY_ID = process.env.MINIO_ROOT_USER ?? ''
 const AWS_SECRET_ACCESS_KEY = process.env.MINIO_ROOT_PASSWORD ?? ''
 const S3_REGION = process.env.S3_REGION ?? ''
-const S3_ENDPOINT = process.env.NODE_ENV === 'production' ? undefined : 'http://localhost:9000'
+const S3_ENDPOINT = process.env.S3_REGION || undefined
 const S3_BUCKET = process.env.S3_BUCKET ?? 'violet-app'
-const NODE_ENV = process.env.NODE_ENV ?? ''
 
 export {
   SERVER_PORT,
@@ -21,5 +20,4 @@ export {
   S3_REGION,
   S3_ENDPOINT,
   S3_BUCKET,
-  NODE_ENV,
 }
