@@ -42,7 +42,21 @@ export const getDesks = async (projectId: ProjectId) => {
   }))
   return { projectId, desks }
 }
-
+export const getWork = async (deskId: DeskId) => {
+  const dbWorks = await prisma.work.findMany({
+    where: { deskId: deskId },
+    include: { revisions: { orderBy: { createdAt: 'asc' } } },
+    orderBy: { createdAt: 'asc' },
+  })
+  if (!dbWorks) return
+  const work = dbWorks.map<ApiWork>((w) => ({
+    id: w.workId as WorkId,
+    name: w.workName,
+    ext: w.ext,
+    path: w.path,
+  }))
+  return work
+}
 export const createWork = async (
   deskId: DeskId,
   path: ApiWork['path'],
@@ -50,7 +64,7 @@ export const createWork = async (
   ext?: ApiWork['ext']
 ) => {
   const id = generateId()
-  await prisma.work.create({
+  const newWork = await prisma.work.create({
     data: {
       workId: id,
       path: path,
@@ -59,7 +73,6 @@ export const createWork = async (
       ext: ext,
     },
   })
-  const newWork = await prisma.work.findFirst({ where: { workId: id } })
   if (!newWork) return
   const apiWork: ApiWork = {
     id: newWork.workId as WorkId,
