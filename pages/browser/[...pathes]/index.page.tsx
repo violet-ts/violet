@@ -62,7 +62,7 @@ const ProjectPage = () => {
               <TabBar project={currentProject} projectApiData={projectApiData} />
               <MainContent>
                 <RevisionContent>
-                  <Revision />
+                  <Revision project={currentProject} />
                 </RevisionContent>
                 <Spacer axis="x" size={16} />
                 <StreamBarColumn>
@@ -71,7 +71,10 @@ const ProjectPage = () => {
               </MainContent>
             </MainColumn>
           ) : (
-            <EmptyWork project={currentProject} />
+            <>
+              <TabBar project={currentProject} projectApiData={projectApiData} />
+              <EmptyWork project={currentProject} />
+            </>
           )
         ) : (
           <div>Choose work</div>

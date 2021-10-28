@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { acceptExtensions } from '~/server/utils/constants'
 import { alphaLevel, colors } from '~/utils/constants'
 
 const Container = styled.div`
@@ -8,7 +9,7 @@ const Container = styled.div`
 const WidthAdjustments = styled.div`
   width: 95%;
 `
-const StyledAddButton = styled.button`
+const StyledAddButton = styled.label`
   & {
     position: relative;
     box-sizing: border-box;
@@ -16,6 +17,7 @@ const StyledAddButton = styled.button`
     width: 48px;
     height: 48px;
     color: ${colors.violet};
+    cursor: pointer;
     background-color: ${colors.violet}${alphaLevel[2]};
     border: 2px solid;
     border-radius: 4px;
@@ -43,11 +45,16 @@ const StyledAddButton = styled.button`
     color: ${colors.violet};
   }
 `
+const UploadFile = styled.input`
+  display: none;
+`
 export const AddButton = () => {
   return (
     <Container>
       <WidthAdjustments />
-      <StyledAddButton />
+      <StyledAddButton>
+        <UploadFile type="file" accept={acceptExtensions} />
+      </StyledAddButton>
     </Container>
   )
 }
