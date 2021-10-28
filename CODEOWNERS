@@ -11,15 +11,16 @@ package.json @violet-ts/frontend
 tsconfig.json @violet-ts/frontend
 jest.config.ts @violet-ts/frontend
 stylelint.config.js @violet-ts/frontend
-.babelrc/ @violet-ts/frontend
-.eslintignore/ @violet-ts/frontend
-.eslintrc.js/ @violet-ts/frontend
-aspida.config.js/ @violet-ts/frontend
+.babelrc @violet-ts/frontend
+.eslintignore @violet-ts/frontend
+.eslintrc.js @violet-ts/frontend
+aspida.config.js @violet-ts/frontend
+next.config.js @violet-ts/infrastructure
 
 # backend
 server/ @violet-ts/backend
-.eslintignore/ @violet-ts/backend
-.eslintrc.js/ @violet-ts/backend
+.eslintignore @violet-ts/backend
+.eslintrc.js @violet-ts/backend
 
 # security
 .github/ @violet-ts/security
@@ -33,10 +34,10 @@ server/package.json @violet-ts/infrastructure
 server/index.ts @violet-ts/infrastructure
 server/api/healthz/ @violet-ts/infrastructure
 server/utils/envValues.ts @violet-ts/infrastructure
+server/.env.example @violet-ts/infrastructure
 server/service/s3.ts @violet-ts/infrastructure
 server/service/aws-credential.ts @violet-ts/infrastructure
 public/ @violet-ts/infrastructure
 docker/ @violet-ts/infrastructure
-data/my.cnf.json @violet-ts/infrastructure
 docker-compose.yml @violet-ts/infrastructure
 next.config.js @violet-ts/infrastructure
