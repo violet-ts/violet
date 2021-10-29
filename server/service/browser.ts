@@ -53,10 +53,10 @@ export const createWork = async (
   const newWork = await prisma.work.create({
     data: {
       workId: id,
-      path: path,
-      deskId: deskId,
-      workName: workName,
-      ext: ext,
+      path,
+      deskId,
+      workName,
+      ext,
     },
   })
   const apiWork: ApiWork = {
