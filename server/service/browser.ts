@@ -23,7 +23,7 @@ export const getProjects = async () => {
 }
 export const getDesks = async (projectId: ProjectId) => {
   const dbDesk = await prisma.desk.findMany({
-    where: { projectId: projectId },
+    where: { projectId },
     include: { works: { orderBy: { createdAt: 'asc' } } },
     orderBy: { createdAt: 'asc' },
   })
@@ -43,7 +43,7 @@ export const getDesks = async (projectId: ProjectId) => {
 }
 export const getRevisions = async (workId: WorkId) => {
   const dbRevision = await prisma.revision.findMany({
-    where: { workId: workId },
+    where: { workId },
     include: { editions: { orderBy: { createdAt: 'asc' } } },
     orderBy: { createdAt: 'asc' },
   })
