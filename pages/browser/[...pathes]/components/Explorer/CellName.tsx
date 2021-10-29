@@ -85,10 +85,9 @@ export const CellName = (props: {
     setIsClickNewAddFolder(true)
   }
   const submitNew = async (path: string, name: string, ext?: string) => {
-    const { projectId, deskId } = getProjectInfo(pathChunks)
-    if (!path) return
+    const { projectId, deskName } = getProjectInfo(pathChunks)
     const desks = await api.browser.projects._projectId(projectId).desks.$get()
-    const desk = desks.desks.find((d) => d.name === deskId)
+    const desk = desks.desks.find((d) => d.name === deskName)
     if (!desk) return
     await api.browser.projects
       ._projectId(projectId)
@@ -99,9 +98,7 @@ export const CellName = (props: {
 
     updateApiWholeData(
       'desksList',
-      apiWholeData.desksList.some((d) => d.projectId === deskRes.projectId)
-        ? apiWholeData.desksList.map((d) => (d.projectId === deskRes.projectId ? deskRes : d))
-        : [...apiWholeData.desksList, deskRes]
+      apiWholeData.desksList.map((d) => (d.projectId === deskRes.projectId ? deskRes : d))
     )
     setIsClickNewAdd(false)
   }
