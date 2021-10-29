@@ -59,7 +59,6 @@ export const createWork = async (
       ext: ext,
     },
   })
-  if (!newWork) return
   const apiWork: ApiWork = {
     id: newWork.workId as WorkId,
     name: newWork.workName,

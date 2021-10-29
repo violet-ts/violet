@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
 import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
+import { getProjectInfo } from '~/utils'
 import { pagesPath } from '~/utils/$path'
 import { colors, forceToggleHash } from '~/utils/constants'
 import { AddArea } from '../AddArea'
@@ -84,19 +85,18 @@ export const CellName = (props: {
     setIsClickNewAddFolder(true)
   }
   const submitNew = async (path: string, name: string, ext?: string) => {
+    const projectInfo = getProjectInfo(pathChunks)
     if (!path) return
-    const desks = await api.browser.projects._projectId(pathChunks[0]).desks.$get()
-    const desk = desks.desks.filter((d) => {
-      if (d.name === pathChunks[1]) return d.id
-    })[0]
+    const desks = await api.browser.projects._projectId(projectInfo.projectId).desks.$get()
+    const desk = desks.desks.find((d) => d.name === projectInfo.deskId)
+    if (!desk) return
     await api.browser.projects
-      ._projectId(pathChunks[0])
+      ._projectId(projectInfo.projectId)
       .desks._deskId(desk.id)
       .post({ body: { path, name, ext } })
       .catch(onErr)
-    const deskRes = await api.browser.projects._projectId(pathChunks[0]).desks.$get()
+    const deskRes = await api.browser.projects._projectId(projectInfo.projectId).desks.$get()
 
-    if (!deskRes) return
     updateApiWholeData(
       'desksList',
       apiWholeData.desksList.some((d) => d.projectId === deskRes.projectId)
