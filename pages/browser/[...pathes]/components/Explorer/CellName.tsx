@@ -20,9 +20,14 @@ const Container = styled.a<{ depth: number; selected: boolean; bold?: boolean }>
   ${SelectableStyle};
 `
 
-const Label = styled.div`
+const LabelArea = styled.div`
   position: relative;
   display: flex;
+`
+const Label = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const Arrow = styled.div<{ opened?: boolean }>`
@@ -131,7 +136,7 @@ export const CellName = (props: {
     <Link href={href}>
       {props.name && (
         <Container depth={pathChunks.length - 1} selected={props.selected} bold={props.bold}>
-          <Label>
+          <LabelArea>
             {props.isWork ? (
               <>
                 <ExtIcon name={props.name} />
@@ -144,8 +149,8 @@ export const CellName = (props: {
                 <AddArea addFile={AddNewFile} addFolder={AddNewFolder} />
               </>
             )}
-            {props.name}
-          </Label>
+            <Label>{props.name}</Label>
+          </LabelArea>
           {isClickNewAdd && !isFocusing && (
             <NewFileFolderArea depth={pathChunks.length - 1}>
               <form onSubmit={sendNewName}>

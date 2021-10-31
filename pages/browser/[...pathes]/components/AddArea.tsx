@@ -99,8 +99,6 @@ const StyledFolderAdd = styled.i`
 
 const ShowAddArea = styled.span`
   position: absolute;
-  display: flex;
-  justify-content: flex-end;
   width: 100%;
   &:hover {
     ${StyledFileAdd} {
