@@ -22,6 +22,7 @@ const Container = styled.a<{ depth: number; selected: boolean; bold?: boolean }>
 
 const Label = styled.div`
   position: relative;
+  display: flex;
 `
 
 const Arrow = styled.div<{ opened?: boolean }>`

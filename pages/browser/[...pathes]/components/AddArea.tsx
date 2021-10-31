@@ -6,7 +6,7 @@ const StyledFileAdd = styled.i`
   width: 12px;
   height: 14px;
   margin: 1px 0 1px 0;
-  margin-right: 20px;
+  margin-right: 10px;
   overflow: hidden;
   color: #333;
   visibility: hidden;
@@ -99,8 +99,9 @@ const StyledFolderAdd = styled.i`
 
 const ShowAddArea = styled.span`
   position: absolute;
+  display: flex;
+  justify-content: flex-end;
   width: 100%;
-  height: 100%;
   &:hover {
     ${StyledFileAdd} {
       visibility: visible;
