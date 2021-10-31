@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { alphaLevel, colors } from '~/utils/constants'
+import { alphaLevel, colors } from '@violet/frontend/src/utils/constants'
 
 const Container = styled.div.attrs<{ width: number }>((props) => ({
   style: { width: `${props.width}px` },

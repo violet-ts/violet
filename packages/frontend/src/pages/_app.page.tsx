@@ -1,8 +1,8 @@
 import type { AppProps } from 'next/app'
 import { createGlobalStyle } from 'styled-components'
-import { ApiProvider } from '~/contexts/Api'
-import { BrowserProvider } from '~/contexts/Browser'
-import { fontSizes } from '~/utils/constants'
+import { ApiProvider } from '@violet/frontend/src/contexts/Api'
+import { BrowserProvider } from '@violet/frontend/src/contexts/Browser'
+import { fontSizes } from '@violet/frontend/src/utils/constants'
 import { AuthProvider } from '../contexts/Auth'
 
 const GlobalStyle = createGlobalStyle`

@@ -13,6 +13,9 @@ out/
 # production
 build/
 
+# typescript
+tsconfig.tsbuildinfo
+
 # misc
 .DS_Store
 
@@ -31,12 +34,11 @@ yarn-error.log*
 # client
 /packages/frontend/utils/$path.ts
 
-# server
-/packages/server/api/**/$*.ts
-/packages/server/.upload
+# api
+/packages/api/api/**/$*.ts
+/packages/api/.upload
 
 # docker
-/docker/firebase/config/
 /docker/minio/config/
 /docker/minio/data/*
 !/docker/minio/data/static

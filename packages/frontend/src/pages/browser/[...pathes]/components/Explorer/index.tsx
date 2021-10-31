@@ -8,9 +8,9 @@ import type {
   BrowserWork,
   OpenedFullPathDict,
   ProjectApiData,
-} from '~/server/types'
-import { getWorkFullName } from '~/utils'
-import { fontSizes } from '~/utils/constants'
+} from '@violet/api/src/types'
+import { getWorkFullName } from '@violet/frontend/src//utils'
+import { fontSizes } from '@violet/frontend/src//utils/constants'
 import { CellName } from './CellName'
 import { DirectoryCell } from './DirectoryCell'
 import { WorkCell } from './WorkCell'

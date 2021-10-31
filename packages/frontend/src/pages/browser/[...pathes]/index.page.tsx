@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Fetching } from '~/components/organisms/Fetching'
+import { Fetching } from '@violet/frontend/src/components/organisms/Fetching'
 import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
 import { LeftColumn } from './components/LeftColumn'

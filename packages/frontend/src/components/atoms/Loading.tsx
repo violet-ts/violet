@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { alphaLevel, colors } from '~/utils/constants'
+import { alphaLevel, colors } from '@violet/frontend/src/utils/constants'
 import { Portal } from './Portal'
 
 const Container = styled.div`

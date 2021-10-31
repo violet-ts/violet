@@ -1,4 +1,4 @@
-import type { BrowserDir } from '~/server/types'
+import type { BrowserDir } from '@violet/api/src/types'
 import { CellName } from './CellName'
 import { WorkCell } from './WorkCell'
 

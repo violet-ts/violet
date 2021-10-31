@@ -3,7 +3,25 @@ name: Node.js CI
 on: [push, pull_request]
 
 jobs:
+  cache-pnpm:
+    name: Cache Pnpm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --prefer-offline]
   test:
+    needs: [cache-pnpm]
     name: Test
     runs-on: ubuntu-latest
     env:
@@ -16,23 +34,22 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - uses: actions/cache@v2
-        id: client-yarn-cache
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
         with:
-          path: 'node_modules'
-          key: client-yarn-${{ hashFiles('yarn.lock') }}
-      - uses: actions/cache@v2
-        id: server-yarn-cache
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+      - uses: pnpm/action-setup@v2
         with:
-          path: 'server/node_modules'
-          key: server-yarn-${{ hashFiles('server/yarn.lock') }}
-      - run: yarn install
-        if: steps.client-yarn-cache.outputs.cache-hit != 'true'
-      - run: yarn install --cwd server
-        if: steps.server-yarn-cache.outputs.cache-hit != 'true'
-      - run: yarn lint
+          version: 6
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --prefer-offline]
+      - run: pnpm run lint
       - run: |
           sudo systemctl start mysql.service
-          echo "DATABASE_URL=mysql://root:root@localhost:3306/test" > server/prisma/.env
-      - run: yarn typecheck
-      - run: yarn test
+          echo "DATABASE_URL=mysql://root:root@localhost:3306/test" > packages/api/prisma/.env
+      - run: pnpm run typecheck
+      - run: pnpm run test

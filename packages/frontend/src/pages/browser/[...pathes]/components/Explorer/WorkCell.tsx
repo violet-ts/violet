@@ -1,5 +1,5 @@
-import type { BrowserWork } from '~/server/types'
-import { getWorkFullName } from '~/utils'
+import type { BrowserWork } from '@violet/api/src/types'
+import { getWorkFullName } from '@violet/frontend/src/utils'
 import { CellName } from './CellName'
 
 export const WorkCell = (props: { work: BrowserWork }) => {

@@ -3,27 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm run migrate:dev && run-p dev:*",
-    "dev:client": "next dev -p 3000",
-    "dev:server": "pnpm run dev --prefix server",
-    "dev:aspida": "aspida --watch",
-    "dev:pathpida": "pathpida --enableStatic --watch",
-    "build": "run-p build:client build:server",
-    "build:client": "pathpida --enableStatic && aspida && prisma generate --schema server/prisma/schema.prisma && next build && next export",
-    "build:server": "pnpm run build --prefix server",
-    "build:types": "pathpida --enableStatic && aspida && pnpm run build:frourio --prefix server",
-    "lint": "pnpm run lint:js && pnpm run lint:prettier && pnpm run lint:style",
-    "lint:js": "eslint --ext .ts,.tsx,.js .",
-    "lint:prettier": "prettier --check \"./**/*.{ts,tsx,js}\" --ignore-path .eslintignore",
-    "lint:style": "stylelint '**/*.ts{,x}' -s css-in-js",
-    "lint:fix": "pnpm run lint:js -- --fix && prettier --write \"./**/*.{ts,tsx,js}\" --ignore-path .eslintignore &&  pnpm run lint:style -- --fix",
-    "migrate:dev": "pnpm run migrate:dev --prefix server",
-    "migrate:reset": "pnpm run migrate:reset --prefix server",
-    "start": "run-p start:*",
-    "start:client": "next start",
-    "start:server": "npm start --prefix server",
-    "test": "pnpm run build:types && jest",
-    "typecheck": "pnpm run build:types && tsc --noEmit && tsc --noEmit -p server"
+    "start": "cross-env NODE_ENV=production next start",
+    "_:dev": "run-p _:dev:*",
+    "_:dev:next": "next dev -p 3000",
+    "_:dev:pathpida": "pathpida --enableStatic --watch",
+    "_:generate": "pathpida --enableStatic",
+    "_:build": "next build"
   },
   "dependencies": {
     "@aspida/fetch": "^1.7.1",
@@ -31,9 +16,13 @@
     "class-validator": "^0.13.1",
     "dayjs": "^1.10.7",
     "next": "^11.1.0",
+    "next-transpile-modules": "^9.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "styled-components": "^5.3.1",
     "swr": "^1.0.0"
+  },
+  "devDependencies": {
+    "@violet/api": "workspace:^0.1.0"
   }
 }

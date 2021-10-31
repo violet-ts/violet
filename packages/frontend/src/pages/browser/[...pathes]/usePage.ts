@@ -1,9 +1,9 @@
 import { useRouter } from 'next/dist/client/router'
 import { useContext, useEffect, useMemo } from 'react'
-import { BrowserContext } from '~/contexts/Browser'
-import type { ApiWork, BrowserProject, ProjectApiData, ProjectId } from '~/server/types'
-import { getWorkFullName } from '~/utils'
-import { forceToggleHash } from '~/utils/constants'
+import { BrowserContext } from '@violet/frontend/src/contexts/Browser'
+import type { ApiWork, BrowserProject, ProjectApiData, ProjectId } from '@violet/api/src/types'
+import { getWorkFullName } from '@violet/frontend/src/utils'
+import { forceToggleHash } from '@violet/frontend/src/utils/constants'
 import { useFetch } from './useFetch'
 
 const findWork = (

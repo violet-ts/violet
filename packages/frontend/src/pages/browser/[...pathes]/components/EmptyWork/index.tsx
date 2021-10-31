@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { BrowserContext } from '~/contexts/Browser'
-import { useApi } from '~/hooks'
-import type { ApiRevision, BrowserProject, WorkId } from '~/server/types'
-import { fileTypes } from '~/server/utils/constants'
-import { colors, fontSizes } from '~/utils/constants'
+import { BrowserContext } from '@violet/frontend/src/contexts/Browser'
+import { useApi } from '@violet/frontend/src/hooks'
+import type { ApiRevision, BrowserProject, WorkId } from '@violet/api/src/types'
+import { fileTypes } from '@violet/api/src/utils/constants'
+import { colors, fontSizes } from '@violet/frontend/src/utils/constants'
 import { FileTypeAlertModal } from './FileTypeAlertModal'
 
 const Container = styled.div`

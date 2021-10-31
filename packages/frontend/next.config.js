@@ -1,24 +1,10 @@
-require('dotenv').config({ path: 'server/.env' })
+const withTM = require('next-transpile-modules')(['@violet/api'])
 
-const {
-  NODE_ENV,
-  FIREBASE_API_KEY,
-  FIREBASE_AUTH_DOMAIN,
-  FIREBASE_PROJECT_ID,
-  FIREBASE_STORAGE_BUCKET,
-  FIREBASE_MESSEGING_SENDER_ID,
-  FIREBASE_APP_ID,
-} = process.env
+const { NODE_ENV } = process.env
 
-module.exports = {
+module.exports = withTM({
   env: {
     IS_PRODUCTION: NODE_ENV === 'production',
-    FIREBASE_API_KEY,
-    FIREBASE_AUTH_DOMAIN,
-    FIREBASE_PROJECT_ID,
-    FIREBASE_STORAGE_BUCKET,
-    FIREBASE_MESSEGING_SENDER_ID,
-    FIREBASE_APP_ID,
   },
   pageExtensions: ['page.tsx'],
-}
+})

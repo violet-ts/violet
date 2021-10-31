@@ -1,13 +1,13 @@
-import type { Task } from '$prisma/client'
+import type { Task } from '@prisma/client'
 import useAspidaSWR from '@aspida/swr'
 import Head from 'next/head'
 import type { ChangeEvent, FormEvent } from 'react'
 import { Fragment, useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { Spacer } from '~/components/atoms/Spacer'
-import { Fetching } from '~/components/organisms/Fetching'
-import { useApi } from '~/hooks'
-import { staticPath } from '~/utils/$path'
+import { Spacer } from '@violet/frontend/src/components/atoms/Spacer'
+import { Fetching } from '@violet/frontend/src/components/organisms/Fetching'
+import { useApi } from '@violet/frontend/src/hooks'
+import { staticPath } from '@violet/frontend/src/utils/$path'
 import { UserBanner } from './components/UserBanner'
 
 const Container = styled.div`

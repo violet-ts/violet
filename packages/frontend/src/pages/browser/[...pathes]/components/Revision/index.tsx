@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { alphaLevel, colors, fontSizes } from '~/utils/constants'
+import { alphaLevel, colors, fontSizes } from '@violet/frontend/src/utils/constants'
 
 const Container = styled.div`
   position: relative;

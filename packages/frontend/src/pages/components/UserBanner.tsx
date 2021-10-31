@@ -1,7 +1,6 @@
-import { getAuth, GoogleAuthProvider, signInWithRedirect, signOut } from 'firebase/auth'
 import { useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import { AuthContext } from '~/contexts/Auth'
+import { AuthContext } from '@violet/frontend/src/contexts/Auth'
 
 const Container = styled.div`
   position: fixed;
@@ -20,14 +19,9 @@ const Icon = styled.img`
 export const UserBanner = () => {
   const { currentUser } = useContext(AuthContext)
 
-  const googleLogin = useCallback(() => {
-    const provider = new GoogleAuthProvider()
-    signInWithRedirect(getAuth(), provider)
-  }, [])
+  const googleLogin = useCallback(() => {}, [])
 
-  const logout = useCallback(() => {
-    signOut(getAuth())
-  }, [])
+  const logout = useCallback(() => {}, [])
 
   return (
     <Container>

@@ -7,23 +7,10 @@ services:
     ports:
       - 3306:3306
     env_file:
-      - ./server/.env
+      - ./.env
     volumes:
       - mysql_data:/var/lib/mysql
       - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-
-  firebase:
-    build: ./docker/firebase
-    restart: always
-    volumes:
-      - ./docker/firebase:/opt/workspace:cached
-    ports:
-      - 9099:9099 # Auth
-      - 4000:4000 # Emulator Suite UI
-    env_file:
-      - ./server/.env
-    working_dir: /opt/workspace
-    command: firebase emulators:start --import=seeder
 
   minio:
     image: minio/minio
@@ -32,7 +19,7 @@ services:
       - 9000:9000 # Storage
       - 9001:9001 # Console
     env_file:
-      - ./server/.env
+      - ./.env
     volumes:
       - ./docker/minio/data:/data
       - ./docker/minio/policies:/policies

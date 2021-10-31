@@ -1,43 +1,35 @@
 # frontend
-# TODO: ディレクトリ構造再考
-public/ @violet-ts/frontend
-pages/ @violet-ts/frontend
-hooks/ @violet-ts/frontend
-contexts/ @violet-ts/frontend
-components/ @violet-ts/frontend
-test/ @violet-ts/frontend
-next-env.d.ts @violet-ts/frontend
-package.json @violet-ts/frontend
-tsconfig.json @violet-ts/frontend
-jest.config.ts @violet-ts/frontend
-stylelint.config.js @violet-ts/frontend
-.babelrc @violet-ts/frontend
-.eslintignore @violet-ts/frontend
-.eslintrc.js @violet-ts/frontend
-aspida.config.js @violet-ts/frontend
-next.config.js @violet-ts/infrastructure
+/.eslintrc.js
+/.eslintignore
+/packages/frontend/ @violet-ts/frontend
+/package.json
 
 # backend
-server/ @violet-ts/backend
-.eslintignore @violet-ts/backend
-.eslintrc.js @violet-ts/backend
+/.eslintrc.js
+/.eslintignore
+/packages/api/ @violet-ts/frontend
+/package.json
 
 # security
-.github/ @violet-ts/security
-package.json @violet-ts/security
-server/package.json @violet-ts/security
+/.github/ @violet-ts/security
+**/package.json @violet-ts/security
+pnpm-lock.yaml @violet-ts/security
+/packages/api/src/service/aws-credential.ts.ts @violet-ts/infrastructure
 
 # infrastructure
-.github/ @violet-ts/infrastructure
-package.json @violet-ts/infrastructure
-server/package.json @violet-ts/infrastructure
-server/index.ts @violet-ts/infrastructure
-server/api/healthz/ @violet-ts/infrastructure
-server/utils/envValues.ts @violet-ts/infrastructure
-server/.env.example @violet-ts/infrastructure
-server/service/s3.ts @violet-ts/infrastructure
-server/service/aws-credential.ts @violet-ts/infrastructure
-public/ @violet-ts/infrastructure
-docker/ @violet-ts/infrastructure
-docker-compose.yml @violet-ts/infrastructure
-next.config.js @violet-ts/infrastructure
+/.github/ @violet-ts/infrastructure
+**/package.json @violet-ts/infrastructure
+/packages/api/scripts/ @violet-ts/infrastructure
+/packages/api/prisma/ @violet-ts/infrastructure
+/packages/api/api/healthz/ @violet-ts/infrastructure
+/packages/api/.env.example @violet-ts/infrastructure
+/packages/api/src/utils/envValues.ts @violet-ts/infrastructure
+/packages/api/src/utils/envValues.ts @violet-ts/infrastructure
+
+/packages/api/src/service/s3.ts @violet-ts/infrastructure
+/packages/api/src/service/aws-credential.ts.ts @violet-ts/infrastructure
+
+/packages/frontend/public/ @violet-ts/infrastructure
+/packages/frontend/next.config.js @violet-ts/infrastructure
+/docker/ @violet-ts/infrastructure
+/docker-compose.yml @violet-ts/infrastructure

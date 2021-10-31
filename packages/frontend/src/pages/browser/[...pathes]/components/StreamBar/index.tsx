@@ -1,16 +1,16 @@
 import type { FormEvent } from 'react'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { BrowserContext } from '~/contexts/Browser'
-import { useApi } from '~/hooks'
+import { BrowserContext } from '@violet/frontend/src/contexts/Browser'
+import { useApi } from '@violet/frontend/src/hooks'
 import type {
   ApiMessage,
   BrowserProject,
   MessageId,
   ProjectApiData,
   RevisionId,
-} from '~/server/types'
-import { alphaLevel, colors } from '~/utils/constants'
+} from '@violet/api/src/types'
+import { alphaLevel, colors } from '@violet/frontend/src/utils/constants'
 import { MessageCell } from './MessageCell'
 
 const Container = styled.div`
