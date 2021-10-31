@@ -1,19 +1,17 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-node_modules
-/.pnp
-.pnp.js
+node_modules/
 
 # testing
-/coverage
+coverage/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
-/build
+build/
 
 # misc
 .DS_Store
@@ -31,20 +29,14 @@ yarn-error.log*
 .env.production.local
 
 # client
-utils/$path.ts
+/packages/frontend/utils/$path.ts
 
 # server
-server/**/$*.ts
-server/**/*.db
-server/index.js
-server/database.json
-server/.upload
-
-# firebase
-firebase-debug.log
+/packages/server/api/**/$*.ts
+/packages/server/.upload
 
 # docker
-docker/firebase/config/
-docker/minio/config/
-docker/minio/data/*
-!docker/minio/data/static
+/docker/firebase/config/
+/docker/minio/config/
+/docker/minio/data/*
+!/docker/minio/data/static
