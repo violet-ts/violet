@@ -2,6 +2,7 @@ import type {
   ApiDesk,
   ApiProject,
   ApiRevision,
+  ApiWork,
   DeskId,
   EditionId,
   ProjectId,
@@ -23,7 +24,7 @@ export const getProjects = async () => {
 }
 export const getDesks = async (projectId: ProjectId) => {
   const dbDesk = await prisma.desk.findMany({
-    where: { projectId: projectId },
+    where: { projectId },
     include: { works: { orderBy: { createdAt: 'asc' } } },
     orderBy: { createdAt: 'asc' },
   })
@@ -41,9 +42,35 @@ export const getDesks = async (projectId: ProjectId) => {
   }))
   return { projectId, desks }
 }
+
+export const createWork = async (
+  deskId: DeskId,
+  path: ApiWork['path'],
+  workName: ApiWork['name'],
+  ext?: ApiWork['ext']
+) => {
+  const id = generateId()
+  const newWork = await prisma.work.create({
+    data: {
+      workId: id,
+      path,
+      deskId,
+      workName,
+      ext,
+    },
+  })
+  const apiWork: ApiWork = {
+    id: newWork.workId as WorkId,
+    name: newWork.workName,
+    path: newWork.path,
+    ext: newWork.ext,
+  }
+  return apiWork
+}
+
 export const getRevisions = async (workId: WorkId) => {
   const dbRevision = await prisma.revision.findMany({
-    where: { workId: workId },
+    where: { workId },
     include: { editions: { orderBy: { createdAt: 'asc' } } },
     orderBy: { createdAt: 'asc' },
   })

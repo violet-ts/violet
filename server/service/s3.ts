@@ -9,13 +9,8 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import type { MultipartFile } from 'fastify-multipart'
 import { depend } from 'velona'
-import {
-  AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY,
-  S3_BUCKET,
-  S3_ENDPOINT,
-  S3_REGION,
-} from '../utils/envValues'
+import { S3_BUCKET, S3_ENDPOINT, S3_REGION } from '../utils/envValues'
+import { getCredentials } from './aws-credential'
 
 let s3Client: S3Client
 
@@ -24,10 +19,7 @@ const getS3Client = () => {
     s3Client ??
     new S3Client({
       region: S3_REGION,
-      credentials: {
-        accessKeyId: AWS_ACCESS_KEY_ID,
-        secretAccessKey: AWS_SECRET_ACCESS_KEY,
-      },
+      credentials: getCredentials(),
       endpoint: S3_ENDPOINT,
       forcePathStyle: true,
     })
@@ -35,19 +27,20 @@ const getS3Client = () => {
   return s3Client
 }
 
-export const listBucket = depend({ getS3Client }, ({ getS3Client }) =>
+const listBucket = depend({ getS3Client }, ({ getS3Client }) =>
   getS3Client()
     .send(new ListBucketsCommand({}))
     .then((res) => res.Buckets)
 )
 
-export const createBucket = depend({ getS3Client }, ({ getS3Client }) =>
+const createBucket = depend({ getS3Client }, ({ getS3Client }) =>
   getS3Client()
     .send(new CreateBucketCommand({ Bucket: S3_BUCKET }))
     .then((res) => res.$metadata)
 )
 
 export const createBucketIfNotExists = async () => {
+  if (!S3_ENDPOINT) return
   const isBucket = await listBucket()
   if (!isBucket?.some((b) => b.Name === S3_BUCKET)) {
     await createBucket()
@@ -60,6 +53,7 @@ export const getRevisionsSidnedUrl = depend({ getS3Client }, ({ getS3Client }) =
   })
 )
 
+// TODO: presigned URL 検討
 export const sendNewWork = depend(
   { getS3Client },
   async (

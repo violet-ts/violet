@@ -1,8 +1,11 @@
 import Link from 'next/link'
-import type { ChangeEvent } from 'react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { ChangeEvent, FormEvent } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
+import { BrowserContext } from '~/contexts/Browser'
+import { useApi } from '~/hooks'
+import { getProjectInfo } from '~/utils'
 import { pagesPath } from '~/utils/$path'
 import { colors, forceToggleHash } from '~/utils/constants'
 import { AddArea } from '../AddArea'
@@ -53,6 +56,10 @@ export const CellName = (props: {
   const [label, setLabel] = useState('')
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const inputElement = useRef<HTMLInputElement>(null)
+  const { api, onErr } = useApi()
+  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
+  const [isClickNewAddFile, setIsClickNewAddFile] = useState(false)
+  const [isClickNewAddFolder, setIsClickNewAddFolder] = useState(false)
   useEffect(() => {
     inputElement.current?.focus()
   }, [inputElement.current])
@@ -63,37 +70,90 @@ export const CellName = (props: {
         .$url(props.selected && !props.isWork ? { hash: forceToggleHash } : undefined),
     [props.selected, props.isWork]
   )
-  const onClick = () => {
+  const openInputField = () => {
     setIsFocusing(false)
     setIsClickNewAdd(true)
   }
-  const onBlur = () => {
-    setIsFocusing(!label)
+
+  const AddNewFile = () => {
+    openInputField()
+    setIsClickNewAddFile(true)
   }
+
+  const AddNewFolder = () => {
+    openInputField()
+    setIsClickNewAddFolder(true)
+  }
+  const submitNew = async (path: string, name: string, ext?: string) => {
+    const { projectId, deskName } = getProjectInfo(pathChunks)
+    const desks = await api.browser.projects._projectId(projectId).desks.$get()
+    const desk = desks.desks.find((d) => d.name === deskName)
+    if (!desk) return
+    await api.browser.projects
+      ._projectId(projectId)
+      .desks._deskId(desk.id)
+      .post({ body: { path, name, ext } })
+      .catch(onErr)
+    const deskRes = await api.browser.projects._projectId(projectId).desks.$get()
+
+    updateApiWholeData(
+      'desksList',
+      apiWholeData.desksList.map((d) => (d.projectId === deskRes.projectId ? deskRes : d))
+    )
+    setIsClickNewAdd(false)
+  }
+  const createNew = () => {
+    const pathArray = pathChunks.filter((d) => pathChunks.indexOf(d) > 1)
+    if (isClickNewAddFile) {
+      const path = `/${pathArray.join('/')}`
+      const name = label.substring(0, label.lastIndexOf('.'))
+      const ext = label.substring(label.lastIndexOf('.') + 1, label.length)
+      submitNew(path, name, ext)
+    }
+    if (isClickNewAddFolder) {
+      const path = `/${pathArray.join('/')}/${label}`
+      submitNew(path, '')
+    }
+    setIsClickNewAddFile(false)
+    setIsClickNewAddFolder(false)
+  }
+  const sendNewName = (e: FormEvent) => {
+    e.preventDefault()
+    setIsFocusing(!label)
+    if (label) {
+      createNew()
+    }
+    setLabel('')
+  }
+
   return (
     <Link href={href}>
-      <Container depth={pathChunks.length - 1} selected={props.selected} bold={props.bold}>
-        <Label>
-          {props.isWork ? (
-            <>
-              <ExtIcon name={props.name} />
-              <Spacer axis="x" size={6} />
-            </>
-          ) : (
-            <>
-              <Arrow opened={props.opened} />
-              <Spacer axis="x" size={18} />
-              <AddArea addFile={onClick} addFolder={onClick} />
-            </>
+      {props.name && (
+        <Container depth={pathChunks.length - 1} selected={props.selected} bold={props.bold}>
+          <Label>
+            {props.isWork ? (
+              <>
+                <ExtIcon name={props.name} />
+                <Spacer axis="x" size={6} />
+              </>
+            ) : (
+              <>
+                <Arrow opened={props.opened} />
+                <Spacer axis="x" size={18} />
+                <AddArea addFile={AddNewFile} addFolder={AddNewFolder} />
+              </>
+            )}
+            {props.name}
+          </Label>
+          {isClickNewAdd && !isFocusing && (
+            <NewFileFolderArea depth={pathChunks.length - 1}>
+              <form onSubmit={sendNewName}>
+                <input ref={inputElement} type="text" onBlur={sendNewName} onChange={inputLabel} />
+              </form>
+            </NewFileFolderArea>
           )}
-          {props.name}
-        </Label>
-        {isClickNewAdd && !isFocusing && (
-          <NewFileFolderArea depth={pathChunks.length - 1}>
-            <input ref={inputElement} type="text" onBlur={onBlur} onChange={inputLabel} />
-          </NewFileFolderArea>
-        )}
-      </Container>
+        </Container>
+      )}
     </Link>
   )
 }
