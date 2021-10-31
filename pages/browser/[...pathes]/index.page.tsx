@@ -31,8 +31,8 @@ const MainColumn = styled.div`
 const MainContent = styled.div`
   display: flex;
   flex: 1;
-  justify-content: right;
   flex-direction: column;
+  justify-content: right;
 `
 
 const RevisionContent = styled.div`

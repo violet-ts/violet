@@ -73,7 +73,6 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
     )
   }
   const sendFormData = async (file: FileList) => {
-    console.log('NEW FILE')
     setDragging(false)
     if (!project.openedTabId) return
     if (!file) return
@@ -107,7 +106,7 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
             type="file"
             accept={acceptExtensions}
             onDragEnter={dragEnter}
-            onDragEnd={dragLeave}
+            onDragLeave={dragLeave}
             onChange={drop}
           />
         </>
