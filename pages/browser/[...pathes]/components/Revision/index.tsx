@@ -47,21 +47,15 @@ const Dropper = styled.input`
   opacity: 0;
 `
 
-const AddButtonWrap = styled.button`
-  background-color: ${colors.transparent};
-  border: none;
-`
-
 export const Revision = ({ project }: { project: BrowserProject }) => {
   const [isFile, setIsFile] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
-  const openedTabRevisions = apiWholeData.revisionsList.filter(
-    (e) => e.workId === project.openedTabId
+  const [openedTabRevisions, setOpenTabRevision] = useState(
+    apiWholeData.revisionsList.filter((e) => e.workId === project.openedTabId)
   )
   const dropFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('CHANGE!!')
     if (e.target.files?.length !== 1) {
       e.target.value = ''
       setIsFile(false)
@@ -84,7 +78,6 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
     )
   }
   const sendFormData = async (file: File) => {
-    console.log('project.openedTabId->', project.openedTabId)
     if (!project.openedTabId) return
     if (!file) return
     const addRevision = await api.browser.works
@@ -109,11 +102,12 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
         </>
       )}
       <>
-        {openedTabRevisions && (
-          <DisplayWorksArea>
-            <DisplayWorksFrame>SHOW WORK</DisplayWorksFrame>
-          </DisplayWorksArea>
-        )}
+        {openedTabRevisions &&
+          openedTabRevisions[0].revisions.map((o, i) => (
+            <DisplayWorksArea key={i}>
+              <DisplayWorksFrame>{o.id}</DisplayWorksFrame>
+            </DisplayWorksArea>
+          ))}
         <div>
           <AddButton />
         </div>

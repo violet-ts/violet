@@ -19,12 +19,12 @@ const Container = styled.div`
 `
 const WorksView = styled.div`
   width: 100%;
+  overflow-y: scroll;
 `
 
 const MainColumn = styled.div`
   display: flex;
-  flex: 1;
-  flex-direction: column;
+  flex-grow: 1;
   height: 100vh;
 `
 
@@ -32,11 +32,12 @@ const MainContent = styled.div`
   display: flex;
   flex: 1;
   justify-content: right;
+  flex-direction: column;
 `
 
 const RevisionContent = styled.div`
   flex: 1;
-  height: 100%;
+  min-width: 100%;
 `
 
 const StreamBarColumn = styled.div`
@@ -59,16 +60,16 @@ const ProjectPage = () => {
         {projectApiData.revisions ? (
           projectApiData.revisions.length ? (
             <MainColumn>
-              <TabBar project={currentProject} projectApiData={projectApiData} />
               <MainContent>
+                <TabBar project={currentProject} projectApiData={projectApiData} />
                 <RevisionContent>
                   <Revision project={currentProject} />
                 </RevisionContent>
                 <Spacer axis="x" size={16} />
-                <StreamBarColumn>
-                  <StreamBar project={currentProject} projectApiData={projectApiData} />
-                </StreamBarColumn>
               </MainContent>
+              <StreamBarColumn>
+                <StreamBar project={currentProject} projectApiData={projectApiData} />
+              </StreamBarColumn>
             </MainColumn>
           ) : (
             <>
