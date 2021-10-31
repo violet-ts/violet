@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { alphaLevel, colors } from '~/utils/constants'
+import { LeftColumnResizeAbleArea } from './LeftColumnResizeAbleArea'
 
 const Container = styled.div.attrs<{ width: number }>((props) => ({
   style: { width: `${props.width}px` },
@@ -8,7 +9,7 @@ const Container = styled.div.attrs<{ width: number }>((props) => ({
   width: number
 }>`
   position: relative;
-  height: 100%;
+  height: 100vh;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 
@@ -24,14 +25,6 @@ const ResizeHandle = styled.div`
   &:hover {
     background: ${colors.blue};
   }
-`
-
-const MovableArea = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
 `
 
 const MIN_WIDTH = 100
@@ -68,7 +61,7 @@ export const LeftColumn: React.FC = ({ children }) => {
     <Container width={width}>
       {children}
       <ResizeHandle onMouseDown={start} onMouseMove={move} onMouseUp={() => setIsResizing(false)}>
-        {isResizing && <MovableArea />}
+        {isResizing && <LeftColumnResizeAbleArea />}
       </ResizeHandle>
     </Container>
   )

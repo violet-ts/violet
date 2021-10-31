@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Spacer } from '~/components/atoms/Spacer'
 import { Fetching } from '~/components/organisms/Fetching'
 import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
@@ -15,24 +16,28 @@ const Container = styled.div`
   left: 0;
   display: flex;
   width: 100%;
-  height: 100%;
+`
+const WorksView = styled.div`
+  width: 100%;
+  overflow-y: scroll;
 `
 
 const MainColumn = styled.div`
   display: flex;
-  flex: 1;
-  height: 100%;
+  flex-grow: 1;
+  height: 100vh;
 `
 
 const MainContent = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  height: 100%;
+  justify-content: right;
 `
 
 const RevisionContent = styled.div`
-  height: 100%;
+  flex: 1;
+  min-width: 100%;
 `
 
 const StreamBarColumn = styled.div`
@@ -51,27 +56,31 @@ const ProjectPage = () => {
       <LeftColumn>
         <Explorer projectApiData={projectApiData} project={currentProject} />
       </LeftColumn>
-      <MainColumn>
-        <MainContent>
-          {projectApiData.revisions ? (
-            projectApiData.revisions.length ? (
-              <>
+      <WorksView>
+        {projectApiData.revisions ? (
+          projectApiData.revisions.length ? (
+            <MainColumn>
+              <MainContent>
                 <TabBar project={currentProject} projectApiData={projectApiData} />
                 <RevisionContent>
-                  <Revision />
+                  <Revision project={currentProject} />
                 </RevisionContent>
-              </>
-            ) : (
-              <EmptyWork project={currentProject} />
-            )
+                <Spacer axis="x" size={16} />
+              </MainContent>
+              <StreamBarColumn>
+                <StreamBar project={currentProject} projectApiData={projectApiData} />
+              </StreamBarColumn>
+            </MainColumn>
           ) : (
-            <div>Choose work</div>
-          )}
-        </MainContent>
-        <StreamBarColumn>
-          <StreamBar project={currentProject} projectApiData={projectApiData} />
-        </StreamBarColumn>
-      </MainColumn>
+            <>
+              <TabBar project={currentProject} projectApiData={projectApiData} />
+              <EmptyWork project={currentProject} />
+            </>
+          )
+        ) : (
+          <div>Choose work</div>
+        )}
+      </WorksView>
     </Container>
   )
 }

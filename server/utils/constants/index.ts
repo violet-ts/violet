@@ -4,3 +4,5 @@ export const fileTypes = [
     type: 'application/pdf',
   },
 ] as const
+
+export const acceptExtensions = fileTypes.map((x) => x.ex).join()

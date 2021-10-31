@@ -1,10 +1,12 @@
 import styled from 'styled-components'
+import { Portal } from '~/components/atoms/Portal'
 import { alphaLevel, colors, fontSizes } from '~/utils/constants'
 
 const Container = styled.div`
+  position: fixed;
   width: 100%;
-  height: 100%;
-  background-color: ${colors.black}${alphaLevel[3]};
+  height: 100vh;
+  background-color: ${colors.black}${alphaLevel[1]};
 `
 const Modal = styled.dialog`
   position: absolute;
@@ -34,17 +36,20 @@ const CloseButton = styled.button`
   height: 32px;
   font-size: ${fontSizes.large};
   color: ${colors.gray};
-  background-color: ${colors.violet}${alphaLevel[3]};
+  cursor: pointer;
+  background-color: ${colors.violet}${alphaLevel[5]};
   border: none;
   border-radius: 16px;
 `
 export const FileTypeAlertModal = (props: { closeModal: () => void }) => {
   return (
-    <Container onClick={props.closeModal}>
-      <Modal open>
-        <AlertMessage>UnSupported File Format!</AlertMessage>
-        <CloseButton> OK </CloseButton>
-      </Modal>
-    </Container>
+    <Portal>
+      <Container onClick={props.closeModal}>
+        <Modal open>
+          <AlertMessage>UnSupported File Format!</AlertMessage>
+          <CloseButton> OK </CloseButton>
+        </Modal>
+      </Container>
+    </Portal>
   )
 }

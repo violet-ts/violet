@@ -85,7 +85,7 @@ export const StreamBar = ({
   const [content, setMessage] = useState('')
   const scrollBottomRef = useRef<HTMLDivElement>(null)
 
-  const userName = 'Test Name'
+  const userName = 'Charles M. Schulz'
   const submitMessage = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
