@@ -16,8 +16,8 @@ import { MessageCell } from './MessageCell'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
   width: 300px;
+  height: 100vh;
   border-left: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const StreamBox = styled.div`
@@ -32,11 +32,11 @@ const MessageBox = styled.div`
   padding: 8px;
 `
 const InputForm = styled.textarea`
-  width: 100%;
+  position: sticky;
   right: 8px;
   bottom: 8px;
+  width: 100%;
   min-height: 120px;
-  position: sticky;
   resize: none;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
   ::placeholder {

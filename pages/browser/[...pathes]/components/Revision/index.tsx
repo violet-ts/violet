@@ -46,10 +46,9 @@ const Dropper = styled.input`
   background-color: ${colors.transparent};
   opacity: 0;
 `
-const Body = styled.div`
+const DisplayWorksBody = styled.div`
   overflow-y: scroll;
 `
-const Fooder = styled.div``
 
 export const Revision = ({ project }: { project: BrowserProject }) => {
   const [isFile, setIsFile] = useState(false)
@@ -112,18 +111,18 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
           <Dropper type="file" accept={acceptExtensions} onChange={dropFile} />
         </>
       )}
-      <Body>
+      <DisplayWorksBody>
         {openedTabRevisions &&
           openedTabRevisions[0].revisions.map((_o, i) => (
             <DisplayWorksArea key={i}>
               <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
             </DisplayWorksArea>
           ))}
-      </Body>
-      <Fooder>
+      </DisplayWorksBody>
+      <div>
         <AddButton dropFile={dropFile} />
-        <Spacer axis="y" size={16} />
-      </Fooder>
+        <Spacer axis="y" size={8} />
+      </div>
     </Container>
   )
 }
