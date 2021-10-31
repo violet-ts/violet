@@ -61,7 +61,7 @@ const ProjectPage = () => {
                 <RevisionContent>
                   <Revision project={currentProject} />
                 </RevisionContent>
-                <Spacer axis="x" size={16} />
+                <Spacer axis="y" size={8} />
               </MainContent>
               <StreamBarColumn>
                 <StreamBar project={currentProject} projectApiData={projectApiData} />

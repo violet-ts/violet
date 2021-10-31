@@ -1,6 +1,5 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Spacer } from '~/components/atoms/Spacer'
 import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
 import type { ApiRevision, BrowserProject, WorkId } from '~/server/types'
@@ -12,12 +11,10 @@ import { AddButton } from './AddButton'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 41px);
+  height: calc(100vh - 48px);
 `
 
 const DisplayWorksArea = styled.div`
-  top: 0;
-  left: 0;
   flex: 1;
   padding: 48px;
   background: ${colors.transparent};
@@ -47,7 +44,12 @@ const Dropper = styled.input`
   opacity: 0;
 `
 const DisplayWorksBody = styled.div`
+  flex: 1;
   overflow-y: scroll;
+`
+const Footer = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `
 
 export const Revision = ({ project }: { project: BrowserProject }) => {
@@ -58,6 +60,10 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
   const [openedTabRevisions, setOpenTabRevision] = useState(
     apiWholeData.revisionsList.filter((e) => e.workId === project.openedTabId)
   )
+  useEffect(() => {
+    setOpenTabRevision(apiWholeData.revisionsList.filter((e) => e.workId === project.openedTabId))
+  }, [apiWholeData.revisionsList])
+
   const dropFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) {
       e.target.value = ''
@@ -87,17 +93,19 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
       ._workId(project.openedTabId)
       .revisions.$post({ body: { uploadFile: file, projectId: project.id } })
       .catch(onErr)
+
     if (!addRevision) return
 
     const revisionRes = await api.browser.works._workId(project.openedTabId).revisions.$get()
 
     if (!revisionRes) return
+
     updateRevisions(revisionRes)
-    setOpenTabRevision(apiWholeData.revisionsList.filter((e) => e.workId === project.openedTabId))
   }
   const closeModal = () => {
     setOpenAlert(false)
   }
+
   return (
     <Container onDragEnter={() => setIsFile(true)} onChange={dropFile}>
       {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
@@ -114,10 +122,9 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
             </DisplayWorksArea>
           ))}
       </DisplayWorksBody>
-      <div>
+      <Footer>
         <AddButton dropFile={dropFile} />
-        <Spacer axis="y" size={8} />
-      </div>
+      </Footer>
     </Container>
   )
 }

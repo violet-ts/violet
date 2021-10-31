@@ -56,7 +56,7 @@ export const AddButton = (props: {
       <StyledAddButton>
         <UploadFile type="file" accept={acceptExtensions} onChange={props.dropFile} />
       </StyledAddButton>
-      <Spacer axis="x" size={16} />
+      <Spacer axis="x" size={8} />
     </Container>
   )
 }
