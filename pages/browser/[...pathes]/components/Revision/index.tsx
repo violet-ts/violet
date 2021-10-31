@@ -88,17 +88,12 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
       .revisions.$post({ body: { uploadFile: file, projectId: project.id } })
       .catch(onErr)
     if (!addRevision) return
-    console.log('Revision->', addRevision)
+
     const revisionRes = await api.browser.works._workId(project.openedTabId).revisions.$get()
-    console.log('Revisions->', revisionRes)
 
     if (!revisionRes) return
     updateRevisions(revisionRes)
     setOpenTabRevision(apiWholeData.revisionsList.filter((e) => e.workId === project.openedTabId))
-    console.log(
-      'OpenTabRevisions->',
-      apiWholeData.revisionsList.filter((e) => e.workId === project.openedTabId)
-    )
   }
   const closeModal = () => {
     setOpenAlert(false)
