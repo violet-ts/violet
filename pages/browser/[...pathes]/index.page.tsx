@@ -19,13 +19,10 @@ const Container = styled.div`
 `
 const WorksView = styled.div`
   width: 100%;
-  overflow-y: scroll;
 `
 
 const MainColumn = styled.div`
   display: flex;
-  flex-grow: 1;
-  height: 100vh;
 `
 
 const MainContent = styled.div`
@@ -33,16 +30,15 @@ const MainContent = styled.div`
   flex: 1;
   flex-direction: column;
   justify-content: right;
+  height: 100vh;
 `
 
 const RevisionContent = styled.div`
-  flex: 1;
   min-width: 100%;
 `
 
 const StreamBarColumn = styled.div`
-  width: 300px;
-  height: 100%;
+  height: 100vh;
 `
 
 const ProjectPage = () => {

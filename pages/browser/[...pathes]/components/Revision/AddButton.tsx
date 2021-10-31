@@ -1,14 +1,14 @@
 import styled from 'styled-components'
+import { Spacer } from '~/components/atoms/Spacer'
 import { acceptExtensions } from '~/server/utils/constants'
 import { alphaLevel, colors } from '~/utils/constants'
 
 const Container = styled.div`
   display: flex;
+  justify-content: right;
   height: 100%;
 `
-const WidthAdjustments = styled.div`
-  width: 95%;
-`
+
 const StyledAddButton = styled.label`
   & {
     position: relative;
@@ -48,13 +48,15 @@ const StyledAddButton = styled.label`
 const UploadFile = styled.input`
   display: none;
 `
-export const AddButton = () => {
+export const AddButton = (props: {
+  dropFile: (e: React.ChangeEvent<HTMLInputElement>) => void
+}) => {
   return (
     <Container>
-      <WidthAdjustments />
       <StyledAddButton>
-        <UploadFile type="file" accept={acceptExtensions} />
+        <UploadFile type="file" accept={acceptExtensions} onChange={props.dropFile} />
       </StyledAddButton>
+      <Spacer axis="x" size={16} />
     </Container>
   )
 }

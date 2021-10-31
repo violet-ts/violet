@@ -12,7 +12,7 @@ import { AddButton } from './AddButton'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100vh - 41px);
 `
 
 const DisplayWorksArea = styled.div`
@@ -29,7 +29,7 @@ const DisplayWorksFrame = styled.div`
   flex: 1;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  min-height: 200px;
   font-size: ${fontSizes.big};
   color: ${colors.violet};
   border: 4px solid ${colors.violet};
@@ -46,6 +46,10 @@ const Dropper = styled.input`
   background-color: ${colors.transparent};
   opacity: 0;
 `
+const Body = styled.div`
+  overflow-y: scroll;
+`
+const Fooder = styled.div``
 
 export const Revision = ({ project }: { project: BrowserProject }) => {
   const [isFile, setIsFile] = useState(false)
@@ -85,34 +89,41 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
       .revisions.$post({ body: { uploadFile: file, projectId: project.id } })
       .catch(onErr)
     if (!addRevision) return
+    console.log('Revision->', addRevision)
     const revisionRes = await api.browser.works._workId(project.openedTabId).revisions.$get()
+    console.log('Revisions->', revisionRes)
 
     if (!revisionRes) return
     updateRevisions(revisionRes)
+    setOpenTabRevision(apiWholeData.revisionsList.filter((e) => e.workId === project.openedTabId))
+    console.log(
+      'OpenTabRevisions->',
+      apiWholeData.revisionsList.filter((e) => e.workId === project.openedTabId)
+    )
   }
   const closeModal = () => {
     setOpenAlert(false)
   }
   return (
-    <Container onDragEnter={() => setIsFile(true)}>
+    <Container onDragEnter={() => setIsFile(true)} onChange={dropFile}>
       {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
       {isFile && (
         <>
           <Dropper type="file" accept={acceptExtensions} onChange={dropFile} />
         </>
       )}
-      <>
+      <Body>
         {openedTabRevisions &&
-          openedTabRevisions[0].revisions.map((o, i) => (
+          openedTabRevisions[0].revisions.map((_o, i) => (
             <DisplayWorksArea key={i}>
-              <DisplayWorksFrame>{o.id}</DisplayWorksFrame>
+              <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
             </DisplayWorksArea>
           ))}
-        <div>
-          <AddButton />
-        </div>
+      </Body>
+      <Fooder>
+        <AddButton dropFile={dropFile} />
         <Spacer axis="y" size={16} />
-      </>
+      </Fooder>
     </Container>
   )
 }
