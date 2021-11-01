@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import type { ChangeEvent, FormEvent } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import type { BrowserProject, ProjectId } from '~/server/types'
 import { pagesPath } from '~/utils/$path'
@@ -44,9 +46,30 @@ const Icon = styled.div`
   background: ${colors.blue};
   border-radius: 6px;
 `
-const AddNewProject = () => {}
+
+const InputFormProject = styled.div`
+  display: block;
+  padding: 6px 8px;
+`
 
 export const ProjectBar = (props: { projects: BrowserProject[]; projectId: ProjectId }) => {
+  const [isClickAddProject, setIsClickAddProject] = useState(false)
+  const [label, setLabel] = useState('')
+  const [isFocusing, setIsFocusing] = useState(false)
+  const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
+  const inputElem = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    inputElem.current?.focus()
+  }, [inputElem.current])
+  const addNewProject = () => {
+    setIsFocusing(false)
+    setIsClickAddProject(true)
+  }
+  const sendProjectName = (e: FormEvent) => {
+    e.preventDefault()
+    setIsFocusing(!label)
+    setLabel('')
+  }
   return (
     <Container>
       {props.projects.map((p) => (
@@ -60,7 +83,14 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
           </IconWrapper>
         </Link>
       ))}
-      <AddProject addProject={AddNewProject} />
+      <AddProject addProject={addNewProject} />
+      {isClickAddProject && !isFocusing && (
+        <InputFormProject>
+          <form onSubmit={sendProjectName}>
+            <input ref={inputElem} type="text" onBlur={sendProjectName} onChange={inputLabel} />
+          </form>
+        </InputFormProject>
+      )}
     </Container>
   )
 }
