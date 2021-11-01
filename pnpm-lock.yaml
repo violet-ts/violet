@@ -38,7 +38,6 @@ importers:
       postcss: ^8.3.6
       prettier: ^2.3.2
       prettier-plugin-organize-imports: ^2.3.3
-      prisma: ^3.2.1
       source-map-support: ^0.5.20
       stylelint: ^13.13.1
       stylelint-config-prettier: ^8.0.2
@@ -83,7 +82,6 @@ importers:
       postcss: 8.3.11
       prettier: 2.4.1
       prettier-plugin-organize-imports: 2.3.4_prettier@2.4.1+typescript@4.4.4
-      prisma: 3.3.0
       source-map-support: 0.5.20
       stylelint: 13.13.1
       stylelint-config-prettier: 8.0.2_stylelint@13.13.1
@@ -107,6 +105,7 @@ importers:
       fastify-cors: ^6.0.2
       fastify-helmet: ^5.3.2
       fastify-multipart: ^4.0.7
+      prisma: ^3.2.1
       uuid: ^8.3.2
       velona: ^0.7.0
     dependencies:
@@ -121,6 +120,7 @@ importers:
       fastify-cors: 6.0.2
       fastify-helmet: 5.3.2
       fastify-multipart: 4.0.7
+      prisma: 3.3.0
       uuid: 8.3.2
       velona: 0.7.0
 
@@ -1938,7 +1938,7 @@ packages:
   /@prisma/engines/3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c:
     resolution: {integrity: sha512-T3nEnRWmoneNZJPd9IBR29G8ZDUjNelA8+cG5y8/lh6vySm6ryWSNxj1s377U9YzFYyZmXiA9vK1iyxMoRff/g==}
     requiresBuild: true
-    dev: true
+    dev: false
 
   /@sinonjs/commons/1.8.3:
     resolution: {integrity: sha512-xkNcLAn/wZaX14RPlwizcKicDk9G3F8m2nU3L7Ukm5zBgTwiT0wsoFAHx9Jq56fJA1z/7uKGtCRu16sOUCLIHQ==}
@@ -6488,7 +6488,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@prisma/engines': 3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c
-    dev: true
+    dev: false
 
   /process-nextick-args/2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
