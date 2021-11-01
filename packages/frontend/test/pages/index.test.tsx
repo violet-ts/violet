@@ -1,5 +1,4 @@
 import aspida from '@aspida/fetch'
-import dotenv from 'dotenv'
 import type { FastifyInstance } from 'fastify'
 import Fastify from 'fastify'
 import cors from 'fastify-cors'
@@ -7,9 +6,7 @@ import React from 'react'
 import Home from '@violet/frontend/src/pages/index.page'
 import api from '@violet/api/api/$api'
 import { fireEvent, render } from '../testUtils'
-import path from 'path'
 
-dotenv.config({ path: path.resolve(process.cwd(), '.env') })
 
 const apiClient = api(aspida(undefined, { baseURL: process.env.BASE_PATH }))
 const res = function <T>(data: T extends () => Promise<infer S> ? S : never) {
@@ -29,7 +26,6 @@ beforeAll(() => {
       ])
     )
   })
-
   return fastify.listen(process.env.SERVER_PORT ?? 8080)
 })
 

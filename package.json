@@ -11,8 +11,8 @@
     "lint:style": "stylelint '**/*.ts{,x}' -s css-in-js",
     "lint:fix": "pnpm run lint:js -- --fix && prettier --write \"./**/*.{ts,tsx,js}\" --ignore-path .eslintignore &&  pnpm run lint:style -- --fix",
     "build": "pnpm run generate && pnpm run --filter=./packages _:build",
-    "start": "pnpm run --filter=./packages start",
-    "test": "pnpm run generate && jest",
+    "start": "pnpm run --parallel --filter=./packages start",
+    "test": "pnpm run generate && pnpm run --filter=./packages _:test",
     "typecheck": "pnpm run generate && pnpm --filter=./packages exec tsc --noEmit"
   },
   "prettier": {

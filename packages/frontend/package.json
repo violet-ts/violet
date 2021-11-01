@@ -8,7 +8,8 @@
     "_:dev:next": "next dev -p 3000",
     "_:dev:pathpida": "pathpida --enableStatic --watch",
     "_:generate": "pathpida --enableStatic",
-    "_:build": "next build"
+    "_:build": "next build",
+    "_:test": "jest"
   },
   "dependencies": {
     "@aspida/fetch": "^1.7.1",

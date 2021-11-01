@@ -3,20 +3,20 @@
 exports[`Home page matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="Container-sc-43yzvd-0 dVSdUP"
+    class="Container-sc-hgt38n-0 bMrodF"
   >
     <main
-      class="StyledMain-sc-43yzvd-1 mMuSq"
+      class="StyledMain-sc-hgt38n-1 loiSJo"
     >
       <div
-        class="Container-sc-o2zdss-0 hgsMPa"
+        class="Container-sc-37iz5d-0 xzMXF"
       >
         <button>
           Google LOGIN
         </button>
       </div>
       <h1
-        class="Title-sc-43yzvd-2 jMLCrV"
+        class="Title-sc-hgt38n-2 eUVWrv"
       >
         Welcome to 
         <a
@@ -26,7 +26,7 @@ exports[`Home page matches snapshot 1`] = `
         </a>
       </h1>
       <span
-        class="sc-bdfBQB bSDfGC"
+        class="sc-bdvvtL kvaJtv"
         size="16"
       />
       <div>
@@ -43,7 +43,7 @@ exports[`Home page matches snapshot 1`] = `
           />
         </form>
         <ul
-          class="Tasks-sc-43yzvd-3 izlyjp"
+          class="Tasks-sc-hgt38n-3 ejaAjv"
         >
           <li>
             <label>
@@ -55,13 +55,13 @@ exports[`Home page matches snapshot 1`] = `
               </span>
             </label>
             <input
-              class="StyledInput-sc-43yzvd-4 dJjLOz"
+              class="StyledInput-sc-hgt38n-4 dVmYPV"
               type="button"
               value="DELETE"
             />
           </li>
           <span
-            class="sc-bdfBQB hNoJZG"
+            class="sc-bdvvtL eApfar"
             size="12"
           />
           <li>
@@ -75,7 +75,7 @@ exports[`Home page matches snapshot 1`] = `
               </span>
             </label>
             <input
-              class="StyledInput-sc-43yzvd-4 dJjLOz"
+              class="StyledInput-sc-hgt38n-4 dVmYPV"
               type="button"
               value="DELETE"
             />
@@ -84,7 +84,7 @@ exports[`Home page matches snapshot 1`] = `
       </div>
     </main>
     <footer
-      class="StyledFooter-sc-43yzvd-5 MAqtv"
+      class="StyledFooter-sc-hgt38n-5 kOWMYt"
     >
       <a
         href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -94,7 +94,7 @@ exports[`Home page matches snapshot 1`] = `
         Powered by 
         <img
           alt="Vercel Logo"
-          class="Logo-sc-43yzvd-6 lmsmDN"
+          class="Logo-sc-hgt38n-6 hJDkBf"
           src="/vercel.svg"
         />
       </a>

@@ -5,14 +5,15 @@
   "scripts": {
     "migrate:dev": "prisma migrate dev",
     "migrate:reset": "prisma migrate reset",
-    "start": "cross-env NODE_ENV=production node index.js",
+    "start": "cross-env NODE_ENV=production node build/index.js",
     "prisma:seed": "prisma db seed",
     "_:dev": "run-p _:dev:*",
     "_:dev:build": "pnpm run migrate:dev && pnpm run prisma:seed && ts-node -T ./scripts/build.ts --watch",
     "_:dev:serve": "node-dev src/entries/index.ts",
     "_:dev:aspida": "aspida --watch",
     "_:generate": "prisma generate && frourio && aspida",
-    "_:build": "ts-node -T ./scripts/build.ts --production"
+    "_:build": "ts-node -T ./scripts/build.ts --production",
+    "_:test": "jest"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
