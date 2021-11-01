@@ -7,7 +7,6 @@ import Home from '@violet/frontend/src/pages/index.page'
 import api from '@violet/api/api/$api'
 import { fireEvent, render } from '../testUtils'
 
-
 const apiClient = api(aspida(undefined, { baseURL: process.env.BASE_PATH }))
 const res = function <T>(data: T extends () => Promise<infer S> ? S : never) {
   return data

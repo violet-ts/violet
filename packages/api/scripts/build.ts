@@ -28,9 +28,11 @@ const main = async (watch: boolean) => {
     outdir: buildDir,
     entryPoints: [entry],
     watch: watchOptions,
-    plugins: [nodeExternalsPlugin({
-      allowList: ['@violet/frontend', '@violet/api']
-    })],
+    plugins: [
+      nodeExternalsPlugin({
+        allowList: ['@violet/frontend', '@violet/api'],
+      }),
+    ],
   })
 }
 
