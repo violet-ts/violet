@@ -23,11 +23,19 @@ const Container = styled.a<{ depth: number; selected: boolean; bold?: boolean }>
 const LabelArea = styled.div`
   position: relative;
   display: flex;
+  height: 100%;
+  &:hover {
+    width: 80%;
+  }
 `
 const Label = styled.div`
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  /* &:hover {
+  } */
 `
 
 const Arrow = styled.div<{ opened?: boolean }>`

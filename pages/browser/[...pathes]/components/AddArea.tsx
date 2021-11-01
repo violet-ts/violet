@@ -97,10 +97,11 @@ const StyledFolderAdd = styled.i`
   }
 `
 
-const ShowAddArea = styled.span`
+const ShowAddArea = styled.div`
   position: absolute;
   width: 100%;
   &:hover {
+    width: 120%;
     ${StyledFileAdd} {
       visibility: visible;
     }
