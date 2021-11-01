@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import type { BrowserProject, ProjectId } from '~/server/types'
 import { pagesPath } from '~/utils/$path'
 import { alphaLevel, colors, fontSizes } from '~/utils/constants'
+import { AddProject } from './AddProject'
 
 const Container = styled.div`
   display: flex;
@@ -43,6 +44,7 @@ const Icon = styled.div`
   background: ${colors.blue};
   border-radius: 6px;
 `
+const AddNewProject = () => {}
 
 export const ProjectBar = (props: { projects: BrowserProject[]; projectId: ProjectId }) => {
   return (
@@ -58,6 +60,7 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
           </IconWrapper>
         </Link>
       ))}
+      <AddProject addProject={AddNewProject} />
     </Container>
   )
 }
