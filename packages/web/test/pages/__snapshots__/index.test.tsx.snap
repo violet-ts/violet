@@ -3,20 +3,20 @@
 exports[`Home page matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="Container-sc-hgt38n-0 bMrodF"
+    class="Container-sc-a9fhw1-0 cxeahP"
   >
     <main
-      class="StyledMain-sc-hgt38n-1 loiSJo"
+      class="StyledMain-sc-a9fhw1-1 fASgPW"
     >
       <div
-        class="Container-sc-37iz5d-0 xzMXF"
+        class="Container-sc-7qg3zi-0 jxPjBO"
       >
         <button>
           Google LOGIN
         </button>
       </div>
       <h1
-        class="Title-sc-hgt38n-2 eUVWrv"
+        class="Title-sc-a9fhw1-2 gsIwHZ"
       >
         Welcome to 
         <a
@@ -43,7 +43,7 @@ exports[`Home page matches snapshot 1`] = `
           />
         </form>
         <ul
-          class="Tasks-sc-hgt38n-3 ejaAjv"
+          class="Tasks-sc-a9fhw1-3 cuQHVR"
         >
           <li>
             <label>
@@ -55,7 +55,7 @@ exports[`Home page matches snapshot 1`] = `
               </span>
             </label>
             <input
-              class="StyledInput-sc-hgt38n-4 dVmYPV"
+              class="StyledInput-sc-a9fhw1-4 fqCoCD"
               type="button"
               value="DELETE"
             />
@@ -75,7 +75,7 @@ exports[`Home page matches snapshot 1`] = `
               </span>
             </label>
             <input
-              class="StyledInput-sc-hgt38n-4 dVmYPV"
+              class="StyledInput-sc-a9fhw1-4 fqCoCD"
               type="button"
               value="DELETE"
             />
@@ -84,7 +84,7 @@ exports[`Home page matches snapshot 1`] = `
       </div>
     </main>
     <footer
-      class="StyledFooter-sc-hgt38n-5 kOWMYt"
+      class="StyledFooter-sc-a9fhw1-5 dIYAiv"
     >
       <a
         href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -94,7 +94,7 @@ exports[`Home page matches snapshot 1`] = `
         Powered by 
         <img
           alt="Vercel Logo"
-          class="Logo-sc-hgt38n-6 hJDkBf"
+          class="Logo-sc-a9fhw1-6 esNKsh"
           src="/vercel.svg"
         />
       </a>
