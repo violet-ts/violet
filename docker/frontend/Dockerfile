@@ -1,22 +1,22 @@
 FROM node:16-buster
 
 RUN ( \
-  npm install -g pnpm@6.19.1 \
+  npm install -g pnpm@^6.19.1 \
   && npm uninstall -g yarn \
 )
 
 WORKDIR /app
 
-COPY . /app
+COPY . .
 
-ENV NODE_ENV=production
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN ( \
   pnpm install --frozen-lockfile --prod=false \
-  && pnpm run build \
-  && rm -rf ./**/node_modules \
-  && pnpm --dir=./packages/frontend install --frozen-lockfile --prod \
-  && pnpm store prune \
+  && pnpm run generate \
+  && pnpm --dir=./packages/frontend run _:build \
+  && pnpm install --frozen-lockfile --prod \
   && rm -rf \
     .github/ \
     .vscode/ \
@@ -38,9 +38,10 @@ RUN ( \
     pnpm-workspace.yaml \
     README.md \
     tsconfig.json \
+  && pnpm store prune \
 )
 
-ENV SERVER_PORT=80
+ENV SERVER_PORT 80
 EXPOSE 80
 
 ENTRYPOINT ["pnpm", "--dir=./packages/frontend", "exec", "next", "start"]
