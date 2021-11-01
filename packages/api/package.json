@@ -23,6 +23,7 @@
     "@aws-sdk/credential-providers": "^3.38.0",
     "@aws-sdk/s3-request-presigner": "^3.30.0",
     "@prisma/client": "^3.2.1",
+    "aspida": "^1.7.1",
     "class-validator": "^0.13.1",
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",

@@ -16,7 +16,6 @@ importers:
       '@typescript-eslint/parser': ^4.29.3
       '@violet/api': workspace:*
       '@violet/frontend': workspace:*
-      aspida: ^1.7.1
       babel-jest: ^27.1.0
       cross-env: ^7.0.3
       dotenv: ^10.0.0
@@ -59,7 +58,6 @@ importers:
       '@typescript-eslint/parser': 4.33.0_eslint@7.32.0+typescript@4.4.4
       '@violet/api': link:packages/api
       '@violet/frontend': link:packages/frontend
-      aspida: 1.7.1
       babel-jest: 27.3.1
       cross-env: 7.0.3
       dotenv: 10.0.0
@@ -96,6 +94,7 @@ importers:
       '@aws-sdk/credential-providers': ^3.38.0
       '@aws-sdk/s3-request-presigner': ^3.30.0
       '@prisma/client': ^3.2.1
+      aspida: ^1.7.1
       class-validator: ^0.13.1
       dayjs: ^1.10.7
       dotenv: ^10.0.0
@@ -112,6 +111,7 @@ importers:
       '@aws-sdk/credential-providers': 3.39.0
       '@aws-sdk/s3-request-presigner': 3.39.0
       '@prisma/client': 3.3.0_prisma@3.3.0
+      aspida: 1.7.1
       class-validator: 0.13.1
       dayjs: 1.10.7
       dotenv: 10.0.0

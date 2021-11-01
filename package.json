@@ -33,7 +33,6 @@
     "@typescript-eslint/parser": "^4.29.3",
     "@violet/api": "workspace:*",
     "@violet/frontend": "workspace:*",
-    "aspida": "^1.7.1",
     "babel-jest": "^27.1.0",
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
