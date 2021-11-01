@@ -7,7 +7,7 @@ import Home from '@violet/web/src/pages/index.page'
 import api from '@violet/api/api/$api'
 import { fireEvent, render } from '../testUtils'
 
-const apiClient = api(aspida(undefined, { baseURL: process.env.BASE_PATH }))
+const apiClient = api(aspida(undefined, { baseURL: process.env.API_BASE_PATH }))
 const res = function <T>(data: T extends () => Promise<infer S> ? S : never) {
   return data
 }
@@ -25,7 +25,7 @@ beforeAll(() => {
       ])
     )
   })
-  return fastify.listen(process.env.SERVER_PORT ?? 8080)
+  return fastify.listen(process.env.API_PORT ?? 8080)
 })
 
 afterAll(() => fastify.close())
