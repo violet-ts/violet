@@ -1,4 +1,5 @@
 FROM node:16-buster
+ARG API_ORIGIN
 
 RUN ( \
   npm install -g pnpm@^6.19.1 \
@@ -11,6 +12,8 @@ COPY . .
 
 ENV PORT 80
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV API_BASE_PATH ""
+ENV NODE_ENV production
 
 RUN ( \
   pnpm install --frozen-lockfile --prod=false \
@@ -44,7 +47,6 @@ RUN ( \
   && pnpm store prune \
 )
 
-ENV NODE_ENV production
 EXPOSE 80
 
 ENTRYPOINT ["pnpm", "--dir=./packages/web", "exec", "next", "start"]

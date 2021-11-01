@@ -10,6 +10,7 @@ WORKDIR /app
 COPY . .
 
 ENV API_PORT 80
+ENV NODE_ENV production
 
 RUN ( \
   pnpm install --frozen-lockfile --prod=false \
@@ -44,7 +45,6 @@ RUN ( \
   && pnpm store prune \
 )
 
-ENV NODE_ENV production
 EXPOSE 80
 
 ENTRYPOINT ["node", "/app/packages/api/build/index.js"]
