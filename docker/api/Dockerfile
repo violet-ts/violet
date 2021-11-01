@@ -7,16 +7,13 @@ RUN ( \
 
 WORKDIR /app
 
-COPY ./pnpm-lock.yaml /app
-
-RUN pnpm install --frozen-lockfile
-
 COPY . /app
 
 ENV NODE_ENV=production
 
-RUN ( \
-  pnpm run build \
+RUN --mount=type=cache,target=/root/.pnpm-store ( \
+  pnpm install --frozen-lockfile --prod=false \
+  && pnpm run build \
   && rm -rf ./**/node_modules \
   && pnpm --dir=./packages/api install --frozen-lockfile --prod \
   && pnpm store prune \

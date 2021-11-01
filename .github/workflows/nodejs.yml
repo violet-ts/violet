@@ -20,22 +20,17 @@ jobs:
           run_install: |
             - recursive: true
               args: [--frozen-lockfile, --prefer-offline]
-  test:
+  check:
     needs: [cache-pnpm]
-    name: Test
+    name: Check
     runs-on: ubuntu-latest
-    env:
-      SERVER_PORT: 8080
-      API_ORIGIN: http://localhost:8080
-      BASE_PATH: /api
     steps:
       - uses: actions/checkout@v2
       - name: setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - name: Cache pnpm modules
-        uses: actions/cache@v2
+      - uses: actions/cache@v2
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -48,8 +43,35 @@ jobs:
             - recursive: true
               args: [--frozen-lockfile, --prefer-offline]
       - run: pnpm run lint
+      - run: pnpm run typecheck
+      - run: pnpm run build
+  test:
+    needs: [cache-pnpm, check]
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      SERVER_PORT: 8080
+      API_ORIGIN: http://localhost:8080
+      BASE_PATH: /api
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --prefer-offline]
       - run: |
           sudo systemctl start mysql.service
           echo "DATABASE_URL=mysql://root:root@localhost:3306/test" > packages/api/prisma/.env
-      - run: pnpm run typecheck
       - run: pnpm run test

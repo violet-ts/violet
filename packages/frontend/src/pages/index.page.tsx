@@ -1,4 +1,4 @@
-import type { Task } from '@prisma/client'
+import type { Task } from '@violet/api/src/types/prisma-client'
 import useAspidaSWR from '@aspida/swr'
 import Head from 'next/head'
 import type { ChangeEvent, FormEvent } from 'react'
