@@ -56,9 +56,9 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     env:
-      SERVER_PORT: 8080
+      API_PORT: 8080
       API_ORIGIN: http://localhost:8080
-      BASE_PATH: /api
+      API_BASE_PATH: /api
     steps:
       - uses: actions/checkout@v2
       - name: setup Node.js
