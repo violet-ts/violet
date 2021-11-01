@@ -128,7 +128,7 @@ importers:
     specifiers:
       '@aspida/fetch': ^1.7.1
       '@aspida/swr': ^1.7.1
-      '@violet/api': workspace:^0.1.0
+      '@violet/api': workspace:*
       class-validator: ^0.13.1
       dayjs: ^1.10.7
       next: ^11.1.0

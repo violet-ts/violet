@@ -24,6 +24,6 @@
     "swr": "^1.0.0"
   },
   "devDependencies": {
-    "@violet/api": "workspace:^0.1.0"
+    "@violet/api": "workspace:*"
   }
 }
