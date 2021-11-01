@@ -9,7 +9,7 @@ WORKDIR /app
 
 COPY . .
 
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV API_PORT 80
 
 RUN ( \
   pnpm install --frozen-lockfile --prod=false \
@@ -45,7 +45,6 @@ RUN ( \
 )
 
 ENV NODE_ENV production
-ENV SERVER_PORT 80
 EXPOSE 80
 
 ENTRYPOINT ["node", "/app/packages/api/build/index.js"]

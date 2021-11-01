@@ -9,6 +9,7 @@ WORKDIR /app
 
 COPY . .
 
+ENV PORT 80
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN ( \
@@ -44,7 +45,6 @@ RUN ( \
 )
 
 ENV NODE_ENV production
-ENV PORT 80
 EXPOSE 80
 
 ENTRYPOINT ["pnpm", "--dir=./packages/web", "exec", "next", "start"]
