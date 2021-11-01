@@ -140,6 +140,7 @@ importers:
     dependencies:
       '@aspida/fetch': 1.7.1
       '@aspida/swr': 1.7.1
+      '@violet/api': link:../api
       class-validator: 0.13.1
       dayjs: 1.10.7
       next: 11.1.2_8e3522129ef2816b3c737f17aecb3a9d
@@ -148,8 +149,6 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       styled-components: 5.3.3_react-dom@17.0.2+react@17.0.2
       swr: 1.0.1_react@17.0.2
-    devDependencies:
-      '@violet/api': link:../api
 
 packages:
 
