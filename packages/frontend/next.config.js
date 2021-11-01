@@ -1,10 +1,6 @@
-const isProduction = process.env.NODE_ENV === 'production'
-const withNoop = (config) => config
-const withTM = isProduction ? withNoop : require('next-transpile-modules')(['@violet/api'])
+const withTM = require('next-transpile-modules')(['@violet/api'])
 
 module.exports = withTM({
-  env: {
-    IS_PRODUCTION: String(isProduction),
-  },
+  env: {},
   pageExtensions: ['page.tsx'],
 })

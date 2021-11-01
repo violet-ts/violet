@@ -26,15 +26,9 @@ RUN ( \
     packages/frontend/next-env.d.ts \
     packages/frontend/package.json \
     packages/frontend/stylelint.config.js \
-    packages/api/api/ \
-    packages/api/prisma/ \
-    packages/api/src/ \
     packages/api/scripts/ \
     packages/api/test/ \
-    packages/api/\$server.ts \
     packages/api/aspida.config.js \
-    packages/api/package.json \
-    packages/api/tsconfig.json \
     .eslintignore \
     .eslintrc.js \
     .gitignore \
