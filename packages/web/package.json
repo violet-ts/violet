@@ -9,7 +9,8 @@
     "_:dev:pathpida": "pathpida --enableStatic --watch",
     "_:generate": "pathpida --enableStatic",
     "_:build": "next build",
-    "_:test": "jest"
+    "_:test": "jest",
+    "_:typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@aspida/fetch": "^1.7.1",

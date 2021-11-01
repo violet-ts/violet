@@ -13,7 +13,7 @@
     "build": "pnpm run generate && pnpm run --filter=./packages _:build",
     "start": "pnpm run --parallel --filter=./packages start",
     "test": "pnpm run generate && pnpm run --filter=./packages _:test",
-    "typecheck": "pnpm run generate && pnpm --filter=./packages exec tsc --noEmit"
+    "typecheck": "pnpm run generate && pnpm run --filter=./packages _:typecheck"
   },
   "prettier": {
     "printWidth": 100,

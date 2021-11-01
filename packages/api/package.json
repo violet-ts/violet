@@ -13,7 +13,8 @@
     "_:dev:aspida": "aspida --watch",
     "_:generate": "prisma generate && frourio && aspida",
     "_:build": "ts-node -T ./scripts/build.ts --production",
-    "_:test": "jest"
+    "_:test": "jest",
+    "_:typecheck": "tsc --noEmit"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
