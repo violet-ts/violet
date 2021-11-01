@@ -9,7 +9,6 @@ WORKDIR /app
 
 COPY . .
 
-ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN ( \
@@ -50,6 +49,7 @@ RUN ( \
   && pnpm store prune \
 )
 
+ENV NODE_ENV production
 ENV PORT 80
 EXPOSE 80
 

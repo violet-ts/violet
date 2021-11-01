@@ -1,4 +1,5 @@
-const withTM = require('next-transpile-modules')(['@violet/api'])
+const withNoop = (config) => config;
+const withTM = NODE_ENV === 'production' ? withNoop : require('next-transpile-modules')(['@violet/api'])
 
 const { NODE_ENV } = process.env
 
