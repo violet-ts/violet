@@ -29,7 +29,6 @@ RUN ( \
     packages/web/.babelrc \
     packages/web/jest.config.ts \
     packages/web/next-env.d.ts \
-    packages/web/package.json \
     packages/web/stylelint.config.js \
     packages/api/scripts/ \
     packages/api/test/ \
@@ -40,7 +39,6 @@ RUN ( \
     jest.config.js \
     CODEOWNERS \
     docker-compose.yml \
-    package.json \
     pnpm-workspace.yaml \
     pnpm-lock.yaml \
     README.md \

@@ -29,7 +29,6 @@ RUN ( \
     packages/api/test/ \
     packages/api/\$server.ts \
     packages/api/aspida.config.js \
-    packages/api/package.json \
     packages/api/tsconfig.json \
     .eslintignore \
     .eslintrc.js \
@@ -37,7 +36,6 @@ RUN ( \
     .gitignore \
     CODEOWNERS \
     docker-compose.yml \
-    package.json \
     pnpm-workspace.yaml \
     pnpm-lock.yaml \
     README.md \
