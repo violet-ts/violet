@@ -23,25 +23,34 @@ RUN ( \
     docker/ \
     packages/frontend/src/ \
     packages/frontend/.babelrc \
-    packages/frontend/aspida.config.js \
     packages/frontend/jest.config.ts \
     packages/frontend/next-env.d.ts \
     packages/frontend/package.json \
     packages/frontend/stylelint.config.js \
-    packages/api/ \
+    packages/api/api/ \
+    packages/api/prisma/ \
+    packages/api/src/ \
+    packages/api/scripts/ \
+    packages/api/test/ \
+    packages/api/\$server.ts \
+    packages/api/aspida.config.js \
+    packages/api/package.json \
+    packages/api/tsconfig.json \
     .eslintignore \
     .eslintrc.js \
     .gitignore \
+    jest.config.js \
     CODEOWNERS \
     docker-compose.yml \
     package.json \
     pnpm-workspace.yaml \
+    pnpm-lock.yaml \
     README.md \
     tsconfig.json \
   && pnpm store prune \
 )
 
-ENV SERVER_PORT 80
+ENV PORT 80
 EXPOSE 80
 
 ENTRYPOINT ["pnpm", "--dir=./packages/frontend", "exec", "next", "start"]

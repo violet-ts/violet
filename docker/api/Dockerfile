@@ -9,7 +9,7 @@ WORKDIR /app
 
 COPY . .
 
-ENV NODE_ENV=production
+ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN ( \
@@ -25,24 +25,27 @@ RUN ( \
     packages/api/api/ \
     packages/api/prisma/ \
     packages/api/src/ \
+    packages/api/scripts/ \
     packages/api/test/ \
     packages/api/\$server.ts \
+    packages/api/aspida.config.js \
     packages/api/package.json \
     packages/api/tsconfig.json \
-    packages/api/webpack.config.js \
     .eslintignore \
     .eslintrc.js \
+    jest.config.js \
     .gitignore \
     CODEOWNERS \
     docker-compose.yml \
     package.json \
     pnpm-workspace.yaml \
+    pnpm-lock.yaml \
     README.md \
     tsconfig.json \
   && pnpm store prune \
 )
 
-ENV SERVER_PORT=80
+ENV SERVER_PORT 80
 EXPOSE 80
 
-ENTRYPOINT ["node", "/app/index.js"]
+ENTRYPOINT ["node", "/app/packages/api/build/index.js"]
