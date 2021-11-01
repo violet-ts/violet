@@ -33,7 +33,7 @@ yarn-error.log*
 .env.production.local
 
 # client
-/packages/frontend/utils/$path.ts
+/packages/web/src/utils/$path.ts
 
 # api
 /packages/api/api/**/$*.ts

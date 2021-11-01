@@ -1,14 +1,14 @@
 # frontend
-/.eslintrc.js
-/.eslintignore
-/packages/frontend/ @violet-ts/frontend
-/package.json
+/.eslintrc.js @violet-ts/frontend
+/.eslintignore @violet-ts/frontend
+/packages/web/ @violet-ts/frontend
+/package.json @violet-ts/frontend
 
 # backend
-/.eslintrc.js
-/.eslintignore
-/packages/api/ @violet-ts/frontend
-/package.json
+/.eslintrc.js @violet-ts/backend
+/.eslintignore @violet-ts/backend
+/packages/api/ @violet-ts/backend
+/package.json @violet-ts/backend
 
 # security
 /.github/ @violet-ts/security
@@ -29,7 +29,7 @@ pnpm-lock.yaml @violet-ts/security
 /packages/api/src/service/s3.ts @violet-ts/infrastructure
 /packages/api/src/service/aws-credential.ts.ts @violet-ts/infrastructure
 
-/packages/frontend/public/ @violet-ts/infrastructure
-/packages/frontend/next.config.js @violet-ts/infrastructure
+/packages/web/public/ @violet-ts/infrastructure
+/packages/web/next.config.js @violet-ts/infrastructure
 /docker/ @violet-ts/infrastructure
 /docker-compose.yml @violet-ts/infrastructure

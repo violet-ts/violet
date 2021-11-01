@@ -30,7 +30,7 @@ const main = async (watch: boolean) => {
     watch: watchOptions,
     plugins: [
       nodeExternalsPlugin({
-        allowList: ['@violet/frontend', '@violet/api'],
+        allowList: ['@violet/web', '@violet/api'],
       }),
     ],
   })

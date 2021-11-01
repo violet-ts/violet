@@ -14,26 +14,25 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN ( \
   pnpm install --frozen-lockfile --prod=false \
   && pnpm run generate \
-  && pnpm --dir=./packages/api run _:build \
+  && pnpm --dir=./packages/web run _:build \
   && pnpm install --frozen-lockfile --prod \
   && rm -rf \
     .github/ \
     .vscode/ \
     docker/ \
-    packages/web/ \
-    packages/api/api/ \
-    packages/api/prisma/ \
-    packages/api/src/ \
+    packages/web/src/ \
+    packages/web/.babelrc \
+    packages/web/jest.config.ts \
+    packages/web/next-env.d.ts \
+    packages/web/package.json \
+    packages/web/stylelint.config.js \
     packages/api/scripts/ \
     packages/api/test/ \
-    packages/api/\$server.ts \
     packages/api/aspida.config.js \
-    packages/api/package.json \
-    packages/api/tsconfig.json \
     .eslintignore \
     .eslintrc.js \
-    jest.config.js \
     .gitignore \
+    jest.config.js \
     CODEOWNERS \
     docker-compose.yml \
     package.json \
@@ -45,7 +44,7 @@ RUN ( \
 )
 
 ENV NODE_ENV production
-ENV SERVER_PORT 80
+ENV PORT 80
 EXPOSE 80
 
-ENTRYPOINT ["node", "/app/packages/api/build/index.js"]
+ENTRYPOINT ["pnpm", "--dir=./packages/web", "exec", "next", "start"]
