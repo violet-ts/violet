@@ -14,6 +14,7 @@
   "dependencies": {
     "@aspida/fetch": "^1.7.1",
     "@aspida/swr": "^1.7.1",
+    "@violet/api": "workspace:*",
     "class-validator": "^0.13.1",
     "dayjs": "^1.10.7",
     "next": "^11.1.0",
@@ -22,8 +23,5 @@
     "react-dom": "^17.0.2",
     "styled-components": "^5.3.1",
     "swr": "^1.0.0"
-  },
-  "devDependencies": {
-    "@violet/api": "workspace:*"
   }
 }
