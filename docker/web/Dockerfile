@@ -47,4 +47,5 @@ RUN ( \
 
 EXPOSE 80
 
-ENTRYPOINT ["pnpm", "--dir=./packages/web", "exec", "next", "start"]
+ENTRYPOINT []
+CMD ["pnpm", "--dir=./packages/web", "exec", "next", "start"]

@@ -45,4 +45,5 @@ RUN ( \
 
 EXPOSE 80
 
-ENTRYPOINT ["node", "/app/packages/api/build/index.js"]
+ENTRYPOINT []
+CMD ["node", "/app/packages/api/build/index.js"]
