@@ -23,7 +23,6 @@ RUN ( \
     docker/ \
     packages/web/ \
     packages/api/api/ \
-    packages/api/prisma/ \
     packages/api/src/ \
     packages/api/scripts/ \
     packages/api/test/ \
