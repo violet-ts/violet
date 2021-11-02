@@ -1,9 +1,8 @@
+FROM node:16-buster
 ARG API_ORIGIN
 
-FROM node:16-buster
-
 RUN ( \
-  npm install -g pnpm@^6.19.1 \
+  npm install -g pnpm@^6.20.1 \
   && npm uninstall -g yarn \
 )
 
