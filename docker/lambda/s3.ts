@@ -1,5 +1,5 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import { fromContainerMetadata } from '@aws-sdk/credential-providers'
+import { fromInstanceMetadata } from '@aws-sdk/credential-providers'
 import type { Credentials, Provider } from '@aws-sdk/types'
 import {
   AWS_ACCESS_KEY_ID,
@@ -16,7 +16,7 @@ const getCredentials = (): Credentials | Provider<Credentials> => {
       secretAccessKey: AWS_SECRET_ACCESS_KEY,
     }
   }
-  return fromContainerMetadata()
+  return fromInstanceMetadata()
 }
 
 let s3Client: S3Client
