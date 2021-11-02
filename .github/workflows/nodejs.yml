@@ -26,10 +26,17 @@ jobs:
         with:
           path: 'server/node_modules'
           key: server-yarn-${{ hashFiles('server/yarn.lock') }}
+      - uses: actions/cache@v2
+        id: lambda-yarn-cache
+        with:
+          path: 'docker/lambda/node_modules'
+          key: lambda-yarn-${{ hashFiles('docker/lambda/yarn.lock') }}
       - run: yarn install
         if: steps.client-yarn-cache.outputs.cache-hit != 'true'
       - run: yarn install --cwd server
         if: steps.server-yarn-cache.outputs.cache-hit != 'true'
+      - run: yarn install --cwd docker/lambda
+        if: steps.lambda-yarn-cache.outputs.cache-hit != 'true'
       - run: yarn lint
       - run: |
           sudo systemctl start mysql.service
