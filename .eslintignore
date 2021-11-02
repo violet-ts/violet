@@ -2,7 +2,9 @@ node_modules
 .next
 dist
 out
-docker
+docker/*
+!docker/lambda
+docker/lambda/*.js
 server/migration
 server/index.js
 $*.ts

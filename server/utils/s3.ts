@@ -4,6 +4,6 @@ export const createS3SaveWorksPath = (props: {
   projectId: ProjectId
   deskId: DeskId
   revisionId: RevisionId
-}) => {
-  return `${props.projectId}/${props.deskId}/revisions/${props.revisionId}` as S3SaveWorksPath
-}
+  filename: string
+}) =>
+  `${props.projectId}/${props.deskId}/revisions/${props.revisionId}/original/${props.filename}` as S3SaveWorksPath
