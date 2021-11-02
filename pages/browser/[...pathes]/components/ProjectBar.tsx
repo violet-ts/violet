@@ -57,11 +57,14 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
   const [label, setLabel] = useState('')
   const [isFocusing, setIsFocusing] = useState(false)
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
-  const inputElem = useRef<HTMLInputElement>(null)
+  const inputElement = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    inputElem.current?.focus()
-  }, [inputElem.current])
+    inputElement.current?.focus()
+  }, [inputElement.current, isClickAddProject])
   const addNewProject = () => {
+    if (inputElement && inputElement.current) {
+      inputElement.current.focus()
+    }
     setIsFocusing(false)
     setIsClickAddProject(true)
   }
@@ -87,7 +90,7 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
       {isClickAddProject && !isFocusing && (
         <InputFormProject>
           <form onSubmit={sendProjectName}>
-            <input ref={inputElem} type="text" onBlur={sendProjectName} onChange={inputLabel} />
+            <input ref={inputElement} type="text" onBlur={sendProjectName} onChange={inputLabel} />
           </form>
         </InputFormProject>
       )}
