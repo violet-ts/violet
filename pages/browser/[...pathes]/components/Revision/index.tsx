@@ -15,11 +15,11 @@ const Container = styled.div`
 `
 
 const DisplayWorksArea = styled.div`
-  padding: 48px;
   min-height: 100%;
+  padding: 48px;
+  overflow-y: scroll;
   background: ${colors.transparent};
   transition: background 0.2s, padding 0.2s;
-  overflow-y: scroll;
 `
 
 const DisplayWorksFrame = styled.div`
@@ -46,9 +46,9 @@ const Dropper = styled.input`
 
 const RevisionFooter = styled.div`
   position: relative;
+  justify-content: flex-end;
   height: 56px;
   background-color: ${colors.white};
-  justify-content: flex-end;
 `
 
 export const Revision = ({ project }: { project: BrowserProject }) => {
