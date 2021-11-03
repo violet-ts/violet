@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
 import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
-import type { BrowserProject } from '~/server/types'
+import type { ApiRevision, ProjectId, WorkId } from '~/server/types'
 import { acceptExtensions, fileTypes } from '~/server/utils/constants'
 import { colors, fontSizes } from '~/utils/constants'
 import { FileTypeAlertModal } from '../FileTypeAlertModal'
@@ -52,43 +52,40 @@ const RevisionFooter = styled.div`
   background-color: ${colors.white};
 `
 
-export const Revision = ({ project }: { project: BrowserProject }) => {
+export const Revision = (props: {
+  projectId: ProjectId
+  workId: WorkId | undefined
+  revisions: ApiRevision[]
+}) => {
   const [isFile, setIsFile] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
-  const [openedTabRevisions, setOpenTabRevision] = useState(
-    apiWholeData.revisionsList.filter((e) => e.workId === project.openedTabId)
-  )
+  const [openedTabRevisions, setOpenTabRevision] = useState(props.revisions)
   useEffect(() => {
-    setOpenTabRevision(apiWholeData.revisionsList.filter((e) => e.workId === project.openedTabId))
-  }, [apiWholeData.revisionsList])
+    setOpenTabRevision(props.revisions)
+  }, [props.revisions])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length !== 1) {
-      setIsFile(false)
-      e.target.value = ''
-      return
+    if (e.target.files?.length === 1) {
+      dropFile(e.target.files[0])
     }
-    dropFile(e.target.files[0])
+    setIsFile(false)
     e.target.value = ''
   }
 
   const dropFile = (file: File) => {
     fileTypes.some((f) => file.type === f.type) ? sendFormData(file) : setOpenAlert(true)
-    setIsFile(false)
   }
 
   const sendFormData = async (file: File) => {
-    if (!project.openedTabId) return
-    const addRevision = await api.browser.works
-      ._workId(project.openedTabId)
-      .revisions.$post({ body: { uploadFile: file, projectId: project.id } })
+    if (!props.workId) return
+    await api.browser.works
+      ._workId(props.workId)
+      .revisions.$post({ body: { uploadFile: file, projectId: props.projectId } })
       .catch(onErr)
 
-    if (!addRevision) return
-
-    const revisionRes = await api.browser.works._workId(project.openedTabId).revisions.$get()
+    const revisionRes = await api.browser.works._workId(props.workId).revisions.$get()
 
     if (!revisionRes) return
 
@@ -110,7 +107,7 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
       >
         {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
         {isFile && <Dropper type="file" accept={acceptExtensions} />}
-        {openedTabRevisions[0]?.revisions.map((_o, i) => (
+        {openedTabRevisions.map((_o, i) => (
           <DisplayWorksArea key={i}>
             <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
           </DisplayWorksArea>

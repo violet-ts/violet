@@ -59,7 +59,11 @@ const ProjectPage = () => {
               <MainContent>
                 <TabBar project={currentProject} projectApiData={projectApiData} />
                 <RevisionContent>
-                  <Revision project={currentProject} />
+                  <Revision
+                    projectId={currentProject.id}
+                    workId={currentProject.openedTabId}
+                    revisions={projectApiData.revisions}
+                  />
                 </RevisionContent>
                 <Spacer axis="y" size={8} />
               </MainContent>
