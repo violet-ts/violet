@@ -6,4 +6,4 @@
 **/docker/
 **/prisma/migration/
 **/$*.ts
-packages/api
+pkg/api

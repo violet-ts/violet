@@ -1,0 +1,42 @@
+{
+  "name": "@violet/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "migrate:dev": "prisma migrate dev",
+    "migrate:reset": "prisma migrate reset",
+    "start": "cross-env NODE_ENV=production node build/index.js",
+    "prisma:seed": "prisma db seed",
+    "_:dev": "run-p _:dev:*",
+    "_:dev:build": "pnpm run migrate:dev && pnpm run prisma:seed && pnpm run _:build:index -- --watch",
+    "_:dev:serve": "node-dev src/entries/index.ts",
+    "_:dev:aspida": "aspida --watch",
+    "_:build:index": "ts-node -T ./node_modules/@violet/scripts/build-file.ts --from=./src/entries/index.ts --to=./build/index.js --target=node16",
+    "_:generate": "prisma generate && frourio && aspida",
+    "_:build": "pnpm run _:build:index -- --production",
+    "_:test": "jest",
+    "_:typecheck": "tsc --noEmit"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.29.0",
+    "@aws-sdk/credential-providers": "^3.38.0",
+    "@aws-sdk/s3-request-presigner": "^3.30.0",
+    "@prisma/client": "^3.2.1",
+    "@violet/scripts": "workspace:*",
+    "aspida": "^1.7.1",
+    "class-validator": "^0.13.1",
+    "dayjs": "^1.10.7",
+    "dotenv": "^10.0.0",
+    "fast-json-stringify": "^2.7.11",
+    "fastify": "^3.20.2",
+    "fastify-cors": "^6.0.2",
+    "fastify-helmet": "^5.3.2",
+    "fastify-multipart": "^4.0.7",
+    "prisma": "^3.2.1",
+    "uuid": "^8.3.2",
+    "velona": "^0.7.0"
+  }
+}

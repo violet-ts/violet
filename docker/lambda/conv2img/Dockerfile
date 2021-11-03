@@ -1,36 +1,31 @@
-FROM node:16-buster
+FROM public.ecr.aws/lambda/nodejs:14
 
-RUN ( \
-  npm install -g pnpm@^6.20.1 \
-  && npm uninstall -g yarn \
-)
+RUN yum install -y amazon-linux-extras
 
-WORKDIR /app
+RUN amazon-linux-extras enable libreoffice
+
+RUN yum install libreoffice libreoffice-langpack-ja ImageMagick libwebp-tools -y
+
+RUN yum clean all
+
+RUN npm install -g pnpm@6.20.1
 
 COPY . .
 
-ENV API_PORT 80
 ENV NODE_ENV production
 
 RUN ( \
   pnpm install --frozen-lockfile --prod=false \
   && pnpm run generate \
-  && pnpm --dir=./pkg/api run _:build \
+  && pnpm --dir=./pkg/lambda/conv2img run _:build \
   && pnpm install --frozen-lockfile --prod \
   && rm -rf \
     .github/ \
     .vscode/ \
     docker/ \
     pkg/web/ \
+    pkg/api/ \
     pkg/def/ \
-    pkg/api/api/ \
-    pkg/api/src/ \
-    pkg/api/scripts/ \
-    pkg/api/test/ \
-    pkg/api/\$server.ts \
-    pkg/api/aspida.config.js \
-    pkg/api/jest.config.ts \
-    pkg/api/tsconfig.json \
     .eslintignore \
     .dockerignore \
     .stylelintignore \
@@ -45,7 +40,4 @@ RUN ( \
   && pnpm store prune \
 )
 
-EXPOSE 80
-
-ENTRYPOINT []
-CMD ["node", "/app/pkg/api/build/index.js"]
+CMD ["pkg/lambda/conv2img/index.handler"]

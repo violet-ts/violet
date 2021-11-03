@@ -27,6 +27,39 @@ services:
     command: >
       sh -c "cp -r /policies/* /data/.minio.sys/;
       minio server /data --console-address :9001;"
+    healthcheck:
+      test: curl -I http://localhost:9000/minio/health/live
+      interval: 5s
+
+  lambda:
+    build:
+      context: .
+      dockerfile: ./docker/lambda/conv2img/Dockerfile
+    env_file:
+      - ./server/.env
+    environment:
+      - S3_ENDPOINT=http://minio:9000
+    ports:
+      - 9002:8080
+    healthcheck:
+      test: curl -I http://localhost:8080
+      interval: 5s
+
+  mc:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+      lambda:
+        condition: service_healthy
+    env_file:
+      - ./server/.env
+    entrypoint: []
+    command: >
+      sh -c "mc alias set minio http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD;
+      mc admin config set minio notify_webhook:1 queue_limit='0' endpoint='http://lambda:8080/2015-03-31/functions/function/invocations' queue_dir='';
+      mc admin service restart minio;
+      mc event add minio/$$S3_BUCKET arn:minio:sqs::1:webhook --event put"
 
 volumes:
   mysql_data:

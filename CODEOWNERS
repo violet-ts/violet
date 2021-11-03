@@ -1,35 +1,36 @@
 # frontend
 /.eslintrc.js @violet-ts/frontend
 /.eslintignore @violet-ts/frontend
-/packages/web/ @violet-ts/frontend
+/pkg/web/ @violet-ts/frontend
 /package.json @violet-ts/frontend
 
 # backend
 /.eslintrc.js @violet-ts/backend
 /.eslintignore @violet-ts/backend
-/packages/api/ @violet-ts/backend
+/pkg/api/ @violet-ts/backend
 /package.json @violet-ts/backend
+/pkg/api/ @violet-ts/backend
 
 # security
 /.github/ @violet-ts/security
 **/package.json @violet-ts/security
 pnpm-lock.yaml @violet-ts/security
-/packages/api/src/service/aws-credential.ts.ts @violet-ts/infrastructure
+/pkg/api/src/service/aws-credential.ts.ts @violet-ts/infrastructure
 
 # infrastructure
 /.github/ @violet-ts/infrastructure
 **/package.json @violet-ts/infrastructure
-/packages/api/scripts/ @violet-ts/infrastructure
-/packages/api/prisma/ @violet-ts/infrastructure
-/packages/api/api/healthz/ @violet-ts/infrastructure
-/packages/api/.env.example @violet-ts/infrastructure
-/packages/api/src/utils/envValues.ts @violet-ts/infrastructure
-/packages/api/src/utils/envValues.ts @violet-ts/infrastructure
+/pkg/api/scripts/ @violet-ts/infrastructure
+/pkg/api/prisma/ @violet-ts/infrastructure
+/pkg/api/api/healthz/ @violet-ts/infrastructure
+/pkg/api/.env.example @violet-ts/infrastructure
+/pkg/api/src/utils/envValues.ts @violet-ts/infrastructure
+/pkg/api/src/utils/envValues.ts @violet-ts/infrastructure
 
-/packages/api/src/service/s3.ts @violet-ts/infrastructure
-/packages/api/src/service/aws-credential.ts.ts @violet-ts/infrastructure
+/pkg/api/src/service/s3.ts @violet-ts/infrastructure
+/pkg/api/src/service/aws-credential.ts.ts @violet-ts/infrastructure
 
-/packages/web/public/ @violet-ts/infrastructure
-/packages/web/next.config.js @violet-ts/infrastructure
+/pkg/web/public/ @violet-ts/infrastructure
+/pkg/web/next.config.js @violet-ts/infrastructure
 /docker/ @violet-ts/infrastructure
 /docker-compose.yml @violet-ts/infrastructure

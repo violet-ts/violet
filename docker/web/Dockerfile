@@ -18,24 +18,27 @@ ENV NODE_ENV production
 RUN ( \
   pnpm install --frozen-lockfile --prod=false \
   && pnpm run generate \
-  && pnpm --dir=./packages/web run _:build \
+  && pnpm --dir=./pkg/web run _:build \
   && pnpm install --frozen-lockfile --prod \
   && rm -rf \
     .github/ \
     .vscode/ \
     docker/ \
-    packages/web/src/ \
-    packages/web/.babelrc \
-    packages/web/jest.config.ts \
-    packages/web/next-env.d.ts \
-    packages/web/stylelint.config.js \
-    packages/api/scripts/ \
-    packages/api/test/ \
-    packages/api/aspida.config.js \
+    pkg/def/ \
+    pkg/lambda/ \
+    pkg/web/src/ \
+    pkg/web/.babelrc \
+    pkg/web/jest.config.ts \
+    pkg/web/next-env.d.ts \
+    pkg/web/stylelint.config.js \
+    pkg/api/scripts/ \
+    pkg/api/test/ \
+    pkg/api/aspida.config.js \
     .eslintignore \
-    .eslintrc.js \
+    .dockerignore \
+    .stylelintignore \
     .gitignore \
-    jest.config.js \
+    .eslintrc.js \
     CODEOWNERS \
     docker-compose.yml \
     pnpm-workspace.yaml \
@@ -48,4 +51,4 @@ RUN ( \
 EXPOSE 80
 
 ENTRYPOINT []
-CMD ["pnpm", "--dir=./packages/web", "exec", "next", "start"]
+CMD ["pnpm", "--dir=./pkg/web", "exec", "next", "start"]
