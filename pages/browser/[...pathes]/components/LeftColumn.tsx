@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { Portal } from '~/components/atoms/Portal'
 import { alphaLevel, colors } from '~/utils/constants'
-import { LeftColumnResizeAbleArea } from './LeftColumnResizeAbleArea'
 
 const Container = styled.div.attrs<{ width: number }>((props) => ({
   style: { width: `${props.width}px` },
@@ -25,6 +25,14 @@ const ResizeHandle = styled.div`
   &:hover {
     background: ${colors.blue};
   }
+`
+
+const MovableArea = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 `
 
 const MIN_WIDTH = 100
@@ -61,7 +69,11 @@ export const LeftColumn: React.FC = ({ children }) => {
     <Container width={width}>
       {children}
       <ResizeHandle onMouseDown={start} onMouseMove={move} onMouseUp={() => setIsResizing(false)}>
-        {isResizing && <LeftColumnResizeAbleArea />}
+        {isResizing && (
+          <Portal>
+            <MovableArea />
+          </Portal>
+        )}
       </ResizeHandle>
     </Container>
   )

@@ -11,22 +11,22 @@ import { AddButton } from './AddButton'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 48px);
+  height: calc(100vh - 48px - 48px);
 `
 
 const DisplayWorksArea = styled.div`
-  flex: 1;
   padding: 48px;
+  min-height: 100%;
   background: ${colors.transparent};
   transition: background 0.2s, padding 0.2s;
+  overflow-y: scroll;
 `
 
 const DisplayWorksFrame = styled.div`
   display: flex;
-  flex: 1;
   align-items: center;
   justify-content: center;
-  min-height: 200px;
+  min-height: 100%;
   font-size: ${fontSizes.big};
   color: ${colors.violet};
   border: 4px solid ${colors.violet};
@@ -43,12 +43,11 @@ const Dropper = styled.input`
   background-color: ${colors.transparent};
   opacity: 0;
 `
-const DisplayWorksBody = styled.div`
-  flex: 1;
-  overflow-y: scroll;
-`
-const Footer = styled.div`
-  display: flex;
+
+const RevisionFooter = styled.div`
+  position: relative;
+  height: 56px;
+  background-color: ${colors.white};
   justify-content: flex-end;
 `
 
@@ -64,31 +63,35 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
     setOpenTabRevision(apiWholeData.revisionsList.filter((e) => e.workId === project.openedTabId))
   }, [apiWholeData.revisionsList])
 
-  const dropFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) {
-      e.target.value = ''
       setIsFile(false)
+      e.target.value = ''
       return
     }
-    const targetFileType = e.target.files[0].type
+    dropFile(e.target.files)
+    e.target.value = ''
+  }
+  const dropFileWithAddButton = (fileList: FileList) => {
+    if (!fileList) return
+    dropFile(fileList)
+  }
+  const dropFile = (fileList: FileList) => {
+    const targetFileType = fileList[0].type
     const acxeptFileTypes = fileTypes.map<string>((f) => f.type)
     acxeptFileTypes.some((t) => t === targetFileType)
-      ? sendFormData(e.target.files[0])
+      ? sendFormData(fileList[0])
       : setOpenAlert(true)
-    e.target.value = ''
     setIsFile(false)
   }
   const updateRevisions = (revisionRes: { workId: WorkId; revisions: ApiRevision[] }) => {
     updateApiWholeData(
       'revisionsList',
-      apiWholeData.revisionsList.some((r) => r.workId === revisionRes.workId)
-        ? apiWholeData.revisionsList.map((r) => (r.workId === revisionRes.workId ? revisionRes : r))
-        : [...apiWholeData.revisionsList, revisionRes]
+      apiWholeData.revisionsList.map((r) => (r.workId === revisionRes.workId ? revisionRes : r))
     )
   }
   const sendFormData = async (file: File) => {
     if (!project.openedTabId) return
-    if (!file) return
     const addRevision = await api.browser.works
       ._workId(project.openedTabId)
       .revisions.$post({ body: { uploadFile: file, projectId: project.id } })
@@ -107,24 +110,20 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
   }
 
   return (
-    <Container onDragEnter={() => setIsFile(true)} onChange={dropFile}>
-      {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
-      {isFile && (
-        <>
-          <Dropper type="file" accept={acceptExtensions} onChange={dropFile} />
-        </>
-      )}
-      <DisplayWorksBody>
+    <>
+      <Container onDragEnter={() => setIsFile(true)} onChange={onChange}>
+        {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
+        {isFile && <Dropper type="file" accept={acceptExtensions} />}
         {openedTabRevisions &&
-          openedTabRevisions[0].revisions.map((_o, i) => (
+          openedTabRevisions[0]?.revisions.map((_o, i) => (
             <DisplayWorksArea key={i}>
               <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
             </DisplayWorksArea>
           ))}
-      </DisplayWorksBody>
-      <Footer>
-        <AddButton dropFile={dropFile} />
-      </Footer>
-    </Container>
+      </Container>
+      <RevisionFooter>
+        <AddButton dropFileWithAddButton={dropFileWithAddButton} />
+      </RevisionFooter>
+    </>
   )
 }

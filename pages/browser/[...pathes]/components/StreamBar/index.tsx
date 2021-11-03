@@ -32,9 +32,6 @@ const MessageBox = styled.div`
   padding: 8px;
 `
 const InputForm = styled.textarea`
-  position: sticky;
-  right: 8px;
-  bottom: 8px;
   width: 100%;
   min-height: 120px;
   resize: none;
