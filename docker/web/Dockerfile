@@ -19,19 +19,19 @@ RUN ( \
   pnpm install --frozen-lockfile --prod=false \
   && pnpm run generate \
   && pnpm --dir=./pkg/web run _:build \
-  && pnpm install --frozen-lockfile --prod \
+  && pnpm install --frozen-lockfile --prod --filter=./pkg/web \
   && find . \
-    | grep -v -w '\\.' \
-    | grep -v -E '^\\./package.json' \
-    | grep -v -E '^\\./node_modules/' \
-    | grep -v -E '^\\./pkg/web/package.json' \
-    | grep -v -E '^\\./pkg/web/.babelrc' \
-    | grep -v -E '^\\./pkg/web/next.config.js' \
-    | grep -v -E '^\\./pkg/web/src/' \
-    | grep -v -E '^\\./pkg/web/.next/' \
-    | grep -v -E '^\\./pkg/api/package.json' \
-    | grep -v -E '^\\./pkg/api/prisma/' \
-    | grep -v -E '^\\./pkg/api/node_modules/' \
+    | grep -v -E '^\.$' \
+    | grep -v -E '^\./package.json' \
+    | grep -v -E '^\./node_modules/' \
+    | grep -v -E '^\./pkg/web/package.json' \
+    | grep -v -E '^\./pkg/web/.babelrc' \
+    | grep -v -E '^\./pkg/web/next.config.js' \
+    | grep -v -E '^\./pkg/web/src/' \
+    | grep -v -E '^\./pkg/web/.next/' \
+    | grep -v -E '^\./pkg/api/package.json' \
+    | grep -v -E '^\./pkg/api/prisma/' \
+    | grep -v -E '^\./pkg/api/node_modules/' \
     | xargs rm -rf \
   && pnpm store prune \
 )

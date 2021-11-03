@@ -18,14 +18,14 @@ RUN ( \
   pnpm install --frozen-lockfile --prod=false \
   && pnpm run generate \
   && pnpm --dir=./pkg/lambda/conv2img run _:build \
-  && pnpm install --frozen-lockfile --prod \
+  && pnpm install --frozen-lockfile --prod --filter=./pkg/lambda/conv2img \
   && find . \
-    | grep -v -w '\\.' \
-    | grep -v -E '^\\./package.json' \
-    | grep -v -E '^\\./node_modules/' \
-    | grep -v -E '^\\./pkg/lambda/conv2img/package.json' \
-    | grep -v -E '^\\./pkg/lambda/conv2img/build/' \
-    | grep -v -E "^\\./pkg/lambda/conv2img/node_modules/" \
+    | grep -v -E '^\.$' \
+    | grep -v -E '^\./package.json' \
+    | grep -v -E '^\./node_modules/' \
+    | grep -v -E '^\./pkg/lambda/conv2img/package.json' \
+    | grep -v -E '^\./pkg/lambda/conv2img/build/' \
+    | grep -v -E '^\./pkg/lambda/conv2img/node_modules/' \
     | xargs rm -rf \
   && pnpm store prune \
 )
