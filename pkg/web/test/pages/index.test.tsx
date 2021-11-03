@@ -45,7 +45,7 @@ describe('Home page', () => {
     window.alert = jest.fn()
 
     fireEvent.click(await findByText('LOGIN'))
-    expect(window.prompt).toHaveBeenCalledWith('Enter the user id (See server/.env)')
+    expect(window.prompt).toHaveBeenCalledWith('Enter the user id (See @violet/api/.env)')
     expect(window.alert).toHaveBeenCalledWith('Login failed')
   })
 })
