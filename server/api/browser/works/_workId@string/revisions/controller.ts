@@ -10,19 +10,20 @@ export default defineController(() => ({
     return revisions ? { status: 200, body: revisions } : { status: 404 }
   },
   post: async ({ params, body }) => {
-    const revision = await createRevision(params.workId as WorkId)
     const deskId = await getDeskId(params.workId as WorkId)
     if (deskId === undefined) return { status: 404 }
-    const ids = {
-      projectId: body.projectId,
-      deskId,
-      revisionId: revision.id,
-    }
-    const props = {
+
+    const revision = await createRevision(params.workId as WorkId)
+    const data = await sendNewWork({
       uploadFile: body.uploadFile,
-      path: createS3SaveWorksPath(ids),
-    }
-    const data = await sendNewWork(props)
-    return data.httpStatusCode === 200 ? { status: 201, body: revision } : { status: 404 }
+      path: createS3SaveWorksPath({
+        projectId: body.projectId,
+        deskId,
+        revisionId: revision.id,
+        filename: body.uploadFile.filename,
+      }),
+    })
+
+    return data.httpStatusCode === 200 ? { status: 201, body: revision } : { status: 400 }
   },
 }))
