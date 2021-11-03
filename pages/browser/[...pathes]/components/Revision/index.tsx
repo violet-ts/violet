@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { Spacer } from '~/components/atoms/Spacer'
 import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
 import type { BrowserProject } from '~/server/types'
@@ -45,8 +46,8 @@ const Dropper = styled.input`
 `
 
 const RevisionFooter = styled.div`
-  position: relative;
-  justify-content: flex-end;
+  display: flex;
+  justify-content: right;
   height: 56px;
   background-color: ${colors.white};
 `
@@ -74,7 +75,7 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
   }
 
   const dropFile = (file: File) => {
-    fileTypes.some((f) => file.type.includes(f.type)) ? sendFormData(file) : setOpenAlert(true)
+    fileTypes.some((f) => file.type === f.type) ? sendFormData(file) : setOpenAlert(true)
     setIsFile(false)
   }
 
@@ -102,7 +103,11 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
 
   return (
     <>
-      <Container onDragEnter={() => setIsFile(true)} onChange={onChange}>
+      <Container
+        onDragEnter={() => setIsFile(true)}
+        onDragLeave={() => setIsFile(false)}
+        onChange={onChange}
+      >
         {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
         {isFile && <Dropper type="file" accept={acceptExtensions} />}
         {openedTabRevisions[0]?.revisions.map((_o, i) => (
@@ -113,6 +118,7 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
       </Container>
       <RevisionFooter>
         <AddButton dropFile={dropFile} />
+        <Spacer axis="x" size={8} />
       </RevisionFooter>
     </>
   )

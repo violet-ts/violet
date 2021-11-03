@@ -1,12 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Spacer } from '~/components/atoms/Spacer'
 import { acceptExtensions } from '~/server/utils/constants'
 import { alphaLevel, colors } from '~/utils/constants'
 
 const Container = styled.div`
-  display: flex;
-  justify-content: right;
   height: 100%;
 `
 
@@ -49,11 +46,9 @@ const UploadFile = styled.input`
 `
 export const AddButton = (props: { dropFile: (file: File) => void }) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length !== 1) {
-      e.target.value = ''
-      return
+    if (e.target.files?.length === 1) {
+      props.dropFile(e.target.files[0])
     }
-    props.dropFile(e.target.files[0])
     e.target.value = ''
   }
   return (
@@ -61,7 +56,6 @@ export const AddButton = (props: { dropFile: (file: File) => void }) => {
       <StyledAddButton>
         <UploadFile type="file" accept={acceptExtensions} onChange={onChange} />
       </StyledAddButton>
-      <Spacer axis="x" size={8} />
     </Container>
   )
 }
