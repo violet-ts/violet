@@ -22,6 +22,7 @@ const Container = styled.a<{ depth: number; selected: boolean; bold?: boolean }>
 
 const AddAreaParent = styled.div`
   display: none;
+  order: 1;
 `
 
 const LabelArea = styled.div`
@@ -29,14 +30,13 @@ const LabelArea = styled.div`
   display: flex;
   :hover {
     ${AddAreaParent} {
-      display: inline-block;
+      display: block;
     }
   }
 `
 
 const Label = styled.div`
   flex: 1;
-  padding: 0.5px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -153,18 +153,17 @@ export const CellName = (props: {
               <>
                 <ExtIcon name={props.name} />
                 <Spacer axis="x" size={6} />
-                <Label>{props.name}</Label>
               </>
             ) : (
               <>
                 <Arrow opened={props.opened} />
                 <Spacer axis="x" size={18} />
-                <Label>{props.name}</Label>
                 <AddAreaParent>
                   <AddArea addFile={AddNewFile} addFolder={AddNewFolder} />
                 </AddAreaParent>
               </>
             )}
+            <Label>{props.name}</Label>
           </LabelArea>
           {isClickNewAdd && !isFocusing && (
             <NewFileFolderArea depth={pathChunks.length - 1}>

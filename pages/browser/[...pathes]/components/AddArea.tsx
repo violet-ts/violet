@@ -4,12 +4,12 @@ const StyledFileAdd = styled.i`
   box-sizing: border-box;
   float: right;
   width: 12px;
-  height: 14px;
+  height: 13px;
   margin: 1px 0 1px 0;
   margin-right: 10px;
   overflow: hidden;
   color: #333;
-  background: linear-gradient(to bottom, #333 5px, transparent 0) no-repeat 1px 7px/6px 2px;
+  background: linear-gradient(to bottom, #333 5px, transparent 0) no-repeat 1px 6px/6px 2px;
   border: 2px solid transparent;
   border-top: 0;
   border-right: 0;
@@ -29,7 +29,7 @@ const StyledFileAdd = styled.i`
     content: '';
   }
   &::before {
-    top: 5px;
+    top: 4px;
     left: 3px;
     width: 2px;
     background: #333;
@@ -52,7 +52,7 @@ const StyledFolderAdd = styled.i`
   box-sizing: border-box;
   float: right;
   width: 20px;
-  height: 14px;
+  height: 13px;
   margin: 1.5px 0 1px 0;
   margin-right: 10px;
   color: #333;
