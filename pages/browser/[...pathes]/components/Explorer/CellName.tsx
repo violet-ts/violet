@@ -28,10 +28,8 @@ const AddAreaParent = styled.div`
 const LabelArea = styled.div`
   position: relative;
   display: flex;
-  :hover {
-    ${AddAreaParent} {
-      display: block;
-    }
+  :hover ${AddAreaParent} {
+    display: block;
   }
 `
 
