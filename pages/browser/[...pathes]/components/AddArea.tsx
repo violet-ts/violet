@@ -9,7 +9,6 @@ const StyledFileAdd = styled.i`
   margin-right: 10px;
   overflow: hidden;
   color: #333;
-  visibility: hidden;
   background: linear-gradient(to bottom, #333 5px, transparent 0) no-repeat 1px 7px/6px 2px;
   border: 2px solid transparent;
   border-top: 0;
@@ -57,7 +56,6 @@ const StyledFolderAdd = styled.i`
   margin: 1.5px 0 1px 0;
   margin-right: 10px;
   color: #333;
-  visibility: hidden;
   background: linear-gradient(to left, #333 10px, transparent 0) no-repeat 7px 2px/2px 6px;
   border: 2px solid;
   border-radius: 3px;
@@ -97,25 +95,11 @@ const StyledFolderAdd = styled.i`
   }
 `
 
-const ShowAddArea = styled.div`
-  position: absolute;
-  width: 100%;
-  &:hover {
-    width: 120%;
-    ${StyledFileAdd} {
-      visibility: visible;
-    }
-    ${StyledFolderAdd} {
-      visibility: visible;
-    }
-  }
-`
-
 export const AddArea = (props: { addFile: () => void; addFolder: () => void }) => {
   return (
-    <ShowAddArea>
+    <>
       <StyledFileAdd onClick={props.addFile} />
       <StyledFolderAdd onClick={props.addFolder} />
-    </ShowAddArea>
+    </>
   )
 }
