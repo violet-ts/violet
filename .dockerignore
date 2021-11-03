@@ -43,3 +43,9 @@ yarn-error.log*
 /docker/minio/config/
 /docker/minio/data/*
 !/docker/minio/data/static
+
+
+# .dockerignore
+/docker/
+/.github/
+/.vscode/

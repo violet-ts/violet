@@ -19,15 +19,14 @@ RUN ( \
   && pnpm run generate \
   && pnpm --dir=./pkg/lambda/conv2img run _:build \
   && pnpm install --frozen-lockfile --prod --filter=./pkg/lambda/conv2img \
-  && find . \
-    | grep -v -E '^\.$' \
+  && find . -type f \
     | grep -v -E '^\./package.json' \
     | grep -v -E '^\./node_modules/' \
     | grep -v -E '^\./pkg/lambda/conv2img/package.json' \
     | grep -v -E '^\./pkg/lambda/conv2img/build/' \
     | grep -v -E '^\./pkg/lambda/conv2img/node_modules/' \
-    | xargs rm -rf \
-  && pnpm store prune \
+    | xargs rm -f \
+  && rm -rf "$HOME/.pnpm-store" \
 )
 
 CMD ["pkg/lambda/conv2img/build/index.handler"]

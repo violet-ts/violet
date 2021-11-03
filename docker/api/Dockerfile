@@ -17,16 +17,15 @@ RUN ( \
   && pnpm run generate \
   && pnpm --dir=./pkg/api run _:build \
   && pnpm install --frozen-lockfile --prod --filter=./pkg/api \
-  && find . \
-    | grep -v -E '^\.$' \
+  && find . -type f \
     | grep -v -E '^\./package.json' \
     | grep -v -E '^\./node_modules/' \
     | grep -v -E '^\./pkg/api/package.json' \
     | grep -v -E '^\./pkg/api/build/' \
     | grep -v -E '^\./pkg/api/prisma/' \
     | grep -v -E '^\./pkg/api/node_modules/' \
-    | xargs rm -rf \
-  && pnpm store prune \
+    | xargs rm -f \
+  && rm -rf "$HOME/.pnpm-store" \
 )
 
 EXPOSE 80
