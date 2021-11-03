@@ -23,6 +23,7 @@ const WorksView = styled.div`
 
 const MainColumn = styled.div`
   display: flex;
+  overflow-y: scroll;
 `
 
 const MainContent = styled.div`
@@ -55,26 +56,33 @@ const ProjectPage = () => {
       <WorksView>
         {currentProject.openedTabId ? (
           projectApiData.revisions?.length ? (
-            <MainColumn>
-              <MainContent>
-                <TabBar project={currentProject} projectApiData={projectApiData} />
-                <RevisionContent>
-                  <Revision
+            <>
+              <TabBar project={currentProject} projectApiData={projectApiData} />
+              <MainColumn>
+                <MainContent>
+                  <RevisionContent>
+                    <Revision
+                      projectId={currentProject.id}
+                      workId={currentProject.openedTabId}
+                      revisions={projectApiData.revisions}
+                    />
+                  </RevisionContent>
+                  <Spacer axis="y" size={8} />
+                </MainContent>
+                <StreamBarColumn>
+                  <StreamBar
                     projectId={currentProject.id}
                     workId={currentProject.openedTabId}
                     revisions={projectApiData.revisions}
+                    messages={projectApiData.messages}
                   />
-                </RevisionContent>
-                <Spacer axis="y" size={8} />
-              </MainContent>
-              <StreamBarColumn>
-                <StreamBar project={currentProject} projectApiData={projectApiData} />
-              </StreamBarColumn>
-            </MainColumn>
+                </StreamBarColumn>
+              </MainColumn>
+            </>
           ) : (
             <>
               <TabBar project={currentProject} projectApiData={projectApiData} />
-              <EmptyWork project={currentProject} />
+              <EmptyWork projectId={currentProject.id} workId={currentProject.openedTabId} />
             </>
           )
         ) : (

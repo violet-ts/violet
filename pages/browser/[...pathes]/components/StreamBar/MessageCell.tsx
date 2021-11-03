@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Spacer } from '~/components/atoms/Spacer'
-import type { ApiMessage, MessageId } from '~/server/types'
+import type { ApiMessage, ApiRevision, MessageId } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
 import { MessageHeader } from './MessageHeader'
 import { ReplyInputForm } from './ReplyInputForm'
@@ -20,6 +20,7 @@ const Message = styled.div`
 `
 
 export const MessageCell = (props: {
+  revision: ApiRevision
   message: ApiMessage
   replyMessage: (messageId: MessageId, content: string) => Promise<void>
 }) => {

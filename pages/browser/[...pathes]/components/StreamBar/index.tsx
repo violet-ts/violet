@@ -1,14 +1,14 @@
-import type { FormEvent } from 'react'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
 import type {
   ApiMessage,
-  BrowserProject,
+  ApiRevision,
   MessageId,
-  ProjectApiData,
+  ProjectId,
   RevisionId,
+  WorkId,
 } from '~/server/types'
 import { alphaLevel, colors } from '~/utils/constants'
 import { MessageCell } from './MessageCell'
@@ -75,35 +75,30 @@ const SubmitIcon = styled.div`
     border-bottom: 4px solid transparent;
   }
 `
-export const StreamBar = ({
-  project,
-  projectApiData,
-}: {
-  project: BrowserProject
-  projectApiData: ProjectApiData
+export const StreamBar = (props: {
+  projectId: ProjectId
+  workId: WorkId
+  revisions: ApiRevision[]
+  messages: ApiMessage[] | undefined
 }) => {
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
   const { api, onErr } = useApi()
   const [content, setMessage] = useState('')
   const scrollBottomRef = useRef<HTMLDivElement>(null)
 
-  const userName = 'Test Name'
+  const userName = 'Charles M Schultz'
   const submitMessage = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault()
+    async (id: RevisionId) => {
       if (!content) return
-      if (!project.openedTabId) return
-      if (!projectApiData.revisions) return
-      const revisionId = projectApiData.revisions.slice(-1)[0].id
       await api.browser.works
-        ._workId(project.openedTabId)
-        .revisions._revisionId(revisionId)
+        ._workId(props.workId)
+        .revisions._revisionId(id)
         .post({ body: { content, userName } })
         .catch(onErr)
 
       const messageRes = await api.browser.works
-        ._workId(project.openedTabId)
-        .revisions._revisionId(revisionId)
+        ._workId(props.workId)
+        .revisions._revisionId(id)
         .$get()
 
       if (!messageRes) return
@@ -111,11 +106,11 @@ export const StreamBar = ({
       updateMessage(messageRes)
       setMessage('')
     },
-    [content, project, projectApiData]
+    [content]
   )
   useEffect(() => {
     scrollBottomRef?.current?.scrollIntoView()
-  }, [projectApiData.messages?.length])
+  }, [props.messages?.length])
 
   const updateMessage = (messageRes: { revisionId: RevisionId; messages: ApiMessage[] }) => {
     updateApiWholeData(
@@ -131,17 +126,15 @@ export const StreamBar = ({
   const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
       if (!content) return
-      if (!project.openedTabId) return
-      if (!projectApiData.revisions) return
-      const revisionId = projectApiData.revisions.slice(-1)[0].id
+      const revisionId = props.revisions.slice(-1)[0].id
       await api.browser.works
-        ._workId(project.openedTabId)
+        ._workId(props.workId)
         .revisions._revisionId(revisionId)
         .messages._messageId(messageId)
         .replies.$post({ body: { content, userName } })
 
       const replyRes = await api.browser.works
-        ._workId(project.openedTabId)
+        ._workId(props.workId)
         .revisions._revisionId(revisionId)
         .messages.$get()
         .catch(onErr)
@@ -149,28 +142,49 @@ export const StreamBar = ({
       if (!replyRes) return
       updateMessage(replyRes)
     },
-    [content, project, projectApiData]
+    [content]
   )
+  const getRevisionMessagesById = (
+    messages: ApiMessage[],
+    messageIds: {
+      id: MessageId
+    }[]
+  ) => {
+    const ids = messageIds.map((m) => m.id)
+    return messages.filter((message) => ids.map((id) => id === message.id))
+  }
 
   return (
-    <Container>
-      <StreamBox>
-        {projectApiData.messages &&
-          projectApiData.messages.map((d, i) => (
-            <MessageCell key={i} message={d} replyMessage={replyMessage} />
-          ))}
-        <div ref={scrollBottomRef} />
-      </StreamBox>
-      <MessageBox>
-        <InputForm
-          placeholder="message"
-          value={content}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <ClickableArea onClick={submitMessage}>
-          <SubmitIcon />
-        </ClickableArea>
-      </MessageBox>
-    </Container>
+    <div>
+      {props.revisions.map((revision, i) => (
+        <>
+          <Container key={i}>
+            <StreamBox>
+              {revision.messages &&
+                props.messages &&
+                getRevisionMessagesById(props.messages, revision.messages).map((d, i) => (
+                  <MessageCell
+                    key={i}
+                    revision={revision}
+                    message={d}
+                    replyMessage={replyMessage}
+                  />
+                ))}
+              <div ref={scrollBottomRef} />
+            </StreamBox>
+            <MessageBox>
+              <InputForm
+                placeholder="message"
+                value={content}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              <ClickableArea onClick={() => submitMessage(revision.id)}>
+                <SubmitIcon />
+              </ClickableArea>
+            </MessageBox>
+          </Container>
+        </>
+      ))}
+    </div>
   )
 }

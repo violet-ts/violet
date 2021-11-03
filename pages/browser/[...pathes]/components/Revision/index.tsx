@@ -18,7 +18,6 @@ const Container = styled.div`
 const DisplayWorksArea = styled.div`
   min-height: 100%;
   padding: 48px;
-  overflow-y: scroll;
   background: ${colors.transparent};
   transition: background 0.2s, padding 0.2s;
 `
@@ -107,15 +106,17 @@ export const Revision = (props: {
         {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
         {isFile && <Dropper type="file" accept={acceptExtensions} />}
         {openedTabRevisions.map((_o, i) => (
-          <DisplayWorksArea key={i}>
-            <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
-          </DisplayWorksArea>
+          <>
+            <DisplayWorksArea key={i}>
+              <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
+            </DisplayWorksArea>
+            <RevisionFooter>
+              <AddButton dropFile={dropFile} />
+              <Spacer axis="x" size={8} />
+            </RevisionFooter>
+          </>
         ))}
       </Container>
-      <RevisionFooter>
-        <AddButton dropFile={dropFile} />
-        <Spacer axis="x" size={8} />
-      </RevisionFooter>
     </>
   )
 }
