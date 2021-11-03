@@ -36,7 +36,7 @@ services:
       context: .
       dockerfile: ./docker/lambda/conv2img/Dockerfile
     env_file:
-      - ./server/.env
+      - ./.env
     environment:
       - S3_ENDPOINT=http://minio:9000
     ports:
@@ -53,7 +53,7 @@ services:
       lambda:
         condition: service_healthy
     env_file:
-      - ./server/.env
+      - ./.env
     entrypoint: []
     command: >
       sh -c "mc alias set minio http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD;
