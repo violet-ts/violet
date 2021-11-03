@@ -53,8 +53,8 @@ const ProjectPage = () => {
         <Explorer projectApiData={projectApiData} project={currentProject} />
       </LeftColumn>
       <WorksView>
-        {projectApiData.revisions ? (
-          projectApiData.revisions.length ? (
+        {currentProject.openedTabId ? (
+          projectApiData.revisions?.length ? (
             <MainColumn>
               <MainContent>
                 <TabBar project={currentProject} projectApiData={projectApiData} />

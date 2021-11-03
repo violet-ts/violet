@@ -54,7 +54,7 @@ const RevisionFooter = styled.div`
 
 export const Revision = (props: {
   projectId: ProjectId
-  workId: WorkId | undefined
+  workId: WorkId
   revisions: ApiRevision[]
 }) => {
   const [isFile, setIsFile] = useState(false)
@@ -79,7 +79,6 @@ export const Revision = (props: {
   }
 
   const sendFormData = async (file: File) => {
-    if (!props.workId) return
     await api.browser.works
       ._workId(props.workId)
       .revisions.$post({ body: { uploadFile: file, projectId: props.projectId } })
