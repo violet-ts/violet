@@ -8,14 +8,14 @@
 /.eslintrc.js @violet-ts/backend
 /.eslintignore @violet-ts/backend
 /pkg/api/ @violet-ts/backend
+/pkg/lambda/ @violet-ts/backend
 /package.json @violet-ts/backend
-/pkg/api/ @violet-ts/backend
 
 # security
 /.github/ @violet-ts/security
 **/package.json @violet-ts/security
 pnpm-lock.yaml @violet-ts/security
-/pkg/api/src/service/aws-credential.ts.ts @violet-ts/infrastructure
+**/aws-credential.ts @violet-ts/infrastructure
 
 # infrastructure
 /.github/ @violet-ts/infrastructure
@@ -26,9 +26,8 @@ pnpm-lock.yaml @violet-ts/security
 /pkg/api/.env.example @violet-ts/infrastructure
 /pkg/api/src/utils/envValues.ts @violet-ts/infrastructure
 /pkg/api/src/utils/envValues.ts @violet-ts/infrastructure
-
-/pkg/api/src/service/s3.ts @violet-ts/infrastructure
-/pkg/api/src/service/aws-credential.ts.ts @violet-ts/infrastructure
+**/s3.ts @violet-ts/infrastructure
+**/aws-credential.ts @violet-ts/infrastructure
 
 /pkg/web/public/ @violet-ts/infrastructure
 /pkg/web/next.config.js @violet-ts/infrastructure
