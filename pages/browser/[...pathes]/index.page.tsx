@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Spacer } from '~/components/atoms/Spacer'
 import { Fetching } from '~/components/organisms/Fetching'
 import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
@@ -15,29 +16,29 @@ const Container = styled.div`
   left: 0;
   display: flex;
   width: 100%;
-  height: 100%;
+`
+const WorksView = styled.div`
+  width: 100%;
 `
 
 const MainColumn = styled.div`
   display: flex;
-  flex: 1;
-  flex-direction: column;
-  height: 100%;
 `
 
 const MainContent = styled.div`
   display: flex;
-  height: 100%;
+  flex: 1;
+  flex-direction: column;
+  justify-content: right;
+  height: 100vh;
 `
 
-const RevisionColumn = styled.div`
-  flex: 1;
-  height: 100%;
+const RevisionContent = styled.div`
+  min-width: 100%;
 `
 
 const StreamBarColumn = styled.div`
-  width: 300px;
-  height: 100%;
+  height: 100vh;
 `
 
 const ProjectPage = () => {
@@ -51,28 +52,35 @@ const ProjectPage = () => {
       <LeftColumn>
         <Explorer projectApiData={projectApiData} project={currentProject} />
       </LeftColumn>
-      <MainColumn>
-        <TabBar project={currentProject} projectApiData={projectApiData} />
-        <MainContent>
-          {projectApiData.revisions ? (
-            projectApiData.revisions.length ? (
-              <>
+      <WorksView>
+        {currentProject.openedTabId ? (
+          projectApiData.revisions?.length ? (
+            <MainColumn>
+              <MainContent>
                 <TabBar project={currentProject} projectApiData={projectApiData} />
-                <RevisionColumn>
-                  <Revision />
-                </RevisionColumn>
-                <StreamBarColumn>
-                  <StreamBar project={currentProject} projectApiData={projectApiData} />
-                </StreamBarColumn>
-              </>
-            ) : (
-              <EmptyWork project={currentProject} />
-            )
+                <RevisionContent>
+                  <Revision
+                    projectId={currentProject.id}
+                    workId={currentProject.openedTabId}
+                    revisions={projectApiData.revisions}
+                  />
+                </RevisionContent>
+                <Spacer axis="y" size={8} />
+              </MainContent>
+              <StreamBarColumn>
+                <StreamBar project={currentProject} projectApiData={projectApiData} />
+              </StreamBarColumn>
+            </MainColumn>
           ) : (
-            <div>Choose work</div>
-          )}
-        </MainContent>
-      </MainColumn>
+            <>
+              <TabBar project={currentProject} projectApiData={projectApiData} />
+              <EmptyWork project={currentProject} />
+            </>
+          )
+        ) : (
+          <div>Choose work</div>
+        )}
+      </WorksView>
     </Container>
   )
 }

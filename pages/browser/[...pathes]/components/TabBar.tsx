@@ -11,7 +11,6 @@ import { SelectableStyle } from './SelectableStyle'
 const Container = styled.div`
   display: flex;
   height: 41px;
-  overflow: auto;
   user-select: none;
   border-bottom: 1px solid ${colors.violet}${alphaLevel[2]};
 `

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { Portal } from '~/components/atoms/Portal'
 import { alphaLevel, colors } from '~/utils/constants'
 
 const Container = styled.div.attrs<{ width: number }>((props) => ({
@@ -8,7 +9,7 @@ const Container = styled.div.attrs<{ width: number }>((props) => ({
   width: number
 }>`
   position: relative;
-  height: 100%;
+  height: 100vh;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 
@@ -68,7 +69,11 @@ export const LeftColumn: React.FC = ({ children }) => {
     <Container width={width}>
       {children}
       <ResizeHandle onMouseDown={start} onMouseMove={move} onMouseUp={() => setIsResizing(false)}>
-        {isResizing && <MovableArea />}
+        {isResizing && (
+          <Portal>
+            <MovableArea />
+          </Portal>
+        )}
       </ResizeHandle>
     </Container>
   )

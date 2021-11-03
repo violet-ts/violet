@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
 import type { ApiRevision, BrowserProject, WorkId } from '~/server/types'
-import { fileTypes } from '~/server/utils/constants'
+import { acceptExtensions, fileTypes } from '~/server/utils/constants'
 import { colors, fontSizes } from '~/utils/constants'
-import { FileTypeAlertModal } from './FileTypeAlertModal'
+import { FileTypeAlertModal } from '../FileTypeAlertModal'
 
 const Container = styled.div`
   position: relative;
@@ -52,7 +52,6 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
   const [openAlert, setOpenAlert] = useState(false)
   const dragEnter = () => setDragging(true)
   const dragLeave = () => setDragging(false)
-  const acceptExtensions = fileTypes.map((x) => x.ex).join()
 
   const drop = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) {
@@ -107,7 +106,7 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
             type="file"
             accept={acceptExtensions}
             onDragEnter={dragEnter}
-            onDragEnd={dragLeave}
+            onDragLeave={dragLeave}
             onChange={drop}
           />
         </>
