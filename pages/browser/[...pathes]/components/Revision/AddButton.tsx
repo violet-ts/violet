@@ -47,10 +47,13 @@ const StyledAddButton = styled.label`
 const UploadFile = styled.input`
   display: none;
 `
-export const AddButton = (props: { dropFileWithAddButton: (fileList: FileList) => void }) => {
+export const AddButton = (props: { dropFile: (file: File) => void }) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return
-    props.dropFileWithAddButton(e.target.files)
+    if (e.target.files?.length !== 1) {
+      e.target.value = ''
+      return
+    }
+    props.dropFile(e.target.files[0])
     e.target.value = ''
   }
   return (

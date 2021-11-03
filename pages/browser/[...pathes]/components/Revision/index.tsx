@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { BrowserContext } from '~/contexts/Browser'
 import { useApi } from '~/hooks'
-import type { ApiRevision, BrowserProject, WorkId } from '~/server/types'
+import type { BrowserProject } from '~/server/types'
 import { acceptExtensions, fileTypes } from '~/server/utils/constants'
 import { colors, fontSizes } from '~/utils/constants'
 import { FileTypeAlertModal } from '../FileTypeAlertModal'
@@ -69,27 +69,15 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
       e.target.value = ''
       return
     }
-    dropFile(e.target.files)
+    dropFile(e.target.files[0])
     e.target.value = ''
   }
-  const dropFileWithAddButton = (fileList: FileList) => {
-    if (!fileList) return
-    dropFile(fileList)
-  }
-  const dropFile = (fileList: FileList) => {
-    const targetFileType = fileList[0].type
-    const acxeptFileTypes = fileTypes.map<string>((f) => f.type)
-    acxeptFileTypes.some((t) => t === targetFileType)
-      ? sendFormData(fileList[0])
-      : setOpenAlert(true)
+
+  const dropFile = (file: File) => {
+    fileTypes.some((f) => file.type.includes(f.type)) ? sendFormData(file) : setOpenAlert(true)
     setIsFile(false)
   }
-  const updateRevisions = (revisionRes: { workId: WorkId; revisions: ApiRevision[] }) => {
-    updateApiWholeData(
-      'revisionsList',
-      apiWholeData.revisionsList.map((r) => (r.workId === revisionRes.workId ? revisionRes : r))
-    )
-  }
+
   const sendFormData = async (file: File) => {
     if (!project.openedTabId) return
     const addRevision = await api.browser.works
@@ -103,7 +91,10 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
 
     if (!revisionRes) return
 
-    updateRevisions(revisionRes)
+    updateApiWholeData(
+      'revisionsList',
+      apiWholeData.revisionsList.map((r) => (r.workId === revisionRes.workId ? revisionRes : r))
+    )
   }
   const closeModal = () => {
     setOpenAlert(false)
@@ -114,15 +105,14 @@ export const Revision = ({ project }: { project: BrowserProject }) => {
       <Container onDragEnter={() => setIsFile(true)} onChange={onChange}>
         {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
         {isFile && <Dropper type="file" accept={acceptExtensions} />}
-        {openedTabRevisions &&
-          openedTabRevisions[0]?.revisions.map((_o, i) => (
-            <DisplayWorksArea key={i}>
-              <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
-            </DisplayWorksArea>
-          ))}
+        {openedTabRevisions[0]?.revisions.map((_o, i) => (
+          <DisplayWorksArea key={i}>
+            <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
+          </DisplayWorksArea>
+        ))}
       </Container>
       <RevisionFooter>
-        <AddButton dropFileWithAddButton={dropFileWithAddButton} />
+        <AddButton dropFile={dropFile} />
       </RevisionFooter>
     </>
   )
