@@ -4,13 +4,12 @@ const StyledFileAdd = styled.i`
   box-sizing: border-box;
   float: right;
   width: 12px;
-  height: 14px;
+  height: 13px;
   margin: 1px 0 1px 0;
-  margin-right: 20px;
+  margin-right: 10px;
   overflow: hidden;
   color: #333;
-  visibility: hidden;
-  background: linear-gradient(to bottom, #333 5px, transparent 0) no-repeat 1px 7px/6px 2px;
+  background: linear-gradient(to bottom, #333 5px, transparent 0) no-repeat 1px 6px/6px 2px;
   border: 2px solid transparent;
   border-top: 0;
   border-right: 0;
@@ -30,7 +29,7 @@ const StyledFileAdd = styled.i`
     content: '';
   }
   &::before {
-    top: 5px;
+    top: 4px;
     left: 3px;
     width: 2px;
     background: #333;
@@ -53,11 +52,10 @@ const StyledFolderAdd = styled.i`
   box-sizing: border-box;
   float: right;
   width: 20px;
-  height: 14px;
+  height: 13px;
   margin: 1.5px 0 1px 0;
   margin-right: 10px;
   color: #333;
-  visibility: hidden;
   background: linear-gradient(to left, #333 10px, transparent 0) no-repeat 7px 2px/2px 6px;
   border: 2px solid;
   border-radius: 3px;
@@ -97,25 +95,11 @@ const StyledFolderAdd = styled.i`
   }
 `
 
-const ShowAddArea = styled.span`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  &:hover {
-    ${StyledFileAdd} {
-      visibility: visible;
-    }
-    ${StyledFolderAdd} {
-      visibility: visible;
-    }
-  }
-`
-
 export const AddArea = (props: { addFile: () => void; addFolder: () => void }) => {
   return (
-    <ShowAddArea>
+    <>
       <StyledFileAdd onClick={props.addFile} />
       <StyledFolderAdd onClick={props.addFolder} />
-    </ShowAddArea>
+    </>
   )
 }

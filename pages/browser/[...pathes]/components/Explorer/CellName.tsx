@@ -20,8 +20,24 @@ const Container = styled.a<{ depth: number; selected: boolean; bold?: boolean }>
   ${SelectableStyle};
 `
 
-const Label = styled.div`
+const AddAreaParent = styled.div`
+  display: none;
+  order: 1;
+`
+
+const LabelArea = styled.div`
   position: relative;
+  display: flex;
+  :hover ${AddAreaParent} {
+    display: block;
+  }
+`
+
+const Label = styled.div`
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const Arrow = styled.div<{ opened?: boolean }>`
@@ -130,7 +146,7 @@ export const CellName = (props: {
     <Link href={href}>
       {props.name && (
         <Container depth={pathChunks.length - 1} selected={props.selected} bold={props.bold}>
-          <Label>
+          <LabelArea>
             {props.isWork ? (
               <>
                 <ExtIcon name={props.name} />
@@ -140,11 +156,13 @@ export const CellName = (props: {
               <>
                 <Arrow opened={props.opened} />
                 <Spacer axis="x" size={18} />
-                <AddArea addFile={AddNewFile} addFolder={AddNewFolder} />
+                <AddAreaParent>
+                  <AddArea addFile={AddNewFile} addFolder={AddNewFolder} />
+                </AddAreaParent>
               </>
             )}
-            {props.name}
-          </Label>
+            <Label>{props.name}</Label>
+          </LabelArea>
           {isClickNewAdd && !isFocusing && (
             <NewFileFolderArea depth={pathChunks.length - 1}>
               <form onSubmit={sendNewName}>
