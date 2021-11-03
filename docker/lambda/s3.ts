@@ -1,6 +1,7 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { fromInstanceMetadata } from '@aws-sdk/credential-providers'
 import type { Credentials, Provider } from '@aws-sdk/types'
+import { IncomingMessage } from 'http'
 import {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
@@ -37,14 +38,15 @@ const getS3Client = () => {
 export const getObject = (key: string) =>
   getS3Client()
     .send(new GetObjectCommand({ Bucket: S3_BUCKET, Key: key }))
-    .then((res) => res.Body)
+    .then(({ Body }) => {
+      if (Body instanceof IncomingMessage) return Body
 
-export const putObject = async (key: string, contentType: string, body: Buffer | string) => {
-  const data = await getS3Client()
+      throw new Error('Body of getObject is not IncomingMessage')
+    })
+
+export const putObject = async (key: string, contentType: string, body: Buffer | string) =>
+  getS3Client()
     .send(
       new PutObjectCommand({ Bucket: S3_BUCKET, Key: key, ContentType: contentType, Body: body })
     )
     .then((res) => res.$metadata)
-
-  return data
-}

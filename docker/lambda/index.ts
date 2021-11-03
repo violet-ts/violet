@@ -1,9 +1,8 @@
-import type { Handler } from 'aws-lambda'
+import type { S3Handler } from 'aws-lambda'
 import * as childProcess from 'child_process'
 import * as fs from 'fs'
-import { IncomingMessage } from 'http'
+import type { IncomingMessage } from 'http'
 import { promisify } from 'util'
-import { S3_BUCKET } from './envValues'
 import { getObject, putObject } from './s3'
 
 const CONTENT_TYPES = {
@@ -28,12 +27,8 @@ Object.values(LOCAL_DIR_NAMES).forEach((name) => fs.mkdirSync(name))
 
 const exec = promisify(childProcess.exec)
 
-const downloadFromS3 = async (key: string, filename: string): Promise<{ err: boolean }> => {
-  const data = await getObject(key)
-
-  if (!(data instanceof IncomingMessage)) return { err: true }
-
-  await new Promise<void>((resolve) => {
+const convertS3DataToPdf = (data: IncomingMessage, filename: string) =>
+  new Promise<void>((resolve) => {
     if (filename.endsWith('.pdf')) {
       const writer = fs.createWriteStream(`./${LOCAL_DIR_NAMES.original}/${filename}`)
       writer.on('finish', resolve)
@@ -52,20 +47,13 @@ const downloadFromS3 = async (key: string, filename: string): Promise<{ err: boo
     data.pipe(writer)
   })
 
-  return { err: false }
-}
-
-export const handler: Handler<{
-  Key: string
-}> = async (event): Promise<{ statusCode: 200 | 404 }> => {
-  const key = event.Key.replace(`${S3_BUCKET}/`, '')
+export const handler: S3Handler = async (event) => {
+  const key = decodeURIComponent(event.Records[0].s3.object.key)
   const filename = `${Date.now()}-${key.split('/').pop()}`
-  const { err } = await downloadFromS3(key, filename)
-
-  if (err) return { statusCode: 404 }
-
   const convertedDir = `${LOCAL_DIR_NAMES.converted}/${filename.replace(/\.[^.]+$/, '')}`
   fs.mkdirSync(convertedDir)
+
+  await getObject(key).then((data) => convertS3DataToPdf(data, filename))
 
   for (const ext of FALLBACK_EXTS) {
     await exec(
@@ -107,6 +95,4 @@ export const handler: Handler<{
   )
 
   await putObject(`${convertedPath}/info.json`, 'application/json', JSON.stringify(info))
-
-  return { statusCode: 200 }
 }
