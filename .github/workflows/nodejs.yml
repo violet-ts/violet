@@ -79,5 +79,5 @@ jobs:
               args: [--frozen-lockfile, --prefer-offline]
       - run: |
           sudo systemctl start mysql.service
-          echo "DATABASE_URL=mysql://root:root@localhost:3306/test" > packages/api/prisma/.env
+          echo "DATABASE_URL=mysql://root:root@localhost:3306/test" > pkg/api/prisma/.env
       - run: pnpm run test
