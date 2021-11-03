@@ -10,7 +10,8 @@
     "lint:prettier": "prettier --check \"./**/*.{ts,tsx,js}\" --ignore-path .eslintignore",
     "lint:style": "stylelint '**/*.ts{,x}' -s css-in-js",
     "lint:fix": "pnpm run lint:js -- --fix && prettier --write \"./**/*.{ts,tsx,js}\" --ignore-path .eslintignore &&  pnpm run lint:style -- --fix",
-    "build": "pnpm run generate && pnpm run --filter=./pkg _:build",
+    "build": "pnpm run generate && pnpm run --filter=./pkg --filter=!./pkg/lambda _:build",
+    "build-all": "pnpm run generate && pnpm run --filter=./pkg _:build",
     "start": "pnpm run --parallel --filter=./pkg start",
     "test": "pnpm run generate && pnpm run --filter=./pkg _:test",
     "typecheck": "pnpm run generate && pnpm run --filter=./pkg _:typecheck"
@@ -54,7 +55,6 @@
     "postcss": "^8.3.6",
     "prettier": "^2.3.2",
     "prettier-plugin-organize-imports": "^2.3.3",
-    "source-map-support": "^0.5.20",
     "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-recess-order": "^2.5.0",

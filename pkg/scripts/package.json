@@ -6,6 +6,7 @@
     "_:typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@violet/def": "workspace:*",
     "arg": "^5.0.1",
     "esbuild": "^0.13.10",
     "esbuild-node-externals": "^1.3.0"

@@ -19,25 +19,15 @@ RUN ( \
   && pnpm run generate \
   && pnpm --dir=./pkg/lambda/conv2img run _:build \
   && pnpm install --frozen-lockfile --prod \
-  && rm -rf \
-    .github/ \
-    .vscode/ \
-    docker/ \
-    pkg/web/ \
-    pkg/api/ \
-    pkg/def/ \
-    .eslintignore \
-    .dockerignore \
-    .stylelintignore \
-    .gitignore \
-    .eslintrc.js \
-    CODEOWNERS \
-    docker-compose.yml \
-    pnpm-workspace.yaml \
-    pnpm-lock.yaml \
-    README.md \
-    tsconfig.json \
+  && find . \
+    | grep -v -w '\\.' \
+    | grep -v -E '^\\./package.json' \
+    | grep -v -E '^\\./node_modules/' \
+    | grep -v -E '^\\./pkg/lambda/conv2img/package.json' \
+    | grep -v -E '^\\./pkg/lambda/conv2img/build/' \
+    | grep -v -E "^\\./pkg/lambda/conv2img/node_modules/" \
+    | xargs rm -rf \
   && pnpm store prune \
 )
 
-CMD ["pkg/lambda/conv2img/index.handler"]
+CMD ["pkg/lambda/conv2img/build/index.handler"]

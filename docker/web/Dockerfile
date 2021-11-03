@@ -20,31 +20,19 @@ RUN ( \
   && pnpm run generate \
   && pnpm --dir=./pkg/web run _:build \
   && pnpm install --frozen-lockfile --prod \
-  && rm -rf \
-    .github/ \
-    .vscode/ \
-    docker/ \
-    pkg/def/ \
-    pkg/lambda/ \
-    pkg/web/src/ \
-    pkg/web/.babelrc \
-    pkg/web/jest.config.ts \
-    pkg/web/next-env.d.ts \
-    pkg/web/stylelint.config.js \
-    pkg/api/scripts/ \
-    pkg/api/test/ \
-    pkg/api/aspida.config.js \
-    .eslintignore \
-    .dockerignore \
-    .stylelintignore \
-    .gitignore \
-    .eslintrc.js \
-    CODEOWNERS \
-    docker-compose.yml \
-    pnpm-workspace.yaml \
-    pnpm-lock.yaml \
-    README.md \
-    tsconfig.json \
+  && find . \
+    | grep -v -w '\\.' \
+    | grep -v -E '^\\./package.json' \
+    | grep -v -E '^\\./node_modules/' \
+    | grep -v -E '^\\./pkg/web/package.json' \
+    | grep -v -E '^\\./pkg/web/.babelrc' \
+    | grep -v -E '^\\./pkg/web/next.config.js' \
+    | grep -v -E '^\\./pkg/web/src/' \
+    | grep -v -E '^\\./pkg/web/.next/' \
+    | grep -v -E '^\\./pkg/api/package.json' \
+    | grep -v -E '^\\./pkg/api/prisma/' \
+    | grep -v -E '^\\./pkg/api/node_modules/' \
+    | xargs rm -rf \
   && pnpm store prune \
 )
 

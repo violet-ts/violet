@@ -25,6 +25,7 @@
     "@aws-sdk/credential-providers": "^3.38.0",
     "@aws-sdk/s3-request-presigner": "^3.30.0",
     "@prisma/client": "^3.2.1",
+    "@violet/def": "workspace:*",
     "@violet/scripts": "workspace:*",
     "aspida": "^1.7.1",
     "class-validator": "^0.13.1",
@@ -36,6 +37,7 @@
     "fastify-helmet": "^5.3.2",
     "fastify-multipart": "^4.0.7",
     "prisma": "^3.2.1",
+    "source-map-support": "^0.5.20",
     "uuid": "^8.3.2",
     "velona": "^0.7.0"
   }

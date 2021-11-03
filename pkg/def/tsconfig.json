@@ -9,11 +9,11 @@
     "lib": ["DOM"],
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "baseUrl": ".",
-    "rootDir": ".",
     "strict": true,
     "strictPropertyInitialization": false,
     "target": "ES2015",
     "incremental": true
-  }
+  },
+  "exclude": ["node_modules"],
+  "include": ["**/*.ts"]
 }

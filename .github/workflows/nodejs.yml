@@ -50,7 +50,7 @@ jobs:
               args: [--frozen-lockfile, --prefer-offline]
       - run: pnpm run lint
       - run: pnpm run typecheck
-      - run: pnpm run build
+      - run: pnpm run build-all
   test:
     needs: [cache-pnpm, check]
     name: Test

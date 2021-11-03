@@ -17,31 +17,15 @@ RUN ( \
   && pnpm run generate \
   && pnpm --dir=./pkg/api run _:build \
   && pnpm install --frozen-lockfile --prod \
-  && rm -rf \
-    .github/ \
-    .vscode/ \
-    docker/ \
-    pkg/web/ \
-    pkg/def/ \
-    pkg/api/api/ \
-    pkg/api/src/ \
-    pkg/api/scripts/ \
-    pkg/api/test/ \
-    pkg/api/\$server.ts \
-    pkg/api/aspida.config.js \
-    pkg/api/jest.config.ts \
-    pkg/api/tsconfig.json \
-    .eslintignore \
-    .dockerignore \
-    .stylelintignore \
-    .gitignore \
-    .eslintrc.js \
-    CODEOWNERS \
-    docker-compose.yml \
-    pnpm-workspace.yaml \
-    pnpm-lock.yaml \
-    README.md \
-    tsconfig.json \
+  && find . \
+    | grep -v -w '\\.' \
+    | grep -v -E '^\\./package.json' \
+    | grep -v -E '^\\./node_modules/' \
+    | grep -v -E '^\\./pkg/api/package.json' \
+    | grep -v -E '^\\./pkg/api/build/' \
+    | grep -v -E '^\\./pkg/api/prisma/' \
+    | grep -v -E '^\\./pkg/api/node_modules/' \
+    | xargs rm -rf \
   && pnpm store prune \
 )
 
