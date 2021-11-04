@@ -1,3 +1,5 @@
 {
-  "extends": "@violet/def/tsconfig.json"
+  "extends": "@violet/def/tsconfig.json",
+  "exclude": ["node_modules"],
+  "include": ["**/*.ts"]
 }
