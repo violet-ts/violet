@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "lib": ["DOM"],
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "target": "ES2015",
+    "incremental": true
+  },
+  "exclude": ["node_modules"],
+  "include": ["**/*.ts"]
+}
