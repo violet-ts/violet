@@ -36,7 +36,7 @@ yarn-error.log*
 /pkg/web/src/utils/$path.ts
 
 # api
-/pkg/api/api/**/$*.ts
+$*.ts
 /pkg/api/.upload
 
 # docker
