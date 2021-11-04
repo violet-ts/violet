@@ -100,26 +100,24 @@ export const CellName = (props: {
     openInputField()
     setIsClickNewAddFolder(true)
   }
-  const submitNew = useCallback(
-    async (path: string, name: string, ext?: string) => {
-      const { projectId, deskName } = getProjectInfo(pathChunks)
-      const desks = await api.browser.projects._projectId(projectId).desks.$get()
-      const desk = desks.desks.find((d) => d.name === deskName)
-      if (!desk) return
-      await api.browser.projects
-        ._projectId(projectId)
-        .desks._deskId(desk.id)
-        .post({ body: { path, name, ext } })
-        .catch(onErr)
-      const deskRes = await api.browser.projects._projectId(projectId).desks.$get()
-      updateApiWholeData(
-        'desksList',
-        apiWholeData.desksList.map((d) => (d.projectId === deskRes.projectId ? deskRes : d))
-      )
-      setIsClickNewAdd(false)
-    },
-    [apiWholeData.desksList]
-  )
+  const submitNew = async (path: string, name: string, ext?: string) => {
+    const { projectId, deskName } = getProjectInfo(pathChunks)
+    const desk = apiWholeData.desksList
+      .filter((d) => d.projectId === projectId)[0]
+      .desks.filter((d) => d.name === deskName)[0]
+    await api.browser.projects
+      ._projectId(projectId)
+      .desks._deskId(desk.id)
+      .post({ body: { path, name, ext } })
+      .catch(onErr)
+    const deskRes = await api.browser.projects._projectId(projectId).desks.$get()
+    updateApiWholeData(
+      'desksList',
+      apiWholeData.desksList.map((d) => (d.projectId === deskRes.projectId ? deskRes : d))
+    )
+    console.log('check')
+    setIsClickNewAdd(false)
+  }
   const createNew = () => {
     const pathArray = pathChunks.filter((d) => pathChunks.indexOf(d) > 1)
     if (isClickNewAddFile) {
