@@ -115,7 +115,6 @@ export const CellName = (props: {
       'desksList',
       apiWholeData.desksList.map((d) => (d.projectId === deskRes.projectId ? deskRes : d))
     )
-    console.log('check')
     setIsClickNewAdd(false)
   }
   const createNew = () => {
