@@ -1,42 +1,34 @@
 FROM node:16-buster
 
+RUN ( \
+  npm install -g pnpm@^6.20.1 \
+  && npm uninstall -g yarn \
+)
+
 WORKDIR /app
 
-COPY ./server/package.json /app
-COPY ./server/yarn.lock /app
+COPY . .
+
+ENV API_PORT 80
+ENV NODE_ENV production
 
 RUN ( \
-  yarn install --frozen-lockfile --production=false \
-  && yarn cache clean \
+  pnpm install --frozen-lockfile --prod=false \
+  && pnpm run generate \
+  && pnpm --dir=./pkg/api run _:build \
+  && pnpm install --frozen-lockfile --prod --filter=./pkg/api \
+  && find . -type f \
+    | grep -v -E '^\./package.json' \
+    | grep -v -E '^\./node_modules/' \
+    | grep -v -E '^\./pkg/api/package.json' \
+    | grep -v -E '^\./pkg/api/build/' \
+    | grep -v -E '^\./pkg/api/prisma/' \
+    | grep -v -E '^\./pkg/api/node_modules/' \
+    | xargs rm -f \
+  && rm -rf "$HOME/.pnpm-store" \
 )
 
-COPY ./server /app
-
-RUN ( \
-  yarn exec prisma generate \
-  && yarn exec frourio \
-  && yarn exec webpack -- --mode=production \
-  && rm -rf ./node_modules \
-  && yarn install --frozen-lockfile --production \
-  && yarn cache clean \
-  && rm -rf \
-    api/ \
-    prisma/ \
-    service/ \
-    test/ \
-    types/ \
-    utils/ \
-    validators/ \
-    \$server.ts \
-    .env.example \
-    index.ts \
-    tsconfig.json \
-    webpack.config.js \
-    yarn.lock \
-)
-
-ENV SERVER_PORT=80
-ENV NODE_ENV=production
 EXPOSE 80
 
-ENTRYPOINT ["node", "/app/index.js"]
+ENTRYPOINT []
+CMD ["node", "/app/pkg/api/build/index.js"]
