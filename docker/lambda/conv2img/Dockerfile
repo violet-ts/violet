@@ -1,10 +1,16 @@
 FROM public.ecr.aws/lambda/nodejs:14
 
-RUN yum install -y amazon-linux-extras
+RUN yum install -y amazon-linux-extras-2.0.1-1.amzn2.noarch
 
 RUN amazon-linux-extras enable libreoffice
 
-RUN yum install libreoffice libreoffice-langpack-ja ImageMagick libwebp-tools -y
+RUN ( \
+  yum install -y \
+    1:libreoffice-5.3.6.1-21.amzn2.0.3.x86_64 \
+    1:libreoffice-langpack-ja-5.3.6.1-21.amzn2.0.3.x86_64 \
+    ImageMagick-6.9.10.68-5.amzn2.0.1.x86_64 \
+    libwebp-tools-0.3.0-10.amzn2.x86_64 \
+)
 
 RUN yum clean all
 
