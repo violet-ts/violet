@@ -1,7 +1,7 @@
-import React from 'react'
-import styled from 'styled-components'
 import { acceptExtensions } from '@violet/api/src/utils/constants'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
+import React from 'react'
+import styled from 'styled-components'
 
 const Container = styled.div`
   height: 100%;

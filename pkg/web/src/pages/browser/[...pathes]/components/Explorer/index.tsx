@@ -1,5 +1,3 @@
-import React, { useMemo } from 'react'
-import styled from 'styled-components'
 import type {
   ApiDesk,
   BrowserDesk,
@@ -11,6 +9,8 @@ import type {
 } from '@violet/api/src/types'
 import { getWorkFullName } from '@violet/web/src//utils'
 import { fontSizes } from '@violet/web/src//utils/constants'
+import React, { useMemo } from 'react'
+import styled from 'styled-components'
 import { CellName } from './CellName'
 import { DirectoryCell } from './DirectoryCell'
 import { WorkCell } from './WorkCell'

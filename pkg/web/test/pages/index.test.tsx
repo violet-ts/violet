@@ -1,10 +1,10 @@
 import aspida from '@aspida/fetch'
+import api from '@violet/api/api/$api'
+import Home from '@violet/web/src/pages/index.page'
 import type { FastifyInstance } from 'fastify'
 import Fastify from 'fastify'
 import cors from 'fastify-cors'
 import React from 'react'
-import Home from '@violet/web/src/pages/index.page'
-import api from '@violet/api/api/$api'
 import { fireEvent, render } from '../testUtils'
 
 const apiClient = api(aspida(undefined, { baseURL: process.env.API_BASE_PATH }))

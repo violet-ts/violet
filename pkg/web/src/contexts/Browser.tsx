@@ -1,5 +1,5 @@
-import { createContext, useCallback, useState } from 'react'
 import type { BrowserApiWholeData, BrowserProject } from '@violet/api/src/types'
+import { createContext, useCallback, useState } from 'react'
 
 export const BrowserContext = createContext({
   projects: [] as BrowserProject[],

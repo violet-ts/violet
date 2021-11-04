@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
-import styled from 'styled-components'
 import { Portal } from '@violet/web/src/components/atoms/Portal'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
 
 const Container = styled.div.attrs<{ width: number }>((props) => ({
   style: { width: `${props.width}px` },

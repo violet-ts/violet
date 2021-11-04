@@ -1,6 +1,6 @@
-import styled from 'styled-components'
 import { Portal } from '@violet/web/src/components/atoms/Portal'
 import { alphaLevel, colors, fontSizes } from '@violet/web/src/utils/constants'
+import styled from 'styled-components'
 
 const Container = styled.div`
   position: fixed;

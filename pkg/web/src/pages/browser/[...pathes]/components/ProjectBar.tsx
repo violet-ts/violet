@@ -1,8 +1,8 @@
+import type { BrowserProject, ProjectId } from '@violet/api/src/types'
+import { alphaLevel, colors, fontSizes } from '@violet/web/src//utils/constants'
+import { pagesPath } from '@violet/web/src/utils/$path'
 import Link from 'next/link'
 import styled from 'styled-components'
-import type { BrowserProject, ProjectId } from '@violet/api/src/types'
-import { pagesPath } from '@violet/web/src/utils/$path'
-import { alphaLevel, colors, fontSizes } from '@violet/web/src//utils/constants'
 
 const Container = styled.div`
   display: flex;

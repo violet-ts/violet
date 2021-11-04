@@ -19,7 +19,10 @@
   "prettier": {
     "printWidth": 100,
     "semi": false,
-    "singleQuote": true
+    "singleQuote": true,
+    "pluginSearchDirs": [
+      "."
+    ]
   },
   "devDependencies": {
     "@testing-library/react": "^12.0.0",

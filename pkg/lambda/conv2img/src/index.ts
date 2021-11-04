@@ -1,9 +1,8 @@
-import 'source-map-support/register'
-
 import type { S3Handler } from 'aws-lambda'
 import * as childProcess from 'child_process'
 import * as fs from 'fs'
 import type { IncomingMessage } from 'http'
+import 'source-map-support/register'
 import { promisify } from 'util'
 import { getObject, putObject } from './s3'
 

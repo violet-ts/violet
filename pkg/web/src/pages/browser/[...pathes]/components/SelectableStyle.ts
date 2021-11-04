@@ -1,5 +1,5 @@
-import { css } from 'styled-components'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
+import { css } from 'styled-components'
 
 export type SelectableStyleProps = { selected: boolean }
 

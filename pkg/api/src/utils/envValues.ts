@@ -1,6 +1,6 @@
-import * as path from 'path'
-import dotenv from 'dotenv'
 import { extractEnv } from '@violet/def/envValues'
+import dotenv from 'dotenv'
+import * as path from 'path'
 
 dotenv.config({
   path: path.resolve(process.cwd(), '.env'),

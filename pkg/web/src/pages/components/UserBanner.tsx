@@ -1,6 +1,6 @@
+import { AuthContext } from '@violet/web/src/contexts/Auth'
 import { useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import { AuthContext } from '@violet/web/src/contexts/Auth'
 
 const Container = styled.div`
   position: fixed;

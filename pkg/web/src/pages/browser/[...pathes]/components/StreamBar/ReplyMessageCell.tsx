@@ -1,7 +1,7 @@
+import type { ApiReply } from '@violet/api/src/types'
+import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import React from 'react'
 import styled from 'styled-components'
-import { Spacer } from '@violet/web/src/components/atoms/Spacer'
-import type { ApiReply } from '@violet/api/src/types'
 import { MessageHeader } from './MessageHeader'
 
 const Container = styled.div`

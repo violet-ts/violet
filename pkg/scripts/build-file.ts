@@ -1,9 +1,9 @@
 import arg from 'arg'
-import * as fs from 'fs'
-import * as path from 'path'
 import type { WatchMode } from 'esbuild'
 import { build } from 'esbuild'
 import { nodeExternalsPlugin } from 'esbuild-node-externals'
+import * as fs from 'fs'
+import * as path from 'path'
 
 interface Params {
   from: string

@@ -1,5 +1,5 @@
-import styled from 'styled-components'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
+import styled from 'styled-components'
 
 const Container = styled.span<{ color: string }>`
   display: inline-block;

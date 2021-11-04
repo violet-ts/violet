@@ -1,10 +1,10 @@
-import Link from 'next/link'
-import styled from 'styled-components'
-import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import type { BrowserProject, ProjectApiData } from '@violet/api/src/types'
+import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { getWorkFullName } from '@violet/web/src/utils'
 import { pagesPath } from '@violet/web/src/utils/$path'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
+import Link from 'next/link'
+import styled from 'styled-components'
 import { ExtIcon } from './ExtIcon'
 import { SelectableStyle } from './SelectableStyle'
 

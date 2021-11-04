@@ -1,8 +1,8 @@
 import useAspidaSWR from '@aspida/swr'
-import { useContext, useEffect } from 'react'
+import type { BrowserProject, ProjectId } from '@violet/api/src/types'
 import { BrowserContext } from '@violet/web/src//contexts/Browser'
 import { useApi } from '@violet/web/src//hooks'
-import type { BrowserProject, ProjectId } from '@violet/api/src/types'
+import { useContext, useEffect } from 'react'
 
 export const useFetch = (
   projectId: ProjectId | undefined,

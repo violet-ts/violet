@@ -1,8 +1,3 @@
-import type { FormEvent } from 'react'
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
-import { BrowserContext } from '@violet/web/src/contexts/Browser'
-import { useApi } from '@violet/web/src/hooks'
 import type {
   ApiMessage,
   BrowserProject,
@@ -10,7 +5,12 @@ import type {
   ProjectApiData,
   RevisionId,
 } from '@violet/api/src/types'
+import { BrowserContext } from '@violet/web/src/contexts/Browser'
+import { useApi } from '@violet/web/src/hooks'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
+import type { FormEvent } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
 import { MessageCell } from './MessageCell'
 
 const Container = styled.div`

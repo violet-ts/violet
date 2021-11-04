@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
 import { Spacer } from '@violet/web/src//components/atoms/Spacer'
 import { alphaLevel, colors } from '@violet/web/src//utils/constants'
+import React, { useState } from 'react'
+import styled from 'styled-components'
 import { MessageIcon } from './MessageIcon'
 
 const Container = styled.div`

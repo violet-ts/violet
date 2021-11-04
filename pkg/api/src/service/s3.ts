@@ -1,4 +1,3 @@
-import type { S3SaveWorksPath } from '@violet/api/src/types'
 import {
   CreateBucketCommand,
   GetObjectCommand,
@@ -7,6 +6,7 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import type { S3SaveWorksPath } from '@violet/api/src/types'
 import type { MultipartFile } from 'fastify-multipart'
 import { depend } from 'velona'
 import envValues from '../utils/envValues'
