@@ -4,6 +4,7 @@ import { useApi } from '@violet/web/src/hooks'
 import { getProjectInfo } from '@violet/web/src/utils'
 import { pagesPath } from '@violet/web/src/utils/$path'
 import { colors, forceToggleHash } from '@violet/web/src/utils/constants'
+import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import type { ChangeEvent, FormEvent } from 'react'
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
@@ -74,8 +75,8 @@ export const CellName = (props: {
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
-  const [isClickNewAddFile, setIsClickNewAddFile] = useState(false)
-  const [isClickNewAddFolder, setIsClickNewAddFolder] = useState(false)
+  const { asPath, replace } = useRouter()
+  const [editType, setEditType] = useState<'file' | 'folder'>('file')
   useEffect(() => {
     inputElement.current?.focus()
   }, [inputElement.current])
@@ -93,12 +94,12 @@ export const CellName = (props: {
 
   const AddNewFile = () => {
     openInputField()
-    setIsClickNewAddFile(true)
+    setEditType('file')
   }
 
   const AddNewFolder = () => {
     openInputField()
-    setIsClickNewAddFolder(true)
+    setEditType('folder')
   }
   const submitNew = async (path: string, name: string, ext?: string) => {
     const { projectId, deskName } = getProjectInfo(pathChunks)
@@ -115,22 +116,20 @@ export const CellName = (props: {
       'desksList',
       apiWholeData.desksList.map((d) => (d.projectId === deskRes.projectId ? deskRes : d))
     )
+    replace(`${asPath}/${label}`)
     setIsClickNewAdd(false)
   }
   const createNew = () => {
     const pathArray = pathChunks.filter((d) => pathChunks.indexOf(d) > 1)
-    if (isClickNewAddFile) {
+    if (editType === 'file') {
       const path = `/${pathArray.join('/')}`
       const name = label.substring(0, label.lastIndexOf('.'))
       const ext = label.substring(label.lastIndexOf('.') + 1, label.length)
       submitNew(path, name, ext)
-    }
-    if (isClickNewAddFolder) {
+    } else {
       const path = `/${pathArray.join('/')}/${label}`
       submitNew(path, '')
     }
-    setIsClickNewAddFile(false)
-    setIsClickNewAddFolder(false)
   }
   const sendNewName = (e: FormEvent) => {
     e.preventDefault()
