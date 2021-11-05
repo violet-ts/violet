@@ -1,5 +1,5 @@
 import { createReply } from '@violet/api/src/service/streamBar'
-import type { MessageId } from '@violet/api/src/types'
+import type { MessageId } from '@violet/api/types'
 import { defineController } from './$relay'
 
 export default defineController(() => ({

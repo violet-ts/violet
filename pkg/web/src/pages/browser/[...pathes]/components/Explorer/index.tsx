@@ -6,7 +6,7 @@ import type {
   BrowserWork,
   OpenedFullPathDict,
   ProjectApiData,
-} from '@violet/api/src/types'
+} from '@violet/api/types'
 import { getWorkFullName } from '@violet/web/src//utils'
 import { fontSizes } from '@violet/web/src//utils/constants'
 import React, { useMemo } from 'react'

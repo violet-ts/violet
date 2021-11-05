@@ -6,7 +6,7 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import type { S3SaveWorksPath } from '@violet/api/src/types'
+import type { S3SaveWorksPath } from '@violet/api/types'
 import type { MultipartFile } from 'fastify-multipart'
 import { depend } from 'velona'
 import { fileTypes } from '../utils/constants'

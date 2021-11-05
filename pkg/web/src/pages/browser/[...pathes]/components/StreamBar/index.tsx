@@ -4,7 +4,7 @@ import type {
   MessageId,
   ProjectApiData,
   RevisionId,
-} from '@violet/api/src/types'
+} from '@violet/api/types'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'

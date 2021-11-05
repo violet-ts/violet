@@ -1,5 +1,5 @@
 import useAspidaSWR from '@aspida/swr'
-import type { BrowserProject, ProjectId } from '@violet/api/src/types'
+import type { BrowserProject, ProjectId } from '@violet/api/types'
 import { BrowserContext } from '@violet/web/src//contexts/Browser'
 import { useApi } from '@violet/web/src//hooks'
 import { useContext, useEffect } from 'react'

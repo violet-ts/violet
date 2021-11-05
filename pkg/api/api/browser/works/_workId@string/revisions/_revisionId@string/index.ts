@@ -1,4 +1,4 @@
-import type { ApiMessage, RevisionId } from '@violet/api/src/types'
+import type { ApiMessage, RevisionId } from '@violet/api/types'
 
 export type Methods = {
   get: {
