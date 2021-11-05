@@ -26,7 +26,7 @@ const LOCAL_DIR_NAMES = {
 
 Object.values(LOCAL_DIR_NAMES).forEach((name) => fs.mkdirSync(name))
 
-const exec = promisify(childProcess.exec)
+const execFile = promisify(childProcess.execFile)
 
 const convertS3DataToPdf = (data: IncomingMessage, filename: string) =>
   new Promise<void>((resolve) => {
@@ -35,9 +35,19 @@ const convertS3DataToPdf = (data: IncomingMessage, filename: string) =>
       false: {
         dirname: LOCAL_DIR_NAMES.tmp,
         onFinish: () =>
-          exec(
-            `libreoffice --nolockcheck --nologo --headless --norestore --language=ja --nofirststartwizard --convert-to pdf --outdir "${LOCAL_DIR_NAMES.original}" "${LOCAL_DIR_NAMES.tmp}/${filename}"`
-          ).then(() => resolve()),
+          execFile('libreoffice', [
+            '--nolockcheck',
+            '--nologo',
+            '--headless',
+            '--norestore',
+            '--language=ja',
+            '--nofirststartwizard',
+            '--convert-to',
+            'pdf',
+            '--outdir',
+            LOCAL_DIR_NAMES.original,
+            `${LOCAL_DIR_NAMES.tmp}/${filename}`,
+          ]).then(() => resolve()),
       },
     }[`${filename.endsWith('.pdf')}`]
 
@@ -55,11 +65,18 @@ export const handler: S3Handler = async (event) => {
   await getObject(key).then((data) => convertS3DataToPdf(data, filename))
 
   for (const ext of FALLBACK_EXTS) {
-    await exec(
-      `convert -density 400 -resize 1280x1280 -alpha remove -quality 85 "${
-        LOCAL_DIR_NAMES.original
-      }/${filename.replace(/[^.]+$/, 'pdf')}" "${convertedDir}/%d.${ext}"`
-    )
+    await execFile('convert', [
+      '-density',
+      '400',
+      '-resize',
+      '1280x1280',
+      '-alpha',
+      'remove',
+      '-quality',
+      '85',
+      `${LOCAL_DIR_NAMES.original}/${filename.replace(/[^.]+$/, 'pdf')}`,
+      `${convertedDir}/%d.${ext}`,
+    ])
   }
 
   // Todo: mozjpeg
@@ -75,9 +92,10 @@ export const handler: S3Handler = async (event) => {
   }
 
   for (let i = 0; i < info.fallbackImageExts.length; i += 1) {
-    await exec(
-      `convert "${convertedDir}/${i}.${info.fallbackImageExts[i]}" "${convertedDir}/${i}.webp"`
-    )
+    await execFile('convert', [
+      `${convertedDir}/${i}.${info.fallbackImageExts[i]}`,
+      `${convertedDir}/${i}.webp`,
+    ])
   }
 
   const convertedPath = key.replace(/\/original\/[^/]+$/, '/converted')
