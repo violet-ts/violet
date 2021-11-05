@@ -26,30 +26,38 @@ const LOCAL_DIR_NAMES = {
 
 Object.values(LOCAL_DIR_NAMES).forEach((name) => fs.mkdirSync(name))
 
-const exec = promisify(childProcess.exec)
+const execFile = promisify(childProcess.execFile)
 
 const convertS3DataToPdf = (data: IncomingMessage, filename: string) =>
   new Promise<void>((resolve) => {
-    if (filename.endsWith('.pdf')) {
-      const writer = fs.createWriteStream(`./${LOCAL_DIR_NAMES.original}/${filename}`)
-      writer.on('finish', resolve)
-      data.pipe(writer)
-      return
-    }
+    const { dirname, onFinish } = {
+      true: { dirname: LOCAL_DIR_NAMES.original, onFinish: resolve },
+      false: {
+        dirname: LOCAL_DIR_NAMES.tmp,
+        onFinish: () =>
+          execFile('libreoffice', [
+            '--nolockcheck',
+            '--nologo',
+            '--headless',
+            '--norestore',
+            '--language=ja',
+            '--nofirststartwizard',
+            '--convert-to',
+            'pdf',
+            '--outdir',
+            LOCAL_DIR_NAMES.original,
+            `${LOCAL_DIR_NAMES.tmp}/${filename}`,
+          ]).then(() => resolve()),
+      },
+    }[`${filename.endsWith('.pdf')}`]
 
-    const writer = fs.createWriteStream(`./${LOCAL_DIR_NAMES.tmp}/${filename}`)
-    writer.on('finish', async () => {
-      await exec(
-        `libreoffice --nolockcheck --nologo --headless --norestore --language=ja --nofirststartwizard --convert-to png --outdir "${LOCAL_DIR_NAMES.original}" "${LOCAL_DIR_NAMES.tmp}/${filename}"`
-      )
-
-      resolve()
-    })
+    const writer = fs.createWriteStream(`./${dirname}/${filename}`)
+    writer.on('finish', onFinish)
     data.pipe(writer)
   })
 
 export const handler: S3Handler = async (event) => {
-  const key = decodeURIComponent(event.Records[0].s3.object.key)
+  const key = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, ' ')) // ref: https://docs.aws.amazon.com/lambda/latest/dg/with-s3-tutorial.html#with-s3-tutorial-create-function-code
   const filename = `${Date.now()}-${key.split('/').pop()}`
   const convertedDir = `${LOCAL_DIR_NAMES.converted}/${filename.replace(/\.[^.]+$/, '')}`
   fs.mkdirSync(convertedDir)
@@ -57,11 +65,18 @@ export const handler: S3Handler = async (event) => {
   await getObject(key).then((data) => convertS3DataToPdf(data, filename))
 
   for (const ext of FALLBACK_EXTS) {
-    await exec(
-      `convert -density 400 -resize 1280x1280 -quality 85 ${
-        LOCAL_DIR_NAMES.original
-      }/${filename.replace(/[^.]+$/, 'pdf')} ${convertedDir}/%d.${ext}`
-    )
+    await execFile('convert', [
+      '-density',
+      '400',
+      '-resize',
+      '1280x1280',
+      '-alpha',
+      'remove',
+      '-quality',
+      '85',
+      `${LOCAL_DIR_NAMES.original}/${filename.replace(/[^.]+$/, 'pdf')}`,
+      `${convertedDir}/%d.${ext}`,
+    ])
   }
 
   // Todo: mozjpeg
@@ -77,12 +92,14 @@ export const handler: S3Handler = async (event) => {
   }
 
   for (let i = 0; i < info.fallbackImageExts.length; i += 1) {
-    await exec(
-      `convert ${convertedDir}/${i}.${info.fallbackImageExts[i]} ${convertedDir}/${i}.webp`
-    )
+    await execFile('convert', [
+      `${convertedDir}/${i}.${info.fallbackImageExts[i]}`,
+      `${convertedDir}/${i}.webp`,
+    ])
   }
 
   const convertedPath = key.replace(/\/original\/[^/]+$/, '/converted')
+
   await Promise.all(
     info.fallbackImageExts.flatMap((ext, i) =>
       (['webp', ext] as const).map((e) =>

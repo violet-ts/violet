@@ -9,6 +9,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import type { S3SaveWorksPath } from '@violet/api/src/types'
 import type { MultipartFile } from 'fastify-multipart'
 import { depend } from 'velona'
+import { fileTypes } from '../utils/constants'
 import envValues from '../utils/envValues'
 import { getCredentials } from './aws-credential'
 const { S3_BUCKET, S3_ENDPOINT, S3_REGION } = envValues
@@ -67,6 +68,7 @@ export const sendNewWork = depend(
     const uploadParams = {
       Bucket: S3_BUCKET,
       Key: props.path,
+      ContentType: fileTypes.find((f) => props.uploadFile.filename.endsWith(f.ex))?.type,
       Body: await props.uploadFile.toBuffer(),
     }
 
