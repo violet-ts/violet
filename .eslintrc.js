@@ -28,6 +28,7 @@ module.exports = {
     },
   },
   rules: {
+    'prettier/prettier': ['error'],
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': [2, { ignore: ['children'] }],
     complexity: ['error', 5],
