@@ -76,7 +76,7 @@ export const CellName = (props: {
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
   const { asPath, replace } = useRouter()
-  const [editType, setEditType] = useState<'file' | 'folder'>('file')
+  const [editingType, setEditingType] = useState<'file' | 'folder'>('file')
   useEffect(() => {
     inputElement.current?.focus()
   }, [inputElement.current])
@@ -94,12 +94,12 @@ export const CellName = (props: {
 
   const AddNewFile = () => {
     openInputField()
-    setEditType('file')
+    setEditingType('file')
   }
 
   const AddNewFolder = () => {
     openInputField()
-    setEditType('folder')
+    setEditingType('folder')
   }
   const submitNew = async (path: string, name: string, ext?: string) => {
     const { projectId, deskName } = getProjectInfo(pathChunks)
@@ -121,7 +121,7 @@ export const CellName = (props: {
   }
   const createNew = () => {
     const pathArray = pathChunks.filter((d) => pathChunks.indexOf(d) > 1)
-    if (editType === 'file') {
+    if (editingType === 'file') {
       const path = `/${pathArray.join('/')}`
       const name = label.substring(0, label.lastIndexOf('.'))
       const ext = label.substring(label.lastIndexOf('.') + 1, label.length)
