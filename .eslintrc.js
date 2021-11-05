@@ -9,7 +9,7 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'prettier',
   ],
-  plugins: ['@typescript-eslint', 'react', 'prettier', 'import'],
+  plugins: ['@typescript-eslint', 'react', 'import'],
   parser: '@typescript-eslint/parser',
   env: {
     browser: true,
@@ -28,7 +28,6 @@ module.exports = {
     },
   },
   rules: {
-    'prettier/prettier': ['error'],
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': [2, { ignore: ['children'] }],
     complexity: ['error', 5],
