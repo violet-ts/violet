@@ -1,0 +1,10 @@
+**/node_modules/
+**/.next/
+**/dist/
+**/out/
+**/build/
+**/docker/
+**/prisma/migration/
+**/$*.ts
+/pkg/*
+!/pkg/web

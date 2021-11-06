@@ -1,0 +1,28 @@
+{
+  "name": "@violet/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "cross-env NODE_ENV=production next start",
+    "_:dev": "run-p _:dev:*",
+    "_:dev:next": "next dev -p 3000",
+    "_:dev:pathpida": "pathpida --enableStatic --watch",
+    "_:generate": "pathpida --enableStatic",
+    "_:build": "next build",
+    "_:test": "jest",
+    "_:typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@aspida/fetch": "^1.7.1",
+    "@aspida/swr": "^1.7.1",
+    "@violet/api": "workspace:*",
+    "class-validator": "^0.13.1",
+    "dayjs": "^1.10.7",
+    "next": "^11.1.0",
+    "next-transpile-modules": "^9.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "styled-components": "^5.3.1",
+    "swr": "^1.0.0"
+  }
+}

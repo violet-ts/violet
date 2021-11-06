@@ -1,15 +1,35 @@
 name: Node.js CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  test:
-    name: Test
+  cache-pnpm:
+    name: Cache Pnpm
     runs-on: ubuntu-latest
-    env:
-      SERVER_PORT: 8080
-      API_ORIGIN: http://localhost:8080
-      BASE_PATH: /api
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --prefer-offline]
+  check:
+    needs: [cache-pnpm]
+    name: Check
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: setup Node.js
@@ -17,22 +37,47 @@ jobs:
         with:
           node-version: 16
       - uses: actions/cache@v2
-        id: client-yarn-cache
         with:
-          path: 'node_modules'
-          key: client-yarn-${{ hashFiles('yarn.lock') }}
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --prefer-offline]
+      - run: pnpm run lint
+      - run: pnpm run typecheck
+      - run: pnpm run build-all
+  test:
+    needs: [cache-pnpm, check]
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      API_PORT: 8080
+      API_ORIGIN: http://localhost:8080
+      API_BASE_PATH: /api
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
       - uses: actions/cache@v2
-        id: server-yarn-cache
         with:
-          path: 'server/node_modules'
-          key: server-yarn-${{ hashFiles('server/yarn.lock') }}
-      - run: yarn install
-        if: steps.client-yarn-cache.outputs.cache-hit != 'true'
-      - run: yarn install --cwd server
-        if: steps.server-yarn-cache.outputs.cache-hit != 'true'
-      - run: yarn lint
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --prefer-offline]
       - run: |
           sudo systemctl start mysql.service
-          echo "DATABASE_URL=mysql://root:root@localhost:3306/test" > server/prisma/.env
-      - run: yarn typecheck
-      - run: yarn test
+          echo "DATABASE_URL=mysql://root:root@localhost:3306/test" > pkg/api/prisma/.env
+      - run: pnpm run test
