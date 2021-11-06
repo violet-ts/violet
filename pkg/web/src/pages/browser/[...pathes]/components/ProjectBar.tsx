@@ -6,6 +6,7 @@ import type { ChangeEvent, FormEvent } from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { AddProject } from './AddProject'
+import { FileTypeAlertModal } from './FileTypeAlertModal'
 
 const Container = styled.div`
   display: flex;
@@ -58,6 +59,7 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
   const [isFocusing, setIsFocusing] = useState(false)
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const inputElement = useRef<HTMLInputElement>(null)
+  const [openInputForm, setOpenInputForm] = useState(false)
   useEffect(() => {
     inputElement.current?.focus()
   }, [inputElement.current, isClickAddProject])
@@ -67,12 +69,18 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
     }
     setIsFocusing(false)
     setIsClickAddProject(true)
+    setOpenInputForm(true)
   }
   const sendProjectName = (e: FormEvent) => {
     e.preventDefault()
     setIsFocusing(!label)
     setLabel('')
   }
+
+  const closeModal = () => {
+    setOpenInputForm(false)
+  }
+
   return (
     <Container>
       {props.projects.map((p) => (
@@ -87,12 +95,27 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
         </Link>
       ))}
       <AddProject addProject={addNewProject} />
+
       {isClickAddProject && !isFocusing && (
-        <InputFormProject>
-          <form onSubmit={sendProjectName}>
-            <input ref={inputElement} type="text" onBlur={sendProjectName} onChange={inputLabel} />
-          </form>
-        </InputFormProject>
+        <>
+          {openInputForm && (
+            <FileTypeAlertModal
+              closeModal={closeModal}
+              message={'プロジェクト名を入力してください'}
+              type={'input'}
+            />
+          )}
+          {/* <InputFormProject>
+            <form onSubmit={sendProjectName}>
+              <input
+                ref={inputElement}
+                type="text"
+                onBlur={sendProjectName}
+                onChange={inputLabel}
+              />
+            </form>
+          </InputFormProject> */}
+        </>
       )}
     </Container>
   )

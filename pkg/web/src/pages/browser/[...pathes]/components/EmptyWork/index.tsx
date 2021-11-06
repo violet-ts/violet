@@ -96,7 +96,11 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
   return (
     <Container>
       {openAlert ? (
-        <FileTypeAlertModal closeModal={closeModal} message={'UnSupported File Format!'} />
+        <FileTypeAlertModal
+          closeModal={closeModal}
+          message={'UnSupported File Format!'}
+          type={'text'}
+        />
       ) : (
         <>
           <DraggingPanel dragging={dragging}>

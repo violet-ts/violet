@@ -105,7 +105,11 @@ export const Revision = (props: {
         onChange={onChange}
       >
         {openAlert && (
-          <FileTypeAlertModal closeModal={closeModal} message={'UnSupported File Format!'} />
+          <FileTypeAlertModal
+            closeModal={closeModal}
+            message={'UnSupported File Format!'}
+            type={'text'}
+          />
         )}
         {isFile && <Dropper type="file" accept={acceptExtensions} />}
         {openedTabRevisions.map((_o, i) => (

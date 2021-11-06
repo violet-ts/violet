@@ -1,5 +1,6 @@
 import { Portal } from '@violet/web/src/components/atoms/Portal'
 import { alphaLevel, colors, fontSizes } from '@violet/web/src/utils/constants'
+import { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -25,6 +26,7 @@ const AlertMessage = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
+  white-space: nowrap;
   transform: translate(-50%, -50%);
 `
 
@@ -41,13 +43,50 @@ const CloseButton = styled.button`
   border: none;
   border-radius: 16px;
 `
-export const FileTypeAlertModal = (props: { closeModal: () => void; message: string }) => {
+
+const InputFormProject = styled.div`
+  position: absolute;
+  top: 80px;
+  left: 35%;
+`
+
+export const FileTypeAlertModal = (props: {
+  closeModal: () => void
+  message: string
+  type: 'text' | 'input'
+}) => {
+  const inputElement = useRef<HTMLInputElement>(null)
+  const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
+  const [label, setLabel] = useState('')
+  useEffect(() => {
+    if (inputElement.current) {
+      inputElement.current.focus()
+    }
+  }, [inputElement.current])
+  const sendProjectName = (e: FormEvent) => {
+    e.preventDefault()
+    props.closeModal()
+  }
   return (
     <Portal>
-      <Container onClick={props.closeModal}>
+      <Container>
         <Modal open>
           <AlertMessage>{props.message}</AlertMessage>
-          <CloseButton> OK </CloseButton>
+          {props.type === 'input' ? (
+            <InputFormProject>
+              <form onSubmit={sendProjectName}>
+                <input
+                  ref={inputElement}
+                  onBlur={sendProjectName}
+                  type="text"
+                  onChange={inputLabel}
+                />
+              </form>
+            </InputFormProject>
+          ) : (
+            <></>
+          )}
+          <CloseButton onClick={props.closeModal}> OK </CloseButton>
         </Modal>
       </Container>
     </Portal>
