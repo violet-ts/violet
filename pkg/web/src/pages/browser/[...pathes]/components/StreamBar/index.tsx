@@ -1,6 +1,9 @@
 import type {
   ApiMessage,
   ApiRevision,
+  BrowserMessage,
+  BrowserReply,
+  BrowserRevision,
   MessageId,
   ProjectId,
   RevisionId,
@@ -9,7 +12,7 @@ import type {
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { MessageCell } from './MessageCell'
 
@@ -17,7 +20,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
-  height: 100vh;
+  height: calc(100vh - 40px);
   border-left: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const StreamBox = styled.div`
@@ -85,7 +88,30 @@ export const StreamBar = (props: {
   const { api, onErr } = useApi()
   const [content, setMessage] = useState('')
   const scrollBottomRef = useRef<HTMLDivElement>(null)
-
+  const getMessgaesByMessageIds = (messageId: MessageId) => {
+    const message = props.messages?.filter((m) => m.id === messageId)
+    if (!(message?.length === 1)) return
+    const messageRes: BrowserMessage = {
+      id: message[0].id,
+      content: message[0].content,
+      createdAt: message[0].createdAt,
+      userName: message[0].userName,
+      replys: message[0].replys.map<BrowserReply>(({ id, content, createdAt, userName }) => ({
+        id,
+        content,
+        createdAt,
+        userName,
+      })),
+    }
+    return messageRes
+  }
+  const messagesByRevisionId = useMemo(() => {
+    return props.revisions.map<BrowserRevision>(({ id, messageIds }) => ({
+      id,
+      editions: [],
+      messages: messageIds.map((id) => getMessgaesByMessageIds(id)),
+    }))
+  }, [props.revisions, props.messages])
   const userName = 'Charles M Schultz'
   const submitMessage = useCallback(
     async (id: RevisionId) => {
@@ -111,7 +137,6 @@ export const StreamBar = (props: {
   useEffect(() => {
     scrollBottomRef?.current?.scrollIntoView()
   }, [props.messages?.length])
-
   const updateMessage = (messageRes: { revisionId: RevisionId; messages: ApiMessage[] }) => {
     updateApiWholeData(
       'messagesList',
@@ -122,7 +147,6 @@ export const StreamBar = (props: {
         : [...apiWholeData.messagesList, messageRes]
     )
   }
-
   const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
       if (!content) return
@@ -144,32 +168,16 @@ export const StreamBar = (props: {
     },
     [content]
   )
-  const getRevisionMessagesById = (
-    messages: ApiMessage[],
-    messageIds: {
-      id: MessageId
-    }[]
-  ) => {
-    const ids = messageIds.map((m) => m.id)
-    return messages.filter((message) => ids.map((id) => id === message.id))
-  }
-
   return (
     <div>
-      {props.revisions.map((revision, i) => (
+      {messagesByRevisionId.map((revision, i) => (
         <>
           <Container key={i}>
             <StreamBox>
-              {revision.messages &&
-                props.messages &&
-                getRevisionMessagesById(props.messages, revision.messages).map((d, i) => (
-                  <MessageCell
-                    key={i}
-                    revision={revision}
-                    message={d}
-                    replyMessage={replyMessage}
-                  />
-                ))}
+              {revision.messages.map(
+                (message, i) =>
+                  message && <MessageCell key={i} message={message} replyMessage={replyMessage} />
+              )}
               <div ref={scrollBottomRef} />
             </StreamBox>
             <MessageBox>

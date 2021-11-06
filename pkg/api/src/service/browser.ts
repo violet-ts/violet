@@ -6,7 +6,7 @@ import type {
   ApiRevision,
   ApiWork,
   DeskId,
-  EditionId,
+  MessageId,
   ProjectId,
   RevisionId,
   WorkId,
@@ -71,17 +71,15 @@ export const createWork = async (
 export const getRevisions = async (workId: WorkId) => {
   const dbRevision = await prisma.revision.findMany({
     where: { workId },
-    include: { editions: { orderBy: { createdAt: 'asc' } } },
+    include: { message: { orderBy: { createdAt: 'asc' } } },
     orderBy: { createdAt: 'asc' },
   })
   if (!dbRevision) return
   const revisions = dbRevision.map<ApiRevision>((r) => ({
     ...r,
     id: r.revisionId as RevisionId,
-    editions: r.editions.map((e) => ({
-      id: e.editionId as EditionId,
-    })),
-    messages: [],
+    editionIds: [],
+    messageIds: r.message.map((m) => m.messageId as MessageId),
   }))
   return { workId, revisions }
 }
@@ -96,8 +94,8 @@ export const createRevision = async (workId: WorkId) => {
 
   const apiRevision: ApiRevision = {
     id: data.revisionId as RevisionId,
-    editions: [],
-    messages: [],
+    editionIds: [],
+    messageIds: [],
   }
   return apiRevision
 }

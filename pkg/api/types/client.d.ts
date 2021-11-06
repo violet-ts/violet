@@ -1,16 +1,17 @@
+import type { ReplyId } from '.'
 import type { ApiProject, ApiWork } from './api'
 import type { DeskId, EditionId, MessageId, RevisionId, WorkId } from './branded'
 
 export type BrowserReply = {
-  id: MessageId
-  contents: string
-  cratedAt: number
+  id: ReplyId
+  content: string
+  createdAt: number
   userName: string
 }
 
 export type BrowserMessage = {
   id: MessageId
-  contents: string
+  content: string
   createdAt: number
   userName: string
   replys: BrowserReply[]
@@ -23,7 +24,7 @@ export type BrowserEdition = {
 export type BrowserRevision = {
   id: RevisionId
   editions: BrowserEdition[]
-  messages: BrowserMessage[]
+  messages: (BrowserMessage | undefined)[]
 }
 
 export type BrowserWork = {

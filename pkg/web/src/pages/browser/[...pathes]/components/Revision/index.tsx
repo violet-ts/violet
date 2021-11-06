@@ -97,26 +97,29 @@ export const Revision = (props: {
   }
 
   return (
-    <>
-      <Container
-        onDragEnter={() => setIsFile(true)}
-        onDragLeave={() => setIsFile(false)}
-        onChange={onChange}
-      >
-        {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
-        {isFile && <Dropper type="file" accept={acceptExtensions} />}
-        {openedTabRevisions.map((_o, i) => (
-          <>
-            <DisplayWorksArea key={i}>
-              <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
-            </DisplayWorksArea>
-            <RevisionFooter>
-              <AddButton dropFile={dropFile} />
-              <Spacer axis="x" size={8} />
-            </RevisionFooter>
-          </>
-        ))}
-      </Container>
-    </>
+    <div>
+      {openedTabRevisions.map((_o, i) => (
+        <>
+          <Container
+            onDragEnter={() => setIsFile(true)}
+            onDragLeave={() => setIsFile(false)}
+            onChange={onChange}
+          >
+            {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
+            {isFile && <Dropper type="file" accept={acceptExtensions} />}
+
+            <>
+              <DisplayWorksArea key={i}>
+                <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
+              </DisplayWorksArea>
+              <RevisionFooter>
+                <AddButton dropFile={dropFile} />
+                <Spacer axis="x" size={8} />
+              </RevisionFooter>
+            </>
+          </Container>
+        </>
+      ))}
+    </div>
   )
 }

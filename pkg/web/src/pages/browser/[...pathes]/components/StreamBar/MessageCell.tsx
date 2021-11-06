@@ -1,4 +1,4 @@
-import type { ApiMessage, ApiRevision, MessageId } from '@violet/api/types'
+import type { ApiMessage, MessageId } from '@violet/api/types'
 import { Spacer } from '@violet/web/src//components/atoms/Spacer'
 import { alphaLevel, colors } from '@violet/web/src//utils/constants'
 import React from 'react'
@@ -20,7 +20,6 @@ const Message = styled.div`
 `
 
 export const MessageCell = (props: {
-  revision: ApiRevision
   message: ApiMessage
   replyMessage: (messageId: MessageId, content: string) => Promise<void>
 }) => {
@@ -34,7 +33,7 @@ export const MessageCell = (props: {
       <Spacer axis="y" size={8} />
       <Message>{props.message.content}</Message>
       <Spacer axis="y" size={16} />
-      {props.message.replys.length > 0 && (
+      {props.message.replys && props.message.replys.length > 0 && (
         <div>
           <ReplyMessageCell replies={props.message.replys} />
           <Spacer axis="y" size={8} />

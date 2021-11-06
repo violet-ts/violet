@@ -93,12 +93,8 @@ export const usePage = () => {
         desks,
         revisions: apiWholeData.revisionsList.find((d) => d.workId === currentProject.openedTabId)
           ?.revisions,
-        messages: apiWholeData.messagesList.find(
-          (d) =>
-            d.revisionId ===
-            apiWholeData.revisionsList
-              .find((d) => d.workId === currentProject.openedTabId)
-              ?.revisions?.slice(-1)[0]?.id
+        messages: apiWholeData.messagesList.find((d) =>
+          apiWholeData.revisionsList.find((r) => r.workId === currentProject.openedTabId)
         )?.messages,
       }
     )
