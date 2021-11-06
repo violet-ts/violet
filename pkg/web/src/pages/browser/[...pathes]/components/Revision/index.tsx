@@ -104,7 +104,9 @@ export const Revision = (props: {
         onDragLeave={() => setIsFile(false)}
         onChange={onChange}
       >
-        {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
+        {openAlert && (
+          <FileTypeAlertModal closeModal={closeModal} message={'UnSupported File Format!'} />
+        )}
         {isFile && <Dropper type="file" accept={acceptExtensions} />}
         {openedTabRevisions.map((_o, i) => (
           <DisplayWorksArea key={i}>
