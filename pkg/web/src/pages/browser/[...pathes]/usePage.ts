@@ -94,7 +94,9 @@ export const usePage = () => {
         revisions: apiWholeData.revisionsList.find((d) => d.workId === currentProject.openedTabId)
           ?.revisions,
         messages: apiWholeData.messagesList.find((d) =>
-          apiWholeData.revisionsList.find((r) => r.workId === currentProject.openedTabId)
+          apiWholeData.revisionsList
+            .find((d) => d.workId === currentProject.openedTabId)
+            ?.revisions.find((r) => r.id === d.revisionId)
         )?.messages,
       }
     )

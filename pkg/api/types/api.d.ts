@@ -28,8 +28,8 @@ export type ApiDesk = {
 
 export type ApiRevision = {
   id: RevisionId
-  editionIds: EditionId[]
-  messageIds: MessageId[]
+  editionIds: (EditionId | undefined)[]
+  messageIds: (MessageId | undefined)[]
 }
 
 export type ApiMessage = {

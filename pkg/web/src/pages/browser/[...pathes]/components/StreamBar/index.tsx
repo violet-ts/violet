@@ -12,7 +12,7 @@ import type {
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { MessageCell } from './MessageCell'
 
@@ -87,8 +87,10 @@ export const StreamBar = (props: {
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
   const { api, onErr } = useApi()
   const [content, setMessage] = useState('')
+  const [messagesByRevisionId, setMessagesByRevisionId] = useState<BrowserRevision[]>()
   const scrollBottomRef = useRef<HTMLDivElement>(null)
   const getMessgaesByMessageIds = (messageId: MessageId) => {
+    console.log('REVISIONS->', props.revisions, 'MESSAGES->', props.messages)
     const message = props.messages?.filter((m) => m.id === messageId)
     if (!(message?.length === 1)) return
     const messageRes: BrowserMessage = {
@@ -105,12 +107,14 @@ export const StreamBar = (props: {
     }
     return messageRes
   }
-  const messagesByRevisionId = useMemo(() => {
-    return props.revisions.map<BrowserRevision>(({ id, messageIds }) => ({
-      id,
-      editions: [],
-      messages: messageIds.map((id) => getMessgaesByMessageIds(id)),
-    }))
+  useEffect(() => {
+    setMessagesByRevisionId(
+      props.revisions.map<BrowserRevision>(({ id, messageIds }) => ({
+        id,
+        editions: [],
+        messages: messageIds?.map((id) => id && getMessgaesByMessageIds(id)),
+      }))
+    )
   }, [props.revisions, props.messages])
   const userName = 'Charles M Schultz'
   const submitMessage = useCallback(
@@ -121,14 +125,12 @@ export const StreamBar = (props: {
         .revisions._revisionId(id)
         .post({ body: { content, userName } })
         .catch(onErr)
-
       const messageRes = await api.browser.works
         ._workId(props.workId)
         .revisions._revisionId(id)
         .$get()
 
       if (!messageRes) return
-
       updateMessage(messageRes)
       setMessage('')
     },
@@ -170,11 +172,11 @@ export const StreamBar = (props: {
   )
   return (
     <div>
-      {messagesByRevisionId.map((revision, i) => (
+      {messagesByRevisionId?.map((revision, i) => (
         <>
           <Container key={i}>
             <StreamBox>
-              {revision.messages.map(
+              {revision.messages?.map(
                 (message, i) =>
                   message && <MessageCell key={i} message={message} replyMessage={replyMessage} />
               )}
