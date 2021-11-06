@@ -15,6 +15,7 @@ import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { MessageCell } from './MessageCell'
+import { MessageIcon } from './MessageIcon'
 
 const Container = styled.div`
   display: flex;
@@ -81,7 +82,7 @@ const SubmitIcon = styled.div`
 export const StreamBar = (props: {
   projectId: ProjectId
   workId: WorkId
-  revisions: ApiRevision[]
+  revision: ApiRevision
   messages: ApiMessage[] | undefined
 }) => {
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
@@ -90,7 +91,7 @@ export const StreamBar = (props: {
   const [messagesByRevisionId, setMessagesByRevisionId] = useState<BrowserRevision[]>()
   const scrollBottomRef = useRef<HTMLDivElement>(null)
   const getMessgaesByMessageIds = (messageId: MessageId) => {
-    console.log('REVISIONS->', props.revisions, 'MESSAGES->', props.messages)
+    console.log('REVISIONS->', props.revision, 'MESSAGES->', props.messages)
     const message = props.messages?.filter((m) => m.id === messageId)
     if (!(message?.length === 1)) return
     const messageRes: BrowserMessage = {
@@ -107,18 +108,10 @@ export const StreamBar = (props: {
     }
     return messageRes
   }
-  useEffect(() => {
-    setMessagesByRevisionId(
-      props.revisions.map<BrowserRevision>(({ id, messageIds }) => ({
-        id,
-        editions: [],
-        messages: messageIds?.map((id) => id && getMessgaesByMessageIds(id)),
-      }))
-    )
-  }, [props.revisions, props.messages])
   const userName = 'Charles M Schultz'
   const submitMessage = useCallback(
     async (id: RevisionId) => {
+      console.log('SEND!!->', content, 'ID->', id)
       if (!content) return
       await api.browser.works
         ._workId(props.workId)
@@ -152,16 +145,15 @@ export const StreamBar = (props: {
   const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
       if (!content) return
-      const revisionId = props.revisions.slice(-1)[0].id
       await api.browser.works
         ._workId(props.workId)
-        .revisions._revisionId(revisionId)
+        .revisions._revisionId(props.revision.id)
         .messages._messageId(messageId)
         .replies.$post({ body: { content, userName } })
 
       const replyRes = await api.browser.works
         ._workId(props.workId)
-        .revisions._revisionId(revisionId)
+        .revisions._revisionId(props.revision.id)
         .messages.$get()
         .catch(onErr)
 
@@ -172,29 +164,27 @@ export const StreamBar = (props: {
   )
   return (
     <div>
-      {messagesByRevisionId?.map((revision, i) => (
-        <>
-          <Container key={i}>
-            <StreamBox>
-              {revision.messages?.map(
-                (message, i) =>
-                  message && <MessageCell key={i} message={message} replyMessage={replyMessage} />
-              )}
-              <div ref={scrollBottomRef} />
-            </StreamBox>
-            <MessageBox>
-              <InputForm
-                placeholder="message"
-                value={content}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-              <ClickableArea onClick={() => submitMessage(revision.id)}>
-                <SubmitIcon />
-              </ClickableArea>
-            </MessageBox>
-          </Container>
-        </>
-      ))}
+      <>
+        <Container>
+          <StreamBox>
+            {props.messages?.map(
+              (message, i) =>
+                message && <MessageCell key={i} message={message} replyMessage={replyMessage} />
+            )}
+            <div ref={scrollBottomRef} />
+          </StreamBox>
+          <MessageBox>
+            <InputForm
+              placeholder="message"
+              value={content}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <ClickableArea>
+              <MessageIcon onClick={() => submitMessage(props.revision.id)} />
+            </ClickableArea>
+          </MessageBox>
+        </Container>
+      </>
     </div>
   )
 }

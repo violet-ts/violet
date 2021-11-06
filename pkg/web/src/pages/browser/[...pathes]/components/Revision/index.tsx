@@ -54,16 +54,16 @@ const RevisionFooter = styled.div`
 export const Revision = (props: {
   projectId: ProjectId
   workId: WorkId
-  revisions: ApiRevision[]
+  revision: ApiRevision
 }) => {
   const [isFile, setIsFile] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
-  const [openedTabRevisions, setOpenTabRevision] = useState(props.revisions)
+  const [openedTabRevisions, setOpenTabRevision] = useState(props.revision)
   useEffect(() => {
-    setOpenTabRevision(props.revisions)
-  }, [props.revisions])
+    setOpenTabRevision(props.revision)
+  }, [props.revision])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -98,28 +98,24 @@ export const Revision = (props: {
 
   return (
     <div>
-      {openedTabRevisions.map((_o, i) => (
-        <>
-          <Container
-            onDragEnter={() => setIsFile(true)}
-            onDragLeave={() => setIsFile(false)}
-            onChange={onChange}
-          >
-            {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
-            {isFile && <Dropper type="file" accept={acceptExtensions} />}
+      <Container
+        onDragEnter={() => setIsFile(true)}
+        onDragLeave={() => setIsFile(false)}
+        onChange={onChange}
+      >
+        {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
+        {isFile && <Dropper type="file" accept={acceptExtensions} />}
 
-            <>
-              <DisplayWorksArea key={i}>
-                <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
-              </DisplayWorksArea>
-              <RevisionFooter>
-                <AddButton dropFile={dropFile} />
-                <Spacer axis="x" size={8} />
-              </RevisionFooter>
-            </>
-          </Container>
+        <>
+          <DisplayWorksArea>
+            <DisplayWorksFrame>REVISION -- {openedTabRevisions.id}</DisplayWorksFrame>
+          </DisplayWorksArea>
+          <RevisionFooter>
+            <AddButton dropFile={dropFile} />
+            <Spacer axis="x" size={8} />
+          </RevisionFooter>
         </>
-      ))}
+      </Container>
     </div>
   )
 }

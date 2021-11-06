@@ -84,6 +84,7 @@ export const usePage = () => {
 
     const data = apiWholeData.projects?.find((p) => p.id === currentProject.id)
     const desks = apiWholeData.desksList.find((d) => d.projectId === currentProject.id)?.desks
+    console.log('UPDATE!!->', apiWholeData.revisionsList)
 
     return (
       data &&

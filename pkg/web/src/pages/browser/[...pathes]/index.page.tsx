@@ -19,11 +19,12 @@ const Container = styled.div`
 `
 const WorksView = styled.div`
   width: 100%;
+  overflow-y: scroll;
 `
 
 const MainColumn = styled.div`
   display: flex;
-  overflow-y: scroll;
+  height: 100vh;
 `
 
 const MainContent = styled.div`
@@ -46,7 +47,7 @@ const ProjectPage = () => {
   const { error, projectApiData, projects, currentProject } = usePage()
 
   if (!projectApiData || !currentProject) return <Fetching error={error} />
-
+  console.log('Is the message ID updated?->', projectApiData.messages)
   return (
     <Container>
       <ProjectBar projects={projects} projectId={projectApiData.projectId} />
@@ -54,39 +55,41 @@ const ProjectPage = () => {
         <Explorer projectApiData={projectApiData} project={currentProject} />
       </LeftColumn>
       <WorksView>
-        {currentProject.openedTabId ? (
-          projectApiData.revisions?.length ? (
-            <>
-              <TabBar project={currentProject} projectApiData={projectApiData} />
-              <MainColumn>
-                <MainContent>
-                  <RevisionContent>
-                    <Revision
+        {projectApiData.revisions?.map((revision, i) =>
+          currentProject.openedTabId ? (
+            projectApiData.revisions?.length ? (
+              <>
+                <TabBar project={currentProject} projectApiData={projectApiData} />
+                <MainColumn key={i}>
+                  <MainContent>
+                    <RevisionContent>
+                      <Revision
+                        projectId={currentProject.id}
+                        workId={currentProject.openedTabId}
+                        revision={revision}
+                      />
+                    </RevisionContent>
+                    <Spacer axis="y" size={8} />
+                  </MainContent>
+                  <StreamBarColumn>
+                    <StreamBar
                       projectId={currentProject.id}
                       workId={currentProject.openedTabId}
-                      revisions={projectApiData.revisions}
+                      revision={revision}
+                      messages={projectApiData.messages}
                     />
-                  </RevisionContent>
-                  <Spacer axis="y" size={8} />
-                </MainContent>
-                <StreamBarColumn>
-                  <StreamBar
-                    projectId={currentProject.id}
-                    workId={currentProject.openedTabId}
-                    revisions={projectApiData.revisions}
-                    messages={projectApiData.messages}
-                  />
-                </StreamBarColumn>
-              </MainColumn>
-            </>
+                  </StreamBarColumn>
+                </MainColumn>
+              </>
+            ) : (
+              <>
+                <TabBar project={currentProject} projectApiData={projectApiData} />
+                <EmptyWork projectId={currentProject.id} workId={currentProject.openedTabId} />
+              </>
+            )
           ) : (
-            <>
-              <TabBar project={currentProject} projectApiData={projectApiData} />
-              <EmptyWork projectId={currentProject.id} workId={currentProject.openedTabId} />
-            </>
+            <div>Choose work</div>
           )
-        ) : (
-          <div>Choose work</div>
         )}
       </WorksView>
     </Container>
