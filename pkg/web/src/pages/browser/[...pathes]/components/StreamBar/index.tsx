@@ -15,6 +15,7 @@ import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { MessageCell } from './MessageCell'
+import { MessageIcon } from './MessageIcon'
 
 const Container = styled.div`
   display: flex;
@@ -44,40 +45,17 @@ const InputForm = styled.textarea`
   }
 `
 const ClickableArea = styled.button`
-  position: fixed;
   right: 8px;
   bottom: 8px;
+  display: flex;
+  justify-content: right;
   width: 32px;
   height: 32px;
   cursor: pointer;
   background-color: transparent;
   border: none;
 `
-const SubmitIcon = styled.div`
-  position: fixed;
-  right: 16px;
-  bottom: 24px;
-  width: 16px;
-  height: 4px;
-  border-right: solid transparent;
-  border-top-right-radius: 1px;
-  border-bottom-right-radius: 1px;
-  box-shadow: 0 0 0 2px, inset -2px 0 0;
-  transform: rotate(-45deg);
-  ::before {
-    position: fixed;
-    top: -2px;
-    left: -12px;
-    box-sizing: border-box;
-    display: block;
-    width: 8px;
-    height: 8px;
-    content: '';
-    border-top: 4px solid transparent;
-    border-right: 8px solid;
-    border-bottom: 4px solid transparent;
-  }
-`
+
 export const StreamBar = (props: {
   projectId: ProjectId
   workId: WorkId
@@ -188,8 +166,8 @@ export const StreamBar = (props: {
                 value={content}
                 onChange={(e) => setMessage(e.target.value)}
               />
-              <ClickableArea onClick={() => submitMessage(revision.id)}>
-                <SubmitIcon />
+              <ClickableArea>
+                <MessageIcon onClick={() => submitMessage(revision.id)} />
               </ClickableArea>
             </MessageBox>
           </Container>
