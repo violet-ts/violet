@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home page matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="Container-sc-a9fhw1-0 cxeahP"
+  >
+    <main
+      class="StyledMain-sc-a9fhw1-1 fASgPW"
+    >
+      <div
+        class="Container-sc-7qg3zi-0 jxPjBO"
+      >
+        <button>
+          Google LOGIN
+        </button>
+      </div>
+      <h1
+        class="Title-sc-a9fhw1-2 gsIwHZ"
+      >
+        Welcome to 
+        <a
+          href="https://nextjs.org"
+        >
+          Next.js!
+        </a>
+      </h1>
+      <span
+        class="sc-bdvvtL kvaJtv"
+        size="16"
+      />
+      <div>
+        <form
+          style="text-align: center;"
+        >
+          <input
+            type="text"
+            value=""
+          />
+          <input
+            type="submit"
+            value="ADD"
+          />
+        </form>
+        <ul
+          class="Tasks-sc-a9fhw1-3 cuQHVR"
+        >
+          <li>
+            <label>
+              <input
+                type="checkbox"
+              />
+              <span>
+                foo task
+              </span>
+            </label>
+            <input
+              class="StyledInput-sc-a9fhw1-4 fqCoCD"
+              type="button"
+              value="DELETE"
+            />
+          </li>
+          <span
+            class="sc-bdvvtL eApfar"
+            size="12"
+          />
+          <li>
+            <label>
+              <input
+                checked=""
+                type="checkbox"
+              />
+              <span>
+                bar task
+              </span>
+            </label>
+            <input
+              class="StyledInput-sc-a9fhw1-4 fqCoCD"
+              type="button"
+              value="DELETE"
+            />
+          </li>
+        </ul>
+      </div>
+    </main>
+    <footer
+      class="StyledFooter-sc-a9fhw1-5 dIYAiv"
+    >
+      <a
+        href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Powered by 
+        <img
+          alt="Vercel Logo"
+          class="Logo-sc-a9fhw1-6 esNKsh"
+          src="/vercel.svg"
+        />
+      </a>
+    </footer>
+  </div>
+</DocumentFragment>
+`;
