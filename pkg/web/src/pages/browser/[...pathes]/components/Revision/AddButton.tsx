@@ -1,4 +1,4 @@
-import { acceptExtensions } from '@violet/api/src/utils/constants'
+import { acceptExtensions } from '@violet/def/constants'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import React from 'react'
 import styled from 'styled-components'

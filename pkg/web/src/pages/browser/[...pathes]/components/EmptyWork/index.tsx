@@ -1,5 +1,5 @@
-import type { ApiRevision, BrowserProject, WorkId } from '@violet/api/src/types'
-import { acceptExtensions, fileTypes } from '@violet/api/src/utils/constants'
+import type { ApiRevision, BrowserProject, WorkId } from '@violet/api/types'
+import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'

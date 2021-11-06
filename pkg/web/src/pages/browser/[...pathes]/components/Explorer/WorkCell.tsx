@@ -1,4 +1,4 @@
-import type { BrowserWork } from '@violet/api/src/types'
+import type { BrowserWork } from '@violet/api/types'
 import { getWorkFullName } from '@violet/web/src/utils'
 import { CellName } from './CellName'
 

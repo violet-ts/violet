@@ -1,4 +1,4 @@
-import type { BrowserProject, ProjectId } from '@violet/api/src/types'
+import type { BrowserProject, ProjectId } from '@violet/api/types'
 import { alphaLevel, colors, fontSizes } from '@violet/web/src//utils/constants'
 import { pagesPath } from '@violet/web/src/utils/$path'
 import Link from 'next/link'

@@ -1,4 +1,4 @@
-import type { ApiWork, BrowserProject, ProjectApiData, ProjectId } from '@violet/api/src/types'
+import type { ApiWork, BrowserProject, ProjectApiData, ProjectId } from '@violet/api/types'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { getWorkFullName } from '@violet/web/src/utils'
 import { forceToggleHash } from '@violet/web/src/utils/constants'

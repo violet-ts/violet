@@ -31,4 +31,4 @@ RUN ( \
 EXPOSE 80
 
 ENTRYPOINT []
-CMD ["node", "/app/pkg/api/build/index.js"]
+CMD ["node", "--require=source-map-support/register", "/app/pkg/api/build/index.js"]

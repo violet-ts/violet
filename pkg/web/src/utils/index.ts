@@ -1,4 +1,4 @@
-import type { ProjectId } from '@violet/api/src/types'
+import type { ProjectId } from '@violet/api/types'
 
 export const getWorkFullName = (work: { name: string; ext?: string | null }) =>
   `${work.name}${work.ext ? `.${work.ext}` : ''}`

@@ -1,4 +1,4 @@
-import type { ApiMessage, MessageId } from '@violet/api/src/types'
+import type { ApiMessage, MessageId } from '@violet/api/types'
 import { Spacer } from '@violet/web/src//components/atoms/Spacer'
 import { alphaLevel, colors } from '@violet/web/src//utils/constants'
 import React from 'react'

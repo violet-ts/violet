@@ -4,7 +4,6 @@ import envValues from '@violet/api/src/utils/envValues'
 import Fastify from 'fastify'
 import cors from 'fastify-cors'
 import helmet from 'fastify-helmet'
-import 'source-map-support/register'
 
 const { API_BASE_PATH, API_PORT } = envValues
 

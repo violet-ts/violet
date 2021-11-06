@@ -1,4 +1,4 @@
-import type { BrowserProject, ProjectApiData } from '@violet/api/src/types'
+import type { BrowserProject, ProjectApiData } from '@violet/api/types'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { getWorkFullName } from '@violet/web/src/utils'
 import { pagesPath } from '@violet/web/src/utils/$path'

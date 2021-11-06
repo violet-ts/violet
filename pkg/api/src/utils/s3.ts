@@ -1,4 +1,4 @@
-import type { DeskId, ProjectId, RevisionId, S3SaveWorksPath } from '@violet/api/src/types'
+import type { DeskId, ProjectId, RevisionId, S3SaveWorksPath } from '@violet/api/types'
 
 export const createS3SaveWorksPath = (props: {
   projectId: ProjectId

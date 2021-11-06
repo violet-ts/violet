@@ -1,4 +1,4 @@
-import type { ApiReply } from '@violet/api/src/types'
+import type { ApiReply } from '@violet/api/types'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import React from 'react'
 import styled from 'styled-components'
