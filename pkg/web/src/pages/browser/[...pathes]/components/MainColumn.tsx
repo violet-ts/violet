@@ -1,12 +1,5 @@
-import type {
-  ApiMessage,
-  ApiRevision,
-  BrowserRevision,
-  MessageId,
-  ProjectId,
-  WorkId,
-} from '@violet/api/types'
-import React, { useMemo } from 'react'
+import type { BrowserRevision, ProjectId, WorkId } from '@violet/api/types'
+import React from 'react'
 import { Spacer } from 'src/components/atoms/Spacer'
 import styled from 'styled-components'
 import { Revision } from '../components/Revision'
@@ -32,23 +25,11 @@ const StreamBarColumn = styled.div`
 export const MainColumn = (props: {
   projectId: ProjectId
   workId: WorkId
-  revisions: ApiRevision[]
-  messages: ApiMessage[] | undefined
+  revisions: BrowserRevision[]
 }) => {
-  const getMessgaesByMessageIds = (messages: ApiMessage[], messageIds: MessageId[]) =>
-    messages.filter((message) => messageIds.filter((id) => id === message.id))
-
-  const messagesByRevisionId = useMemo(() => {
-    return props.revisions.map<BrowserRevision>(({ id, messageIds }) => ({
-      id,
-      editions: [],
-      messages: props.messages && messageIds && getMessgaesByMessageIds(props.messages, messageIds),
-    }))
-  }, [props.revisions, props.messages])
-
   return (
     <Container>
-      {messagesByRevisionId.map((revision, i) => (
+      {props.revisions.map((revision, i) => (
         <MainContent key={i}>
           <RevisionContent>
             <Revision projectId={props.projectId} workId={props.workId} revision={revision} />

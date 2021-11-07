@@ -1,4 +1,6 @@
+import type { BrowserMessage, BrowserRevision, RevisionId } from '@violet/api/types'
 import { Fetching } from '@violet/web/src/components/organisms/Fetching'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
@@ -29,6 +31,23 @@ const WroksMain = styled.div`
 const ProjectPage = () => {
   const { error, projectApiData, projects, currentProject } = usePage()
 
+  const getMessagesByRevisionId = (id: RevisionId) => {
+    const messageIds = projectApiData?.revisions?.find((revision) => revision.id === id)?.messageIds
+    if (!messageIds) return [] as BrowserMessage[]
+    if (!projectApiData.messages) return [] as BrowserMessage[]
+    return projectApiData.messages.filter((message) => messageIds.includes(message.id))
+  }
+
+  const browserRevisionData = useMemo(() => {
+    if (!projectApiData?.revisions) return
+    const revisions: BrowserRevision[] = projectApiData.revisions.map<BrowserRevision>((p) => ({
+      id: p.id,
+      editions: [],
+      messages: getMessagesByRevisionId(p.id),
+    }))
+    return revisions
+  }, [projectApiData])
+
   if (!projectApiData || !currentProject) return <Fetching error={error} />
 
   return (
@@ -39,7 +58,7 @@ const ProjectPage = () => {
       </LeftColumn>
       <WorksView>
         {currentProject.openedTabId ? (
-          projectApiData.revisions?.length ? (
+          browserRevisionData ? (
             <>
               <WorksHeader>
                 <TabBar project={currentProject} projectApiData={projectApiData} />
@@ -48,8 +67,7 @@ const ProjectPage = () => {
                 <MainColumn
                   projectId={currentProject.id}
                   workId={currentProject.openedTabId}
-                  revisions={projectApiData.revisions}
-                  messages={projectApiData.messages}
+                  revisions={browserRevisionData}
                 />
               </WroksMain>
             </>
