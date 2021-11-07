@@ -1,4 +1,4 @@
-import type {PrismaClient} from '@prisma/client'
+import type { PrismaClient } from '@prisma/client'
 import { deskData, projectData, revisionData, workData } from './specials-data/basic'
 import { messageData, replyData } from './specials-data/stream'
 

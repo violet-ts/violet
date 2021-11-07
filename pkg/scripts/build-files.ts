@@ -21,13 +21,12 @@ const main = async ({ fromDir, toDir, watch, target, clean }: Params) => {
     .readdirSync(fromDirAbs)
     .map((f) => path.resolve(fromDirAbs, f))
     .filter((e) => e.endsWith('.ts'))
-  const watchOptions: boolean | WatchMode = watch
-    && {
-        onRebuild(error) {
-          if (error) return console.error(error)
-          console.log(`Build done for files under ${fromDirAbs}`)
-        },
-      }
+  const watchOptions: boolean | WatchMode = watch && {
+    onRebuild(error) {
+      if (error) return console.error(error)
+      console.log(`Build done for files under ${fromDirAbs}`)
+    },
+  }
 
   const cleanPlugin: Plugin = {
     name: 'clean',

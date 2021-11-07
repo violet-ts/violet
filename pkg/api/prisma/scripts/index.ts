@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires,@typescript-eslint/no-explicit-any */
+import { PrismaClient } from '@prisma/client'
+import arg from 'arg'
 import * as fs from 'fs'
 import * as path from 'path'
-import arg from 'arg'
-import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
