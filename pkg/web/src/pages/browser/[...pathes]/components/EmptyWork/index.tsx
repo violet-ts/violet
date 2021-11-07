@@ -105,7 +105,7 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
     <Container>
       {openAlert ? (
         <Modal closeModal={closeModal}>
-          <AlertMessage>'UnSupported File Format!'</AlertMessage>
+          <AlertMessage>UnSupported File Format!</AlertMessage>
         </Modal>
       ) : (
         <>

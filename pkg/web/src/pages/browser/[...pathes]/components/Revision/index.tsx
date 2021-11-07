@@ -114,7 +114,7 @@ export const Revision = (props: {
       >
         {openAlert && (
           <Modal closeModal={closeModal}>
-            <AlertMessage>'UnSupported File Format!'</AlertMessage>
+            <AlertMessage>UnSupported File Format!</AlertMessage>
           </Modal>
         )}
         {isFile && <Dropper type="file" accept={acceptExtensions} />}
