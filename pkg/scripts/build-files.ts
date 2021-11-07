@@ -13,7 +13,7 @@ interface Params {
   clean: boolean
 }
 
-const main = async ({ fromDir, toDir, watch, target }: Params) => {
+const main = async ({ fromDir, toDir, watch, target, clean }: Params) => {
   const fromDirAbs = path.resolve(process.cwd(), fromDir)
   const toDirAbs = path.resolve(process.cwd(), toDir)
 
@@ -56,7 +56,7 @@ const main = async ({ fromDir, toDir, watch, target }: Params) => {
     entryPoints,
     watch: watchOptions,
     plugins: [
-      cleanPlugin,
+      ...(clean ? [cleanPlugin] : []),
       nodeExternalsPlugin({
         allowList: [
           '@violet/web',
