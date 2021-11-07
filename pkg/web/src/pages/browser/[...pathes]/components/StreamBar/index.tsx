@@ -59,8 +59,19 @@ export const StreamBar = (props: {
   const { api, onErr } = useApi()
   const [content, setMessage] = useState('')
   const scrollBottomRef = useRef<HTMLDivElement>(null)
-
   const userName = 'Charles M Schultz'
+
+  const updateMessage = (messageRes: { revisionId: RevisionId; messages: ApiMessage[] }) => {
+    updateApiWholeData(
+      'messagesList',
+      apiWholeData.messagesList.some((r) => r.revisionId === messageRes.revisionId)
+        ? apiWholeData.messagesList.map((r) =>
+            r.revisionId === messageRes.revisionId ? messageRes : r
+          )
+        : [...apiWholeData.messagesList, messageRes]
+    )
+  }
+
   const submitMessage = useCallback(
     async (id: RevisionId) => {
       if (!content) return
@@ -80,20 +91,10 @@ export const StreamBar = (props: {
     },
     [content]
   )
+
   useEffect(() => {
     scrollBottomRef?.current?.scrollIntoView()
   }, [props.messages?.length])
-
-  const updateMessage = (messageRes: { revisionId: RevisionId; messages: ApiMessage[] }) => {
-    updateApiWholeData(
-      'messagesList',
-      apiWholeData.messagesList.some((r) => r.revisionId === messageRes.revisionId)
-        ? apiWholeData.messagesList.map((r) =>
-            r.revisionId === messageRes.revisionId ? messageRes : r
-          )
-        : [...apiWholeData.messagesList, messageRes]
-    )
-  }
 
   const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
