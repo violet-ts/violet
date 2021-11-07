@@ -1,12 +1,10 @@
-import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { Fetching } from '@violet/web/src/components/organisms/Fetching'
 import styled from 'styled-components'
 import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
 import { LeftColumn } from './components/LeftColumn'
+import { MainColumn } from './components/MainColumn'
 import { ProjectBar } from './components/ProjectBar'
-import { Revision } from './components/Revision'
-import { StreamBar } from './components/StreamBar'
 import { TabBar } from './components/TabBar'
 import { usePage } from './usePage'
 
@@ -20,26 +18,12 @@ const Container = styled.div`
 const WorksView = styled.div`
   width: 100%;
 `
-
-const MainColumn = styled.div`
-  display: flex;
+const WorksHeader = styled.div`
+  width: 100%;
+`
+const WroksMain = styled.div`
+  height: 100vh;
   overflow-y: scroll;
-`
-
-const MainContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: right;
-  height: 100vh;
-`
-
-const RevisionContent = styled.div`
-  min-width: 100%;
-`
-
-const StreamBarColumn = styled.div`
-  height: 100vh;
 `
 
 const ProjectPage = () => {
@@ -57,27 +41,17 @@ const ProjectPage = () => {
         {currentProject.openedTabId ? (
           projectApiData.revisions?.length ? (
             <>
-              <TabBar project={currentProject} projectApiData={projectApiData} />
-              <MainColumn>
-                <MainContent>
-                  <RevisionContent>
-                    <Revision
-                      projectId={currentProject.id}
-                      workId={currentProject.openedTabId}
-                      revisions={projectApiData.revisions}
-                    />
-                  </RevisionContent>
-                  <Spacer axis="y" size={8} />
-                </MainContent>
-                <StreamBarColumn>
-                  <StreamBar
-                    projectId={currentProject.id}
-                    workId={currentProject.openedTabId}
-                    revisions={projectApiData.revisions}
-                    messages={projectApiData.messages}
-                  />
-                </StreamBarColumn>
-              </MainColumn>
+              <WorksHeader>
+                <TabBar project={currentProject} projectApiData={projectApiData} />
+              </WorksHeader>
+              <WroksMain>
+                <MainColumn
+                  projectId={currentProject.id}
+                  workId={currentProject.openedTabId}
+                  revisions={projectApiData.revisions}
+                  messages={projectApiData.messages}
+                />
+              </WroksMain>
             </>
           ) : (
             <>

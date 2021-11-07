@@ -40,6 +40,7 @@ export const MessageCell = (props: {
         </div>
       )}
       <ReplyInputForm sendContent={sendContent} />
+      <Spacer axis="y" size={8} />
     </Container>
   )
 }

@@ -7,6 +7,7 @@ import { MessageIcon } from './MessageIcon'
 const Container = styled.div`
   display: flex;
 `
+
 const InputForm = styled.textarea`
   width: 100%;
   min-height: 64px;
@@ -16,7 +17,12 @@ const InputForm = styled.textarea`
     color: ${colors.violet}${alphaLevel[2]};
   }
 `
-
+const ClickableArea = styled.div`
+  justify-content: flex-end;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+`
 export const ReplyInputForm = (props: { sendContent: (content: string) => void }) => {
   const [content, setContent] = useState('')
   const replyButtonClick = () => {
@@ -28,10 +34,10 @@ export const ReplyInputForm = (props: { sendContent: (content: string) => void }
       <Spacer axis="x" size={4} />
       <InputForm placeholder="reply" value={content} onChange={(e) => setContent(e.target.value)} />
       <Spacer axis="x" size={8} />
-      <div>
-        <Spacer axis="y" size={48} />
-        <MessageIcon onClick={replyButtonClick} />
-      </div>
+      <ClickableArea onClick={replyButtonClick}>
+        <Spacer axis="y" size={32} />
+        <MessageIcon />
+      </ClickableArea>
     </Container>
   )
 }

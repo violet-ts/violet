@@ -1,4 +1,4 @@
-import type { ApiRevision, ProjectId, WorkId } from '@violet/api/types'
+import type { BrowserRevision, ProjectId, WorkId } from '@violet/api/types'
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
@@ -12,7 +12,7 @@ import { AddButton } from './AddButton'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 48px - 48px);
+  height: calc(100vh - 96px);
 `
 
 const DisplayWorksArea = styled.div`
@@ -54,16 +54,16 @@ const RevisionFooter = styled.div`
 export const Revision = (props: {
   projectId: ProjectId
   workId: WorkId
-  revisions: ApiRevision[]
+  revision: BrowserRevision
 }) => {
   const [isFile, setIsFile] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
-  const [openedTabRevisions, setOpenTabRevision] = useState(props.revisions)
+  const [openedTabRevisions, setOpenTabRevision] = useState(props.revision)
   useEffect(() => {
-    setOpenTabRevision(props.revisions)
-  }, [props.revisions])
+    setOpenTabRevision(props.revision)
+  }, [props.revision])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -97,29 +97,20 @@ export const Revision = (props: {
   }
 
   return (
-    <div>
-      {openedTabRevisions.map((_o, i) => (
-        <>
-          <Container
-            onDragEnter={() => setIsFile(true)}
-            onDragLeave={() => setIsFile(false)}
-            onChange={onChange}
-          >
-            {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
-            {isFile && <Dropper type="file" accept={acceptExtensions} />}
-
-            <>
-              <DisplayWorksArea key={i}>
-                <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
-              </DisplayWorksArea>
-              <RevisionFooter>
-                <AddButton dropFile={dropFile} />
-                <Spacer axis="x" size={8} />
-              </RevisionFooter>
-            </>
-          </Container>
-        </>
-      ))}
-    </div>
+    <Container
+      onDragEnter={() => setIsFile(true)}
+      onDragLeave={() => setIsFile(false)}
+      onChange={onChange}
+    >
+      {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
+      {isFile && <Dropper type="file" accept={acceptExtensions} />}
+      <DisplayWorksArea>
+        <DisplayWorksFrame>REVISION -- {openedTabRevisions.id}</DisplayWorksFrame>
+      </DisplayWorksArea>
+      <RevisionFooter>
+        <AddButton dropFile={dropFile} />
+        <Spacer axis="x" size={8} />
+      </RevisionFooter>
+    </Container>
   )
 }
