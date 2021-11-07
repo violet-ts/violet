@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-const AddProjectButton = styled.i`
+
+export const PlusIcon = styled.i`
   & {
     position: relative;
     box-sizing: border-box;
@@ -40,6 +41,3 @@ const AddProjectButton = styled.i`
     opacity: 1;
   }
 `
-export const ProjectAddIcon = (props: { addProject: () => void }) => {
-  return <AddProjectButton onClick={props.addProject} />
-}

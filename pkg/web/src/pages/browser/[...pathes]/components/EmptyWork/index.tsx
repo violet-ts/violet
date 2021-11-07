@@ -5,7 +5,7 @@ import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { Modal } from '../Modal'
+import { Modal } from '../../../../../components/atoms/Modal'
 
 const Container = styled.div`
   position: relative;
@@ -105,7 +105,7 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
     <Container>
       {openAlert ? (
         <Modal closeModal={closeModal}>
-          <AlertMessage>{'UnSupported File Format!'}</AlertMessage>
+          <AlertMessage>'UnSupported File Format!'</AlertMessage>
         </Modal>
       ) : (
         <>

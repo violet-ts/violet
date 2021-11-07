@@ -4,9 +4,9 @@ import { pagesPath } from '@violet/web/src/utils/$path'
 import Link from 'next/link'
 import { useState } from 'react'
 import styled from 'styled-components'
-import { InputFromProject } from './InputFromProject'
-import { Modal } from './Modal'
-import { ProjectAddIcon } from './ProjectAddIcon'
+import { Modal } from '../../../../components/atoms/Modal'
+import { PlusIcon } from '../../../../components/atoms/PlusIcon'
+import { ProjectNameInput } from './ProjectNameInput'
 
 const Container = styled.div`
   display: flex;
@@ -58,9 +58,7 @@ const Message = styled.div`
 
 export const ProjectBar = (props: { projects: BrowserProject[]; projectId: ProjectId }) => {
   const [isClickAddProject, setIsClickAddProject] = useState(false)
-  const [isFocusing, setIsFocusing] = useState(false)
   const addNewProject = () => {
-    setIsFocusing(false)
     setIsClickAddProject(true)
   }
 
@@ -81,11 +79,11 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
           </IconWrapper>
         </Link>
       ))}
-      <ProjectAddIcon addProject={addNewProject} />
-      {isClickAddProject && !isFocusing && (
+      <PlusIcon onClick={addNewProject} />
+      {isClickAddProject && (
         <Modal closeModal={closeModal}>
-          <Message>{'Please enter a project name'}</Message>
-          <InputFromProject closeModal={closeModal} />
+          <Message>Please enter a project name</Message>
+          <ProjectNameInput closeModal={closeModal} />
         </Modal>
       )}
     </Container>

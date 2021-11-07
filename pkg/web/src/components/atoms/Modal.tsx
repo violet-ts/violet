@@ -9,7 +9,7 @@ const Container = styled.div`
   background-color: ${colors.black}${alphaLevel[1]};
 `
 
-const StyleModal = styled.dialog`
+const StyledModal = styled.dialog`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -40,10 +40,10 @@ export const Modal = (props: { closeModal: () => void; children: React.ReactNode
   return (
     <Portal>
       <Container>
-        <StyleModal open>
+        <StyledModal open>
           {props.children}
           <CloseButton onClick={props.closeModal}> OK </CloseButton>
-        </StyleModal>
+        </StyledModal>
       </Container>
     </Portal>
   )
