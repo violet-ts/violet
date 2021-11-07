@@ -1,12 +1,12 @@
 import type { ApiRevision, ProjectId, WorkId } from '@violet/api/types'
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
+import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Modal } from '../../../../../components/atoms/Modal'
 import { AddButton } from './AddButton'
 
 const Container = styled.div`

@@ -2,9 +2,7 @@ import type { ChangeEvent, FormEvent } from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-const InputFormProject = styled.div`
-  position: relative;
-  top: 80px;
+const InputFormProject = styled.form`
   display: flex;
   justify-content: center;
 `
@@ -18,17 +16,13 @@ export const ProjectNameInput = (props: { closeModal: () => void }) => {
   }, [])
   const sendProjectName = (e: FormEvent) => {
     e.preventDefault()
-    if (label) {
-      setLabel(label)
-    }
+    if (!label) return
     setLabel('')
     props.closeModal()
   }
   return (
-    <InputFormProject>
-      <form onSubmit={sendProjectName}>
-        <input ref={inputElement} type="text" onChange={inputLabel} />
-      </form>
+    <InputFormProject onSubmit={sendProjectName}>
+      <input ref={inputElement} type="text" onChange={inputLabel} />
     </InputFormProject>
   )
 }
