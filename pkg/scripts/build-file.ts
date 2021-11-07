@@ -66,4 +66,5 @@ main({
   target: args['--target'] || '',
 }).catch((e) => {
   console.error(e)
+  process.exit(1)
 })

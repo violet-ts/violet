@@ -85,4 +85,5 @@ main({
   clean: Boolean(args['--clean']),
 }).catch((e) => {
   console.error(e)
+  process.exit(1)
 })
