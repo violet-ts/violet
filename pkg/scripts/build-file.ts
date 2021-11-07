@@ -20,13 +20,12 @@ const main = async ({ from, to, watch, target }: Params) => {
   fs.mkdirSync(toDir, { recursive: true })
 
   const watchOptions: boolean | WatchMode = watch
-    ? {
+    && {
         onRebuild(error) {
           if (error) return console.error(error)
           console.log(`Build done for file ${fromPath}`)
         },
       }
-    : false
 
   await build({
     platform: 'node',
