@@ -6,19 +6,23 @@
     "migrate:dev": "prisma migrate dev",
     "migrate:reset": "prisma migrate reset",
     "start": "cross-env NODE_ENV=production node --require=source-map-support/register build/index.js",
-    "prisma:seed": "prisma db seed",
-    "_:dev": "run-p _:dev:*",
-    "_:dev:build": "pnpm run migrate:dev && pnpm run prisma:seed && pnpm run _:build:index -- --watch",
+    "prisma:prod": "node --require=source-map-support/register ./prisma/scripts.js --prod",
+    "prisma:seed": "node --require=source-map-support/register ./prisma/scripts.js --seed",
+    "prisma:seed:dev": "pnpm run prisma:seed -- dev",
+    "_:dev": "run-p -l _:dev:*",
+    "_:dev:build": "pnpm run migrate:dev && pnpm run prisma:seed:dev && run-p -l \"_:build:* -- --watch\"",
     "_:dev:serve": "node-dev src/entries/index.ts",
     "_:dev:aspida": "aspida --watch",
     "_:build:index": "ts-node -T ./node_modules/@violet/scripts/build-file.ts --from=./src/entries/index.ts --to=./build/index.js --target=node16",
+    "_:build:prisma-seed": "ts-node -T ./node_modules/@violet/scripts/build-files.ts --from-dir=./prisma/scripts/seed --to-dir=./prisma/build/seed --target=node16 --clean",
+    "_:build:prisma-prod": "ts-node -T ./node_modules/@violet/scripts/build-files.ts --from-dir=./prisma/scripts/prod --to-dir=./prisma/build/prod --target=node16 --clean",
     "_:generate": "prisma generate && frourio && aspida",
-    "_:build": "pnpm run _:build:index -- --production",
+    "_:build": "run-p -l \"_:build:* -- --prod\"",
     "_:test": "jest",
     "_:typecheck": "tsc --noEmit"
   },
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "pnpm run prisma:seed:dev"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.29.0",

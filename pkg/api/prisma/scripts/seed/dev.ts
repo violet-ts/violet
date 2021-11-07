@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
-import { deskData, projectData, revisionData, workData } from './seedData'
-import { messageData, replyData } from './seedStreamData'
+import { deskData, projectData, revisionData, workData } from './dev-data/basic'
+import { messageData, replyData } from './dev-data/stream'
 
 const prisma = new PrismaClient()
 export const main = async () => {
@@ -85,9 +85,11 @@ export const main = async () => {
   )
 }
 
-main()
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
-  .finally(() => prisma.$disconnect())
+if (require.main === module) {
+  main()
+    .catch((e) => {
+      console.error(e)
+      process.exit(1)
+    })
+    .finally(() => prisma.$disconnect())
+}
