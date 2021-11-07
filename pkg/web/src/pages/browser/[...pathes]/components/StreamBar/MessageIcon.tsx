@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const ClickableArea = styled.button`
+const Container = styled.button`
   width: 24px;
   height: 32px;
   cursor: pointer;
@@ -31,10 +31,10 @@ const SubmitIcon = styled.div`
     border-bottom: 4px solid transparent;
   }
 `
-export const MessageIcon = (props: { onClick: () => void }) => {
+export const MessageIcon = () => {
   return (
-    <ClickableArea onClick={props.onClick}>
+    <Container>
       <SubmitIcon />
-    </ClickableArea>
+    </Container>
   )
 }

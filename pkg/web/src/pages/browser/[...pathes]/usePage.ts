@@ -84,7 +84,13 @@ export const usePage = () => {
 
     const data = apiWholeData.projects?.find((p) => p.id === currentProject.id)
     const desks = apiWholeData.desksList.find((d) => d.projectId === currentProject.id)?.desks
-    console.log('UPDATE!!->', apiWholeData.revisionsList)
+    const revisions = apiWholeData.revisionsList.find(
+      (d) => d.workId === currentProject.openedTabId
+    )?.revisions
+
+    const messages = apiWholeData.messagesList.find((m) =>
+      revisions?.find((revision) => revision.id === m.revisionId)
+    )?.messages
 
     return (
       data &&
@@ -92,13 +98,8 @@ export const usePage = () => {
         projectId: currentProject.id,
         name: data.name,
         desks,
-        revisions: apiWholeData.revisionsList.find((d) => d.workId === currentProject.openedTabId)
-          ?.revisions,
-        messages: apiWholeData.messagesList.find((d) =>
-          apiWholeData.revisionsList
-            .find((d) => d.workId === currentProject.openedTabId)
-            ?.revisions.find((r) => r.id === d.revisionId)
-        )?.messages,
+        revisions,
+        messages,
       }
     )
   }, [apiWholeData, currentProject])
