@@ -1,8 +1,6 @@
 import type {
   ApiMessage,
   ApiRevision,
-  BrowserMessage,
-  BrowserReply,
   BrowserRevision,
   MessageId,
   ProjectId,
@@ -37,22 +35,8 @@ export const MainColumn = (props: {
   revisions: ApiRevision[]
   messages: ApiMessage[] | undefined
 }) => {
-  const getMessgaesByMessageIds = (messages: ApiMessage[], messageIds: MessageId[]) => {
-    if (!messages.some((m) => messageIds.includes(m.id))) return
-
-    return messages.map<BrowserMessage>(({ id, content, createdAt, userName, replys }) => ({
-      id,
-      content,
-      createdAt,
-      userName,
-      replys: replys.map<BrowserReply>(({ id, content, createdAt, userName }) => ({
-        id,
-        content,
-        createdAt,
-        userName,
-      })),
-    }))
-  }
+  const getMessgaesByMessageIds = (messages: ApiMessage[], messageIds: MessageId[]) =>
+    messages.filter((message) => messageIds.filter((id) => id === message.id))
 
   const messagesByRevisionId = useMemo(() => {
     return props.revisions.map<BrowserRevision>(({ id, messageIds }) => ({
@@ -71,12 +55,7 @@ export const MainColumn = (props: {
           </RevisionContent>
           <Spacer axis="y" size={8} />
           <StreamBarColumn>
-            <StreamBar
-              projectId={props.projectId}
-              workId={props.workId}
-              revision={revision}
-              messages={revision.messages}
-            />
+            <StreamBar projectId={props.projectId} workId={props.workId} revision={revision} />
           </StreamBarColumn>
         </MainContent>
       ))}

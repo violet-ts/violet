@@ -1,4 +1,4 @@
-import type { ApiReply } from '@violet/api/types'
+import type { BrowserReply } from '@violet/api/types'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import React from 'react'
 import styled from 'styled-components'
@@ -13,7 +13,7 @@ const Message = styled.div`
   font-size: 12px;
   overflow-wrap: break-word;
 `
-export const ReplyMessageCell = (props: { replies: ApiReply[] }) => {
+export const ReplyMessageCell = (props: { replies: BrowserReply[] }) => {
   return (
     <Container>
       {props.replies.map((r, i) => (

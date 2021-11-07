@@ -1,4 +1,4 @@
-import type { ApiMessage, MessageId } from '@violet/api/types'
+import type { BrowserMessage, MessageId } from '@violet/api/types'
 import { Spacer } from '@violet/web/src//components/atoms/Spacer'
 import { alphaLevel, colors } from '@violet/web/src//utils/constants'
 import React from 'react'
@@ -20,7 +20,7 @@ const Message = styled.div`
 `
 
 export const MessageCell = (props: {
-  message: ApiMessage
+  message: BrowserMessage
   replyMessage: (messageId: MessageId, content: string) => Promise<void>
 }) => {
   const sendContent = (content: string) => {

@@ -1,6 +1,5 @@
 import type {
   ApiMessage,
-  BrowserMessage,
   BrowserRevision,
   MessageId,
   ProjectId,
@@ -53,7 +52,6 @@ export const StreamBar = (props: {
   projectId: ProjectId
   workId: WorkId
   revision: BrowserRevision
-  messages: BrowserMessage[] | undefined
 }) => {
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
   const { api, onErr } = useApi()
@@ -80,6 +78,7 @@ export const StreamBar = (props: {
         .revisions._revisionId(id)
         .post({ body: { content, userName } })
         .catch(onErr)
+
       const messageRes = await api.browser.works
         ._workId(props.workId)
         .revisions._revisionId(id)
@@ -94,7 +93,7 @@ export const StreamBar = (props: {
 
   useEffect(() => {
     scrollBottomRef?.current?.scrollIntoView()
-  }, [props.messages?.length])
+  }, [props.revision.messages?.length])
 
   const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
@@ -120,7 +119,7 @@ export const StreamBar = (props: {
   return (
     <Container>
       <StreamBox>
-        {props.messages?.map(
+        {props.revision.messages?.map(
           (message, i) =>
             message && <MessageCell key={i} message={message} replyMessage={replyMessage} />
         )}

@@ -4,7 +4,7 @@ import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { FileTypeAlertModal } from '../FileTypeAlertModal'
 import { AddButton } from './AddButton'
@@ -60,10 +60,6 @@ export const Revision = (props: {
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
-  const [openedTabRevisions, setOpenTabRevision] = useState(props.revision)
-  useEffect(() => {
-    setOpenTabRevision(props.revision)
-  }, [props.revision])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -105,7 +101,7 @@ export const Revision = (props: {
       {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
       {isFile && <Dropper type="file" accept={acceptExtensions} />}
       <DisplayWorksArea>
-        <DisplayWorksFrame>REVISION -- {openedTabRevisions.id}</DisplayWorksFrame>
+        <DisplayWorksFrame>REVISION -- {props.revision.id}</DisplayWorksFrame>
       </DisplayWorksArea>
       <RevisionFooter>
         <AddButton dropFile={dropFile} />
