@@ -1,11 +1,11 @@
 import type { ApiRevision, BrowserProject, WorkId } from '@violet/api/types'
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
+import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { FileTypeAlertModal } from '../FileTypeAlertModal'
 
 const Container = styled.div`
   position: relative;
@@ -43,6 +43,14 @@ const Dropper = styled.input`
   height: 100%;
   cursor: pointer;
   opacity: 0;
+`
+
+const AlertMessage = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
 `
 
 export const EmptyWork = ({ project }: { project: BrowserProject }) => {
@@ -96,7 +104,9 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
   return (
     <Container>
       {openAlert ? (
-        <FileTypeAlertModal closeModal={closeModal} />
+        <Modal closeModal={closeModal}>
+          <AlertMessage>UnSupported File Format!</AlertMessage>
+        </Modal>
       ) : (
         <>
           <DraggingPanel dragging={dragging}>

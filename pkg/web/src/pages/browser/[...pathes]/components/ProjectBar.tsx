@@ -1,8 +1,13 @@
 import type { BrowserProject, ProjectId } from '@violet/api/types'
 import { alphaLevel, colors, fontSizes } from '@violet/web/src//utils/constants'
+import { PlusIcon } from '@violet/web/src/components/atoms/PlusIcon'
+import { Spacer } from '@violet/web/src/components/atoms/Spacer'
+import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { pagesPath } from '@violet/web/src/utils/$path'
 import Link from 'next/link'
+import { useState } from 'react'
 import styled from 'styled-components'
+import { ProjectNameInput } from './ProjectNameInput'
 
 const Container = styled.div`
   display: flex;
@@ -44,7 +49,24 @@ const Icon = styled.div`
   border-radius: 6px;
 `
 
+const Message = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+`
+
 export const ProjectBar = (props: { projects: BrowserProject[]; projectId: ProjectId }) => {
+  const [isClickAddProject, setIsClickAddProject] = useState(false)
+  const addNewProject = () => {
+    setIsClickAddProject(true)
+  }
+
+  const closeModal = () => {
+    setIsClickAddProject(false)
+  }
+
   return (
     <Container>
       {props.projects.map((p) => (
@@ -58,6 +80,14 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
           </IconWrapper>
         </Link>
       ))}
+      <PlusIcon onClick={addNewProject} />
+      {isClickAddProject && (
+        <Modal closeModal={closeModal}>
+          <Spacer axis="y" size={80} />
+          <Message>Please enter a project name</Message>
+          <ProjectNameInput closeModal={closeModal} />
+        </Modal>
+      )}
     </Container>
   )
 }

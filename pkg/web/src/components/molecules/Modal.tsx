@@ -8,7 +8,8 @@ const Container = styled.div`
   height: 100vh;
   background-color: ${colors.black}${alphaLevel[1]};
 `
-const Modal = styled.dialog`
+
+const StyledModal = styled.dialog`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -18,13 +19,6 @@ const Modal = styled.dialog`
   background-color: ${colors.white};
   border: none;
   border-radius: 8px;
-  transform: translate(-50%, -50%);
-`
-
-const AlertMessage = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
   transform: translate(-50%, -50%);
 `
 
@@ -41,14 +35,15 @@ const CloseButton = styled.button`
   border: none;
   border-radius: 16px;
 `
-export const FileTypeAlertModal = (props: { closeModal: () => void }) => {
+
+export const Modal = (props: { closeModal: () => void; children: React.ReactNode }) => {
   return (
     <Portal>
-      <Container onClick={props.closeModal}>
-        <Modal open>
-          <AlertMessage>UnSupported File Format!</AlertMessage>
-          <CloseButton> OK </CloseButton>
-        </Modal>
+      <Container>
+        <StyledModal open>
+          {props.children}
+          <CloseButton onClick={props.closeModal}> OK </CloseButton>
+        </StyledModal>
       </Container>
     </Portal>
   )
