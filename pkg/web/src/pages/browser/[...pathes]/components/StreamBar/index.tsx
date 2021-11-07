@@ -118,29 +118,25 @@ export const StreamBar = (props: {
   )
 
   return (
-    <div>
-      <>
-        <Container>
-          <StreamBox>
-            {props.messages?.map(
-              (message, i) =>
-                message && <MessageCell key={i} message={message} replyMessage={replyMessage} />
-            )}
-            <div ref={scrollBottomRef} />
-          </StreamBox>
-          <MessageBox>
-            <InputForm
-              placeholder="message"
-              value={content}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <ClickableArea onClick={() => submitMessage(props.revision.id)}>
-              <Spacer axis="y" size={88} />
-              <MessageIcon />
-            </ClickableArea>
-          </MessageBox>
-        </Container>
-      </>
-    </div>
+    <Container>
+      <StreamBox>
+        {props.messages?.map(
+          (message, i) =>
+            message && <MessageCell key={i} message={message} replyMessage={replyMessage} />
+        )}
+        <div ref={scrollBottomRef} />
+      </StreamBox>
+      <MessageBox>
+        <InputForm
+          placeholder="message"
+          value={content}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <ClickableArea onClick={() => submitMessage(props.revision.id)}>
+          <Spacer axis="y" size={88} />
+          <MessageIcon />
+        </ClickableArea>
+      </MessageBox>
+    </Container>
   )
 }

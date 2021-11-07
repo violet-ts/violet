@@ -56,8 +56,8 @@ export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
   const drop = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
       const targetFileType = e.target.files[0].type
-      const typeList = fileTypes.map<string>((x) => x.type)
-      typeList.some((t) => t === targetFileType) ? sendFormData(e.target.files) : setOpenAlert(true)
+      const types = fileTypes.map<string>((x) => x.type)
+      types.includes(targetFileType) ? sendFormData(e.target.files) : setOpenAlert(true)
     }
     e.target.value = ''
   }

@@ -65,22 +65,20 @@ export const MainColumn = (props: {
   return (
     <Container>
       {messagesByRevisionId.map((revision, i) => (
-        <>
-          <MainContent key={i}>
-            <RevisionContent>
-              <Revision projectId={props.projectId} workId={props.workId} revision={revision} />
-            </RevisionContent>
-            <Spacer axis="y" size={8} />
-            <StreamBarColumn>
-              <StreamBar
-                projectId={props.projectId}
-                workId={props.workId}
-                revision={revision}
-                messages={revision.messages}
-              />
-            </StreamBarColumn>
-          </MainContent>
-        </>
+        <MainContent key={i}>
+          <RevisionContent>
+            <Revision projectId={props.projectId} workId={props.workId} revision={revision} />
+          </RevisionContent>
+          <Spacer axis="y" size={8} />
+          <StreamBarColumn>
+            <StreamBar
+              projectId={props.projectId}
+              workId={props.workId}
+              revision={revision}
+              messages={revision.messages}
+            />
+          </StreamBarColumn>
+        </MainContent>
       ))}
     </Container>
   )
