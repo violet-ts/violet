@@ -1,4 +1,4 @@
-import type { Prisma } from '.prisma/client'
+import type { Prisma } from '@prisma/client'
 
 const projectIds = {
   id1: '82116895-a386-8a33-f6e0-347408413e33',

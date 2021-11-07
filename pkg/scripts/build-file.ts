@@ -19,14 +19,12 @@ const main = async ({ from, to, watch, target }: Params) => {
 
   fs.mkdirSync(toDir, { recursive: true })
 
-  const watchOptions: boolean | WatchMode = watch
-    ? {
-        onRebuild(error) {
-          if (!error) return console.error(error)
-          console.log('building...')
-        },
-      }
-    : false
+  const watchOptions: boolean | WatchMode = watch && {
+    onRebuild(error) {
+      if (error) return console.error(error)
+      console.log(`Build done for file ${fromPath}`)
+    },
+  }
 
   await build({
     platform: 'node',
@@ -55,7 +53,8 @@ const main = async ({ from, to, watch, target }: Params) => {
 
 const args = arg({
   '--watch': Boolean,
-  '--production': Boolean,
+  // NOTE: 現状未使用
+  '--prod': Boolean,
   '--from': String,
   '--to': String,
   '--target': String,
@@ -67,4 +66,5 @@ main({
   target: args['--target'] || '',
 }).catch((e) => {
   console.error(e)
+  process.exit(1)
 })

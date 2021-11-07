@@ -106,6 +106,7 @@ importers:
       '@prisma/client': ^3.2.1
       '@violet/def': workspace:*
       '@violet/scripts': workspace:*
+      arg: ^5.0.1
       aspida: ^1.7.1
       class-validator: ^0.13.1
       dayjs: ^1.10.7
@@ -126,6 +127,7 @@ importers:
       '@prisma/client': 3.3.0_prisma@3.3.0
       '@violet/def': link:../def
       '@violet/scripts': link:../scripts
+      arg: 5.0.1
       aspida: 1.7.1
       class-validator: 0.13.1
       dayjs: 1.10.7
@@ -2634,7 +2636,6 @@ packages:
 
   /arg/5.0.1:
     resolution: {integrity: sha512-e0hDa9H2Z9AwFkk2qDlwhoMYE4eToKarchkQHovNdLTCYMHZHeRjI71crOh+dio4K6u1IcwubQqo79Ga4CyAQA==}
-    dev: true
 
   /argparse/1.0.10:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
