@@ -1,4 +1,5 @@
 FROM public.ecr.aws/lambda/nodejs:14
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN yum install -y amazon-linux-extras-2.0.1-1.amzn2.noarch
 
@@ -21,10 +22,12 @@ COPY . .
 ENV NODE_ENV production
 
 RUN ( \
-  pnpm install --frozen-lockfile --prod=false \
+  pnpm install --frozen-lockfile --prod=false --ignore-scripts \
+  && node node_modules/esbuild/install.js \
   && pnpm run generate \
-  && pnpm --dir=./pkg/lambda/conv2img run _:build \
-  && pnpm install --frozen-lockfile --prod --filter=./pkg/lambda/conv2img \
+  && pnpm --filter=@violet/lambda-conv2img run _:build \
+  && pnpm install --frozen-lockfile --prod --offline --ignore-scripts \
+  && pnpm install --frozen-lockfile --prod --offline --ignore-script --filter=violet --filter=@violet/lambda-conv2img \
   && find . -type f \
     | grep -v -E '^\./package.json' \
     | grep -v -E '^\./node_modules/' \
