@@ -23,8 +23,8 @@ export type BrowserEdition = {
 
 export type BrowserRevision = {
   id: RevisionId
-  editions: BrowserEdition[]
-  messages: (BrowserMessage | undefined)[]
+  editions: BrowserEdition[] | undefined
+  messages: BrowserMessage[] | undefined
 }
 
 export type BrowserWork = {

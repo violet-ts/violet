@@ -37,28 +37,28 @@ export const MainColumn = (props: {
   revisions: ApiRevision[]
   messages: ApiMessage[] | undefined
 }) => {
-  const getMessgaesByMessageIds = (messageId: MessageId) => {
-    const message = props.messages?.filter((m) => m.id === messageId)
-    if (!(message?.length === 1)) return
-    const messageRes: BrowserMessage = {
-      id: message[0].id,
-      content: message[0].content,
-      createdAt: message[0].createdAt,
-      userName: message[0].userName,
-      replys: message[0].replys.map<BrowserReply>(({ id, content, createdAt, userName }) => ({
+  const getMessgaesByMessageIds = (messages: ApiMessage[], messageIds: MessageId[]) => {
+    if (!messages.some((m) => messageIds.includes(m.id))) return
+
+    return messages.map<BrowserMessage>(({ id, content, createdAt, userName, replys }) => ({
+      id,
+      content,
+      createdAt,
+      userName,
+      replys: replys.map<BrowserReply>(({ id, content, createdAt, userName }) => ({
         id,
         content,
         createdAt,
         userName,
       })),
-    }
-    return messageRes
+    }))
   }
+
   const messagesByRevisionId = useMemo(() => {
     return props.revisions.map<BrowserRevision>(({ id, messageIds }) => ({
       id,
       editions: [],
-      messages: messageIds.map((id) => id && getMessgaesByMessageIds(id)),
+      messages: props.messages && messageIds && getMessgaesByMessageIds(props.messages, messageIds),
     }))
   }, [props.revisions, props.messages])
 

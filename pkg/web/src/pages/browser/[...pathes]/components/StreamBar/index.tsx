@@ -53,7 +53,7 @@ export const StreamBar = (props: {
   projectId: ProjectId
   workId: WorkId
   revision: BrowserRevision
-  messages: (BrowserMessage | undefined)[]
+  messages: BrowserMessage[] | undefined
 }) => {
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
   const { api, onErr } = useApi()
