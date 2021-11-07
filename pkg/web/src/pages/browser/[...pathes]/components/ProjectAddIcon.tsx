@@ -40,6 +40,6 @@ const AddProjectButton = styled.i`
     opacity: 1;
   }
 `
-export const AddProject = (props: { addProject: () => void }) => {
+export const ProjectAddIcon = (props: { addProject: () => void }) => {
   return <AddProjectButton onClick={props.addProject} />
 }

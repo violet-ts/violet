@@ -7,7 +7,6 @@ import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Modal } from '../Modal'
-import { PortalModal } from '../PortalModal'
 import { AddButton } from './AddButton'
 
 const Container = styled.div`
@@ -114,11 +113,9 @@ export const Revision = (props: {
         onChange={onChange}
       >
         {openAlert && (
-          <PortalModal>
-            <Modal closeModal={closeModal}>
-              <AlertMessage>{'UnSupported File Format!'}</AlertMessage>
-            </Modal>
-          </PortalModal>
+          <Modal closeModal={closeModal}>
+            <AlertMessage>{'UnSupported File Format!'}</AlertMessage>
+          </Modal>
         )}
         {isFile && <Dropper type="file" accept={acceptExtensions} />}
         {openedTabRevisions.map((_o, i) => (

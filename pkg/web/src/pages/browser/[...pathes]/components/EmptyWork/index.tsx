@@ -6,7 +6,6 @@ import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { Modal } from '../Modal'
-import { PortalModal } from '../PortalModal'
 
 const Container = styled.div`
   position: relative;
@@ -105,11 +104,9 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
   return (
     <Container>
       {openAlert ? (
-        <PortalModal>
-          <Modal closeModal={closeModal}>
-            <AlertMessage>{'UnSupported File Format!'}</AlertMessage>
-          </Modal>
-        </PortalModal>
+        <Modal closeModal={closeModal}>
+          <AlertMessage>{'UnSupported File Format!'}</AlertMessage>
+        </Modal>
       ) : (
         <>
           <DraggingPanel dragging={dragging}>

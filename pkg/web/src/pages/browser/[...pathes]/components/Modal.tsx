@@ -1,5 +1,13 @@
+import { Portal } from '@violet/web/src/components/atoms/Portal'
 import { alphaLevel, colors, fontSizes } from '@violet/web/src/utils/constants'
 import styled from 'styled-components'
+
+const Container = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: ${colors.black}${alphaLevel[1]};
+`
 
 const StyleModal = styled.dialog`
   position: absolute;
@@ -30,9 +38,13 @@ const CloseButton = styled.button`
 
 export const Modal = (props: { closeModal: () => void; children: React.ReactNode }) => {
   return (
-    <StyleModal open>
-      {props.children}
-      <CloseButton onClick={props.closeModal}> OK </CloseButton>
-    </StyleModal>
+    <Portal>
+      <Container>
+        <StyleModal open>
+          {props.children}
+          <CloseButton onClick={props.closeModal}> OK </CloseButton>
+        </StyleModal>
+      </Container>
+    </Portal>
   )
 }
