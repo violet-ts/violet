@@ -6,7 +6,8 @@ import type { ChangeEvent, FormEvent } from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { AddProject } from './AddProject'
-import { FileTypeAlertModal } from './FileTypeAlertModal'
+import { Modal } from './Modal'
+import { PortalModal } from './PortalModal'
 
 const Container = styled.div`
   display: flex;
@@ -49,8 +50,17 @@ const Icon = styled.div`
 `
 
 const InputFormProject = styled.div`
-  display: block;
-  padding: 6px 8px;
+  position: absolute;
+  top: 80px;
+  left: 35%;
+`
+
+const Message = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
 `
 
 export const ProjectBar = (props: { projects: BrowserProject[]; projectId: ProjectId }) => {
@@ -59,7 +69,6 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
   const [isFocusing, setIsFocusing] = useState(false)
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const inputElement = useRef<HTMLInputElement>(null)
-  const [openInputForm, setOpenInputForm] = useState(false)
   useEffect(() => {
     inputElement.current?.focus()
   }, [inputElement.current, isClickAddProject])
@@ -69,7 +78,6 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
     }
     setIsFocusing(false)
     setIsClickAddProject(true)
-    setOpenInputForm(true)
   }
   const sendProjectName = (e: FormEvent) => {
     e.preventDefault()
@@ -78,7 +86,7 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
   }
 
   const closeModal = () => {
-    setOpenInputForm(false)
+    setIsClickAddProject(false)
   }
 
   return (
@@ -95,27 +103,22 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
         </Link>
       ))}
       <AddProject addProject={addNewProject} />
-
       {isClickAddProject && !isFocusing && (
-        <>
-          {openInputForm && (
-            <FileTypeAlertModal
-              closeModal={closeModal}
-              message={'プロジェクト名を入力してください'}
-              type={'input'}
-            />
-          )}
-          {/* <InputFormProject>
-            <form onSubmit={sendProjectName}>
-              <input
-                ref={inputElement}
-                type="text"
-                onBlur={sendProjectName}
-                onChange={inputLabel}
-              />
-            </form>
-          </InputFormProject> */}
-        </>
+        <PortalModal>
+          <Modal closeModal={closeModal}>
+            <Message>{'Please enter a project name'}</Message>
+            <InputFormProject>
+              <form onSubmit={sendProjectName}>
+                <input
+                  ref={inputElement}
+                  type="text"
+                  onBlur={sendProjectName}
+                  onChange={inputLabel}
+                />
+              </form>
+            </InputFormProject>
+          </Modal>
+        </PortalModal>
       )}
     </Container>
   )
