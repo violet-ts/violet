@@ -1,9 +1,9 @@
-FROM node:16-buster
+FROM node:14-buster
 ARG API_ORIGIN
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN ( \
-  npm install -g pnpm@^6.20.1 \
+  npm install -g pnpm@6.20.1 \
   && npm uninstall -g yarn \
 )
 

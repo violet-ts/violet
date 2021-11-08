@@ -60,6 +60,7 @@ const main = async ({ fromDir, toDir, watch, target, clean }: Params) => {
           '@violet/web',
           '@violet/api',
           '@violet/def',
+          '@violet/lib',
           '@violet/scripts',
           '@violet/lambda-conv2img',
         ],

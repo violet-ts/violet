@@ -38,10 +38,6 @@
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^4.29.3",
     "@typescript-eslint/parser": "^4.29.3",
-    "@violet/api": "workspace:*",
-    "@violet/def": "workspace:*",
-    "@violet/lambda-conv2img": "workspace:*",
-    "@violet/web": "workspace:*",
     "babel-jest": "^27.1.0",
     "commitlint": "^14.1.0",
     "cross-env": "^7.0.3",
@@ -76,7 +72,7 @@
     "typescript": "^4.4.2"
   },
   "engines": {
-    "node": ">=14",
+    "node": "^14",
     "npm": "forbidden, use npm",
     "pnpm": ">=6",
     "yarn": "forbidden, use npm"

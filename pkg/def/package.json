@@ -4,5 +4,8 @@
   "private": true,
   "scripts": {
     "_:typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@violet/def": "workspace:*"
   }
 }

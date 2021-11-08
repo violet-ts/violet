@@ -1,4 +1,4 @@
-const pkgs = ['api', 'def', 'lambda', 'scripts', 'web']
+const pkgs = ['api', 'def', 'lib', 'lambda', 'scripts', 'web']
 module.exports = {
   root: true,
   ignorePatterns: ['!*.js', '!*.cjs', '!*.mjs', '!*.ts'],
@@ -61,10 +61,14 @@ module.exports = {
           {
             patterns: [
               {
+                group: ['.prisma/*'],
+                message: `do not use .prisma/* instead use @prisma/*`,
+              },
+              {
                 group: [
                   '.prisma/*',
                   ...pkgs
-                    .filter((pkg2) => pkg2 !== pkg && pkg2 !== 'api' && pkg2 !== 'def')
+                    .filter((pkg2) => pkg2 !== pkg && !['api', 'def', 'lib'].includes(pkg2))
                     .map((pkg2) => `@violet/${pkg2}`),
                   ...(pkg === 'api' ? [] : ['@violet/api/src/*']),
                 ],
