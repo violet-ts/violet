@@ -62,9 +62,10 @@ module.exports = {
             patterns: [
               {
                 group: [
+                  '.prisma/*',
                   ...pkgs
                     .filter((pkg2) => pkg2 !== pkg && pkg2 !== 'api' && pkg2 !== 'def')
-                    .map((pkg2) => `!@violet/${pkg2}`),
+                    .map((pkg2) => `@violet/${pkg2}`),
                   ...(pkg === 'api' ? [] : ['@violet/api/src/*']),
                 ],
                 message: `only allowed to import modules under @violet/${pkg}, @violet/def, @violet/api/api and @violet/api/types`,
