@@ -1,5 +1,6 @@
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
+import { useRouter } from 'next/dist/client/router'
 import type { ChangeEvent, FormEvent } from 'react'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -14,13 +15,26 @@ export const ProjectNameInput = (props: { closeModal: () => void }) => {
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
-  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
+  const { apiWholeData, updateApiWholeData, updateProjects } = useContext(BrowserContext)
+  const { replace } = useRouter()
   useEffect(() => {
     inputElement.current?.focus()
   }, [])
   const createProject = async (name: string) => {
     const newProject = await api.browser.projects.post({ body: { name } }).catch(onErr)
-    console.log(newProject)
+    if (!newProject?.body) return
+    const projectsData = [...apiWholeData.projects, newProject.body]
+    updateApiWholeData('projects', projectsData)
+    updateProjects(
+      projectsData.map((d) => ({
+        ...d,
+        tabs: [],
+        openedFullPathDict: {},
+        openedTabId: undefined,
+        selectedFullPath: d.id,
+      }))
+    )
+    replace(newProject.body.id)
   }
   const sendProjectName = (e: FormEvent) => {
     e.preventDefault()
