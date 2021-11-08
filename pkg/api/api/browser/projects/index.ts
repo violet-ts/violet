@@ -6,5 +6,6 @@ export type Methods = {
   }
   post: {
     reqBody: Pick<ApiProject, 'name'>
+    resBody: ApiProject
   }
 }

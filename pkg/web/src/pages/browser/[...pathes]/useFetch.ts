@@ -27,7 +27,6 @@ export const useFetch = (
   useEffect(() => {
     const projectsData = projectsRes.data
     if (!projectsData) return
-
     updateApiWholeData('projects', projectsData)
     updateProjects(
       projectsData.map((d) => ({
