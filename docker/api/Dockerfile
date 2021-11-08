@@ -20,14 +20,6 @@ RUN ( \
   && pnpm --filter=@violet/api run _:build \
   && pnpm install --frozen-lockfile --prod --offline --ignore-scripts \
   && pnpm install --frozen-lockfile --prod --offline --ignore-scripts --filter=violet --filter=@violet/api \
-  && find . -type f \
-    | grep -v -E '^\./package.json' \
-    | grep -v -E '^\./node_modules/' \
-    | grep -v -E '^\./pkg/api/package.json' \
-    | grep -v -E '^\./pkg/api/build/' \
-    | grep -v -E '^\./pkg/api/prisma/' \
-    | grep -v -E '^\./pkg/api/node_modules/' \
-    | xargs rm -f \
   && rm -rf "$HOME/.pnpm-store" \
 )
 

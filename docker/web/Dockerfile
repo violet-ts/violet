@@ -24,21 +24,6 @@ RUN ( \
   && pnpm --filter=@violet/web run _:build \
   && pnpm install --frozen-lockfile --prod --offline --ignore-scripts \
   && pnpm install --frozen-lockfile --prod --offline --ignore-scripts --filter=violet --filter=@violet/web \
-  && find . -type f \
-    | grep -v -E '^\./package.json' \
-    | grep -v -E '^\./node_modules/' \
-    | grep -v -E '^\./pkg/web/package.json' \
-    | grep -v -E '^\./pkg/web/.babelrc' \
-    | grep -v -E '^\./pkg/web/next.config.js' \
-    | grep -v -E '^\./pkg/web/src/' \
-    | grep -v -E '^\./pkg/web/.next/' \
-    | grep -v -E '^\./pkg/web/node_modules/' \
-    | grep -v -E '^\./pkg/api/package.json' \
-    | grep -v -E '^\./pkg/api/prisma/' \
-    | grep -v -E '^\./pkg/api/src/' \
-    | grep -v -E '^\./pkg/api/types/' \
-    | grep -v -E '^\./pkg/api/node_modules/' \
-    | xargs rm -f \
   && rm -rf "$HOME/.pnpm-store" \
 )
 

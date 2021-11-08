@@ -28,13 +28,6 @@ RUN ( \
   && pnpm --filter=@violet/lambda-conv2img run _:build \
   && pnpm install --frozen-lockfile --prod --offline --ignore-scripts \
   && pnpm install --frozen-lockfile --prod --offline --ignore-script --filter=violet --filter=@violet/lambda-conv2img \
-  && find . -type f \
-    | grep -v -E '^\./package.json' \
-    | grep -v -E '^\./node_modules/' \
-    | grep -v -E '^\./pkg/lambda/conv2img/package.json' \
-    | grep -v -E '^\./pkg/lambda/conv2img/build/' \
-    | grep -v -E '^\./pkg/lambda/conv2img/node_modules/' \
-    | xargs rm -f \
   && rm -rf "$HOME/.pnpm-store" \
 )
 
