@@ -25,7 +25,6 @@ export const getMessages = async (revisionId: RevisionId) => {
       userName: r.userName,
     })),
   }))
-  console.log('MESSAGES->', messages)
   return { revisionId, messages }
 }
 

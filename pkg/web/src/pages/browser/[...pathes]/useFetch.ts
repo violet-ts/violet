@@ -1,5 +1,5 @@
 import useAspidaSWR from '@aspida/swr'
-import type { BrowserProject, ProjectId } from '@violet/api/types'
+import type { BrowserProject, ProjectId, RevisionId } from '@violet/api/types'
 import { BrowserContext } from '@violet/web/src//contexts/Browser'
 import { useApi } from '@violet/web/src//hooks'
 import { useContext, useEffect } from 'react'
@@ -17,13 +17,14 @@ export const useFetch = (
     api.browser.works._workId(currentProject?.openedTabId ?? '').revisions,
     { enabled: !!currentProject?.openedTabId }
   )
-  const revisionIdToGetMessage = revisionsRes?.data?.revisions?.slice(-1).map((c) => c.id)
-  const messagesRes = useAspidaSWR(
-    api.browser.works
-      ._workId(currentProject?.openedTabId ?? '')
-      .revisions._revisionId(revisionIdToGetMessage?.[0] ?? '')
-  )
-
+  const messageRes = (revisions: RevisionId[]) =>
+    revisions.map(
+      async (r) =>
+        await api.browser.works
+          ._workId(currentProject?.openedTabId ?? '')
+          .revisions._revisionId(r)
+          .messages.$get()
+    )
   useEffect(() => {
     const projectsData = projectsRes.data
     if (!projectsData) return
@@ -67,18 +68,28 @@ export const useFetch = (
   }, [revisionsRes.data])
 
   useEffect(() => {
-    const messageData = messagesRes.data
-    if (!messageData) return
+    const revisionsData = revisionsRes.data
+    if (!revisionsData) return
+
+    const revisions = revisionsData.revisions.flatMap((revision) => revision.id)
+    const messageData = revisions.map((r) =>
+      api.browser.works
+        ._workId(currentProject?.openedTabId ?? '')
+        .revisions._revisionId(r)
+        .messages.$get()
+    )
 
     updateApiWholeData(
       'messagesList',
-      apiWholeData.messagesList.some((r) => r.revisionId === messageData.revisionId)
+      apiWholeData.messagesList.some((r) =>
+        messageData.filter((message) => message === r.revisionId)
+      )
         ? apiWholeData.messagesList.map((r) =>
             r.revisionId === messageData.revisionId ? messageData : r
           )
-        : [...apiWholeData.messagesList, messageData]
+        : [...apiWholeData.messagesList, messageRes]
     )
-  }, [messagesRes.data])
+  }, [revisionsRes.data])
 
   return {
     error: [projectsRes.error, desksRes.error, revisionsRes.error, revisionsRes.error].find(

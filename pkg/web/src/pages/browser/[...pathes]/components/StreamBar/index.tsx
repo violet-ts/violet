@@ -119,9 +119,12 @@ export const StreamBar = (props: {
   return (
     <Container>
       <StreamBox>
-        {props.revision.messages?.map(
-          (message, i) =>
-            message && <MessageCell key={i} message={message} replyMessage={replyMessage} />
+        {props.revision.messages.map(
+          (m) =>
+            props.revision &&
+            props.revision.messages.length > 0 && (
+              <MessageCell message={m} replyMessage={replyMessage} />
+            )
         )}
         <div ref={scrollBottomRef} />
       </StreamBox>
