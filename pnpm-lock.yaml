@@ -157,6 +157,7 @@ importers:
       '@aws-sdk/credential-providers': ^3.39.0
       '@types/aws-lambda': ^8.10.84
       '@types/node': ^16.7.5
+      '@violet/def': workspace:*
       '@violet/lambda-conv2img': workspace:*
       '@violet/lib': workspace:*
       '@violet/scripts': workspace:*
@@ -169,6 +170,7 @@ importers:
     devDependencies:
       '@types/aws-lambda': 8.10.85
       '@types/node': 16.11.6
+      '@violet/def': link:../../def
       '@violet/lambda-conv2img': 'link:'
       '@violet/lib': link:../../lib
       '@violet/scripts': link:../../scripts
