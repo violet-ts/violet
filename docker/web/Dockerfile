@@ -15,8 +15,6 @@ ENV PORT 80
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV API_BASE_PATH ""
 ENV NODE_ENV production
-RUN pnpm install --frozen-lockfile --prod=false --ignore-scripts
-
 RUN ( \
   pnpm install --frozen-lockfile --prod=false --ignore-scripts \
   && node node_modules/esbuild/install.js \
