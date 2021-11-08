@@ -46,6 +46,7 @@
     "velona": "^0.7.0"
   },
   "devDependencies": {
+    "@violet/api": "workspace:*",
     "@violet/def": "workspace:*",
     "@violet/lib": "workspace:*",
     "@violet/scripts": "workspace:*",
