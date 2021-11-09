@@ -15,7 +15,7 @@ export const ProjectNameInput = (props: { closeModal: () => void }) => {
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
-  const { apiWholeData, updateApiWholeData, updateProjects } = useContext(BrowserContext)
+  const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
   const { replace } = useRouter()
   useEffect(() => {
     inputElement.current?.focus()
@@ -24,13 +24,24 @@ export const ProjectNameInput = (props: { closeModal: () => void }) => {
     const newProject = await api.browser.projects.post({ body: { name } }).catch(onErr)
     if (!newProject?.body) return
     const projectsData = [...apiWholeData.projects, newProject.body]
-    updateApiWholeData('projects', projectsData)
-    updateProjects(
-      projectsData.map((d) => ({
-        ...d,
-        tabs: [],
+    const projectsStatus = [
+      ...projects,
+      {
+        id: newProject.body.id,
+        name: newProject.body.name,
         openedFullPathDict: {},
         openedTabId: undefined,
+        selectedFullPath: newProject.body.id,
+        tabs: [],
+      },
+    ]
+    updateApiWholeData('projects', projectsData)
+    updateProjects(
+      projectsStatus.map((d) => ({
+        ...d,
+        tabs: d.tabs,
+        openedFullPathDict: d.openedFullPathDict,
+        openedTabId: d.openedTabId,
         selectedFullPath: d.id,
       }))
     )
