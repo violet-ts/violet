@@ -45,7 +45,7 @@ export const ProjectNameInput = (props: { closeModal: () => void }) => {
         selectedFullPath: d.id,
       }))
     )
-    replace(asPath.split('/')[2] + '/' + newProject.body.id)
+    replace(`${asPath.split('/')[2]}/${newProject.body.id}`)
   }
   const sendProjectName = (e: FormEvent) => {
     e.preventDefault()
