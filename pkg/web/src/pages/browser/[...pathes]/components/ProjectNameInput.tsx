@@ -16,7 +16,7 @@ export const ProjectNameInput = (props: { closeModal: () => void }) => {
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
   const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
-  const { replace } = useRouter()
+  const { asPath, replace } = useRouter()
   useEffect(() => {
     inputElement.current?.focus()
   }, [])
@@ -45,7 +45,7 @@ export const ProjectNameInput = (props: { closeModal: () => void }) => {
         selectedFullPath: d.id,
       }))
     )
-    replace(newProject.body.id)
+    replace(asPath.split('/')[2] + '/' + newProject.body.id)
   }
   const sendProjectName = (e: FormEvent) => {
     e.preventDefault()
