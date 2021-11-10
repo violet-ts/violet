@@ -36,15 +36,7 @@ export const ProjectNameInput = (props: { closeModal: () => void }) => {
       },
     ]
     updateApiWholeData('projects', projectsData)
-    updateProjects(
-      projectsStatus.map((d) => ({
-        ...d,
-        tabs: d.tabs,
-        openedFullPathDict: d.openedFullPathDict,
-        openedTabId: d.openedTabId,
-        selectedFullPath: d.selectedFullPath,
-      }))
-    )
+    updateProjects(projectsStatus)
     push(`${asPath}/${newProject.body.id}`)
   }
   const sendProjectName = (e: FormEvent) => {
