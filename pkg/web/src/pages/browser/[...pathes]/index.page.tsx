@@ -30,6 +30,7 @@ const WroksMain = styled.div`
 
 const ProjectPage = () => {
   const { error, projectApiData, projects, currentProject } = usePage()
+  let emptyRevisions: BrowserRevision[]
 
   const getMessagesByRevisionId = (id: RevisionId) => {
     const messageIds = projectApiData?.revisions?.find((revision) => revision.id === id)?.messageIds
@@ -39,7 +40,7 @@ const ProjectPage = () => {
   }
 
   const browserRevisionData = useMemo(() => {
-    if (!projectApiData?.revisions) return
+    if (!projectApiData?.revisions) return emptyRevisions
     const revisions: BrowserRevision[] = projectApiData.revisions.map<BrowserRevision>((p) => ({
       id: p.id,
       editions: [],
@@ -58,7 +59,7 @@ const ProjectPage = () => {
       </LeftColumn>
       <WorksView>
         {currentProject.openedTabId ? (
-          browserRevisionData ? (
+          projectApiData.revisions?.length ? (
             <>
               <WorksHeader>
                 <TabBar project={currentProject} projectApiData={projectApiData} />
