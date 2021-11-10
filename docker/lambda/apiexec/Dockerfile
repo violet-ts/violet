@@ -19,4 +19,4 @@ RUN ( \
   && rm -rf "$HOME/.pnpm-store" \
 )
 
-CMD ["pkg/api/build/lambda.handler"]
+CMD ["pkg/api/bin/lambda.handler"]

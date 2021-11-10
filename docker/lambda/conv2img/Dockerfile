@@ -31,4 +31,4 @@ RUN ( \
   && rm -rf "$HOME/.pnpm-store" \
 )
 
-CMD ["pkg/lambda/conv2img/build/index.handler"]
+CMD ["pkg/lambda/conv2img/bin/index.handler"]

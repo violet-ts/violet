@@ -1,4 +1,4 @@
-const pkgs = ['api', 'def', 'lib', 'lambda', 'scripts', 'web']
+const pkgs = ['api', 'def', 'lib', 'lambda-conv2img', 'scripts', 'web']
 module.exports = {
   root: true,
   ignorePatterns: ['!*.js', '!*.cjs', '!*.mjs', '!*.ts'],
