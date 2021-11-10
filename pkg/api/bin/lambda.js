@@ -1,2 +1,2 @@
 require('source-map-support').install()
-require('../build/lambda.js')
+module.exports = require('../build/lambda.js')
