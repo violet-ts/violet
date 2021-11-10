@@ -48,8 +48,6 @@ const ProjectPage = () => {
     return revisions
   }, [projectApiData])
 
-  console.log('BrowserRevision->', browserRevisionData)
-
   if (!projectApiData || !currentProject) return <Fetching error={error} />
 
   return (

@@ -17,14 +17,17 @@ export const useFetch = (
     api.browser.works._workId(currentProject?.openedTabId ?? '').revisions,
     { enabled: !!currentProject?.openedTabId }
   )
-  const messageRes = (revisions: RevisionId[]) =>
-    revisions.map(
-      async (r) =>
-        await api.browser.works
+
+  const messageRes = async (revisions: RevisionId[]) =>
+    await Promise.all(
+      revisions.map((r) =>
+        api.browser.works
           ._workId(currentProject?.openedTabId ?? '')
           .revisions._revisionId(r)
           .messages.$get()
+      )
     )
+
   useEffect(() => {
     const projectsData = projectsRes.data
     if (!projectsData) return
@@ -72,23 +75,10 @@ export const useFetch = (
     if (!revisionsData) return
 
     const revisions = revisionsData.revisions.flatMap((revision) => revision.id)
-    const messageData = revisions.map((r) =>
-      api.browser.works
-        ._workId(currentProject?.openedTabId ?? '')
-        .revisions._revisionId(r)
-        .messages.$get()
-    )
 
-    updateApiWholeData(
-      'messagesList',
-      apiWholeData.messagesList.some((r) =>
-        messageData.filter((message) => message === r.revisionId)
-      )
-        ? apiWholeData.messagesList.map((r) =>
-            r.revisionId === messageData.revisionId ? messageData : r
-          )
-        : [...apiWholeData.messagesList, messageRes]
-    )
+    messageRes(revisions).then((message) => {
+      updateApiWholeData('messagesList', message)
+    })
   }, [revisionsRes.data])
 
   return {
