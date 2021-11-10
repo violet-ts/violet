@@ -120,10 +120,12 @@ export const StreamBar = (props: {
     <Container>
       <StreamBox>
         {props.revision.messages.map(
-          (m) =>
+          (m, i) =>
             props.revision &&
             props.revision.messages.length > 0 && (
-              <MessageCell message={m} replyMessage={replyMessage} />
+              <React.Fragment key={i}>
+                <MessageCell message={m} replyMessage={replyMessage} />
+              </React.Fragment>
             )
         )}
         <div ref={scrollBottomRef} />
