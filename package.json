@@ -14,7 +14,8 @@
     "build-all": "pnpm run generate && pnpm run --filter=./pkg _:build",
     "start": "pnpm run --parallel --filter=./pkg start",
     "test": "pnpm run generate && pnpm run --filter=./pkg _:test",
-    "typecheck": "pnpm run generate && pnpm run --filter=./pkg _:typecheck"
+    "typecheck": "pnpm run generate && pnpm run --filter=./pkg _:typecheck",
+    "prepare": "husky install"
   },
   "prettier": {
     "printWidth": 100,
@@ -25,6 +26,8 @@
     ]
   },
   "devDependencies": {
+    "@commitlint/cli": "^14.1.0",
+    "@commitlint/config-conventional": "^14.1.0",
     "@testing-library/react": "^12.0.0",
     "@types/busboy": "^0.2.4",
     "@types/jest": "^27.0.1",
@@ -40,6 +43,7 @@
     "@violet/lambda-conv2img": "workspace:*",
     "@violet/web": "workspace:*",
     "babel-jest": "^27.1.0",
+    "commitlint": "^14.1.0",
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
@@ -49,6 +53,7 @@
     "fastify": "^3.20.2",
     "fastify-cors": "^6.0.2",
     "frourio": "^0.25.1",
+    "husky": "^7.0.4",
     "identity-obj-proxy": "^3.0.0",
     "isomorphic-fetch": "^3.0.0",
     "jest": "^27.1.0",

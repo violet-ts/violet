@@ -1,5 +1,5 @@
-import type { Prisma } from '.prisma/client'
-import { revisionIds } from './seedData'
+import type { Prisma } from '@prisma/client'
+import { revisionIds } from './basic'
 
 const messageIds = {
   id1: 'ce2dd590-ffad-cd32-01c2-06fd4f009ff3',

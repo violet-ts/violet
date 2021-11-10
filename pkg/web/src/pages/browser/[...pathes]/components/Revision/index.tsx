@@ -1,12 +1,12 @@
 import type { BrowserRevision, ProjectId, WorkId } from '@violet/api/types'
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
+import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { FileTypeAlertModal } from '../FileTypeAlertModal'
 import { AddButton } from './AddButton'
 
 const Container = styled.div`
@@ -49,6 +49,14 @@ const RevisionFooter = styled.div`
   justify-content: right;
   height: 56px;
   background-color: ${colors.white};
+`
+
+const AlertMessage = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
 `
 
 export const Revision = (props: {
@@ -98,7 +106,11 @@ export const Revision = (props: {
       onDragLeave={() => setIsFile(false)}
       onChange={onChange}
     >
-      {openAlert && <FileTypeAlertModal closeModal={closeModal} />}
+      {openAlert && (
+        <Modal closeModal={closeModal}>
+          <AlertMessage>UnSupported File Format!</AlertMessage>
+        </Modal>
+      )}
       {isFile && <Dropper type="file" accept={acceptExtensions} />}
       <DisplayWorksArea>
         <DisplayWorksFrame>REVISION -- {props.revision.id}</DisplayWorksFrame>

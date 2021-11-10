@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+env:
+  HUSKY: '0'
+
 jobs:
   cache-pnpm:
     name: Cache Pnpm
