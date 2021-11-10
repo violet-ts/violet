@@ -1,2 +1,2 @@
-require('source-map-support').install();
-require('../build/index.js');
+require('source-map-support').install()
+require('../build/index.js')
