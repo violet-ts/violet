@@ -85,7 +85,7 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
         <Modal closeModal={closeModal}>
           <Spacer axis="y" size={80} />
           <Message>Please enter a project name</Message>
-          <ProjectNameInput closeModal={closeModal} />
+          <ProjectNameInput inputCompleted={closeModal} />
         </Modal>
       )}
     </Container>

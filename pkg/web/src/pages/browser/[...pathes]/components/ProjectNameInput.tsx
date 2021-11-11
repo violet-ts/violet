@@ -1,3 +1,4 @@
+import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { useRouter } from 'next/dist/client/router'
@@ -10,19 +11,21 @@ const InputFormProject = styled.form`
   justify-content: center;
 `
 
-export const ProjectNameInput = (props: { closeModal: () => void }) => {
+export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
   const [label, setLabel] = useState('')
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
   const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
   const { asPath, push } = useRouter()
+  const [isCreating, setIsCreating] = useState(false)
   useEffect(() => {
     inputElement.current?.focus()
   }, [])
   const createProject = async (name: string) => {
     const newProject = await api.browser.projects.post({ body: { name } }).catch(onErr)
     if (!newProject?.body) return
+
     const projectsData = [...apiWholeData.projects, newProject.body]
     const projectsStatus = [
       ...projects,
@@ -39,16 +42,21 @@ export const ProjectNameInput = (props: { closeModal: () => void }) => {
     updateProjects(projectsStatus)
     push(`${asPath}/${newProject.body.id}`)
   }
-  const sendProjectName = (e: FormEvent) => {
+  const sendProjectName = async (e: FormEvent) => {
     e.preventDefault()
     if (!label) return
-    createProject(label)
+
+    setIsCreating(true)
+    await createProject(label)
+    setIsCreating(false)
     setLabel('')
-    props.closeModal()
+    props.inputCompleted()
   }
+
   return (
     <InputFormProject onSubmit={sendProjectName}>
       <input ref={inputElement} type="text" onChange={inputLabel} />
+      {isCreating && <Loading />}
     </InputFormProject>
   )
 }
