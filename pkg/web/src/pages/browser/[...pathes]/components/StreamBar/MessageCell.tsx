@@ -34,10 +34,10 @@ export const MessageCell = (props: {
       <Message>{props.message.content}</Message>
       <Spacer axis="y" size={16} />
       {props.message.replys && props.message.replys.length > 0 && (
-        <div>
+        <>
           <ReplyMessageCell replies={props.message.replys} />
           <Spacer axis="y" size={8} />
-        </div>
+        </>
       )}
       <ReplyInputForm sendContent={sendContent} />
       <Spacer axis="y" size={8} />

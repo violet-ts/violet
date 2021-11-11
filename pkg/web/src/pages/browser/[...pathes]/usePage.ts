@@ -89,7 +89,7 @@ export const usePage = () => {
     )?.revisions
 
     const messages = apiWholeData.messagesList.find((m) =>
-      revisions?.find((revision) => revision.id === m.revisionId)
+      revisions?.some((revision) => revision.id === m.revisionId)
     )?.messages
 
     return (

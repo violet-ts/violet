@@ -10,10 +10,10 @@ import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { PencileIcon } from 'src/components/atoms/PencileIcon'
 import { Spacer } from 'src/components/atoms/Spacer'
 import styled from 'styled-components'
 import { MessageCell } from './MessageCell'
-import { MessageIcon } from './MessageIcon'
 
 const Container = styled.div`
   display: flex;
@@ -62,11 +62,9 @@ export const StreamBar = (props: {
   const updateMessage = (messageRes: { revisionId: RevisionId; messages: ApiMessage[] }) => {
     updateApiWholeData(
       'messagesList',
-      apiWholeData.messagesList.some((r) => r.revisionId === messageRes.revisionId)
-        ? apiWholeData.messagesList.map((r) =>
-            r.revisionId === messageRes.revisionId ? messageRes : r
-          )
-        : [...apiWholeData.messagesList, messageRes]
+      apiWholeData.messagesList.map((r) =>
+        r.revisionId === messageRes.revisionId ? messageRes : r
+      )
     )
   }
 
@@ -123,9 +121,7 @@ export const StreamBar = (props: {
           (m, i) =>
             props.revision &&
             props.revision.messages.length > 0 && (
-              <React.Fragment key={i}>
-                <MessageCell message={m} replyMessage={replyMessage} />
-              </React.Fragment>
+              <MessageCell key={i} message={m} replyMessage={replyMessage} />
             )
         )}
         <div ref={scrollBottomRef} />
@@ -138,7 +134,7 @@ export const StreamBar = (props: {
         />
         <ClickableArea onClick={() => submitMessage(props.revision.id)}>
           <Spacer axis="y" size={88} />
-          <MessageIcon />
+          <PencileIcon />
         </ClickableArea>
       </MessageBox>
     </Container>

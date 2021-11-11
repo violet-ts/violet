@@ -1,11 +1,14 @@
 import { Spacer } from '@violet/web/src//components/atoms/Spacer'
 import { alphaLevel, colors } from '@violet/web/src//utils/constants'
 import React, { useState } from 'react'
+import { PencileIcon } from 'src/components/atoms/PencileIcon'
 import styled from 'styled-components'
-import { MessageIcon } from './MessageIcon'
 
 const Container = styled.div`
   display: flex;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
 `
 
 const InputForm = styled.textarea`
@@ -35,8 +38,8 @@ export const ReplyInputForm = (props: { sendContent: (content: string) => void }
       <InputForm placeholder="reply" value={content} onChange={(e) => setContent(e.target.value)} />
       <Spacer axis="x" size={8} />
       <ClickableArea onClick={replyButtonClick}>
-        <Spacer axis="y" size={32} />
-        <MessageIcon />
+        <Spacer axis="y" size={40} />
+        <PencileIcon />
       </ClickableArea>
     </Container>
   )
