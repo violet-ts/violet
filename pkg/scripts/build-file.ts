@@ -43,6 +43,7 @@ const main = async ({ from, to, watch, target }: Params) => {
           '@violet/web',
           '@violet/api',
           '@violet/def',
+          '@violet/lib',
           '@violet/scripts',
           '@violet/lambda-conv2img',
         ],

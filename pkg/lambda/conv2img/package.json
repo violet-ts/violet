@@ -8,8 +8,10 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.84",
     "@types/node": "^16.7.5",
-    "@violet/scripts": "workspace:*",
-    "aws-lambda": "^1.0.6"
+    "@violet/def": "workspace:*",
+    "@violet/lambda-conv2img": "workspace:*",
+    "@violet/lib": "workspace:*",
+    "@violet/scripts": "workspace:*"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.39.0",

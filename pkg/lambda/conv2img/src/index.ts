@@ -1,8 +1,7 @@
+import { exec } from '@violet/lib/exec'
 import type { S3Handler } from 'aws-lambda'
-import * as childProcess from 'child_process'
 import * as fs from 'fs'
 import type { IncomingMessage } from 'http'
-import { promisify } from 'util'
 import { getObject, putObject } from './s3'
 
 const CONTENT_TYPES = {
@@ -25,8 +24,6 @@ const LOCAL_DIR_NAMES = {
 
 Object.values(LOCAL_DIR_NAMES).forEach((name) => fs.mkdirSync(name))
 
-const execFile = promisify(childProcess.execFile)
-
 const convertS3DataToPdf = (data: IncomingMessage, filename: string) =>
   new Promise<void>((resolve) => {
     const { dirname, onFinish } = {
@@ -34,19 +31,23 @@ const convertS3DataToPdf = (data: IncomingMessage, filename: string) =>
       false: {
         dirname: LOCAL_DIR_NAMES.tmp,
         onFinish: () =>
-          execFile('libreoffice', [
-            '--nolockcheck',
-            '--nologo',
-            '--headless',
-            '--norestore',
-            '--language=ja',
-            '--nofirststartwizard',
-            '--convert-to',
-            'pdf',
-            '--outdir',
-            LOCAL_DIR_NAMES.original,
-            `${LOCAL_DIR_NAMES.tmp}/${filename}`,
-          ]).then(() => resolve()),
+          exec(
+            'libreoffice',
+            [
+              '--nolockcheck',
+              '--nologo',
+              '--headless',
+              '--norestore',
+              '--language=ja',
+              '--nofirststartwizard',
+              '--convert-to',
+              'pdf',
+              '--outdir',
+              LOCAL_DIR_NAMES.original,
+              `${LOCAL_DIR_NAMES.tmp}/${filename}`,
+            ],
+            false
+          ).then(() => resolve()),
       },
     }[`${filename.endsWith('.pdf')}`]
 
@@ -64,18 +65,22 @@ export const handler: S3Handler = async (event) => {
   await getObject(key).then((data) => convertS3DataToPdf(data, filename))
 
   for (const ext of FALLBACK_EXTS) {
-    await execFile('convert', [
-      '-density',
-      '400',
-      '-resize',
-      '1280x1280',
-      '-alpha',
-      'remove',
-      '-quality',
-      '85',
-      `${LOCAL_DIR_NAMES.original}/${filename.replace(/[^.]+$/, 'pdf')}`,
-      `${convertedDir}/%d.${ext}`,
-    ])
+    await exec(
+      'convert',
+      [
+        '-density',
+        '400',
+        '-resize',
+        '1280x1280',
+        '-alpha',
+        'remove',
+        '-quality',
+        '85',
+        `${LOCAL_DIR_NAMES.original}/${filename.replace(/[^.]+$/, 'pdf')}`,
+        `${convertedDir}/%d.${ext}`,
+      ],
+      false
+    )
   }
 
   // Todo: mozjpeg
@@ -91,10 +96,11 @@ export const handler: S3Handler = async (event) => {
   }
 
   for (let i = 0; i < info.fallbackImageExts.length; i += 1) {
-    await execFile('convert', [
-      `${convertedDir}/${i}.${info.fallbackImageExts[i]}`,
-      `${convertedDir}/${i}.webp`,
-    ])
+    await exec(
+      'convert',
+      [`${convertedDir}/${i}.${info.fallbackImageExts[i]}`, `${convertedDir}/${i}.webp`],
+      false
+    )
   }
 
   const convertedPath = key.replace(/\/original\/[^/]+$/, '/converted')

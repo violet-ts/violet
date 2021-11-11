@@ -1,15 +1,15 @@
 {
-  "name": "@violet/scripts",
+  "name": "@violet/lib",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "_:typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@violet/def": "workspace:*",
-    "arg": "^5.0.1"
+    "ballvalve": "^3.1.3"
   },
   "devDependencies": {
-    "@violet/scripts": "workspace:*"
+    "@violet/def": "workspace:*",
+    "@violet/lib": "workspace:*"
   }
 }

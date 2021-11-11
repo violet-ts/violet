@@ -1,16 +1,11 @@
-FROM node:14-buster
+FROM public.ecr.aws/lambda/nodejs:14
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN ( \
-  npm install -g pnpm@6.20.1 \
-  && npm uninstall -g yarn \
-)
+RUN npm install -g pnpm@6.20.1
 
-WORKDIR /app
-
+# hadolint ignore=DL3045
 COPY . .
 
-ENV API_PORT 80
 ENV NODE_ENV production
 
 RUN ( \
@@ -23,8 +18,4 @@ RUN ( \
   && rm -rf "$HOME/.pnpm-store" \
 )
 
-WORKDIR /app/pkg/api
-EXPOSE 80
-
-ENTRYPOINT []
-CMD ["node", "--require=source-map-support/register", "./build/index.js"]
+CMD ["pkg/api/bin/lambda.handler"]
