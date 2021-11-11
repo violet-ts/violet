@@ -14,7 +14,7 @@ import type {
 
 const prisma = new PrismaClient()
 export const getProjects = async () => {
-  const dbProjects = await prisma.project.findMany()
+  const dbProjects = await prisma.project.findMany({ orderBy: { createdAt: 'asc' } })
   if (!dbProjects) return
   const projects = dbProjects.map<ApiProject>((p) => ({
     id: p.projectId as ProjectId,
@@ -22,6 +22,22 @@ export const getProjects = async () => {
   }))
   return projects
 }
+
+export const createProject = async (projectName: ApiProject['name']) => {
+  const id = generateId()
+  const newProject = await prisma.project.create({
+    data: {
+      projectId: id,
+      projectName,
+    },
+  })
+  const apiProject: ApiProject = {
+    id: newProject.projectId as ProjectId,
+    name: newProject.projectName,
+  }
+  return apiProject
+}
+
 export const getDesks = async (projectId: ProjectId) => {
   const dbDesk = await prisma.desk.findMany({
     where: { projectId },
