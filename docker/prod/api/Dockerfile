@@ -1,10 +1,16 @@
-FROM public.ecr.aws/lambda/nodejs:14
+FROM node:14-buster
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN npm install -g pnpm@6.20.1
+RUN ( \
+  npm install -g pnpm@6.20.1 \
+  && npm uninstall -g yarn \
+)
+
+WORKDIR /app
 
 COPY . .
 
+ENV API_PORT 80
 ENV NODE_ENV production
 
 RUN ( \
@@ -17,4 +23,8 @@ RUN ( \
   && rm -rf "$HOME/.pnpm-store" \
 )
 
-CMD ["pkg/api/bin/lambda.handler"]
+WORKDIR /app/pkg/api
+EXPOSE 80
+
+ENTRYPOINT []
+CMD ["node", "--require=source-map-support/register", "./build/index.js"]

@@ -40,6 +40,6 @@ $*.ts
 /pkg/api/.upload
 
 # docker
-/docker/minio/config/
-/docker/minio/data/*
-!/docker/minio/data/static
+/docker/dev/minio/config/
+/docker/dev/minio/data/*
+!/docker/dev/minio/data/static
