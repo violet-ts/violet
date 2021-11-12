@@ -68,26 +68,24 @@ export const StreamBar = (props: {
     )
   }
 
-  const submitMessage = useCallback(
-    async (id: RevisionId) => {
-      if (!content) return
-      await api.browser.works
-        ._workId(props.workId)
-        .revisions._revisionId(id)
-        .post({ body: { content, userName } })
-        .catch(onErr)
+  const submitMessage = useCallback(async () => {
+    if (!content) return
+    await api.browser.works
+      ._workId(props.workId)
+      .revisions._revisionId(props.revision.id)
+      .post({ body: { content, userName } })
+      .catch(onErr)
 
-      const messageRes = await api.browser.works
-        ._workId(props.workId)
-        .revisions._revisionId(id)
-        .$get()
+    const messageRes = await api.browser.works
+      ._workId(props.workId)
+      .revisions._revisionId(props.revision.id)
+      .$get()
 
-      if (!messageRes) return
-      updateMessage(messageRes)
-      setMessage('')
-    },
-    [content]
-  )
+    if (!messageRes) return
+    updateApiWholeData('messagesList', [...apiWholeData.messagesList, messageRes])
+
+    setMessage('')
+  }, [content])
 
   useEffect(() => {
     scrollBottomRef?.current?.scrollIntoView()
@@ -109,7 +107,10 @@ export const StreamBar = (props: {
         .catch(onErr)
 
       if (!replyRes) return
-      updateMessage(replyRes)
+      updateApiWholeData(
+        'messagesList',
+        apiWholeData.messagesList.map((r) => (r.revisionId === replyRes.revisionId ? replyRes : r))
+      )
     },
     [content]
   )
@@ -132,7 +133,7 @@ export const StreamBar = (props: {
           value={content}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <ClickableArea onClick={() => submitMessage(props.revision.id)}>
+        <ClickableArea onClick={submitMessage}>
           <Spacer axis="y" size={88} />
           <PencileIcon />
         </ClickableArea>

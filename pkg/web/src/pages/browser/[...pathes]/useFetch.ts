@@ -74,9 +74,7 @@ export const useFetch = (
     const revisionsData = revisionsRes.data
     if (!revisionsData) return
 
-    const revisions = revisionsData.revisions.flatMap((revision) => revision.id)
-
-    messageRes(revisions).then((message) => {
+    messageRes(revisionsData.revisions.flatMap((revision) => revision.id)).then((message) => {
       updateApiWholeData('messagesList', message)
     })
   }, [revisionsRes.data])
