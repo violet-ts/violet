@@ -29,8 +29,6 @@ const LOCAL_DIR_NAMES = {
   converted: '/tmp/converted',
 } as const
 
-Object.values(LOCAL_DIR_NAMES).forEach((name) => fs.mkdirSync(name, { recursive: true }))
-
 const convertS3DataToPdf = (data: IncomingMessage, filename: string) =>
   new Promise<void>((resolve) => {
     const { dirname, onFinish } = {
@@ -61,6 +59,7 @@ const convertS3DataToPdf = (data: IncomingMessage, filename: string) =>
     const writer = fs.createWriteStream(path.join(dirname, filename))
     writer.once('finish', onFinish)
     data.pipe(writer)
+    console.log('Copied object.')
   })
 
 const convertObject = async (bucket: string, key: string): Promise<void> => {
@@ -79,7 +78,7 @@ const convertObject = async (bucket: string, key: string): Promise<void> => {
   fs.mkdirSync(convertedDir, { recursive: true })
 
   await getObject(key).then((data) => convertS3DataToPdf(data, filename))
-  console.log('Downloaded object.');
+  console.log('Downloaded object and converted to PDF.')
 
   for (const ext of FALLBACK_EXTS) {
     await exec(
@@ -99,7 +98,7 @@ const convertObject = async (bucket: string, key: string): Promise<void> => {
       false
     )
   }
-  console.log('Converted fallbacks.');
+  console.log('Converted fallbacks.')
 
   // Todo: mozjpeg
 
@@ -123,7 +122,7 @@ const convertObject = async (bucket: string, key: string): Promise<void> => {
       false
     )
   }
-  console.log('Converted to webp.');
+  console.log('Converted to webp.')
 
   await Promise.all(
     info.fallbackImageExts.flatMap((ext, i) =>
@@ -136,13 +135,15 @@ const convertObject = async (bucket: string, key: string): Promise<void> => {
       )
     )
   )
-  console.log('Uploaded images.');
+  console.log('Uploaded images.')
 
   await putObject(`${convertedKeyPrefix}/info.json`, 'application/json', JSON.stringify(info))
-  console.log('Uploaded info.json.');
+  console.log('Uploaded info.json.')
 }
 
 export const handler: S3Handler & SQSHandler & SNSHandler = async (event) => {
+  Object.values(LOCAL_DIR_NAMES).forEach((name) => fs.mkdirSync(name, { recursive: true }))
+
   console.log('Event received.', JSON.stringify({ event }))
   const locations = findS3LocationsInEvent(event)
   if (locations.length === 0) throw new Error('no location found in received event')
