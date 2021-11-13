@@ -6,7 +6,6 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   display: flex;
-  cursor: pointer;
 `
 
 const InputForm = styled.textarea`
