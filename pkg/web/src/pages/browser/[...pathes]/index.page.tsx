@@ -31,15 +31,16 @@ const WroksMain = styled.div`
 const ProjectPage = () => {
   const { error, projectApiData, projects, currentProject } = usePage()
 
-  const browserRevisionData = useMemo((): BrowserRevision[] | [] => {
-    if (!projectApiData?.revisions) return []
-    return projectApiData.revisions.map<BrowserRevision>((p) => ({
-      id: p.id,
-      editions: [],
-      messages:
-        projectApiData.messages?.filter((message) => p.messageIds?.includes(message.id)) ?? [],
-    }))
-  }, [projectApiData])
+  const browserRevisionData = useMemo(
+    () =>
+      projectApiData?.revisions?.map<BrowserRevision>((p) => ({
+        id: p.id,
+        editions: [],
+        messages:
+          projectApiData.messages?.filter((message) => p.messageIds?.includes(message.id)) ?? [],
+      })) ?? [],
+    [projectApiData]
+  )
 
   if (!projectApiData || !currentProject) return <Fetching error={error} />
 
