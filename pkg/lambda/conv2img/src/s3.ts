@@ -1,11 +1,16 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import { fromInstanceMetadata } from '@aws-sdk/credential-providers'
+import { fromEnv } from '@aws-sdk/credential-providers'
 import type { Credentials, Provider } from '@aws-sdk/types'
 import { extractEnv } from '@violet/def/envValues'
 import { IncomingMessage } from 'http'
-const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET, S3_ENDPOINT, S3_REGION } = extractEnv(
-  process.env
-)
+const {
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  S3_BUCKET_ORIGINAL,
+  S3_BUCKET_CONVERTED,
+  S3_ENDPOINT,
+  S3_REGION,
+} = extractEnv(process.env)
 
 const getCredentials = (): Credentials | Provider<Credentials> => {
   if (AWS_ACCESS_KEY_ID) {
@@ -14,7 +19,7 @@ const getCredentials = (): Credentials | Provider<Credentials> => {
       secretAccessKey: AWS_SECRET_ACCESS_KEY,
     }
   }
-  return fromInstanceMetadata()
+  return fromEnv()
 }
 
 let s3Client: S3Client
@@ -34,7 +39,7 @@ const getS3Client = () => {
 
 export const getObject = (key: string) =>
   getS3Client()
-    .send(new GetObjectCommand({ Bucket: S3_BUCKET, Key: key }))
+    .send(new GetObjectCommand({ Bucket: S3_BUCKET_ORIGINAL, Key: key }))
     .then(({ Body }) => {
       if (Body instanceof IncomingMessage) return Body
 
@@ -45,7 +50,7 @@ export const putObject = async (key: string, contentType: string, body: Buffer |
   getS3Client()
     .send(
       new PutObjectCommand({
-        Bucket: S3_BUCKET,
+        Bucket: S3_BUCKET_CONVERTED,
         Key: key,
         ContentType: contentType,
         Body: body,

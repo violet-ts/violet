@@ -1,4 +1,6 @@
+import { worksConvertedKeyPrefix, worksOriginalKeyPrefix } from '@violet/def/constants/s3'
 import { exec } from '@violet/lib/exec'
+import { replaceKeyPrefix } from '@violet/lib/s3'
 import type { S3Handler } from 'aws-lambda'
 import * as fs from 'fs'
 import type { IncomingMessage } from 'http'
@@ -107,7 +109,11 @@ export const handler: S3Handler = async (event) => {
     )
   }
 
-  const convertedKeyPrefix = key.replace(/\/original\/[^/]+$/, '/converted')
+  const convertedKeyPrefix = replaceKeyPrefix(
+    key.split('/').slice(0, -1).join('/'),
+    worksOriginalKeyPrefix,
+    worksConvertedKeyPrefix
+  )
 
   await Promise.all(
     info.fallbackImageExts.flatMap((ext, i) =>
