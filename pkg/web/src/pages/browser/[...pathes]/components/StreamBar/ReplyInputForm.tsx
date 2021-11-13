@@ -7,8 +7,6 @@ import styled from 'styled-components'
 const Container = styled.div`
   display: flex;
   cursor: pointer;
-  background-color: transparent;
-  border: none;
 `
 
 const InputForm = styled.textarea`

@@ -1,4 +1,11 @@
-import type { BrowserRevision, MessageId, ProjectId, WorkId } from '@violet/api/types'
+import type {
+  ApiMessage,
+  BrowserRevision,
+  MessageId,
+  ProjectId,
+  RevisionId,
+  WorkId,
+} from '@violet/api/types'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
@@ -38,8 +45,6 @@ const InputForm = styled.textarea`
 `
 const ClickableArea = styled.div`
   cursor: pointer;
-  background-color: transparent;
-  border: none;
 `
 export const StreamBar = (props: {
   projectId: ProjectId
@@ -52,6 +57,15 @@ export const StreamBar = (props: {
   const scrollBottomRef = useRef<HTMLDivElement>(null)
   const userName = 'Charles M Schultz'
 
+  const updateStream = (messageRes: { revisionId: RevisionId; messages: ApiMessage[] }) => {
+    updateApiWholeData(
+      'messagesList',
+      apiWholeData.messagesList.map((m) =>
+        m.revisionId === messageRes.revisionId ? messageRes : m
+      )
+    )
+  }
+
   const submitMessage = useCallback(async () => {
     if (!content) return
     await api.browser.works
@@ -63,22 +77,16 @@ export const StreamBar = (props: {
     const messageRes = await api.browser.works
       ._workId(props.workId)
       .revisions._revisionId(props.revision.id)
-      .$get()
+      .messages.$get()
 
-    if (!messageRes) return
+    updateStream(messageRes)
 
-    updateApiWholeData(
-      'messagesList',
-      apiWholeData.messagesList.map((m) =>
-        m.revisionId === messageRes.revisionId ? messageRes : m
-      )
-    )
     setContent('')
   }, [content])
 
   useEffect(() => {
     scrollBottomRef?.current?.scrollIntoView()
-  }, [props.revision.messages?.length])
+  }, [props.revision.messages.length])
 
   const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
@@ -87,7 +95,7 @@ export const StreamBar = (props: {
         ._workId(props.workId)
         .revisions._revisionId(props.revision.id)
         .messages._messageId(messageId)
-        .replies.$post({ body: { content, userName } })
+        .replies.post({ body: { content, userName } })
 
       const replyRes = await api.browser.works
         ._workId(props.workId)
@@ -96,10 +104,7 @@ export const StreamBar = (props: {
         .catch(onErr)
 
       if (!replyRes) return
-      updateApiWholeData(
-        'messagesList',
-        apiWholeData.messagesList.map((r) => (r.revisionId === replyRes.revisionId ? replyRes : r))
-      )
+      updateStream(replyRes)
     },
     [content]
   )
@@ -107,13 +112,9 @@ export const StreamBar = (props: {
   return (
     <Container>
       <StreamBox>
-        {props.revision.messages.map(
-          (m, i) =>
-            props.revision &&
-            props.revision.messages.length > 0 && (
-              <MessageCell key={i} message={m} replyMessage={replyMessage} />
-            )
-        )}
+        {props.revision.messages.map((m, i) => (
+          <MessageCell key={i} message={m} replyMessage={replyMessage} />
+        ))}
         <div ref={scrollBottomRef} />
       </StreamBox>
       <MessageBox>

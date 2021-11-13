@@ -21,14 +21,12 @@ export const useFetch = (
   const updateMessage = useCallback(
     async (revisionsData: { workId: WorkId; revisions: ApiRevision[] }) => {
       const message = await Promise.all(
-        revisionsData.revisions
-          .map((revision) => revision.id)
-          .map((r) =>
-            api.browser.works
-              ._workId(currentProject?.openedTabId ?? '')
-              .revisions._revisionId(r)
-              .messages.$get()
-          )
+        revisionsData.revisions.map((revision) =>
+          api.browser.works
+            ._workId(currentProject?.openedTabId ?? '')
+            .revisions._revisionId(revision.id)
+            .messages.$get()
+        )
       )
       updateApiWholeData('messagesList', message)
     },
