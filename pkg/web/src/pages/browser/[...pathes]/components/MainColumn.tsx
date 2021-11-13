@@ -14,7 +14,7 @@ const MainContent = styled.div`
   flex: 1;
   width: 100%;
   height: calc(100vh - 48px);
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 const RevisionContent = styled.div`
   flex: 1;

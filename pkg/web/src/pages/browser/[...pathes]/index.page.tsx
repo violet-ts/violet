@@ -25,23 +25,20 @@ const WorksHeader = styled.div`
 `
 const WroksMain = styled.div`
   height: 100vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 
 const ProjectPage = () => {
   const { error, projectApiData, projects, currentProject } = usePage()
 
-  const browserRevisionData = useMemo((): BrowserRevision[] | void => {
-    if (!projectApiData?.revisions) return
-    if (!projectApiData?.messages) return
-    const revisions: BrowserRevision[] = projectApiData.revisions.map((p) => ({
+  const browserRevisionData = useMemo((): BrowserRevision[] | [] => {
+    if (!projectApiData?.revisions) return []
+    return projectApiData.revisions.map<BrowserRevision>((p) => ({
       id: p.id,
       editions: [],
-      messages: projectApiData.messages
-        ? projectApiData.messages.filter((message) => p.messageIds?.includes(message.id))
-        : [],
+      messages:
+        projectApiData.messages?.filter((message) => p.messageIds?.includes(message.id)) ?? [],
     }))
-    return revisions
   }, [projectApiData])
 
   if (!projectApiData || !currentProject) return <Fetching error={error} />
@@ -54,7 +51,7 @@ const ProjectPage = () => {
       </LeftColumn>
       <WorksView>
         {currentProject.openedTabId ? (
-          browserRevisionData ? (
+          browserRevisionData.length > 0 ? (
             <>
               <WorksHeader>
                 <TabBar project={currentProject} projectApiData={projectApiData} />

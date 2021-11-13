@@ -3,7 +3,7 @@ import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { PencileIcon } from 'src/components/atoms/PencileIcon'
+import { PencilIcon } from 'src/components/atoms/PencilIcon'
 import { Spacer } from 'src/components/atoms/Spacer'
 import styled from 'styled-components'
 import { MessageCell } from './MessageCell'
@@ -19,7 +19,7 @@ const StreamBox = styled.div`
   bottom: 0;
   flex: 1;
   min-height: 80px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 const MessageBox = styled.div`
   display: flex;
@@ -48,7 +48,7 @@ export const StreamBar = (props: {
 }) => {
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
   const { api, onErr } = useApi()
-  const [content, setMessage] = useState('')
+  const [content, setContent] = useState('')
   const scrollBottomRef = useRef<HTMLDivElement>(null)
   const userName = 'Charles M Schultz'
 
@@ -66,8 +66,14 @@ export const StreamBar = (props: {
       .$get()
 
     if (!messageRes) return
-    updateApiWholeData('messagesList', [...apiWholeData.messagesList, messageRes])
 
+    updateApiWholeData(
+      'messagesList',
+      apiWholeData.messagesList.map((m) =>
+        m.revisionId === messageRes.revisionId ? messageRes : m
+      )
+    )
+    setContent('')
     setMessage('')
   }, [content])
 
@@ -115,11 +121,11 @@ export const StreamBar = (props: {
         <InputForm
           placeholder="message"
           value={content}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(e) => setContent(e.target.value)}
         />
         <ClickableArea onClick={submitMessage}>
           <Spacer axis="y" size={88} />
-          <PencileIcon />
+          <PencilIcon />
         </ClickableArea>
       </MessageBox>
     </Container>

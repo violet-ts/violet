@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const PencileIcon = styled.button`
+export const PencilIcon = styled.button`
   width: 24px;
   height: 32px;
   cursor: pointer;

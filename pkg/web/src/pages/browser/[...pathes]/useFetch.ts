@@ -2,7 +2,7 @@ import useAspidaSWR from '@aspida/swr'
 import type { ApiRevision, BrowserProject, ProjectId, WorkId } from '@violet/api/types'
 import { BrowserContext } from '@violet/web/src//contexts/Browser'
 import { useApi } from '@violet/web/src//hooks'
-import { useContext, useEffect } from 'react'
+import { useCallback, useContext, useEffect } from 'react'
 
 export const useFetch = (
   projectId: ProjectId | undefined,
@@ -18,20 +18,22 @@ export const useFetch = (
     { enabled: !!currentProject?.openedTabId }
   )
 
-  const updateMessage = async (revisionsData: { workId: WorkId; revisions: ApiRevision[] }) => {
-    await Promise.all(
-      revisionsData.revisions
-        .flatMap((revision) => revision.id)
-        .map((r) =>
-          api.browser.works
-            ._workId(currentProject?.openedTabId ?? '')
-            .revisions._revisionId(r)
-            .messages.$get()
-        )
-    ).then((message) => {
+  const updateMessage = useCallback(
+    async (revisionsData: { workId: WorkId; revisions: ApiRevision[] }) => {
+      const message = await Promise.all(
+        revisionsData.revisions
+          .map((revision) => revision.id)
+          .map((r) =>
+            api.browser.works
+              ._workId(currentProject?.openedTabId ?? '')
+              .revisions._revisionId(r)
+              .messages.$get()
+          )
+      )
       updateApiWholeData('messagesList', message)
-    })
-  }
+    },
+    [apiWholeData.messagesList]
+  )
 
   useEffect(() => {
     const projectsData = projectsRes.data
@@ -73,11 +75,6 @@ export const useFetch = (
           )
         : [...apiWholeData.revisionsList, revisionsData]
     )
-  }, [revisionsRes.data])
-
-  useEffect(() => {
-    const revisionsData = revisionsRes.data
-    if (!revisionsData) return
     updateMessage(revisionsData)
   }, [revisionsRes.data])
 
