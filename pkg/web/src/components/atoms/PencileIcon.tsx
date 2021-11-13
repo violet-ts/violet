@@ -1,13 +1,11 @@
 import styled from 'styled-components'
 
 export const PencileIcon = styled.button`
-  & {
-    width: 24px;
-    height: 32px;
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
-  }
+  width: 24px;
+  height: 32px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
   & {
     position: relative;
     width: 16px;
