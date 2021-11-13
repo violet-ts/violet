@@ -1,12 +1,12 @@
-import { Spacer } from '@violet/web/src/components/atoms/Spacer'
+import type { BrowserRevision } from '@violet/api/types'
 import { Fetching } from '@violet/web/src/components/organisms/Fetching'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
 import { LeftColumn } from './components/LeftColumn'
+import { MainColumn } from './components/MainColumn'
 import { ProjectBar } from './components/ProjectBar'
-import { Revision } from './components/Revision'
-import { StreamBar } from './components/StreamBar'
 import { TabBar } from './components/TabBar'
 import { usePage } from './usePage'
 
@@ -20,29 +20,27 @@ const Container = styled.div`
 const WorksView = styled.div`
   width: 100%;
 `
-
-const MainColumn = styled.div`
-  display: flex;
+const WorksHeader = styled.div`
+  width: 100%;
 `
-
-const MainContent = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: right;
+const WroksMain = styled.div`
   height: 100vh;
-`
-
-const RevisionContent = styled.div`
-  min-width: 100%;
-`
-
-const StreamBarColumn = styled.div`
-  height: 100vh;
+  overflow-y: auto;
 `
 
 const ProjectPage = () => {
   const { error, projectApiData, projects, currentProject } = usePage()
+
+  const browserRevisionData = useMemo(
+    () =>
+      projectApiData?.revisions?.map<BrowserRevision>((p) => ({
+        id: p.id,
+        editions: [],
+        messages:
+          projectApiData.messages?.filter((message) => p.messageIds?.includes(message.id)) ?? [],
+      })) ?? [],
+    [projectApiData]
+  )
 
   if (!projectApiData || !currentProject) return <Fetching error={error} />
 
@@ -54,27 +52,23 @@ const ProjectPage = () => {
       </LeftColumn>
       <WorksView>
         {currentProject.openedTabId ? (
-          projectApiData.revisions?.length ? (
-            <MainColumn>
-              <MainContent>
+          browserRevisionData.length > 0 ? (
+            <>
+              <WorksHeader>
                 <TabBar project={currentProject} projectApiData={projectApiData} />
-                <RevisionContent>
-                  <Revision
-                    projectId={currentProject.id}
-                    workId={currentProject.openedTabId}
-                    revisions={projectApiData.revisions}
-                  />
-                </RevisionContent>
-                <Spacer axis="y" size={8} />
-              </MainContent>
-              <StreamBarColumn>
-                <StreamBar project={currentProject} projectApiData={projectApiData} />
-              </StreamBarColumn>
-            </MainColumn>
+              </WorksHeader>
+              <WroksMain>
+                <MainColumn
+                  projectId={currentProject.id}
+                  workId={currentProject.openedTabId}
+                  revisions={browserRevisionData}
+                />
+              </WroksMain>
+            </>
           ) : (
             <>
               <TabBar project={currentProject} projectApiData={projectApiData} />
-              <EmptyWork project={currentProject} />
+              <EmptyWork projectId={currentProject.id} workId={currentProject.openedTabId} />
             </>
           )
         ) : (
