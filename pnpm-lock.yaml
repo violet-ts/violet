@@ -176,12 +176,14 @@ importers:
 
   pkg/lib:
     specifiers:
+      '@types/aws-lambda': ^8.10.84
       '@violet/def': workspace:*
       '@violet/lib': workspace:*
       ballvalve: ^3.1.3
     dependencies:
       ballvalve: 3.1.3
     devDependencies:
+      '@types/aws-lambda': 8.10.85
       '@violet/def': link:../def
       '@violet/lib': 'link:'
 

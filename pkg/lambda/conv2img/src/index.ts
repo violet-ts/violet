@@ -1,11 +1,15 @@
 import { worksConvertedKeyPrefix, worksOriginalKeyPrefix } from '@violet/def/constants/s3'
+import { extractEnv } from '@violet/def/envValues'
 import { exec } from '@violet/lib/exec'
+import { findS3LocationsInEvent } from '@violet/lib/lambda/s3'
 import { replaceKeyPrefix } from '@violet/lib/s3'
-import type { S3Handler } from 'aws-lambda'
+import type { S3Handler, SNSHandler, SQSHandler } from 'aws-lambda'
 import * as fs from 'fs'
 import type { IncomingMessage } from 'http'
 import * as path from 'path'
 import { getObject, putObject } from './s3'
+
+const { S3_BUCKET_ORIGINAL } = extractEnv(process.env)
 
 const CONTENT_TYPES = {
   webp: 'image/webp',
@@ -59,8 +63,17 @@ const convertS3DataToPdf = (data: IncomingMessage, filename: string) =>
     data.pipe(writer)
   })
 
-export const handler: S3Handler = async (event) => {
-  const key = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, ' ')) // ref: https://docs.aws.amazon.com/lambda/latest/dg/with-s3-tutorial.html#with-s3-tutorial-create-function-code
+const convertObject = async (bucket: string, key: string): Promise<void> => {
+  if (bucket !== S3_BUCKET_ORIGINAL) {
+    console.warn(`Ignored bucket s3://${bucket}`)
+    return
+  }
+  const convertedKeyPrefix = replaceKeyPrefix(
+    key.split('/').slice(0, -1).join('/'),
+    worksOriginalKeyPrefix,
+    worksConvertedKeyPrefix
+  )
+
   const filename = `${Date.now()}-${key.split('/').pop()}`
   const convertedDir = path.join(LOCAL_DIR_NAMES.converted, filename.replace(/\.[^.]+$/, ''))
   fs.mkdirSync(convertedDir, { recursive: true })
@@ -109,12 +122,6 @@ export const handler: S3Handler = async (event) => {
     )
   }
 
-  const convertedKeyPrefix = replaceKeyPrefix(
-    key.split('/').slice(0, -1).join('/'),
-    worksOriginalKeyPrefix,
-    worksConvertedKeyPrefix
-  )
-
   await Promise.all(
     info.fallbackImageExts.flatMap((ext, i) =>
       (['webp', ext] as const).map((e) =>
@@ -128,4 +135,20 @@ export const handler: S3Handler = async (event) => {
   )
 
   await putObject(`${convertedKeyPrefix}/info.json`, 'application/json', JSON.stringify(info))
+}
+
+export const handler: S3Handler & SQSHandler & SNSHandler = async (event) => {
+  console.log({ event })
+  let failCount = 0
+  for (const { key, bucket } of findS3LocationsInEvent(event)) {
+    console.log(`s3://${bucket}/${key} is found in event.`)
+    await convertObject(bucket, key).catch((err: unknown) => {
+      console.error(`Failed to convert s3://${bucket}/${key}`)
+      console.error(err)
+      failCount += 1
+    })
+  }
+  if (failCount > 0) {
+    throw new Error(`failed to convert ${failCount} object(s)`)
+  }
 }
