@@ -74,7 +74,6 @@ export const StreamBar = (props: {
       )
     )
     setContent('')
-    setMessage('')
   }, [content])
 
   useEffect(() => {
