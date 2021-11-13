@@ -1,11 +1,4 @@
-import type {
-  ApiMessage,
-  BrowserRevision,
-  MessageId,
-  ProjectId,
-  RevisionId,
-  WorkId,
-} from '@violet/api/types'
+import type { BrowserRevision, MessageId, ProjectId, WorkId } from '@violet/api/types'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
@@ -58,15 +51,6 @@ export const StreamBar = (props: {
   const [content, setMessage] = useState('')
   const scrollBottomRef = useRef<HTMLDivElement>(null)
   const userName = 'Charles M Schultz'
-
-  const updateMessage = (messageRes: { revisionId: RevisionId; messages: ApiMessage[] }) => {
-    updateApiWholeData(
-      'messagesList',
-      apiWholeData.messagesList.map((r) =>
-        r.revisionId === messageRes.revisionId ? messageRes : r
-      )
-    )
-  }
 
   const submitMessage = useCallback(async () => {
     if (!content) return

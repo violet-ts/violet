@@ -88,9 +88,9 @@ export const usePage = () => {
       (d) => d.workId === currentProject.openedTabId
     )?.revisions
 
-    const messages = apiWholeData.messagesList.find((m) =>
-      revisions?.some((revision) => revision.id === m.revisionId)
-    )?.messages
+    const messages = apiWholeData.messagesList
+      .filter((m) => revisions?.some((revision) => revision.id === m.revisionId))
+      ?.flatMap((m) => m.messages)
 
     return (
       data &&

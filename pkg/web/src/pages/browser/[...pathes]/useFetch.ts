@@ -1,5 +1,5 @@
 import useAspidaSWR from '@aspida/swr'
-import type { BrowserProject, ProjectId, RevisionId } from '@violet/api/types'
+import type { ApiRevision, BrowserProject, ProjectId, WorkId } from '@violet/api/types'
 import { BrowserContext } from '@violet/web/src//contexts/Browser'
 import { useApi } from '@violet/web/src//hooks'
 import { useContext, useEffect } from 'react'
@@ -18,15 +18,20 @@ export const useFetch = (
     { enabled: !!currentProject?.openedTabId }
   )
 
-  const messageRes = async (revisions: RevisionId[]) =>
+  const updateMessage = async (revisionsData: { workId: WorkId; revisions: ApiRevision[] }) => {
     await Promise.all(
-      revisions.map((r) =>
-        api.browser.works
-          ._workId(currentProject?.openedTabId ?? '')
-          .revisions._revisionId(r)
-          .messages.$get()
-      )
-    )
+      revisionsData.revisions
+        .flatMap((revision) => revision.id)
+        .map((r) =>
+          api.browser.works
+            ._workId(currentProject?.openedTabId ?? '')
+            .revisions._revisionId(r)
+            .messages.$get()
+        )
+    ).then((message) => {
+      updateApiWholeData('messagesList', message)
+    })
+  }
 
   useEffect(() => {
     const projectsData = projectsRes.data
@@ -73,10 +78,7 @@ export const useFetch = (
   useEffect(() => {
     const revisionsData = revisionsRes.data
     if (!revisionsData) return
-
-    messageRes(revisionsData.revisions.flatMap((revision) => revision.id)).then((message) => {
-      updateApiWholeData('messagesList', message)
-    })
+    updateMessage(revisionsData)
   }, [revisionsRes.data])
 
   return {
