@@ -10,7 +10,7 @@ services:
       - ./.env
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/dev/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
 
   minio:
     image: minio/minio
@@ -21,8 +21,8 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./docker/minio/data:/data
-      - ./docker/minio/policies:/policies
+      - ./docker/dev/minio/data:/data
+      - ./docker/dev/minio/policies:/policies
     entrypoint: []
     command: >
       sh -c "cp -r /policies/* /data/.minio.sys/;
@@ -34,7 +34,9 @@ services:
   lambda:
     build:
       context: .
-      dockerfile: ./docker/lambda/conv2img/Dockerfile
+      dockerfile: ./docker/dev/lambda/conv2img/Dockerfile
+    volumes:
+      - .:/var/task:ro
     env_file:
       - ./.env
     environment:

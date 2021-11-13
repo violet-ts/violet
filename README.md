@@ -1,3 +1,5 @@
+- [CONTRIBUTING (日本語)](./CONTRIBUTING-ja.md)
+
 ## Getting Started
 
 Create .env files:
@@ -6,8 +8,6 @@ Create .env files:
 $ cp .env.example .env
 $ cp packges/api/prisma/.env.example packges/api/prisma/.env
 ```
-
-自分の google アカウントでログインしてターミナルに表示されているトークンをコピー
 
 Input your values to `.env`
 
