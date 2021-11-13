@@ -12,6 +12,16 @@ interface S3ObjectLocation {
   key: string
 }
 
+export const findS3Locations = (
+  obj: S3Event | SQSEvent | SNSEvent | S3EventRecord | SQSRecord | SNSEventRecord
+): S3ObjectLocation[] => {
+  if ('Records' in obj) {
+    return findS3LocationsInEvent(obj)
+  } else {
+    return findS3LocationsInRecord(obj)
+  }
+}
+
 export const findS3LocationsInEvent = (
   event: S3Event | SQSEvent | SNSEvent
 ): S3ObjectLocation[] => {
@@ -30,9 +40,9 @@ export const findS3LocationsInRecord = (
       },
     ]
   } else if ('Sns' in record) {
-    return findS3LocationsInRecord(JSON.parse(record.Sns.Message))
+    return findS3Locations(JSON.parse(record.Sns.Message))
   } else if ('body' in record) {
-    return findS3LocationsInRecord(JSON.parse(record.body))
+    return findS3Locations(JSON.parse(record.body))
   }
   return []
 }

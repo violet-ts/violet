@@ -138,9 +138,12 @@ const convertObject = async (bucket: string, key: string): Promise<void> => {
 }
 
 export const handler: S3Handler & SQSHandler & SNSHandler = async (event) => {
-  console.log({ event })
+  console.log(JSON.stringify({ event }))
+  const locations = findS3LocationsInEvent(event)
+  if (locations.length === 0) throw new Error('no location found in received event')
+  console.log(`Found ${locations.length} location(s).`)
   let failCount = 0
-  for (const { key, bucket } of findS3LocationsInEvent(event)) {
+  for (const { key, bucket } of locations) {
     console.log(`s3://${bucket}/${key} is found in event.`)
     await convertObject(bucket, key).catch((err: unknown) => {
       console.error(`Failed to convert s3://${bucket}/${key}`)
