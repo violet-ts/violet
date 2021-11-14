@@ -100,6 +100,9 @@ export const convertObject = async ({
     // endpoint: env.S3_ENDPOINT,
     // forcePathStyle: true,
   })
+  logger.info('z')
+  const r1 = await s3.headObject({ Bucket: bucket, Key: key })
+  logger.info('r1', { r1 })
   const r = await s3.getObject({ Bucket: bucket, Key: key })
   logger.info('r', { r })
   const data = await getObject({ key, env, logger, credentials })
