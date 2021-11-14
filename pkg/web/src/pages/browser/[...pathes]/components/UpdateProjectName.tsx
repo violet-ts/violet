@@ -2,7 +2,6 @@ import type { ProjectId } from '@violet/api/types'
 import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
-import { useRouter } from 'next/dist/client/router'
 import type { ChangeEvent, FormEvent } from 'react'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -19,7 +18,6 @@ export const UpdateProjectName = (props: { confirmName: () => void; projectId: P
   const { api, onErr } = useApi()
   const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
   const [isUpdating, setIsUpdating] = useState(false)
-  const { asPath, push } = useRouter()
   useEffect(() => {
     inputElement.current?.focus()
   }, [])
