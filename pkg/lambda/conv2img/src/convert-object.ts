@@ -1,4 +1,5 @@
 import { S3 } from '@aws-sdk/client-s3'
+import { EC2 } from '@aws-sdk/client-ec2'
 import type { Credentials, Provider } from '@aws-sdk/types'
 import { worksConvertedKeyPrefix, worksOriginalKeyPrefix } from '@violet/def/constants/s3'
 import type { VioletEnv } from '@violet/def/envValues'
@@ -94,6 +95,13 @@ export const convertObject = async ({
   fs.mkdirSync(convertedDir, { recursive: true })
 
   logger.info('z1')
+  const ec2 = new EC2({
+    credentials,
+    logger,
+  })
+  logger.info('z4')
+  logger.info('ec2', await ec2.describeInstances({}));
+  logger.info('z6')
   const s3 = new S3({
     // region: env.S3_REGION,
     credentials,
