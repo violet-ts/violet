@@ -1,5 +1,3 @@
-import { S3 } from '@aws-sdk/client-s3'
-import { EC2 } from '@aws-sdk/client-ec2'
 import type { Credentials, Provider } from '@aws-sdk/types'
 import { worksConvertedKeyPrefix, worksOriginalKeyPrefix } from '@violet/def/constants/s3'
 import type { VioletEnv } from '@violet/def/envValues'
@@ -94,29 +92,7 @@ export const convertObject = async ({
   const convertedDir = path.join(LOCAL_DIR_NAMES.converted, filename.replace(/\.[^.]+$/, ''))
   fs.mkdirSync(convertedDir, { recursive: true })
 
-  logger.info('z1')
-  const ec2 = new EC2({
-    credentials,
-    logger,
-  })
-  logger.info('z4')
-  logger.info('ec2', await ec2.describeInstances({}));
-  logger.info('z6')
-  const s3 = new S3({
-    // region: env.S3_REGION,
-    credentials,
-    logger,
-    // endpoint: env.S3_ENDPOINT,
-    // forcePathStyle: true,
-  })
-  logger.info('z')
-  logger.info('zzz', await exec('echo', ['hello'], false))
-  logger.info('z2')
   logger.info('zzz2', await exec('curl', ['ifconfig.co'], false))
-  const r1 = await s3.headObject({ Bucket: '', Key: key })
-  logger.info('r1', { r1 })
-  const r = await s3.getObject({ Bucket: bucket, Key: key })
-  logger.info('r', { r })
   const data = await getObject({ key, env, logger, credentials })
   logger.info('Downloaded object.')
 
