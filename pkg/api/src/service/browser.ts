@@ -40,8 +40,8 @@ export const createProject = async (projectName: ApiProject['name']) => {
 
 export const updateProject = async (projectId: ProjectId, projectName: ApiProject['name']) => {
   const dbProjects = await prisma.project.update({
-    where: { projectId: projectId },
-    data: { projectName: projectName },
+    where: { projectId },
+    data: { projectName },
   })
   if (!dbProjects) return
   const apiProject: ApiProject = {
