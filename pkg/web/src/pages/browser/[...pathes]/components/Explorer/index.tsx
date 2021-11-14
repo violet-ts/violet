@@ -9,11 +9,14 @@ import type {
 } from '@violet/api/types'
 import { getWorkFullName } from '@violet/web/src//utils'
 import { fontSizes } from '@violet/web/src//utils/constants'
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import { RenameIcon } from 'src/components/atoms/RenameIcon'
+import { Spacer } from 'src/components/atoms/Spacer'
+import { Modal } from 'src/components/molecules/Modal'
 import styled from 'styled-components'
 import { CellName } from './CellName'
 import { DirectoryCell } from './DirectoryCell'
-import { EditProjectName } from './EditProjectName'
+import { UpdateProjectName } from './UpdateProjectName'
 import { WorkCell } from './WorkCell'
 
 const Container = styled.div`
@@ -38,6 +41,22 @@ const ProjectArea = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+`
+
+const StyleRenameIcon = styled.i`
+  opacity: 0.2;
+  transition: opacity 0.5s;
+  &:hover {
+    opacity: 1;
+  }
+`
+
+const Message = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
 `
 
 type Params = {
@@ -122,34 +141,32 @@ export const Explorer = ({
     [projectApiData.desks, project.openedFullPathDict, project.selectedFullPath]
   )
   const [openRename, setOpenRename] = useState(false)
-  const [label, setLabel] = useState('')
-  const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
-  const inputElement = useRef<HTMLInputElement>(null)
-  useEffect(() => {
-    inputElement.current?.focus()
-  }, [])
   const rename = () => {
     setOpenRename(true)
   }
 
-  const nameConfirm = () => {
+  const closeModal = () => {
     setOpenRename(false)
   }
 
   return (
     <Container>
       <ProjectArea>
-        {openRename ? (
-          <form onSubmit={nameConfirm}>
-            <input ref={inputElement} type="text" onChange={inputLabel} onBlur={nameConfirm} />
-          </form>
-        ) : (
-          <>
-            <ProjectName>{projectApiData.name}</ProjectName>
-            <EditProjectName onClick={rename} />
-          </>
-        )}
+        <ProjectName>{projectApiData.name}</ProjectName>
+        <StyleRenameIcon onClick={rename}>
+          <RenameIcon />
+        </StyleRenameIcon>
       </ProjectArea>
+      {openRename && (
+        <Modal closeModal={closeModal}>
+          <Spacer axis="y" size={80} />
+          <Message>Enter a new project name</Message>
+          <UpdateProjectName
+            confirmName={closeModal}
+            projectId={projectApiData.projectId}
+          ></UpdateProjectName>
+        </Modal>
+      )}
       <TreeViewer>
         {nestedDesks.map((desk) => (
           <React.Fragment key={desk.id}>
