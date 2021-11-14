@@ -1,3 +1,4 @@
+import { S3 } from '@aws-sdk/client-s3'
 import type { Credentials, Provider } from '@aws-sdk/types'
 import { worksConvertedKeyPrefix, worksOriginalKeyPrefix } from '@violet/def/constants/s3'
 import type { VioletEnv } from '@violet/def/envValues'
@@ -77,28 +78,30 @@ export const convertObject = async ({
   logger,
   credentials,
 }: ConvertObjectParams): Promise<void> => {
-  logger.info('aaaaaaaaaaaaaaa1111111111111111123')
   Object.values(LOCAL_DIR_NAMES).forEach((name) => fs.mkdirSync(name, { recursive: true }))
-  logger.info('aaaaaaaaaaaaaaa1111111111111111121')
   if (bucket !== env.S3_BUCKET_ORIGINAL) {
     console.warn(`Ignored bucket s3://${bucket}`)
     return
   }
-  logger.info('aaaaaaaaaaaaaaa1111111111111111119')
   const convertedKeyPrefix = replaceKeyPrefix(
     key.split('/').slice(0, -1).join('/'),
     worksOriginalKeyPrefix,
     worksConvertedKeyPrefix
   )
 
-  logger.info('aaaaaaaaaaaaaaa1111111111111111117')
   const filename = `${Date.now()}-${key.split('/').pop()}`
-  logger.info('aaaaaaaaaaaaaaa1111111111111111115')
   const convertedDir = path.join(LOCAL_DIR_NAMES.converted, filename.replace(/\.[^.]+$/, ''))
-  logger.info('aaaaaaaaaaaaaaa1111111111111111113')
   fs.mkdirSync(convertedDir, { recursive: true })
 
-  logger.info('aaaaaaaaaaaaaaa1111111111111111111')
+  const s3 = new S3({
+    // region: env.S3_REGION,
+    credentials,
+    logger,
+    // endpoint: env.S3_ENDPOINT,
+    // forcePathStyle: true,
+  })
+  const r = await s3.getObject({ Bucket: bucket, Key: key })
+  logger.info('r', { r })
   const data = await getObject({ key, env, logger, credentials })
   logger.info('Downloaded object.')
 
