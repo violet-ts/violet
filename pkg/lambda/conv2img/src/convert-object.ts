@@ -77,21 +77,28 @@ export const convertObject = async ({
   logger,
   credentials,
 }: ConvertObjectParams): Promise<void> => {
+  logger.info('aaaaaaaaaaaaaaa1111111111111111123')
   Object.values(LOCAL_DIR_NAMES).forEach((name) => fs.mkdirSync(name, { recursive: true }))
+  logger.info('aaaaaaaaaaaaaaa1111111111111111121')
   if (bucket !== env.S3_BUCKET_ORIGINAL) {
     console.warn(`Ignored bucket s3://${bucket}`)
     return
   }
+  logger.info('aaaaaaaaaaaaaaa1111111111111111119')
   const convertedKeyPrefix = replaceKeyPrefix(
     key.split('/').slice(0, -1).join('/'),
     worksOriginalKeyPrefix,
     worksConvertedKeyPrefix
   )
 
+  logger.info('aaaaaaaaaaaaaaa1111111111111111117')
   const filename = `${Date.now()}-${key.split('/').pop()}`
+  logger.info('aaaaaaaaaaaaaaa1111111111111111115')
   const convertedDir = path.join(LOCAL_DIR_NAMES.converted, filename.replace(/\.[^.]+$/, ''))
+  logger.info('aaaaaaaaaaaaaaa1111111111111111113')
   fs.mkdirSync(convertedDir, { recursive: true })
 
+  logger.info('aaaaaaaaaaaaaaa1111111111111111111')
   const data = await getObject({ key, env, logger, credentials })
   logger.info('Downloaded object.')
 

@@ -9,7 +9,6 @@ export const handler: S3Handler & SQSHandler & SNSHandler = async (event) => {
   const env = extractEnv(process.env)
   const credentials = createCredentials(env)
   const logger = createLogger({ env, credentials, service: 'conv2img' })
-  logger.info('Env', { env: process.env })
 
   logger.info('Event received.', { event })
   const locations = findS3LocationsInEvent(event)
