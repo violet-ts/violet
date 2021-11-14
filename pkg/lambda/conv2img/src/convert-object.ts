@@ -91,8 +91,8 @@ export const convertObject = async ({
   const filename = `${Date.now()}-${key.split('/').pop()}`
   const convertedDir = path.join(LOCAL_DIR_NAMES.converted, filename.replace(/\.[^.]+$/, ''))
   fs.mkdirSync(convertedDir, { recursive: true })
+  logger.info('Destination directory created.')
 
-  logger.info('zzz2', await exec('curl', ['ifconfig.co'], false))
   const data = await getObject({ key, env, logger, credentials })
   logger.info('Downloaded object.')
 
