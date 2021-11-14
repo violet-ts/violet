@@ -8,6 +8,8 @@ export interface VioletEnv {
   S3_REGION: string
   S3_BUCKET_ORIGINAL: string
   S3_BUCKET_CONVERTED: string
+  CLOUDWATCH_CRITICAL_LOG_GROUP?: string | undefined
+  PRETTY_LOGGING?: string | undefined
 }
 
 // eslint-disable-next-line complexity -- 列挙
@@ -21,6 +23,8 @@ export const extractEnv = (obj: Record<string, string | undefined>): VioletEnv =
   const S3_ENDPOINT = obj.S3_ENDPOINT || undefined
   const S3_BUCKET_ORIGINAL = obj.S3_BUCKET_ORIGINAL ?? ''
   const S3_BUCKET_CONVERTED = obj.S3_BUCKET_CONVERTED ?? ''
+  const CLOUDWATCH_CRITICAL_LOG_GROUP = obj.CLOUDWATCH_CRITICAL_LOG_GROUP || undefined
+  const PRETTY_LOGGING = obj.PRETTY_LOGGING || undefined
 
   return {
     API_BASE_PATH,
@@ -32,5 +36,7 @@ export const extractEnv = (obj: Record<string, string | undefined>): VioletEnv =
     S3_REGION,
     S3_BUCKET_ORIGINAL,
     S3_BUCKET_CONVERTED,
+    CLOUDWATCH_CRITICAL_LOG_GROUP,
+    PRETTY_LOGGING,
   }
 }
