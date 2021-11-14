@@ -7,7 +7,7 @@ import { replaceKeyPrefix } from '@violet/lib/s3'
 import * as fs from 'fs'
 import type { IncomingMessage } from 'http'
 import * as path from 'path'
-import { getObject, putObject } from './s3'
+import { createS3Client, getObject } from './s3'
 
 const CONTENT_TYPES = {
   webp: 'image/webp',
@@ -79,7 +79,7 @@ export const convertObject = async ({
 }: ConvertObjectParams): Promise<void> => {
   Object.values(LOCAL_DIR_NAMES).forEach((name) => fs.mkdirSync(name, { recursive: true }))
   if (bucket !== env.S3_BUCKET_ORIGINAL) {
-    console.warn(`Ignored bucket s3://${bucket}`)
+    logger.warn(`Ignored bucket s3://${bucket}`)
     return
   }
   const convertedKeyPrefix = replaceKeyPrefix(
@@ -93,7 +93,13 @@ export const convertObject = async ({
   fs.mkdirSync(convertedDir, { recursive: true })
   logger.info('Destination directory created.')
 
-  const data = await getObject({ key, env, logger, credentials })
+  const s3 = createS3Client({
+    env,
+    credentials,
+    logger,
+  })
+
+  const data = await getObject(s3, { Bucket: bucket, Key: key })
   logger.info('Downloaded object.')
 
   await convertS3DataToPdf({ data, filename })
@@ -117,7 +123,7 @@ export const convertObject = async ({
       false
     )
   }
-  logger.info('Converted fallbacks.')
+  logger.info('Converted to fallback images.')
 
   // Todo: mozjpeg
 
@@ -146,26 +152,22 @@ export const convertObject = async ({
   await Promise.all(
     info.fallbackImageExts.flatMap((ext, i) =>
       (['webp', ext] as const).map((e) =>
-        putObject({
-          key: `${convertedKeyPrefix}/${i}.${e}`,
-          contentType: CONTENT_TYPES[e],
-          body: fs.readFileSync(path.join(convertedDir, `${i}.${e}`)),
-          env,
-          logger,
-          credentials,
+        s3.putObject({
+          Bucket: env.S3_BUCKET_CONVERTED,
+          Key: `${convertedKeyPrefix}/${i}.${e}`,
+          ContentType: CONTENT_TYPES[e],
+          Body: fs.readFileSync(path.join(convertedDir, `${i}.${e}`)),
         })
       )
     )
   )
   logger.info('Uploaded images.')
 
-  await putObject({
-    key: `${convertedKeyPrefix}/info.json`,
-    contentType: 'application/json',
-    body: JSON.stringify(info),
-    env,
-    logger,
-    credentials,
+  await s3.putObject({
+    Bucket: env.S3_BUCKET_CONVERTED,
+    Key: `${convertedKeyPrefix}/info.json`,
+    ContentType: 'application/json',
+    Body: JSON.stringify(info),
   })
   logger.info('Uploaded info.json.')
 }
