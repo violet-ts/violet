@@ -93,6 +93,7 @@ export const convertObject = async ({
   const convertedDir = path.join(LOCAL_DIR_NAMES.converted, filename.replace(/\.[^.]+$/, ''))
   fs.mkdirSync(convertedDir, { recursive: true })
 
+  logger.info('z1', { credentials })
   const s3 = new S3({
     // region: env.S3_REGION,
     credentials,
