@@ -39,8 +39,8 @@ const TreeViewer = styled.div`
 
 const ProjectArea = styled.div`
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+  justify-content: flex-start;
 `
 
 const StyleRenameIcon = styled.i`
