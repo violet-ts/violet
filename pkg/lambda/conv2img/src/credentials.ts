@@ -1,4 +1,4 @@
-import { fromEnv } from '@aws-sdk/credential-providers'
+import { fromContainerMetadata } from '@aws-sdk/credential-providers'
 import type { Credentials, Provider } from '@aws-sdk/types'
 import type { VioletEnv } from '@violet/def/envValues'
 
@@ -9,5 +9,5 @@ export const createCredentials = (env: VioletEnv): Credentials | Provider<Creden
       secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
     }
   }
-  return fromEnv()
+  return fromContainerMetadata()
 }
