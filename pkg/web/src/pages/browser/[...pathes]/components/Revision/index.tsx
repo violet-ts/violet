@@ -1,11 +1,12 @@
-import type { BrowserRevision, ProjectId, WorkId } from '@violet/api/types'
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
+import type { ProjectId, WorkId } from '@violet/lib/types/branded'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import { useContext, useState } from 'react'
+import type { BrowserRevision } from 'src/types/browser'
 import styled from 'styled-components'
 import { AddButton } from './AddButton'
 

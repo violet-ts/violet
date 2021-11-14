@@ -1,5 +1,5 @@
 import useAspidaSWR from '@aspida/swr'
-import type { Task } from '@violet/api/types/prisma-client'
+import type { Task } from '@prisma/client'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { Fetching } from '@violet/web/src/components/organisms/Fetching'
 import { useApi } from '@violet/web/src/hooks'

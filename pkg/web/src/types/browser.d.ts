@@ -1,6 +1,16 @@
-import type { ReplyId } from '.'
-import type { ApiProject, ApiWork } from './api'
-import type { DeskId, EditionId, MessageId, RevisionId, WorkId } from './branded'
+import type { ApiDesk, ApiMessage, ApiProject, ApiRevision, ApiWork } from '@violet/lib/types/api'
+import type {
+  DeskId,
+  EditionId,
+  MessageId,
+  ProjectId,
+  ReplyId,
+  RevisionId,
+  WorkId,
+} from '@violet/lib/types/branded'
+
+// Todo: @violet/web配下のみ、拡張子がd.tsだと自身の型エラーに気付けない
+export type BrokenType = { a: NotExistsTypeAAAAAaaaaaaaaaaaaaaaa }
 
 export type BrowserReply = {
   id: ReplyId
@@ -60,3 +70,18 @@ export type BrowserProject = {
   selectedFullPath: string
   openedFullPathDict: OpenedFullPathDict
 } & ApiProject
+
+export type BrowserApiWholeData = {
+  projects: ApiProject[]
+  desksList: { projectId: ProjectId; desks: ApiDesk[] }[]
+  revisionsList: { workId: WorkId; revisions: ApiRevision[] }[]
+  messagesList: { revisionId: RevisionId; messages: ApiMessage[] }[]
+}
+
+export type ProjectApiData = {
+  projectId: ProjectId
+  name: string
+  desks: ApiDesk[]
+  revisions: ApiRevision[] | undefined
+  messages: ApiMessage[] | undefined
+}

@@ -46,18 +46,3 @@ export type ApiReply = {
   createdAt: number
   userName: string
 }
-
-export type BrowserApiWholeData = {
-  projects: ApiProject[]
-  desksList: { projectId: ProjectId; desks: ApiDesk[] }[]
-  revisionsList: { workId: WorkId; revisions: ApiRevision[] }[]
-  messagesList: { revisionId: RevisionId; messages: ApiMessage[] }[]
-}
-
-export type ProjectApiData = {
-  projectId: ProjectId
-  name: string
-  desks: ApiDesk[]
-  revisions: ApiRevision[] | undefined
-  messages: ApiMessage[] | undefined
-}

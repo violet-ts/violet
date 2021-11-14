@@ -1,4 +1,6 @@
-const pkgs = ['api', 'def', 'lib', 'lambda-conv2img', 'scripts', 'web']
+const fs = require('fs')
+const path = require('path')
+const pkgs = fs.readdirSync(path.join(__dirname, 'pkg'))
 module.exports = {
   root: true,
   ignorePatterns: ['!*.js', '!*.cjs', '!*.mjs', '!*.ts'],
@@ -66,13 +68,38 @@ module.exports = {
               },
               {
                 group: [
-                  '.prisma/*',
                   ...pkgs
                     .filter((pkg2) => pkg2 !== pkg && !['api', 'def', 'lib'].includes(pkg2))
                     .map((pkg2) => `@violet/${pkg2}`),
-                  ...(pkg === 'api' ? [] : ['@violet/api/src/*']),
+                  ...(pkg === 'api'
+                    ? []
+                    : [
+                        // '!@violet/api/api/$api' と指定したいがglobの否定が使えないのでfsで代用
+                        ...fs
+                          .readdirSync(path.join(__dirname, 'pkg/api'), {
+                            withFileTypes: true,
+                          })
+                          .filter((d) => d.name !== 'api')
+                          .map(
+                            (d) =>
+                              `@violet/api/${
+                                d.isFile() ? d.name.replace(/\.(ts|js)$/, '') : d.name
+                              }`
+                          ),
+                        ...fs
+                          .readdirSync(path.join(__dirname, 'pkg/api/api'), {
+                            withFileTypes: true,
+                          })
+                          .filter((d) => d.name !== '$api.ts')
+                          .map(
+                            (d) =>
+                              `@violet/api/api/${
+                                d.isFile() ? d.name.replace(/\.(ts|js)$/, '') : d.name
+                              }`
+                          ),
+                      ]),
                 ],
-                message: `only allowed to import modules under @violet/${pkg}, @violet/def, @violet/api/api and @violet/api/types`,
+                message: `only allowed to import modules under @violet/${pkg}, @violet/def, @violet/lib and @violet/api/api/$api`,
               },
             ],
           },

@@ -1,14 +1,14 @@
+import type { ApiDesk } from '@violet/lib/types/api'
 import type {
-  ApiDesk,
   BrowserDesk,
   BrowserDir,
   BrowserProject,
   BrowserWork,
   OpenedFullPathDict,
   ProjectApiData,
-} from '@violet/api/types'
-import { getWorkFullName } from '@violet/web/src//utils'
-import { fontSizes } from '@violet/web/src//utils/constants'
+} from '@violet/web/src/types/browser'
+import { getWorkFullName } from '@violet/web/src/utils'
+import { fontSizes } from '@violet/web/src/utils/constants'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { CellName } from './CellName'

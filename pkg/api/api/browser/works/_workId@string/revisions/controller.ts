@@ -1,7 +1,7 @@
 import { createRevision, getDeskId, getRevisions } from '@violet/api/src/service/browser'
 import { sendNewWork } from '@violet/api/src/service/s3'
 import { createS3SaveWorksPath } from '@violet/api/src/utils/s3'
-import type { WorkId } from '@violet/api/types'
+import type { WorkId } from '@violet/lib/types/branded'
 import { defineController } from './$relay'
 
 export default defineController(() => ({

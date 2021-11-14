@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { generateId } from '@violet/api/src/utils/generateId'
-import type { ApiMessage, ApiReply, MessageId, ReplyId, RevisionId } from '@violet/api/types'
+import type { ApiMessage, ApiReply } from '@violet/lib/types/api'
+import type { MessageId, ReplyId, RevisionId } from '@violet/lib/types/branded'
 import dayjs from 'dayjs'
 
 const prisma = new PrismaClient()
