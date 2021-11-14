@@ -1,4 +1,4 @@
-import type { ApiRevision, BrowserProject, WorkId } from '@violet/api/types'
+import type { ApiRevision, ProjectId, WorkId } from '@violet/api/types'
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
@@ -44,7 +44,6 @@ const Dropper = styled.input`
   cursor: pointer;
   opacity: 0;
 `
-
 const AlertMessage = styled.div`
   position: absolute;
   top: 50%;
@@ -53,7 +52,7 @@ const AlertMessage = styled.div`
   transform: translate(-50%, -50%);
 `
 
-export const EmptyWork = ({ project }: { project: BrowserProject }) => {
+export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
   const [dragging, setDragging] = useState(false)
@@ -62,14 +61,12 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
   const dragLeave = () => setDragging(false)
 
   const drop = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length !== 1) {
-      e.target.value = ''
-      setDragging(false)
-      return
+    if (e.target.files?.length === 1) {
+      const targetFileType = e.target.files[0].type
+      fileTypes.some((f) => f.type === targetFileType)
+        ? sendFormData(e.target.files)
+        : setOpenAlert(true)
     }
-    const targetFileType = e.target.files[0].type
-    const typeList = fileTypes.map<string>((x) => x.type)
-    typeList.some((t) => t === targetFileType) ? sendFormData(e.target.files) : setOpenAlert(true)
     e.target.value = ''
   }
   const updateRevisions = (revisionRes: { workId: WorkId; revisions: ApiRevision[] }) => {
@@ -82,15 +79,14 @@ export const EmptyWork = ({ project }: { project: BrowserProject }) => {
   }
   const sendFormData = async (file: FileList) => {
     setDragging(false)
-    if (!project.openedTabId) return
     if (!file) return
     const newRevision = await api.browser.works
-      ._workId(project.openedTabId)
-      .revisions.$post({ body: { uploadFile: file[0], projectId: project.id } })
+      ._workId(props.workId)
+      .revisions.$post({ body: { uploadFile: file[0], projectId: props.projectId } })
       .catch(onErr)
 
     if (!newRevision) return
-    const revisionRes = await api.browser.works._workId(project.openedTabId).revisions.$get()
+    const revisionRes = await api.browser.works._workId(props.workId).revisions.$get()
 
     if (!revisionRes) return
     updateRevisions(revisionRes)

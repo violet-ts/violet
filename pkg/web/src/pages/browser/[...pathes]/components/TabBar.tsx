@@ -16,7 +16,6 @@ const Container = styled.div`
 `
 
 const Tab = styled.a`
-  display: block;
   padding: 12px;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};
   ${SelectableStyle};

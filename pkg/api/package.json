@@ -54,7 +54,6 @@
     "@violet/api": "workspace:*",
     "@violet/def": "workspace:*",
     "@violet/lib": "workspace:*",
-    "@violet/scripts": "workspace:*",
-    "@violet/web": "workspace:*"
+    "@violet/scripts": "workspace:*"
   }
 }

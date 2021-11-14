@@ -84,6 +84,13 @@ export const usePage = () => {
 
     const data = apiWholeData.projects?.find((p) => p.id === currentProject.id)
     const desks = apiWholeData.desksList.find((d) => d.projectId === currentProject.id)?.desks
+    const revisions = apiWholeData.revisionsList.find(
+      (d) => d.workId === currentProject.openedTabId
+    )?.revisions
+
+    const messages = apiWholeData.messagesList
+      .filter((m) => revisions?.some((revision) => revision.id === m.revisionId))
+      ?.flatMap((m) => m.messages)
 
     return (
       data &&
@@ -91,15 +98,8 @@ export const usePage = () => {
         projectId: currentProject.id,
         name: data.name,
         desks,
-        revisions: apiWholeData.revisionsList.find((d) => d.workId === currentProject.openedTabId)
-          ?.revisions,
-        messages: apiWholeData.messagesList.find(
-          (d) =>
-            d.revisionId ===
-            apiWholeData.revisionsList
-              .find((d) => d.workId === currentProject.openedTabId)
-              ?.revisions?.slice(-1)[0]?.id
-        )?.messages,
+        revisions,
+        messages,
       }
     )
   }, [apiWholeData, currentProject])

@@ -1,24 +1,23 @@
-import type { ApiRevision, ProjectId, WorkId } from '@violet/api/types'
+import type { BrowserRevision, ProjectId, WorkId } from '@violet/api/types'
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { AddButton } from './AddButton'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 48px - 48px);
+  height: calc(100vh - 96px);
 `
 
 const DisplayWorksArea = styled.div`
   min-height: 100%;
   padding: 48px;
-  overflow-y: scroll;
   background: ${colors.transparent};
   transition: background 0.2s, padding 0.2s;
 `
@@ -63,16 +62,12 @@ const AlertMessage = styled.div`
 export const Revision = (props: {
   projectId: ProjectId
   workId: WorkId
-  revisions: ApiRevision[]
+  revision: BrowserRevision
 }) => {
   const [isFile, setIsFile] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
-  const [openedTabRevisions, setOpenTabRevision] = useState(props.revisions)
-  useEffect(() => {
-    setOpenTabRevision(props.revisions)
-  }, [props.revisions])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -106,28 +101,24 @@ export const Revision = (props: {
   }
 
   return (
-    <>
-      <Container
-        onDragEnter={() => setIsFile(true)}
-        onDragLeave={() => setIsFile(false)}
-        onChange={onChange}
-      >
-        {openAlert && (
-          <Modal closeModal={closeModal}>
-            <AlertMessage>UnSupported File Format!</AlertMessage>
-          </Modal>
-        )}
-        {isFile && <Dropper type="file" accept={acceptExtensions} />}
-        {openedTabRevisions.map((_o, i) => (
-          <DisplayWorksArea key={i}>
-            <DisplayWorksFrame>WORK{i + 1}</DisplayWorksFrame>
-          </DisplayWorksArea>
-        ))}
-      </Container>
+    <Container
+      onDragEnter={() => setIsFile(true)}
+      onDragLeave={() => setIsFile(false)}
+      onChange={onChange}
+    >
+      {openAlert && (
+        <Modal closeModal={closeModal}>
+          <AlertMessage>UnSupported File Format!</AlertMessage>
+        </Modal>
+      )}
+      {isFile && <Dropper type="file" accept={acceptExtensions} />}
+      <DisplayWorksArea>
+        <DisplayWorksFrame>REVISION -- {props.revision.id}</DisplayWorksFrame>
+      </DisplayWorksArea>
       <RevisionFooter>
         <AddButton dropFile={dropFile} />
         <Spacer axis="x" size={8} />
       </RevisionFooter>
-    </>
+    </Container>
   )
 }

@@ -3,7 +3,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN npm install -g pnpm@6.20.1
 
-# hadolint ignore=DL3045
 COPY . .
 
 ENV NODE_ENV production

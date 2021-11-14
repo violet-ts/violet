@@ -1,8 +1,8 @@
 import useAspidaSWR from '@aspida/swr'
-import type { BrowserProject, ProjectId } from '@violet/api/types'
+import type { ApiRevision, BrowserProject, ProjectId, WorkId } from '@violet/api/types'
 import { BrowserContext } from '@violet/web/src//contexts/Browser'
 import { useApi } from '@violet/web/src//hooks'
-import { useContext, useEffect } from 'react'
+import { useCallback, useContext, useEffect } from 'react'
 
 export const useFetch = (
   projectId: ProjectId | undefined,
@@ -17,11 +17,20 @@ export const useFetch = (
     api.browser.works._workId(currentProject?.openedTabId ?? '').revisions,
     { enabled: !!currentProject?.openedTabId }
   )
-  const revisionIdToGetMessage = revisionsRes?.data?.revisions?.slice(-1).map((c) => c.id)
-  const messagesRes = useAspidaSWR(
-    api.browser.works
-      ._workId(currentProject?.openedTabId ?? '')
-      .revisions._revisionId(revisionIdToGetMessage?.[0] ?? '')
+
+  const updateMessage = useCallback(
+    async (revisionsData: { workId: WorkId; revisions: ApiRevision[] }) => {
+      const message = await Promise.all(
+        revisionsData.revisions.map((revision) =>
+          api.browser.works
+            ._workId(currentProject?.openedTabId ?? '')
+            .revisions._revisionId(revision.id)
+            .messages.$get()
+        )
+      )
+      updateApiWholeData('messagesList', message)
+    },
+    [apiWholeData.messagesList]
   )
 
   useEffect(() => {
@@ -64,21 +73,8 @@ export const useFetch = (
           )
         : [...apiWholeData.revisionsList, revisionsData]
     )
+    updateMessage(revisionsData)
   }, [revisionsRes.data])
-
-  useEffect(() => {
-    const messageData = messagesRes.data
-    if (!messageData) return
-
-    updateApiWholeData(
-      'messagesList',
-      apiWholeData.messagesList.some((r) => r.revisionId === messageData.revisionId)
-        ? apiWholeData.messagesList.map((r) =>
-            r.revisionId === messageData.revisionId ? messageData : r
-          )
-        : [...apiWholeData.messagesList, messageData]
-    )
-  }, [messagesRes.data])
 
   return {
     error: [projectsRes.error, desksRes.error, revisionsRes.error, revisionsRes.error].find(

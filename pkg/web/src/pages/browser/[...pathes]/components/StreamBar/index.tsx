@@ -1,15 +1,10 @@
-import type {
-  ApiMessage,
-  BrowserProject,
-  MessageId,
-  ProjectApiData,
-  RevisionId,
-} from '@violet/api/types'
+import type { BrowserRevision, MessageId, ProjectId, WorkId } from '@violet/api/types'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
-import type { FormEvent } from 'react'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { PencilIcon } from 'src/components/atoms/PencilIcon'
+import { Spacer } from 'src/components/atoms/Spacer'
 import styled from 'styled-components'
 import { MessageCell } from './MessageCell'
 
@@ -17,22 +12,23 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
-  height: 100vh;
+  height: calc(100vh - 48px);
   border-left: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const StreamBox = styled.div`
   bottom: 0;
   flex: 1;
   min-height: 80px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 const MessageBox = styled.div`
+  display: flex;
   flex-shrink: 0;
   justify-content: flex-end;
   padding: 8px;
 `
 const InputForm = styled.textarea`
-  width: 100%;
+  flex: 1;
   min-height: 120px;
   resize: none;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
@@ -40,135 +36,89 @@ const InputForm = styled.textarea`
     color: ${colors.violet}${alphaLevel[2]};
   }
 `
-const ClickableArea = styled.button`
-  position: fixed;
-  right: 8px;
-  bottom: 8px;
-  width: 32px;
-  height: 32px;
+const ClickableArea = styled.div`
   cursor: pointer;
-  background-color: transparent;
-  border: none;
 `
-const SubmitIcon = styled.div`
-  position: fixed;
-  right: 16px;
-  bottom: 24px;
-  width: 16px;
-  height: 4px;
-  border-right: solid transparent;
-  border-top-right-radius: 1px;
-  border-bottom-right-radius: 1px;
-  box-shadow: 0 0 0 2px, inset -2px 0 0;
-  transform: rotate(-45deg);
-  ::before {
-    position: fixed;
-    top: -2px;
-    left: -12px;
-    box-sizing: border-box;
-    display: block;
-    width: 8px;
-    height: 8px;
-    content: '';
-    border-top: 4px solid transparent;
-    border-right: 8px solid;
-    border-bottom: 4px solid transparent;
-  }
-`
-export const StreamBar = ({
-  project,
-  projectApiData,
-}: {
-  project: BrowserProject
-  projectApiData: ProjectApiData
+export const StreamBar = (props: {
+  projectId: ProjectId
+  workId: WorkId
+  revision: BrowserRevision
 }) => {
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
   const { api, onErr } = useApi()
-  const [content, setMessage] = useState('')
+  const [content, setContent] = useState('')
   const scrollBottomRef = useRef<HTMLDivElement>(null)
+  const userName = 'Charles M Schultz'
 
-  const userName = 'Test Name'
-  const submitMessage = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault()
-      if (!content) return
-      if (!project.openedTabId) return
-      if (!projectApiData.revisions) return
-      const revisionId = projectApiData.revisions.slice(-1)[0].id
-      await api.browser.works
-        ._workId(project.openedTabId)
-        .revisions._revisionId(revisionId)
-        .post({ body: { content, userName } })
-        .catch(onErr)
+  const submitMessage = useCallback(async () => {
+    if (!content) return
+    await api.browser.works
+      ._workId(props.workId)
+      .revisions._revisionId(props.revision.id)
+      .post({ body: { content, userName } })
+      .catch(onErr)
 
-      const messageRes = await api.browser.works
-        ._workId(project.openedTabId)
-        .revisions._revisionId(revisionId)
-        .$get()
+    const messageRes = await api.browser.works
+      ._workId(props.workId)
+      .revisions._revisionId(props.revision.id)
+      .messages.$get()
 
-      if (!messageRes) return
-
-      updateMessage(messageRes)
-      setMessage('')
-    },
-    [content, project, projectApiData]
-  )
-  useEffect(() => {
-    scrollBottomRef?.current?.scrollIntoView()
-  }, [projectApiData.messages?.length])
-
-  const updateMessage = (messageRes: { revisionId: RevisionId; messages: ApiMessage[] }) => {
     updateApiWholeData(
       'messagesList',
-      apiWholeData.messagesList.some((r) => r.revisionId === messageRes.revisionId)
-        ? apiWholeData.messagesList.map((r) =>
-            r.revisionId === messageRes.revisionId ? messageRes : r
-          )
-        : [...apiWholeData.messagesList, messageRes]
+      apiWholeData.messagesList.map((m) =>
+        m.revisionId === messageRes.revisionId ? messageRes : m
+      )
     )
-  }
+
+    setContent('')
+  }, [content])
+
+  useEffect(() => {
+    scrollBottomRef?.current?.scrollIntoView()
+  }, [props.revision.messages.length])
 
   const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
       if (!content) return
-      if (!project.openedTabId) return
-      if (!projectApiData.revisions) return
-      const revisionId = projectApiData.revisions.slice(-1)[0].id
       await api.browser.works
-        ._workId(project.openedTabId)
-        .revisions._revisionId(revisionId)
+        ._workId(props.workId)
+        .revisions._revisionId(props.revision.id)
         .messages._messageId(messageId)
-        .replies.$post({ body: { content, userName } })
+        .replies.post({ body: { content, userName } })
 
       const replyRes = await api.browser.works
-        ._workId(project.openedTabId)
-        .revisions._revisionId(revisionId)
+        ._workId(props.workId)
+        .revisions._revisionId(props.revision.id)
         .messages.$get()
         .catch(onErr)
 
       if (!replyRes) return
-      updateMessage(replyRes)
+
+      updateApiWholeData(
+        'messagesList',
+        apiWholeData.messagesList.map((m) => (m.revisionId === replyRes.revisionId ? replyRes : m))
+      )
     },
-    [content, project, projectApiData]
+    [content]
   )
 
   return (
     <Container>
       <StreamBox>
-        {projectApiData.messages &&
-          projectApiData.messages.map((d, i) => (
-            <MessageCell key={i} message={d} replyMessage={replyMessage} />
-          ))}
+        {props.revision.messages.map((m, i) => (
+          <MessageCell key={i} message={m} replyMessage={replyMessage} />
+        ))}
         <div ref={scrollBottomRef} />
       </StreamBox>
       <MessageBox>
         <InputForm
           placeholder="message"
           value={content}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(e) => setContent(e.target.value)}
         />
         <ClickableArea onClick={submitMessage}>
-          <SubmitIcon />
+          <Spacer axis="y" size={88} />
+          <PencilIcon />
         </ClickableArea>
       </MessageBox>
     </Container>
