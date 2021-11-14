@@ -93,7 +93,7 @@ export const convertObject = async ({
   const convertedDir = path.join(LOCAL_DIR_NAMES.converted, filename.replace(/\.[^.]+$/, ''))
   fs.mkdirSync(convertedDir, { recursive: true })
 
-  logger.info('z1', { credentials })
+  logger.info('z1')
   const s3 = new S3({
     // region: env.S3_REGION,
     credentials,
@@ -102,7 +102,10 @@ export const convertObject = async ({
     // forcePathStyle: true,
   })
   logger.info('z')
-  const r1 = await s3.headObject({ Bucket: bucket, Key: key })
+  logger.info('zzz', await exec('echo', ['hello'], false))
+  logger.info('z2')
+  logger.info('zzz2', await exec('curl', ['ifconfig.co'], false))
+  const r1 = await s3.headObject({ Bucket: '', Key: key })
   logger.info('r1', { r1 })
   const r = await s3.getObject({ Bucket: bucket, Key: key })
   logger.info('r', { r })
