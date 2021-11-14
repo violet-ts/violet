@@ -14,9 +14,9 @@ import { RenameIcon } from 'src/components/atoms/RenameIcon'
 import { Spacer } from 'src/components/atoms/Spacer'
 import { Modal } from 'src/components/molecules/Modal'
 import styled from 'styled-components'
+import { UpdateProjectName } from '../UpdateProjectName'
 import { CellName } from './CellName'
 import { DirectoryCell } from './DirectoryCell'
-import { UpdateProjectName } from './UpdateProjectName'
 import { WorkCell } from './WorkCell'
 
 const Container = styled.div`
