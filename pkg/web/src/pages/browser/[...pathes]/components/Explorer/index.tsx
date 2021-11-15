@@ -1,4 +1,4 @@
-import { ApiDesk } from '@violet/lib/types/api'
+import type { ApiDesk } from '@violet/lib/types/api'
 import type {
   BrowserDesk,
   BrowserDir,
