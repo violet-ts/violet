@@ -1,4 +1,9 @@
-const pkgs = ['api', 'def', 'lib', 'lambda-conv2img', 'scripts', 'web']
+const { execFileSync } = require('child_process')
+const pkgs = execFileSync('pnpm', ['--filter=./pkg', 'list', '--depth', '-1', '--no-color'])
+  .toString('utf8')
+  .split(/[\n\r]+/)
+  .filter((line) => line)
+  .map((line) => line.replace(/^@violet\/([^@]*)@.*/, '$1'))
 
 module.exports = {
   root: true,
