@@ -1,4 +1,5 @@
 import type { ProjectId } from '@violet/api/types'
+import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import type { ChangeEvent, FormEvent } from 'react'
@@ -15,6 +16,7 @@ export const UpdateProjectName = (props: { confirmName: () => void; projectId: P
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
   const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
+  const [isUpdating, setIsUpdating] = useState(false)
   useEffect(() => {
     inputElement.current?.focus()
   }, [])
@@ -36,16 +38,19 @@ export const UpdateProjectName = (props: { confirmName: () => void; projectId: P
     updateProjects(projectsStatus)
   }
 
-  const updateProjectName = (e: FormEvent) => {
+  const updateProjectName = async (e: FormEvent) => {
     e.preventDefault()
     if (!label) return
 
-    updateProcess(label)
+    setIsUpdating(true)
+    await updateProcess(label)
+    setIsUpdating(false)
     props.confirmName()
   }
   return (
     <InputFormProject onSubmit={updateProjectName}>
       <input ref={inputElement} type="text" onChange={inputLabel} />
+      {isUpdating && <Loading />}
     </InputFormProject>
   )
 }
