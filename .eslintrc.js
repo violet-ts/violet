@@ -73,31 +73,7 @@ module.exports = {
                     .map((pkg2) => `@violet/${pkg2}`),
                   ...(pkg === 'api'
                     ? []
-                    : [
-                        // '!@violet/api/api/$api' と指定したいがglobの否定が使えないのでfsで代用
-                        ...fs
-                          .readdirSync(path.join(__dirname, 'pkg/api'), {
-                            withFileTypes: true,
-                          })
-                          .filter((d) => d.name !== 'api')
-                          .map(
-                            (d) =>
-                              `@violet/api/${
-                                d.isFile() ? d.name.replace(/\.(ts|js)$/, '') : d.name
-                              }`
-                          ),
-                        ...fs
-                          .readdirSync(path.join(__dirname, 'pkg/api/api'), {
-                            withFileTypes: true,
-                          })
-                          .filter((d) => d.name !== '$api.ts')
-                          .map(
-                            (d) =>
-                              `@violet/api/api/${
-                                d.isFile() ? d.name.replace(/\.(ts|js)$/, '') : d.name
-                              }`
-                          ),
-                      ]),
+                    : ['@violet/api/$server', '@violet/api/*/*', '!@violet/api/api/$api']),
                 ],
                 message: `only allowed to import modules under @violet/${pkg}, @violet/def, @violet/lib and @violet/api/api/$api`,
               },
