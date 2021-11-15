@@ -1,4 +1,4 @@
-import type { ProjectId } from '@violet/api/types'
+import type { ProjectId } from '@violet/lib/types/branded'
 import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
