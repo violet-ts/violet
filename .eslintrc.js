@@ -1,5 +1,7 @@
 const { execFileSync } = require('child_process')
-const pkgs = execFileSync('pnpm', ['--filter=./pkg', 'list', '--depth', '-1', '--no-color'])
+const pkgs = execFileSync('pnpm', ['--filter=./pkg', 'list', '--depth', '-1', '--no-color'], {
+  cwd: __dirname,
+})
   .toString('utf8')
   .split(/[\n\r]+/)
   .filter((line) => line)
@@ -77,7 +79,12 @@ module.exports = {
                     .map((pkg2) => `@violet/${pkg2}`),
                   ...(pkg === 'api'
                     ? []
-                    : ['@violet/api/$server', '@violet/api/*/*', '!@violet/api/api/$api']),
+                    : [
+                        '@violet/api/*',
+                        '!@violet/api/api',
+                        '@violet/api/api/*',
+                        '!@violet/api/api/$api',
+                      ]),
                 ],
                 message: `only allowed to import modules under @violet/${pkg}, @violet/def, @violet/lib and @violet/api/api/$api`,
               },
