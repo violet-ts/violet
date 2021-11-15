@@ -1,5 +1,4 @@
 import type { ProjectId } from '@violet/api/types'
-import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import type { ChangeEvent, FormEvent } from 'react'
@@ -7,8 +6,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const InputFormProject = styled.form`
-  display: flex;
-  justify-content: center;
+  text-align: center;
 `
 
 export const UpdateProjectName = (props: { confirmName: () => void; projectId: ProjectId }) => {
@@ -17,7 +15,6 @@ export const UpdateProjectName = (props: { confirmName: () => void; projectId: P
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
   const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
-  const [isUpdating, setIsUpdating] = useState(false)
   useEffect(() => {
     inputElement.current?.focus()
   }, [])
@@ -27,25 +24,14 @@ export const UpdateProjectName = (props: { confirmName: () => void; projectId: P
       ._projectId(props.projectId)
       .put({ body: { name } })
       .catch(onErr)
-    if (!updateProject?.body) return
+    if (!updateProject) return
 
     const projectsData = apiWholeData.projects.map((d) =>
       d.id === props.projectId ? updateProject.body : d
     )
-    const projectsStatus = [
-      projects.map((d) =>
-        d.id === props.projectId
-          ? {
-              id: d.id,
-              name: updateProject.body.name,
-              openedFullPathDict: d.openedFullPathDict,
-              openedTabId: d.openedTabId,
-              selectedFullPath: d.selectedFullPath,
-              tabs: d.tabs,
-            }
-          : d
-      ),
-    ][0]
+    const projectsStatus = projects.map((d) =>
+      d.id === props.projectId ? { ...d, name: updateProject.body.name } : d
+    )
     updateApiWholeData('projects', projectsData)
     updateProjects(projectsStatus)
   }
@@ -54,15 +40,12 @@ export const UpdateProjectName = (props: { confirmName: () => void; projectId: P
     e.preventDefault()
     if (!label) return
 
-    setIsUpdating(true)
     updateProcess(label)
-    setIsUpdating(false)
     props.confirmName()
   }
   return (
     <InputFormProject onSubmit={updateProjectName}>
       <input ref={inputElement} type="text" onChange={inputLabel} />
-      {isUpdating && <Loading />}
     </InputFormProject>
   )
 }

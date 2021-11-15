@@ -161,10 +161,7 @@ export const Explorer = ({
         <Modal closeModal={closeModal}>
           <Spacer axis="y" size={80} />
           <Message>Enter a new project name</Message>
-          <UpdateProjectName
-            confirmName={closeModal}
-            projectId={projectApiData.projectId}
-          ></UpdateProjectName>
+          <UpdateProjectName confirmName={closeModal} projectId={projectApiData.projectId} />
         </Modal>
       )}
       <TreeViewer>
