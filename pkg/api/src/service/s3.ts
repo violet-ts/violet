@@ -1,10 +1,4 @@
-import {
-  CreateBucketCommand,
-  GetObjectCommand,
-  ListBucketsCommand,
-  PutObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3'
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import type { S3SaveWorksPath } from '@violet/api/types'
 import { fileTypes } from '@violet/def/constants'
@@ -12,7 +6,7 @@ import type { MultipartFile } from 'fastify-multipart'
 import { depend } from 'velona'
 import envValues from '../utils/envValues'
 import { getCredentials } from './aws-credential'
-const { S3_BUCKET, S3_ENDPOINT, S3_REGION } = envValues
+const { S3_BUCKET_ORIGINAL, S3_ENDPOINT, S3_REGION } = envValues
 
 let s3Client: S3Client
 
@@ -27,26 +21,6 @@ const getS3Client = () => {
     })
 
   return s3Client
-}
-
-const listBucket = depend({ getS3Client }, ({ getS3Client }) =>
-  getS3Client()
-    .send(new ListBucketsCommand({}))
-    .then((res) => res.Buckets)
-)
-
-const createBucket = depend({ getS3Client }, ({ getS3Client }) =>
-  getS3Client()
-    .send(new CreateBucketCommand({ Bucket: S3_BUCKET }))
-    .then((res) => res.$metadata)
-)
-
-export const createBucketIfNotExists = async () => {
-  if (!S3_ENDPOINT) return
-  const isBucket = await listBucket()
-  if (!isBucket?.some((b) => b.Name === S3_BUCKET)) {
-    await createBucket()
-  }
 }
 
 export const getRevisionsSidnedUrl = depend({ getS3Client }, ({ getS3Client }) =>
@@ -66,7 +40,7 @@ export const sendNewWork = depend(
     }
   ) => {
     const uploadParams = {
-      Bucket: S3_BUCKET,
+      Bucket: S3_BUCKET_ORIGINAL,
       Key: props.path,
       ContentType: fileTypes.find((f) => props.uploadFile.filename.endsWith(f.ex))?.type,
       Body: await props.uploadFile.toBuffer(),

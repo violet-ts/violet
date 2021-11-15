@@ -6,9 +6,13 @@
     "_:typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "ballvalve": "^3.1.3"
+    "@aws-sdk/client-cloudwatch-logs": "^3.41.0",
+    "ballvalve": "^3.1.3",
+    "safe-stable-stringify": "^2.2.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.84",
     "@violet/def": "workspace:*",
     "@violet/lib": "workspace:*"
   }

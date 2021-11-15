@@ -15,8 +15,8 @@
     "@violet/scripts": "workspace:*"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.39.0",
-    "@aws-sdk/credential-providers": "^3.39.0",
+    "@aws-sdk/client-s3": "^3.41.0",
+    "@aws-sdk/credential-providers": "^3.41.0",
     "source-map-support": "^0.5.20"
   }
 }
