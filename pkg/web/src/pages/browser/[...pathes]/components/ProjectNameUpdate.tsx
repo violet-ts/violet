@@ -22,17 +22,17 @@ export const ProjectNameUpdate = (props: { confirmName: () => void; projectId: P
   }, [])
 
   const updateProjectName = async (name: string) => {
-    const updateProjectData = await api.browser.projects
+    const projectData = await api.browser.projects
       ._projectId(props.projectId)
       .put({ body: { name } })
       .catch(onErr)
-    if (!updateProjectData) return
+    if (!projectData) return
 
     const projectsData = apiWholeData.projects.map((d) =>
-      d.id === props.projectId ? updateProjectData.body : d
+      d.id === props.projectId ? projectData.body : d
     )
     const projectsStatus = projects.map((d) =>
-      d.id === props.projectId ? { ...d, name: updateProjectData.body.name } : d
+      d.id === props.projectId ? { ...d, name: projectData.body.name } : d
     )
     updateApiWholeData('projects', projectsData)
     updateProjects(projectsStatus)
