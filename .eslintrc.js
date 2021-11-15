@@ -1,6 +1,5 @@
-const fs = require('fs')
-const path = require('path')
-const pkgs = fs.readdirSync(path.join(__dirname, 'pkg'))
+const pkgs = ['api', 'def', 'lib', 'lambda-conv2img', 'scripts', 'web']
+
 module.exports = {
   root: true,
   ignorePatterns: ['!*.js', '!*.cjs', '!*.mjs', '!*.ts'],
