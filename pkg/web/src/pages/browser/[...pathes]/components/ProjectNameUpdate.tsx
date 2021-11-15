@@ -10,7 +10,7 @@ const InputFormProject = styled.form`
   text-align: center;
 `
 
-export const UpdateProjectName = (props: { confirmName: () => void; projectId: ProjectId }) => {
+export const ProjectNameUpdate = (props: { confirmName: () => void; projectId: ProjectId }) => {
   const [label, setLabel] = useState('')
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const inputElement = useRef<HTMLInputElement>(null)
@@ -21,34 +21,34 @@ export const UpdateProjectName = (props: { confirmName: () => void; projectId: P
     inputElement.current?.focus()
   }, [])
 
-  const updateProcess = async (name: string) => {
-    const updateProject = await api.browser.projects
+  const updateProjectName = async (name: string) => {
+    const updateProjectData = await api.browser.projects
       ._projectId(props.projectId)
       .put({ body: { name } })
       .catch(onErr)
-    if (!updateProject) return
+    if (!updateProjectData) return
 
     const projectsData = apiWholeData.projects.map((d) =>
-      d.id === props.projectId ? updateProject.body : d
+      d.id === props.projectId ? updateProjectData.body : d
     )
     const projectsStatus = projects.map((d) =>
-      d.id === props.projectId ? { ...d, name: updateProject.body.name } : d
+      d.id === props.projectId ? { ...d, name: updateProjectData.body.name } : d
     )
     updateApiWholeData('projects', projectsData)
     updateProjects(projectsStatus)
   }
 
-  const updateProjectName = async (e: FormEvent) => {
+  const updateName = async (e: FormEvent) => {
     e.preventDefault()
     if (!label) return
 
     setIsUpdating(true)
-    await updateProcess(label)
+    await updateProjectName(label)
     setIsUpdating(false)
     props.confirmName()
   }
   return (
-    <InputFormProject onSubmit={updateProjectName}>
+    <InputFormProject onSubmit={updateName}>
       <input ref={inputElement} type="text" onChange={inputLabel} />
       {isUpdating && <Loading />}
     </InputFormProject>

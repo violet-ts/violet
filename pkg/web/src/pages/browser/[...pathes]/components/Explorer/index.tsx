@@ -14,7 +14,7 @@ import { RenameIcon } from 'src/components/atoms/RenameIcon'
 import { Spacer } from 'src/components/atoms/Spacer'
 import { Modal } from 'src/components/molecules/Modal'
 import styled from 'styled-components'
-import { UpdateProjectName } from '../UpdateProjectName'
+import { ProjectNameUpdate } from '../ProjectNameUpdate'
 import { CellName } from './CellName'
 import { DirectoryCell } from './DirectoryCell'
 import { WorkCell } from './WorkCell'
@@ -161,7 +161,7 @@ export const Explorer = ({
         <Modal closeModal={closeModal}>
           <Spacer axis="y" size={80} />
           <Message>Enter a new project name</Message>
-          <UpdateProjectName confirmName={closeModal} projectId={projectApiData.projectId} />
+          <ProjectNameUpdate confirmName={closeModal} projectId={projectApiData.projectId} />
         </Modal>
       )}
       <TreeViewer>
