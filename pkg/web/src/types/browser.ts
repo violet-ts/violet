@@ -1,3 +1,5 @@
+// Next.jsのskipLibCheckの影響で@violet/web配下で拡張子がd.tsだと以下のような自身の型エラーに気付けない
+// export type BrokenType = { a: NotExistsType }
 import type { ApiDesk, ApiMessage, ApiProject, ApiRevision, ApiWork } from '@violet/lib/types/api'
 import type {
   DeskId,
@@ -8,9 +10,6 @@ import type {
   RevisionId,
   WorkId,
 } from '@violet/lib/types/branded'
-
-// Todo: @violet/web配下のみ、拡張子がd.tsだと自身の型エラーに気付けない
-export type BrokenType = { a: NotExistsTypeAAAAAaaaaaaaaaaaaaaaa }
 
 export type BrowserReply = {
   id: ReplyId
