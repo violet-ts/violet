@@ -30,6 +30,7 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': [2, { ignore: ['children'] }],
+    'react/self-closing-comp': 'error',
     complexity: ['error', 5],
     'max-depth': ['error', 1],
     'max-nested-callbacks': ['error', 3],
