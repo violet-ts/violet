@@ -1,6 +1,7 @@
-import type { BrowserRevision, ProjectId, WorkId } from '@violet/api/types'
+import type { ProjectId, WorkId } from '@violet/lib/types/branded'
 import React from 'react'
 import { Spacer } from 'src/components/atoms/Spacer'
+import type { BrowserRevision } from 'src/types/browser'
 import styled from 'styled-components'
 import { Revision } from '../components/Revision'
 import { StreamBar } from '../components/StreamBar'

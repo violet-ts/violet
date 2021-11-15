@@ -1,5 +1,5 @@
 import { createWork } from '@violet/api/src/service/browser'
-import type { DeskId } from '@violet/api/types'
+import type { DeskId } from '@violet/lib/types/branded'
 import { defineController } from './$relay'
 
 export default defineController(() => ({

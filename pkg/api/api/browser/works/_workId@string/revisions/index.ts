@@ -1,4 +1,5 @@
-import type { ApiRevision, ProjectId, WorkId } from '@violet/api/types'
+import type { ApiRevision } from '@violet/lib/types/api'
+import type { ProjectId, WorkId } from '@violet/lib/types/branded'
 
 export type Methods = {
   get: {

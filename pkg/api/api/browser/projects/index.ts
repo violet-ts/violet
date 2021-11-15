@@ -1,4 +1,4 @@
-import type { ApiProject } from '@violet/api/types'
+import type { ApiProject } from '@violet/lib/types/api'
 
 export type Methods = {
   get: {

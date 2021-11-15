@@ -1,6 +1,6 @@
-import type { BrowserReply } from '@violet/api/types'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import React from 'react'
+import type { BrowserReply } from 'src/types/browser'
 import styled from 'styled-components'
 import { MessageHeader } from './MessageHeader'
 

@@ -1,4 +1,12 @@
-const pkgs = ['api', 'def', 'lib', 'lambda-conv2img', 'scripts', 'web']
+const { execFileSync } = require('child_process')
+const pkgs = execFileSync('pnpm', ['--filter=./pkg', 'list', '--depth', '-1', '--no-color'], {
+  cwd: __dirname,
+})
+  .toString('utf8')
+  .split(/[\n\r]+/)
+  .filter((line) => line)
+  .map((line) => line.replace(/^@violet\/([^@]*)@.*/, '$1'))
+
 module.exports = {
   root: true,
   ignorePatterns: ['!*.js', '!*.cjs', '!*.mjs', '!*.ts'],
@@ -67,13 +75,19 @@ module.exports = {
               },
               {
                 group: [
-                  '.prisma/*',
                   ...pkgs
                     .filter((pkg2) => pkg2 !== pkg && !['api', 'def', 'lib'].includes(pkg2))
                     .map((pkg2) => `@violet/${pkg2}`),
-                  ...(pkg === 'api' ? [] : ['@violet/api/src/*']),
+                  ...(pkg === 'api'
+                    ? []
+                    : [
+                        '@violet/api/*',
+                        '!@violet/api/api',
+                        '@violet/api/api/*',
+                        '!@violet/api/api/$api',
+                      ]),
                 ],
-                message: `only allowed to import modules under @violet/${pkg}, @violet/def, @violet/api/api and @violet/api/types`,
+                message: `only allowed to import modules under @violet/${pkg}, @violet/def, @violet/lib and @violet/api/api/$api`,
               },
             ],
           },
