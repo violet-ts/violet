@@ -1,4 +1,4 @@
-import type { ApiWork } from '@violet/api/types'
+import type { ApiWork } from '@violet/lib/types/api'
 
 export type Methods = {
   post: {

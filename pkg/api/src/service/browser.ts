@@ -1,16 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { generateId } from '@violet/api/src/utils/generateId'
-import type {
-  ApiDesk,
-  ApiProject,
-  ApiRevision,
-  ApiWork,
-  DeskId,
-  MessageId,
-  ProjectId,
-  RevisionId,
-  WorkId,
-} from '@violet/api/types'
+import type { ApiDesk, ApiProject, ApiRevision, ApiWork } from '@violet/lib/types/api'
+import type { DeskId, MessageId, ProjectId, RevisionId, WorkId } from '@violet/lib/types/branded'
 
 const prisma = new PrismaClient()
 export const getProjects = async () => {

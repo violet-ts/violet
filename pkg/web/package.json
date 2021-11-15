@@ -17,6 +17,7 @@
     "@aspida/swr": "^1.7.1",
     "@violet/api": "workspace:*",
     "@violet/def": "workspace:*",
+    "@violet/lib": "workspace:*",
     "class-validator": "^0.13.1",
     "dayjs": "^1.10.7",
     "next": "^11.1.0",

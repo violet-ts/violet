@@ -1,5 +1,5 @@
 import { getDesks, updateProject } from '@violet/api/src/service/browser'
-import type { ProjectId } from '@violet/api/types'
+import type { ProjectId } from '@violet/lib/types/branded'
 import { defineController } from './$relay'
 
 export default defineController(() => ({

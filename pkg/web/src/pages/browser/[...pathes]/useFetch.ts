@@ -1,8 +1,10 @@
 import useAspidaSWR from '@aspida/swr'
-import type { ApiRevision, BrowserProject, ProjectId, WorkId } from '@violet/api/types'
-import { BrowserContext } from '@violet/web/src//contexts/Browser'
-import { useApi } from '@violet/web/src//hooks'
+import type { ApiRevision } from '@violet/lib/types/api'
+import type { ProjectId, WorkId } from '@violet/lib/types/branded'
+import { BrowserContext } from '@violet/web/src/contexts/Browser'
+import { useApi } from '@violet/web/src/hooks'
 import { useCallback, useContext, useEffect } from 'react'
+import type { BrowserProject } from 'src/types/browser'
 
 export const useFetch = (
   projectId: ProjectId | undefined,

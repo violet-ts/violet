@@ -1,5 +1,6 @@
-import type { ApiRevision, ProjectId, WorkId } from '@violet/api/types'
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
+import type { ApiRevision } from '@violet/lib/types/api'
+import type { ProjectId, WorkId } from '@violet/lib/types/branded'
 import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'

@@ -1,10 +1,11 @@
-import type { BrowserRevision, MessageId, ProjectId, WorkId } from '@violet/api/types'
+import type { MessageId, ProjectId, WorkId } from '@violet/lib/types/branded'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { PencilIcon } from 'src/components/atoms/PencilIcon'
 import { Spacer } from 'src/components/atoms/Spacer'
+import type { BrowserRevision } from 'src/types/browser'
 import styled from 'styled-components'
 import { MessageCell } from './MessageCell'
 

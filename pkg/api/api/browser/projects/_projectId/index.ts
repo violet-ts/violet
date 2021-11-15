@@ -1,4 +1,5 @@
-import type { ApiDesk, ApiProject, ProjectId } from '@violet/api/types'
+import type { ApiDesk, ApiProject } from '@violet/lib/types/api'
+import type { ProjectId } from '@violet/lib/types/branded'
 
 export type Methods = {
   get: {

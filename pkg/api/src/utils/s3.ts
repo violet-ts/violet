@@ -1,4 +1,5 @@
-import type { DeskId, ProjectId, RevisionId, S3SaveWorksPath } from '@violet/api/types'
+import { worksOriginalKeyPrefix } from '@violet/def/constants/s3'
+import type { DeskId, ProjectId, RevisionId, S3SaveWorksPath } from '@violet/lib/types/branded'
 
 export const createS3SaveWorksPath = (props: {
   projectId: ProjectId
@@ -6,4 +7,4 @@ export const createS3SaveWorksPath = (props: {
   revisionId: RevisionId
   filename: string
 }) =>
-  `${props.projectId}/${props.deskId}/revisions/${props.revisionId}/original/${props.filename}` as S3SaveWorksPath
+  `${worksOriginalKeyPrefix}/${props.projectId}/${props.deskId}/revisions/${props.revisionId}/${props.filename}` as S3SaveWorksPath

@@ -1,4 +1,4 @@
-import type { ApiReply } from '@violet/api/types'
+import type { ApiReply } from '@violet/lib/types/api'
 
 export type Methods = {
   post: {
