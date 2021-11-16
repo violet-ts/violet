@@ -29,6 +29,19 @@ export const createProject = async (projectName: ApiProject['name']) => {
   return apiProject
 }
 
+export const updateProject = async (projectId: ProjectId, projectName: ApiProject['name']) => {
+  const dbProjects = await prisma.project.update({
+    where: { projectId },
+    data: { projectName },
+  })
+  if (!dbProjects) return
+  const apiProject: ApiProject = {
+    id: dbProjects.projectId as ProjectId,
+    name: dbProjects.projectName,
+  }
+  return apiProject
+}
+
 export const getDesks = async (projectId: ProjectId) => {
   const dbDesk = await prisma.desk.findMany({
     where: { projectId },

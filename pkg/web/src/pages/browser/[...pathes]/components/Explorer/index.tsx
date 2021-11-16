@@ -9,8 +9,12 @@ import type {
 } from '@violet/web/src/types/browser'
 import { getWorkFullName } from '@violet/web/src/utils'
 import { fontSizes } from '@violet/web/src/utils/constants'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
+import { RenameIcon } from 'src/components/atoms/RenameIcon'
+import { Spacer } from 'src/components/atoms/Spacer'
+import { Modal } from 'src/components/molecules/Modal'
 import styled from 'styled-components'
+import { ProjectNameUpdate } from '../ProjectNameUpdate'
 import { CellName } from './CellName'
 import { DirectoryCell } from './DirectoryCell'
 import { WorkCell } from './WorkCell'
@@ -31,6 +35,28 @@ const ProjectName = styled.div`
 const TreeViewer = styled.div`
   flex: 1;
   overflow: auto;
+`
+
+const ProjectArea = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`
+
+const StyleRenameIcon = styled.i`
+  opacity: 0.2;
+  transition: opacity 0.5s;
+  &:hover {
+    opacity: 1;
+  }
+`
+
+const Message = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
 `
 
 type Params = {
@@ -114,10 +140,30 @@ export const Explorer = ({
       })),
     [projectApiData.desks, project.openedFullPathDict, project.selectedFullPath]
   )
+  const [openRename, setOpenRename] = useState(false)
+  const rename = () => {
+    setOpenRename(true)
+  }
+
+  const closeModal = () => {
+    setOpenRename(false)
+  }
 
   return (
     <Container>
-      <ProjectName>{projectApiData.name}</ProjectName>
+      <ProjectArea>
+        <ProjectName>{projectApiData.name}</ProjectName>
+        <StyleRenameIcon onClick={rename}>
+          <RenameIcon />
+        </StyleRenameIcon>
+      </ProjectArea>
+      {openRename && (
+        <Modal closeModal={closeModal}>
+          <Spacer axis="y" size={80} />
+          <Message>Enter a new project name</Message>
+          <ProjectNameUpdate confirmName={closeModal} projectId={projectApiData.projectId} />
+        </Modal>
+      )}
       <TreeViewer>
         {nestedDesks.map((desk) => (
           <React.Fragment key={desk.id}>
