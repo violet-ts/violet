@@ -9,6 +9,19 @@ import styled from 'styled-components'
 const InputFormProject = styled.form`
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`
+
+const Input = styled.input`
+  display: none;
+`
+
+const StyleInputFile = styled.label`
+  padding: 10px 40px;
+  color: #ffffff;
+  background-color: #384878;
+  cursor: pointer;
 `
 
 export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
@@ -56,6 +69,10 @@ export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
   return (
     <InputFormProject onSubmit={sendProjectName}>
       <input ref={inputElement} type="text" onChange={inputLabel} />
+      <StyleInputFile>
+        <Input type="file" />
+        アイコンを選択してください。
+      </StyleInputFile>
       {isCreating && <Loading />}
     </InputFormProject>
   )
