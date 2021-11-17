@@ -17,11 +17,22 @@ const Input = styled.input`
   display: none;
 `
 
-const StyleInputFile = styled.label`
-  padding: 10px 40px;
-  color: #ffffff;
-  background-color: #384878;
+const SelectLabel = styled.label`
+  padding: 1px;
+  color: #f3f3f3;
+  background-color: #b9b9b9;
   cursor: pointer;
+`
+
+const StyleFileLabel = styled.label`
+  width: 95px;
+  height: 20px;
+  background-color: #fff; /* 背景色 */
+  border: 1px solid #999999; /* 枠線 */
+`
+
+const StyleInputFile = styled.div`
+  display: flex;
 `
 
 export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
@@ -32,6 +43,7 @@ export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
   const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
   const { asPath, push } = useRouter()
   const [isCreating, setIsCreating] = useState(false)
+  const inputFileElement = useRef<HTMLInputElement>(null)
   useEffect(() => {
     inputElement.current?.focus()
   }, [])
@@ -70,8 +82,11 @@ export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
     <InputFormProject onSubmit={sendProjectName}>
       <input ref={inputElement} type="text" onChange={inputLabel} />
       <StyleInputFile>
-        <Input type="file" />
-        アイコンを選択してください。
+        <StyleFileLabel></StyleFileLabel>
+        <SelectLabel>
+          <Input type="file" ref={inputFileElement} />
+          Select
+        </SelectLabel>
       </StyleInputFile>
       {isCreating && <Loading />}
     </InputFormProject>
