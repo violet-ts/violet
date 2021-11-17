@@ -24,11 +24,12 @@ const SelectLabel = styled.label`
   cursor: pointer;
 `
 
-const StyleFileLabel = styled.label`
+const StyleFileLabel = styled.input`
   width: 95px;
   height: 20px;
-  background-color: #fff; /* 背景色 */
-  border: 1px solid #999999; /* 枠線 */
+  background-color: #fff;
+  border: 1px solid #999999;
+  pointer-events: none;
 `
 
 const StyleInputFile = styled.div`
@@ -44,6 +45,14 @@ export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
   const { asPath, push } = useRouter()
   const [isCreating, setIsCreating] = useState(false)
   const inputFileElement = useRef<HTMLInputElement>(null)
+  const [filename, setFileName] = useState('')
+  const inputFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.length === 1) {
+      console.log(e.target.files[0].name)
+      setFileName(e.target.files[0].name)
+      console.log(filename)
+    }
+  }
   useEffect(() => {
     inputElement.current?.focus()
   }, [])
@@ -82,9 +91,9 @@ export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
     <InputFormProject onSubmit={sendProjectName}>
       <input ref={inputElement} type="text" onChange={inputLabel} />
       <StyleInputFile>
-        <StyleFileLabel></StyleFileLabel>
+        <StyleFileLabel value={filename} readOnly></StyleFileLabel>
         <SelectLabel>
-          <Input type="file" ref={inputFileElement} />
+          <Input type="file" ref={inputFileElement} onChange={inputFile} />
           Select
         </SelectLabel>
       </StyleInputFile>
