@@ -10,6 +10,7 @@ import type {
 import { getWorkFullName } from '@violet/web/src/utils'
 import { fontSizes } from '@violet/web/src/utils/constants'
 import React, { useMemo, useState } from 'react'
+import { ImageIcon } from 'src/components/atoms/ImageIcon'
 import { RenameIcon } from 'src/components/atoms/RenameIcon'
 import { Spacer } from 'src/components/atoms/Spacer'
 import { Modal } from 'src/components/molecules/Modal'
@@ -43,7 +44,9 @@ const ProjectArea = styled.div`
   justify-content: flex-start;
 `
 
-const StyleRenameIcon = styled.i`
+const StyleIcon = styled.i`
+  display: flex;
+  align-items: center;
   opacity: 0.2;
   transition: opacity 0.5s;
   &:hover {
@@ -141,22 +144,39 @@ export const Explorer = ({
     [projectApiData.desks, project.openedFullPathDict, project.selectedFullPath]
   )
   const [openRename, setOpenRename] = useState(false)
+  const [openAddIcon, setOpenAddIcon] = useState(false)
+
   const rename = () => {
     setOpenRename(true)
   }
 
   const closeModal = () => {
     setOpenRename(false)
+    setOpenAddIcon(false)
+  }
+
+  const addIcon = () => {
+    setOpenAddIcon(true)
   }
 
   return (
     <Container>
       <ProjectArea>
         <ProjectName>{projectApiData.name}</ProjectName>
-        <StyleRenameIcon onClick={rename}>
+        <StyleIcon onClick={rename}>
           <RenameIcon />
-        </StyleRenameIcon>
+        </StyleIcon>
+        <StyleIcon onClick={addIcon}>
+          <Spacer axis="x" size={10} />
+          <ImageIcon />
+        </StyleIcon>
       </ProjectArea>
+      {openAddIcon && (
+        <Modal closeModal={closeModal}>
+          <Spacer axis="y" size={80} />
+          <Message>Upload a icon images...</Message>
+        </Modal>
+      )}
       {openRename && (
         <Modal closeModal={closeModal}>
           <Spacer axis="y" size={80} />

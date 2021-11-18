@@ -34,6 +34,7 @@ const StyleFileLabel = styled.input`
 
 const StyleInputFile = styled.div`
   display: flex;
+  justify-content: center;
 `
 
 export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
@@ -44,15 +45,6 @@ export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
   const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
   const { asPath, push } = useRouter()
   const [isCreating, setIsCreating] = useState(false)
-  const inputFileElement = useRef<HTMLInputElement>(null)
-  const [filename, setFileName] = useState('')
-  const inputFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length === 1) {
-      console.log(e.target.files[0].name)
-      setFileName(e.target.files[0].name)
-      console.log(filename)
-    }
-  }
   useEffect(() => {
     inputElement.current?.focus()
   }, [])
@@ -90,13 +82,6 @@ export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
   return (
     <InputFormProject onSubmit={sendProjectName}>
       <input ref={inputElement} type="text" onChange={inputLabel} />
-      <StyleInputFile>
-        <StyleFileLabel value={filename} readOnly></StyleFileLabel>
-        <SelectLabel>
-          <Input type="file" ref={inputFileElement} onChange={inputFile} />
-          Select
-        </SelectLabel>
-      </StyleInputFile>
       {isCreating && <Loading />}
     </InputFormProject>
   )
