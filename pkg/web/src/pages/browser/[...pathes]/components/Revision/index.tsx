@@ -23,7 +23,7 @@ const DisplayWorksArea = styled.div`
   transition: background 0.2s, padding 0.2s;
 `
 
-const DisplayWorksFrame = styled.div`
+const DisplayWorksFrame = styled.img`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,6 +69,7 @@ export const Revision = (props: {
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
+  const [idsForCreateUrl, setIdsForCreateUrl] = useState('')
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -97,6 +98,7 @@ export const Revision = (props: {
       apiWholeData.revisionsList.map((r) => (r.workId === revisionRes.workId ? revisionRes : r))
     )
   }
+
   const closeModal = () => {
     setOpenAlert(false)
   }
@@ -114,7 +116,7 @@ export const Revision = (props: {
       )}
       {isFile && <Dropper type="file" accept={acceptExtensions} />}
       <DisplayWorksArea>
-        <DisplayWorksFrame>REVISION -- {props.revision.id}</DisplayWorksFrame>
+        <DisplayWorksFrame src={idsForCreateUrl}>REVISION -- {props.revision.id}</DisplayWorksFrame>
       </DisplayWorksArea>
       <RevisionFooter>
         <AddButton dropFile={dropFile} />
