@@ -13,23 +13,33 @@
 
 # security
 /.github/ @violet-ts/security
-**/package.json @violet-ts/security
+package.json @violet-ts/security
 pnpm-lock.yaml @violet-ts/security
-**/aws-credential.ts @violet-ts/infrastructure
+ws-credential.ts @violet-ts/security
+/pkg/api/api/auth/ @violet-ts/security
+/pkg/api/api/csrf/ @violet-ts/security
+.env @violet-ts/security
+.env.production @violet-ts/security
+.env.example @violet-ts/security
+pnpm-lock.yaml @violet-ts/security
 
 # infrastructure
 /.github/ @violet-ts/infrastructure
-**/package.json @violet-ts/infrastructure
+package.json @violet-ts/infrastructure
 /pkg/api/scripts/ @violet-ts/infrastructure
 /pkg/api/prisma/ @violet-ts/infrastructure
 /pkg/api/api/healthz/ @violet-ts/infrastructure
-/pkg/api/.env.example @violet-ts/infrastructure
-/pkg/api/src/utils/envValues.ts @violet-ts/infrastructure
-/pkg/api/src/utils/envValues.ts @violet-ts/infrastructure
-**/s3.ts @violet-ts/infrastructure
-**/aws-credential.ts @violet-ts/infrastructure
-
+/pkg/api/api/auth/ @violet-ts/infrastructure
+/pkg/api/api/csrf/ @violet-ts/infrastructure
+/pkg/api/src/service/firebase-admin/ @violet-ts/infrastructure
+.env @violet-ts/infrastructure
+.env.production @violet-ts/infrastructure
+.env.example @violet-ts/infrastructure
+/pkg/def/ @violet-ts/infrastructure
+s3.ts @violet-ts/infrastructure
+aws-credential.ts @violet-ts/infrastructure
 /pkg/web/public/ @violet-ts/infrastructure
 /pkg/web/next.config.js @violet-ts/infrastructure
+/pkg/web/src/utils/firebase/ @violet-ts/infrastructure
 /docker/ @violet-ts/infrastructure
 /docker-compose.yml @violet-ts/infrastructure
