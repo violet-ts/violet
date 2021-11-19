@@ -7,7 +7,6 @@ RUN yum install -y libreoffice
 RUN yum install -y libreoffice-langpack-ja
 RUN yum install -y ImageMagick
 RUN yum install -y libwebp-tools
-RUN yum clean all
 
 ENV NODE_ENV development
 
