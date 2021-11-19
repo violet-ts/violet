@@ -1,12 +1,12 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { ProjectId, WorkId } from '@violet/lib/types/branded'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
-import { Modal } from '@violet/web/src/components/molecules/Modal'
+import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
+import type { BrowserRevision } from '@violet/web/src/types/browser'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import { useContext, useState } from 'react'
-import type { BrowserRevision } from 'src/types/browser'
 import styled from 'styled-components'
 import { AddButton } from './AddButton'
 
@@ -14,6 +14,21 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 96px);
+`
+
+const Column = styled.div`
+  display: flex;
+  justify-content: end;
+`
+
+const SecondaryButton = styled.button`
+  padding: 0.3em;
+  font-size: ${fontSizes.large};
+  color: ${colors.white};
+  cursor: pointer;
+  background-color: ${colors.gray};
+  border: none;
+  border-radius: 16px;
 `
 
 const DisplayWorksArea = styled.div`
@@ -107,11 +122,12 @@ export const Revision = (props: {
       onDragLeave={() => setIsFile(false)}
       onChange={onChange}
     >
-      {openAlert && (
-        <Modal closeModal={closeModal}>
-          <AlertMessage>UnSupported File Format!</AlertMessage>
-        </Modal>
-      )}
+      <CardModal open={openAlert} onClose={closeModal}>
+        <AlertMessage>UnSupported File Format!</AlertMessage>
+        <Column>
+          <SecondaryButton onClick={closeModal}>Confirm</SecondaryButton>
+        </Column>
+      </CardModal>
       {isFile && <Dropper type="file" accept={acceptExtensions} />}
       <DisplayWorksArea>
         <DisplayWorksFrame>REVISION -- {props.revision.id}</DisplayWorksFrame>
