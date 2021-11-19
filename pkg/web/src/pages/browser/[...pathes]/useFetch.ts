@@ -3,8 +3,8 @@ import type { ApiRevision } from '@violet/lib/types/api'
 import type { ProjectId, WorkId } from '@violet/lib/types/branded'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
+import type { BrowserProject } from '@violet/web/src/types/browser'
 import { useCallback, useContext, useEffect } from 'react'
-import type { BrowserProject } from 'src/types/browser'
 
 export const useFetch = (
   projectId: ProjectId | undefined,

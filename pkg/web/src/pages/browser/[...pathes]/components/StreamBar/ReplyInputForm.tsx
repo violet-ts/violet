@@ -1,7 +1,7 @@
+import { PencilIcon } from '@violet/web/src/components/atoms/PencilIcon'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import React, { useState } from 'react'
-import { PencilIcon } from 'src/components/atoms/PencilIcon'
 import styled from 'styled-components'
 
 const Container = styled.div`
