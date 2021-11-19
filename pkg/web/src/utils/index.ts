@@ -1,6 +1,8 @@
 import type { DeskId, ProjectId, RevisionId, S3SaveWorksPath } from '@violet/lib/types/branded'
-import envValues from '@violet/web/src/utils/envValues'
-const { S3_ENDPOINT } = envValues
+
+// const env = dotenv.parse('S3_ENDPOINT')
+const env = 'http://localhost:9000'
+const bucket = 'violet-app-converted'
 
 export const getWorkFullName = (work: { name: string; ext?: string | null }) =>
   `${work.name}${work.ext ? `.${work.ext}` : ''}`
@@ -16,4 +18,4 @@ export const createWorkPath = (props: {
   revisionId: RevisionId
   filename: string
 }) =>
-  `${S3_ENDPOINT}/${props.projectId}/${props.deskId}/revisions/${props.revisionId}/${props.filename}` as S3SaveWorksPath
+  `${env}/${bucket}/works/converted/${props.projectId}/${props.deskId}/revisions/${props.revisionId}/${props.filename}` as S3SaveWorksPath

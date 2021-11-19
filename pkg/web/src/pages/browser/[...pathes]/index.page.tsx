@@ -1,3 +1,5 @@
+import type { ApiDesk } from '@violet/lib/types/api'
+import type { WorkId } from '@violet/lib/types/branded'
 import { Fetching } from '@violet/web/src/components/organisms/Fetching'
 import { useMemo } from 'react'
 import type { BrowserRevision } from 'src/types/browser'
@@ -31,6 +33,9 @@ const WroksMain = styled.div`
 const ProjectPage = () => {
   const { error, projectApiData, projects, currentProject } = usePage()
 
+  const getDesk = (desks: ApiDesk[], openedTabId: WorkId) =>
+    desks.filter((c) => (c.works.some((w) => w.id === openedTabId) ? c.id : null))[0]?.id
+
   const browserRevisionData = useMemo(
     () =>
       projectApiData?.revisions?.map<BrowserRevision>((p) => ({
@@ -60,6 +65,7 @@ const ProjectPage = () => {
               <WroksMain>
                 <MainColumn
                   projectId={currentProject.id}
+                  deskId={getDesk(projectApiData.desks, currentProject.openedTabId)}
                   workId={currentProject.openedTabId}
                   revisions={browserRevisionData}
                 />

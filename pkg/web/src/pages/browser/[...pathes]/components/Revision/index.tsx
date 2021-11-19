@@ -1,10 +1,11 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
-import type { ProjectId, WorkId } from '@violet/lib/types/branded'
+import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
-import { colors, fontSizes } from '@violet/web/src/utils/constants'
+import { createWorkPath } from '@violet/web/src/utils'
+import { colors } from '@violet/web/src/utils/constants'
 import { useContext, useState } from 'react'
 import type { BrowserRevision } from 'src/types/browser'
 import styled from 'styled-components'
@@ -28,10 +29,6 @@ const DisplayWorksFrame = styled.img`
   align-items: center;
   justify-content: center;
   min-height: 100%;
-  font-size: ${fontSizes.big};
-  color: ${colors.violet};
-  border: 4px solid ${colors.violet};
-  border-radius: 24px;
 `
 
 const Dropper = styled.input`
@@ -49,7 +46,7 @@ const RevisionFooter = styled.div`
   display: flex;
   justify-content: right;
   height: 56px;
-  background-color: ${colors.white};
+  background-color: ${colors.transparent};
 `
 
 const AlertMessage = styled.div`
@@ -62,6 +59,7 @@ const AlertMessage = styled.div`
 
 export const Revision = (props: {
   projectId: ProjectId
+  deskId: DeskId
   workId: WorkId
   revision: BrowserRevision
 }) => {
@@ -69,7 +67,14 @@ export const Revision = (props: {
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
-  const [idsForCreateUrl, setIdsForCreateUrl] = useState('')
+  const [idsForCreateWorkUrl, setIdsForCreateWorkUrl] = useState({
+    projectId: props.projectId,
+    deskId: props.deskId,
+    revisionId: props.revision.id,
+    filename: '0.jpg',
+  })
+
+  const [workUrl, setWorkUrl] = useState(createWorkPath(idsForCreateWorkUrl))
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -116,7 +121,7 @@ export const Revision = (props: {
       )}
       {isFile && <Dropper type="file" accept={acceptExtensions} />}
       <DisplayWorksArea>
-        <DisplayWorksFrame src={idsForCreateUrl}>REVISION -- {props.revision.id}</DisplayWorksFrame>
+        <DisplayWorksFrame src={workUrl} />
       </DisplayWorksArea>
       <RevisionFooter>
         <AddButton dropFile={dropFile} />
