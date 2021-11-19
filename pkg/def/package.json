@@ -6,6 +6,7 @@
     "_:typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@violet/def": "workspace:*"
+    "@violet/def": "workspace:*",
+    "firebase-admin": "^10.0.0"
   }
 }
