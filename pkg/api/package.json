@@ -18,6 +18,7 @@
     "_:dev:build": "pnpm run migrate:dev && pnpm run _:prisma:seed:dev && run-p -l \"_:build:* -- --watch\"",
     "_:dev:serve": "node-dev src/entries/index.ts",
     "_:dev:aspida": "aspida --watch",
+    "_:dev:frourio": "onchange -i -k -d 1000 './api/**/*' -e '**/$*.ts' -- frourio",
     "_:build:index": "ts-node -T ./node_modules/@violet/scripts/build-files.ts --from-dir=./src/entries --to-dir=./build --target=node14",
     "_:build:prisma-index": "ts-node -T ./node_modules/@violet/scripts/build-file.ts --from=./prisma/scripts/index.ts --to=./prisma/build/index.js --target=node14",
     "_:build:prisma-seed": "ts-node -T ./node_modules/@violet/scripts/build-files.ts --from-dir=./prisma/scripts/seed --to-dir=./prisma/build/seed --target=node14",
