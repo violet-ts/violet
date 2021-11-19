@@ -76,6 +76,10 @@ module.exports = {
           {
             patterns: [
               {
+                group: ['firebase/*'],
+                message: `do not directly import firebase/* instead use src/utils/firebase`,
+              },
+              {
                 group: ['.prisma/*'],
                 message: `do not use .prisma/* instead use @prisma/*`,
               },
