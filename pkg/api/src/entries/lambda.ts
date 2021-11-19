@@ -1,7 +1,7 @@
-import type { APIExecHandler } from '@violet/def/lambda-handlers/apiexec-handler'
-import { execThrow } from '@violet/lib/exec'
-
-export const handler: APIExecHandler = async (event) => {
-  const [file, ...args] = event.command
-  await execThrow(file, args, false)
-}
+/* eslint-disable @typescript-eslint/no-var-requires */
+require('source-map-support').install()
+require('dotenv').config({
+  path: require('path').resolve(__dirname, '..', '..', '..', '.env'),
+})
+require('./lambda/main')
+/* eslint-enable @typescript-eslint/no-var-requires */

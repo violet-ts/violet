@@ -27,4 +27,4 @@ WORKDIR /app/pkg/api
 EXPOSE 80
 
 ENTRYPOINT []
-CMD ["node", "--require=source-map-support/register", "./build/index.js"]
+CMD ["node", "./build/index.js"]
