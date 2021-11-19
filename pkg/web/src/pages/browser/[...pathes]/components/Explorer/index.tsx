@@ -28,7 +28,7 @@ const Container = styled.div`
 
 const ProjectName = styled.div`
   padding: 12px;
-  font-size: ${fontSizes.midium};
+  font-size: ${fontSizes.medium};
   font-weight: bold;
 `
 
