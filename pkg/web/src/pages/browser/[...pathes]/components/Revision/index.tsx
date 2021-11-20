@@ -1,9 +1,8 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
-import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
+import type { DeskId, ProjectId, S3RevisionPath, WorkId } from '@violet/lib/types/branded'
 import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
-import { createWorkPath } from '@violet/web/src/utils'
 import { colors, maincolumnHeight } from '@violet/web/src/utils/constants'
 import { useContext, useState } from 'react'
 import type { BrowserRevision } from 'src/types/browser'
@@ -57,14 +56,8 @@ export const Revision = (props: {
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
-  const [idsForCreateWorkUrl, setIdsForCreateWorkUrl] = useState({
-    projectId: props.projectId,
-    deskId: props.deskId,
-    revisionId: props.revision.id,
-    filename: '0.jpg',
-  })
 
-  const [workUrl, setWorkUrl] = useState(createWorkPath(idsForCreateWorkUrl))
+  const [workUrl, setWorkUrl] = useState<S3RevisionPath>()
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -79,18 +72,20 @@ export const Revision = (props: {
   }
 
   const sendFormData = async (file: File) => {
-    await api.browser.works
+    const res = await api.browser.works
       ._workId(props.workId)
-      .revisions.$post({ body: { uploadFile: file, projectId: props.projectId } })
+      .revisions.$post({
+        body: { uploadFile: file, projectId: props.projectId, deskId: props.deskId },
+      })
       .catch(onErr)
 
-    const revisionRes = await api.browser.works._workId(props.workId).revisions.$get()
+    const revisionsRes = await api.browser.works._workId(props.workId).revisions.$get()
 
-    if (!revisionRes) return
+    if (!res) return
 
     updateApiWholeData(
       'revisionsList',
-      apiWholeData.revisionsList.map((r) => (r.workId === revisionRes.workId ? revisionRes : r))
+      apiWholeData.revisionsList.map((r) => (r.workId === revisionsRes.workId ? revisionsRes : r))
     )
   }
 

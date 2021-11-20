@@ -1,24 +1,21 @@
-import { createRevision, getDeskId, getRevisions } from '@violet/api/src/service/browser'
+import { createRevision, getRevisions } from '@violet/api/src/service/browser'
 import { sendNewWork } from '@violet/api/src/service/s3'
-import { createS3SaveWorksPath } from '@violet/api/src/utils/s3'
+import { createS3SaveRevisionPath } from '@violet/api/src/utils/s3'
 import type { WorkId } from '@violet/lib/types/branded'
 import { defineController } from './$relay'
 
 export default defineController(() => ({
-  get: async ({ params }) => {
-    const revisions = await getRevisions(params.workId as WorkId)
+  get: async ({ params, body }) => {
+    const revisions = await getRevisions(body.projectId, body.deskId, params.workId as WorkId)
     return revisions ? { status: 200, body: revisions } : { status: 404 }
   },
   post: async ({ params, body }) => {
-    const deskId = await getDeskId(params.workId as WorkId)
-    if (deskId === undefined) return { status: 404 }
-
-    const revision = await createRevision(params.workId as WorkId)
+    const revision = await createRevision(body.projectId, body.deskId, params.workId as WorkId)
     const data = await sendNewWork({
       uploadFile: body.uploadFile,
-      path: createS3SaveWorksPath({
+      path: createS3SaveRevisionPath({
         projectId: body.projectId,
-        deskId,
+        deskId: body.deskId,
         revisionId: revision.id,
         filename: body.uploadFile.filename,
       }),
