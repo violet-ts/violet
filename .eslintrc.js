@@ -48,6 +48,12 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/consistent-type-imports': 'error',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+      },
+    ],
     'object-shorthand': [
       'error',
       'always',
@@ -69,6 +75,10 @@ module.exports = {
           'error',
           {
             patterns: [
+              {
+                group: ['firebase/*'],
+                message: `do not directly import firebase/* instead use src/utils/firebase`,
+              },
               {
                 group: ['.prisma/*'],
                 message: `do not use .prisma/* instead use @prisma/*`,

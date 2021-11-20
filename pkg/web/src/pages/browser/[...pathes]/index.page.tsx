@@ -1,6 +1,6 @@
 import { Fetching } from '@violet/web/src/components/organisms/Fetching'
+import type { BrowserRevision } from '@violet/web/src/types/browser'
 import { useMemo } from 'react'
-import type { BrowserRevision } from 'src/types/browser'
 import styled from 'styled-components'
 import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'

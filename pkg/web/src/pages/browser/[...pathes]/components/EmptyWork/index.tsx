@@ -1,7 +1,7 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { ApiRevision } from '@violet/lib/types/api'
 import type { ProjectId, WorkId } from '@violet/lib/types/branded'
-import { Modal } from '@violet/web/src/components/molecules/Modal'
+import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
@@ -12,6 +12,21 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+`
+
+const Column = styled.div`
+  display: flex;
+  justify-content: end;
+`
+
+const SecondaryButton = styled.button`
+  padding: 0.3em;
+  font-size: ${fontSizes.large};
+  color: ${colors.white};
+  cursor: pointer;
+  background-color: ${colors.gray};
+  border: none;
+  border-radius: 16px;
 `
 
 const DraggingPanel = styled.div<{ dragging: boolean }>`
@@ -46,11 +61,7 @@ const Dropper = styled.input`
   opacity: 0;
 `
 const AlertMessage = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
   white-space: nowrap;
-  transform: translate(-50%, -50%);
 `
 
 export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
@@ -101,9 +112,12 @@ export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
   return (
     <Container>
       {openAlert ? (
-        <Modal closeModal={closeModal}>
+        <CardModal open={openAlert} onClose={closeModal}>
           <AlertMessage>UnSupported File Format!</AlertMessage>
-        </Modal>
+          <Column>
+            <SecondaryButton onClick={closeModal}>Confirm</SecondaryButton>
+          </Column>
+        </CardModal>
       ) : (
         <>
           <DraggingPanel dragging={dragging}>

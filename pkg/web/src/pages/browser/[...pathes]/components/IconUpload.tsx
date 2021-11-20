@@ -1,11 +1,11 @@
 import { acceptImageExtensions } from '@violet/def/constants'
 import { ProjectId } from '@violet/lib/types/branded'
+import { ImageIcon } from '@violet/web/src/components/atoms/ImageIcon'
+import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import type { ChangeEvent } from 'react'
 import { useRef, useState } from 'react'
-import { ImageIcon } from 'src/components/atoms/ImageIcon'
-import { Spacer } from 'src/components/atoms/Spacer'
 import styled from 'styled-components'
 
 const Container = styled.div`

@@ -1,12 +1,12 @@
 import type { ProjectId } from '@violet/lib/types/branded'
 import { PlusIcon } from '@violet/web/src/components/atoms/PlusIcon'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
-import { Modal } from '@violet/web/src/components/molecules/Modal'
+import { CardModal } from '@violet/web/src/components/organisms/CardModal'
+import type { BrowserProject } from '@violet/web/src/types/browser'
 import { pagesPath } from '@violet/web/src/utils/$path'
 import { alphaLevel, colors, fontSizes } from '@violet/web/src/utils/constants'
 import Link from 'next/link'
 import { useState } from 'react'
-import type { BrowserProject } from 'src/types/browser'
 import styled from 'styled-components'
 import { ProjectNameInput } from './ProjectNameInput'
 
@@ -18,6 +18,21 @@ const Container = styled.div`
   padding: 6px;
   user-select: none;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};
+`
+
+const Column = styled.div`
+  display: flex;
+  justify-content: end;
+`
+
+const SecondaryButton = styled.button`
+  padding: 0.3em;
+  font-size: ${fontSizes.large};
+  color: ${colors.white};
+  cursor: pointer;
+  background-color: ${colors.gray};
+  border: none;
+  border-radius: 16px;
 `
 
 const alpha = (selected: boolean) => (selected ? alphaLevel[5] : alphaLevel[3])
@@ -51,11 +66,7 @@ const Icon = styled.div`
 `
 
 const Message = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
   white-space: nowrap;
-  transform: translate(-50%, -50%);
 `
 
 export const ProjectBar = (props: { projects: BrowserProject[]; projectId: ProjectId }) => {
@@ -82,13 +93,15 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
         </Link>
       ))}
       <PlusIcon onClick={addNewProject} />
-      {isClickAddProject && (
-        <Modal closeModal={closeModal}>
-          <Spacer axis="y" size={80} />
-          <Message>Please enter a project name</Message>
-          <ProjectNameInput inputCompleted={closeModal} />
-        </Modal>
-      )}
+      <CardModal open={isClickAddProject} onClose={closeModal}>
+        <Message>Please enter a project name</Message>
+        <Spacer axis="y" size={8} />
+        <ProjectNameInput onComplete={closeModal} />
+        <Spacer axis="y" size={8} />
+        <Column>
+          <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
+        </Column>
+      </CardModal>
     </Container>
   )
 }

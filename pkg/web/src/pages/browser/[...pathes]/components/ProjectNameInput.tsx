@@ -13,7 +13,7 @@ const InputFormProject = styled.form`
   flex-direction: column;
 `
 
-export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
+export const ProjectNameInput = (props: { onComplete?: () => void }) => {
   const [label, setLabel] = useState('')
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const inputElement = useRef<HTMLInputElement>(null)
@@ -52,7 +52,7 @@ export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
     await createProject(label)
     setIsCreating(false)
     setLabel('')
-    props.inputCompleted()
+    props.onComplete?.()
   }
 
   return (

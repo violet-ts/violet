@@ -1,4 +1,8 @@
 import type { ApiDesk } from '@violet/lib/types/api'
+import { ConfigIcon } from '@violet/web/src/components/atoms/ConfigIcon'
+import { RenameIcon } from '@violet/web/src/components/atoms/RenameIcon'
+import { Spacer } from '@violet/web/src/components/atoms/Spacer'
+import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import type {
   BrowserDesk,
   BrowserDir,
@@ -8,12 +12,8 @@ import type {
   ProjectApiData,
 } from '@violet/web/src/types/browser'
 import { getWorkFullName } from '@violet/web/src/utils'
-import { fontSizes } from '@violet/web/src/utils/constants'
+import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import React, { useMemo, useState } from 'react'
-import { ConfigIcon } from 'src/components/atoms/ConfigIcon'
-import { RenameIcon } from 'src/components/atoms/RenameIcon'
-import { Spacer } from 'src/components/atoms/Spacer'
-import { Modal } from 'src/components/molecules/Modal'
 import styled from 'styled-components'
 import { IconUpload } from '../IconUpload'
 import { ProjectNameUpdate } from '../ProjectNameUpdate'
@@ -28,9 +28,24 @@ const Container = styled.div`
   user-select: none;
 `
 
+const Column = styled.div`
+  display: flex;
+  justify-content: end;
+`
+
+const SecondaryButton = styled.button`
+  padding: 0.3em;
+  font-size: ${fontSizes.large};
+  color: ${colors.white};
+  cursor: pointer;
+  background-color: ${colors.gray};
+  border: none;
+  border-radius: 16px;
+`
+
 const ProjectName = styled.div`
   padding: 12px;
-  font-size: ${fontSizes.midium};
+  font-size: ${fontSizes.medium};
   font-weight: bold;
 `
 
@@ -56,11 +71,7 @@ const StyleIcon = styled.i`
 `
 
 const Message = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
   white-space: nowrap;
-  transform: translate(-50%, -50%);
 `
 
 type Params = {
@@ -145,47 +156,51 @@ export const Explorer = ({
     [projectApiData.desks, project.openedFullPathDict, project.selectedFullPath]
   )
   const [openRename, setOpenRename] = useState(false)
-  const [isOpenConfig, setIsOpenConfig] = useState(false)
+  const [openConfigration, setOpenConfigration] = useState(false)
 
-  const rename = () => {
+  const openRenameModal = () => {
     setOpenRename(true)
   }
 
   const closeModal = () => {
     setOpenRename(false)
-    setIsOpenConfig(false)
+    setOpenConfigration(false)
   }
 
-  const openConfig = () => {
-    setIsOpenConfig(true)
+  const openConfigModal = () => {
+    setOpenConfigration(true)
   }
 
   return (
     <Container>
       <ProjectArea>
         <ProjectName>{projectApiData.name}</ProjectName>
-        <StyleIcon onClick={rename}>
+        <StyleIcon onClick={openRenameModal}>
           <RenameIcon />
         </StyleIcon>
-        <StyleIcon onClick={openConfig}>
+        <StyleIcon onClick={openConfigModal}>
           <Spacer axis="x" size={10} />
           <ConfigIcon size={22} />
         </StyleIcon>
       </ProjectArea>
-      {isOpenConfig && (
-        <Modal closeModal={closeModal}>
-          <Spacer axis="y" size={80} />
-          <Message>Upload a project icon images...</Message>
-          <IconUpload projectName={projectApiData.name} projectId={projectApiData.projectId} />
-        </Modal>
-      )}
-      {openRename && (
-        <Modal closeModal={closeModal}>
-          <Spacer axis="y" size={80} />
-          <Message>Enter a new project name</Message>
-          <ProjectNameUpdate confirmName={closeModal} projectId={projectApiData.projectId} />
-        </Modal>
-      )}
+      <CardModal onClose={closeModal} open={openConfigration}>
+        <Spacer axis="y" size={80} />
+        <Message>Upload a project icon images...</Message>
+        <IconUpload projectName={projectApiData.name} projectId={projectApiData.projectId} />
+        <Spacer axis="y" size={8} />
+        <Column>
+          <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
+        </Column>
+      </CardModal>
+      <CardModal onClose={closeModal} open={openRename}>
+        <Spacer axis="y" size={8} />
+        <Message>Enter a new project name</Message>
+        <ProjectNameUpdate confirmName={closeModal} projectId={projectApiData.projectId} />
+        <Spacer axis="y" size={8} />
+        <Column>
+          <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
+        </Column>
+      </CardModal>
       <TreeViewer>
         {nestedDesks.map((desk) => (
           <React.Fragment key={desk.id}>

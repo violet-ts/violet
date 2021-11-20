@@ -30,13 +30,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <GlobalStyle />
-      <AuthProvider>
-        <ApiProvider>
+      <ApiProvider>
+        <AuthProvider>
           <BrowserProvider>
             <Component {...pageProps} />
           </BrowserProvider>
-        </ApiProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </ApiProvider>
     </>
   )
 }
