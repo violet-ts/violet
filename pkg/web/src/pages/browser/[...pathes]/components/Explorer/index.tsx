@@ -10,11 +10,12 @@ import type {
 import { getWorkFullName } from '@violet/web/src/utils'
 import { fontSizes } from '@violet/web/src/utils/constants'
 import React, { useMemo, useState } from 'react'
-import { ImageIcon } from 'src/components/atoms/ImageIcon'
+import { ConfigIcon } from 'src/components/atoms/ConfigIcon'
 import { RenameIcon } from 'src/components/atoms/RenameIcon'
 import { Spacer } from 'src/components/atoms/Spacer'
 import { Modal } from 'src/components/molecules/Modal'
 import styled from 'styled-components'
+import { IconUpload } from '../IconUpload'
 import { ProjectNameUpdate } from '../ProjectNameUpdate'
 import { CellName } from './CellName'
 import { DirectoryCell } from './DirectoryCell'
@@ -144,7 +145,7 @@ export const Explorer = ({
     [projectApiData.desks, project.openedFullPathDict, project.selectedFullPath]
   )
   const [openRename, setOpenRename] = useState(false)
-  const [openAddIcon, setOpenAddIcon] = useState(false)
+  const [isOpenConfig, setIsOpenConfig] = useState(false)
 
   const rename = () => {
     setOpenRename(true)
@@ -152,11 +153,11 @@ export const Explorer = ({
 
   const closeModal = () => {
     setOpenRename(false)
-    setOpenAddIcon(false)
+    setIsOpenConfig(false)
   }
 
-  const addIcon = () => {
-    setOpenAddIcon(true)
+  const openConfig = () => {
+    setIsOpenConfig(true)
   }
 
   return (
@@ -166,15 +167,16 @@ export const Explorer = ({
         <StyleIcon onClick={rename}>
           <RenameIcon />
         </StyleIcon>
-        <StyleIcon onClick={addIcon}>
+        <StyleIcon onClick={openConfig}>
           <Spacer axis="x" size={10} />
-          <ImageIcon />
+          <ConfigIcon size={22} />
         </StyleIcon>
       </ProjectArea>
-      {openAddIcon && (
+      {isOpenConfig && (
         <Modal closeModal={closeModal}>
           <Spacer axis="y" size={80} />
-          <Message>Upload a icon images...</Message>
+          <Message>Upload a project icon images...</Message>
+          <IconUpload projectName={projectApiData.name} />
         </Modal>
       )}
       {openRename && (

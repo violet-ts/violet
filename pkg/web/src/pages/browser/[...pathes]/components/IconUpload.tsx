@@ -1,45 +1,65 @@
+import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import type { ChangeEvent } from 'react'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
+import { ImageIcon } from 'src/components/atoms/ImageIcon'
+import { Spacer } from 'src/components/atoms/Spacer'
 import styled from 'styled-components'
 
-const Input = styled.input`
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const StyleInput = styled.input`
   display: none;
 `
 
-const SelectLabel = styled.label`
-  padding: 1px;
-  color: #f3f3f3;
-  background-color: #b9b9b9;
-  cursor: pointer;
+const StyleImageIcon = styled.label`
+  opacity: 0.2;
+  transition: opacity 0.5s;
+  &:hover {
+    opacity: 1;
+  }
 `
 
-const StyleFileLabel = styled.input`
-  width: 95px;
-  height: 20px;
-  background-color: #fff;
-  border: 1px solid #999999;
-  pointer-events: none;
-`
-
-const StyleInputFile = styled.div`
+const Icon = styled.div`
   display: flex;
+  align-items: center;
   justify-content: center;
+  height: 100%;
+  font-size: ${fontSizes.small};
+  font-weight: bold;
+  color: ${colors.white};
+  background: ${colors.blue};
+  border-radius: 6px;
 `
 
-export const IconUpload = () => {
-  const inputFileElement = useRef<HTMLInputElement>(null)
-  const [filename, setFileName] = useState('')
-  const inputFile = (e: ChangeEvent<HTMLInputElement>) => {
+const IconWrapper = styled.div`
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  padding: 2px;
+  cursor: default;
+  border-radius: 8px;
+  transition: border-color 0.2s;
+`
+
+export const IconUpload = (props: { projectName: string }) => {
+  const inputImageElement = useRef<HTMLInputElement>(null)
+  const inputImageFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) return
-    setFileName(e.target.files[0].name)
   }
   return (
-    <StyleInputFile>
-      <StyleFileLabel value={filename} readOnly />
-      <SelectLabel>
-        <Input type="file" ref={inputFileElement} onChange={inputFile} />
-        Select
-      </SelectLabel>
-    </StyleInputFile>
+    <Container>
+      <IconWrapper>
+        <Icon>{props.projectName.slice(0, 2)}</Icon>
+      </IconWrapper>
+      <Spacer axis="x" size={10} />
+      <StyleImageIcon>
+        <ImageIcon />
+        <StyleInput type="file" ref={inputImageElement} onChange={inputImageFile} />
+      </StyleImageIcon>
+    </Container>
   )
 }
