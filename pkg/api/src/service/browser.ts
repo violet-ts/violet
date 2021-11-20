@@ -85,18 +85,24 @@ export const createWork = async (
   return apiWork
 }
 
-export const getRevisions = async (projectId: ProjectId, deskId: DeskId, workId: WorkId) => {
+export const getRevisions = async (workId: WorkId) => {
   const dbRevision = await prisma.revision.findMany({
     where: { workId },
     include: { message: { orderBy: { createdAt: 'asc' } } },
     orderBy: { createdAt: 'asc' },
   })
-  if (!dbRevision) return
+  const ids = await getPojectIdAndDeskId(workId)
+  if (!dbRevision || !ids) return
   // TODO:Get FileName from info.json
   const revisions = dbRevision.map<ApiRevision>((r) => ({
     ...r,
     id: r.revisionId as RevisionId,
-    url: createS3RevisionPath(projectId, deskId, r.revisionId as RevisionId, '0.jpg'),
+    url: createS3RevisionPath(
+      ids.project.projectId as ProjectId,
+      ids.desk.deskId as DeskId,
+      r.revisionId as RevisionId,
+      '0.jpg'
+    ),
     editionIds: [],
     messageIds: r.message.map((m) => m.messageId as MessageId),
   }))
@@ -118,6 +124,20 @@ export const createRevision = async (projectId: ProjectId, deskId: DeskId, workI
     messageIds: [],
   }
   return apiRevision
+}
+
+export const getPojectIdAndDeskId = async (workId: WorkId) => {
+  const desk = await prisma.work.findFirst({
+    where: { workId },
+    select: { deskId: true },
+  })
+  const project = await prisma.desk.findFirst({
+    where: { deskId: desk?.deskId },
+    select: { projectId: true },
+  })
+  if (!desk || !project) return
+
+  return { project, desk }
 }
 
 export const createS3RevisionPath = (

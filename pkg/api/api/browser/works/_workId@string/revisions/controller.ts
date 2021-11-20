@@ -5,8 +5,8 @@ import type { WorkId } from '@violet/lib/types/branded'
 import { defineController } from './$relay'
 
 export default defineController(() => ({
-  get: async ({ params, body }) => {
-    const revisions = await getRevisions(body.projectId, body.deskId, params.workId as WorkId)
+  get: async ({ params }) => {
+    const revisions = await getRevisions(params.workId as WorkId)
     return revisions ? { status: 200, body: revisions } : { status: 404 }
   },
   post: async ({ params, body }) => {

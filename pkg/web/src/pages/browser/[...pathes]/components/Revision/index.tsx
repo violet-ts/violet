@@ -57,7 +57,7 @@ export const Revision = (props: {
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
 
-  const [workUrl, setWorkUrl] = useState<S3RevisionPath>()
+  const [workUrl] = useState<S3RevisionPath>(props.revision.url)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {

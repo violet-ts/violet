@@ -33,7 +33,7 @@ export type BrowserEdition = {
 
 export type BrowserRevision = {
   id: RevisionId
-  url: S3RevisionPath | undefined
+  url: S3RevisionPath
   editions: BrowserEdition[]
   messages: BrowserMessage[]
 }
