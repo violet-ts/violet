@@ -1,4 +1,7 @@
 import type { ApiDesk } from '@violet/lib/types/api'
+import { RenameIcon } from '@violet/web/src/components/atoms/RenameIcon'
+import { Spacer } from '@violet/web/src/components/atoms/Spacer'
+import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import type {
   BrowserDesk,
   BrowserDir,
@@ -10,9 +13,6 @@ import type {
 import { getWorkFullName } from '@violet/web/src/utils'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import React, { useMemo, useState } from 'react'
-import { RenameIcon } from '@violet/web/src/components/atoms/RenameIcon'
-import { Spacer } from '@violet/web/src/components/atoms/Spacer'
-import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import styled from 'styled-components'
 import { ProjectNameUpdate } from '../ProjectNameUpdate'
 import { CellName } from './CellName'
