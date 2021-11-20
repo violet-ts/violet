@@ -22,7 +22,7 @@ const RevisionContent = styled.div`
   height: 100%;
 `
 const StreamBarColumn = styled.div`
-  height: 100%;
+  height: ${maincolumnHeight};
 `
 export const MainColumn = (props: {
   projectId: ProjectId
