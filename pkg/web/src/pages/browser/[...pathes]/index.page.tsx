@@ -23,10 +23,11 @@ const WorksView = styled.div`
   width: 100%;
 `
 const WorksHeader = styled.div`
+  height: 48px;
   width: 100%;
 `
 const WroksMain = styled.div`
-  height: 100vh;
+  height: calc(100vh - 48px);
   overflow-y: auto;
 `
 

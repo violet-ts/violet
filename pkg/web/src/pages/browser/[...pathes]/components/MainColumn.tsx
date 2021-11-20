@@ -9,19 +9,19 @@ import { StreamBar } from '../components/StreamBar'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  width: 100%;
 `
 const MainContent = styled.div`
   display: flex;
-  flex: 1;
-  width: 100%;
-  height: calc(100vh - 48px);
-  overflow-y: auto;
 `
 const RevisionContent = styled.div`
   flex: 1;
+  overflow-y: auto;
+  height: 100%;
 `
 const StreamBarColumn = styled.div`
-  height: 100vh;
+  height: 100%;
 `
 export const MainColumn = (props: {
   projectId: ProjectId

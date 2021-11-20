@@ -1,6 +1,5 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
-import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
@@ -9,26 +8,24 @@ import { colors } from '@violet/web/src/utils/constants'
 import { useContext, useState } from 'react'
 import type { BrowserRevision } from 'src/types/browser'
 import styled from 'styled-components'
-import { AddButton } from './AddButton'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 96px);
+  align-items: center;
+  height: 100%;
 `
 
-const DisplayWorksArea = styled.div`
-  min-height: 100%;
+const DisplayWorksFrame = styled.div`
   padding: 48px;
   background: ${colors.transparent};
   transition: background 0.2s, padding 0.2s;
+  height: 100vh;
 `
 
-const DisplayWorksFrame = styled.img`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100%;
+const DisplayWorksViewer = styled.img`
+  max-width: 100%;
+  max-height: 100%;
 `
 
 const Dropper = styled.input`
@@ -40,13 +37,6 @@ const Dropper = styled.input`
   cursor: pointer;
   background-color: ${colors.transparent};
   opacity: 0;
-`
-
-const RevisionFooter = styled.div`
-  display: flex;
-  justify-content: right;
-  height: 56px;
-  background-color: ${colors.transparent};
 `
 
 const AlertMessage = styled.div`
@@ -120,13 +110,9 @@ export const Revision = (props: {
         </Modal>
       )}
       {isFile && <Dropper type="file" accept={acceptExtensions} />}
-      <DisplayWorksArea>
-        <DisplayWorksFrame src={workUrl} />
-      </DisplayWorksArea>
-      <RevisionFooter>
-        <AddButton dropFile={dropFile} />
-        <Spacer axis="x" size={8} />
-      </RevisionFooter>
+      <DisplayWorksFrame>
+        <DisplayWorksViewer src={workUrl} />
+      </DisplayWorksFrame>
     </Container>
   )
 }
