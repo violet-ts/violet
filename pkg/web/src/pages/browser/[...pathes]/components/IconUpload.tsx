@@ -1,6 +1,9 @@
+import { acceptImageExtensions } from '@violet/def/constants'
+import { ProjectId } from '@violet/lib/types/branded'
+import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import type { ChangeEvent } from 'react'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { ImageIcon } from 'src/components/atoms/ImageIcon'
 import { Spacer } from 'src/components/atoms/Spacer'
 import styled from 'styled-components'
@@ -45,20 +48,37 @@ const IconWrapper = styled.div`
   transition: border-color 0.2s;
 `
 
-export const IconUpload = (props: { projectName: string }) => {
+export const IconUpload = (props: { projectName: string; projectId: ProjectId }) => {
+  const { api, onErr } = useApi()
   const inputImageElement = useRef<HTMLInputElement>(null)
-  const inputImageFile = (e: ChangeEvent<HTMLInputElement>) => {
+  const [imageFileName, setImageFileName] = useState('')
+  const [iconImageUrl, setIconImageUrl] = useState('')
+
+  const inputImageFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) return
+    const response = await api.browser.projects
+      ._projectId(props.projectId)
+      .post({ body: { imageFile: e.target.files[0] } })
+      .catch(onErr)
   }
   return (
     <Container>
-      <IconWrapper>
-        <Icon>{props.projectName.slice(0, 2)}</Icon>
-      </IconWrapper>
+      {iconImageUrl ? (
+        <img src={iconImageUrl} />
+      ) : (
+        <IconWrapper>
+          <Icon>{props.projectName.slice(0, 2)}</Icon>
+        </IconWrapper>
+      )}
       <Spacer axis="x" size={10} />
       <StyleImageIcon>
         <ImageIcon />
-        <StyleInput type="file" ref={inputImageElement} onChange={inputImageFile} />
+        <StyleInput
+          type="file"
+          accept={acceptImageExtensions}
+          ref={inputImageElement}
+          onChange={inputImageFile}
+        />
       </StyleImageIcon>
     </Container>
   )

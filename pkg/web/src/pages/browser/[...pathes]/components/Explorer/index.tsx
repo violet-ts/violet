@@ -176,7 +176,7 @@ export const Explorer = ({
         <Modal closeModal={closeModal}>
           <Spacer axis="y" size={80} />
           <Message>Upload a project icon images...</Message>
-          <IconUpload projectName={projectApiData.name} />
+          <IconUpload projectName={projectApiData.name} projectId={projectApiData.projectId} />
         </Modal>
       )}
       {openRename && (

@@ -9,3 +9,4 @@ export type MessageId = Branded<string, '__messageId'>
 export type ResisteredUserId = Branded<string, '__resisteredUserId'>
 export type ReplyId = Branded<string, '__replyId'>
 export type S3SaveWorksPath = Branded<string, '__s3SaveWorksPath'>
+export type S3SaveProjectIconPath = Branded<string, '__s3SaveProjectIconPath'>

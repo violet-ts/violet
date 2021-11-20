@@ -13,30 +13,6 @@ const InputFormProject = styled.form`
   flex-direction: column;
 `
 
-const Input = styled.input`
-  display: none;
-`
-
-const SelectLabel = styled.label`
-  padding: 1px;
-  color: #f3f3f3;
-  background-color: #b9b9b9;
-  cursor: pointer;
-`
-
-const StyleFileLabel = styled.input`
-  width: 95px;
-  height: 20px;
-  background-color: #fff;
-  border: 1px solid #999999;
-  pointer-events: none;
-`
-
-const StyleInputFile = styled.div`
-  display: flex;
-  justify-content: center;
-`
-
 export const ProjectNameInput = (props: { inputCompleted: () => void }) => {
   const [label, setLabel] = useState('')
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
