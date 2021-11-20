@@ -1,6 +1,6 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { ApiRevision } from '@violet/lib/types/api'
-import type { ProjectId, WorkId } from '@violet/lib/types/branded'
+import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
 import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
@@ -53,7 +53,7 @@ const AlertMessage = styled.div`
   transform: translate(-50%, -50%);
 `
 
-export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
+export const EmptyWork = (props: { projectId: ProjectId; deskId: DeskId; workId: WorkId }) => {
   const { api, onErr } = useApi()
   const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
   const [dragging, setDragging] = useState(false)
@@ -83,7 +83,9 @@ export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
     if (!file) return
     const newRevision = await api.browser.works
       ._workId(props.workId)
-      .revisions.$post({ body: { uploadFile: file[0], projectId: props.projectId } })
+      .revisions.$post({
+        body: { uploadFile: file[0], projectId: props.projectId, deskId: props.deskId },
+      })
       .catch(onErr)
 
     if (!newRevision) return

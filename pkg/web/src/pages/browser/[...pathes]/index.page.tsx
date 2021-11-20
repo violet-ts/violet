@@ -76,7 +76,11 @@ const ProjectPage = () => {
           ) : (
             <>
               <TabBar project={currentProject} projectApiData={projectApiData} />
-              <EmptyWork projectId={currentProject.id} workId={currentProject.openedTabId} />
+              <EmptyWork
+                projectId={currentProject.id}
+                workId={currentProject.openedTabId}
+                deskId={getDesk(projectApiData.desks, currentProject.openedTabId)}
+              />
             </>
           )
         ) : (
