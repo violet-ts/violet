@@ -1,5 +1,6 @@
+import { SignInModal } from '@violet/web/src/components/organisms/SignInModal'
 import { AuthContext } from '@violet/web/src/contexts/Auth'
-import { useCallback, useContext } from 'react'
+import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -17,23 +18,32 @@ const Icon = styled.img`
 `
 
 export const UserBanner = () => {
-  const { currentUser } = useContext(AuthContext)
-
-  const googleLogin = useCallback(() => {}, [])
-
-  const logout = useCallback(() => {}, [])
+  const { currentUser, signOut } = useContext(AuthContext)
+  const [modalOpen, setModalOpen] = useState(false)
 
   return (
-    <Container>
-      {currentUser ? (
-        <>
-          <Icon src={currentUser.photoURL ?? ''} />
-          <span>{currentUser.displayName}</span>
-          <button onClick={logout}>LOGOUT</button>
-        </>
-      ) : (
-        <button onClick={googleLogin}>Google LOGIN</button>
-      )}
-    </Container>
+    <>
+      <SignInModal
+        open={modalOpen}
+        onAuthCancel={() => setModalOpen(false)}
+        onAuthSuccess={() => setModalOpen(false)}
+      />
+      <Container>
+        {currentUser ? (
+          <>
+            <Icon
+              src={
+                currentUser.picture ||
+                'https://raw.githubusercontent.com/icons8/flat-color-icons/master/svg/voice_presentation.svg'
+              }
+            />
+            <span>{currentUser.name}</span>
+            <button onClick={signOut}>Sign out</button>
+          </>
+        ) : (
+          <button onClick={() => setModalOpen(true)}>Sign in</button>
+        )}
+      </Container>
+    </>
   )
 }

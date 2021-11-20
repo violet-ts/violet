@@ -1,14 +1,14 @@
 import type { GetObjectCommandInput } from '@aws-sdk/client-s3'
 import { S3 } from '@aws-sdk/client-s3'
 import type { Credentials, Provider } from '@aws-sdk/types'
-import type { VioletEnv } from '@violet/def/envValues'
-import type { Logger } from '@violet/lib/logger'
+import type { VioletEnv } from '@violet/def/env/violet'
+import type { winston } from '@violet/lib/logger'
 import { IncomingMessage } from 'http'
 
 interface CreateS3ClientParams {
   env: VioletEnv
   credentials: Credentials | Provider<Credentials>
-  logger: Logger
+  logger: winston.Logger
 }
 export const createS3Client = ({ env, logger, credentials }: CreateS3ClientParams) => {
   return new S3({

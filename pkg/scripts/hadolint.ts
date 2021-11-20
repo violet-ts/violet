@@ -11,8 +11,11 @@ const lambdaIgnore = [
 ]
 
 const devIgnores = [
+  'DL3008', // apt-get specify version
+  'DL3009', // apt-get delete cache
+  'DL3016', // npm specify version
   'DL3032', // yum clean
-  'DL3033', // specify version
+  'DL3033', // yum specify version
   'DL3045', // WORKDIR before COPY
   'DL3059', // consolidate RUN
 ]

@@ -18,7 +18,7 @@ export const fontSizes = {
   tiny: '12px',
   small: '14px',
   standard: '16px',
-  midium: '18px',
+  medium: '18px',
   large: '20px',
   big: '24px',
   huge: '28px',

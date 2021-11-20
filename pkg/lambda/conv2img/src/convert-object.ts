@@ -1,8 +1,8 @@
 import type { Credentials, Provider } from '@aws-sdk/types'
 import { worksConvertedKeyPrefix, worksOriginalKeyPrefix } from '@violet/def/constants/s3'
-import type { VioletEnv } from '@violet/def/envValues'
+import type { VioletEnv } from '@violet/def/env/violet'
 import { exec } from '@violet/lib/exec'
-import type { Logger } from '@violet/lib/logger'
+import type { winston } from '@violet/lib/logger'
 import { replaceKeyPrefix } from '@violet/lib/s3'
 import * as fs from 'fs'
 import type { IncomingMessage } from 'http'
@@ -67,7 +67,7 @@ interface ConvertObjectParams {
   bucket: string
   key: string
   env: VioletEnv
-  logger: Logger
+  logger: winston.Logger
   credentials: Credentials | Provider<Credentials>
 }
 export const convertObject = async ({
