@@ -10,16 +10,16 @@ import { StreamBar } from '../components/StreamBar'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: ${maincolumnHeight};
   width: 100%;
+  height: ${maincolumnHeight};
 `
 const MainContent = styled.div`
   display: flex;
 `
 const RevisionContent = styled.div`
   flex: 1;
-  overflow-y: auto;
   height: 100%;
+  overflow-y: auto;
 `
 const StreamBarColumn = styled.div`
   height: ${maincolumnHeight};

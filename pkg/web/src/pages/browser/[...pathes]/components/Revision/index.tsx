@@ -16,10 +16,10 @@ const Container = styled.div`
 `
 
 const DisplayWorksFrame = styled.div`
+  height: ${maincolumnHeight};
   padding: 48px;
   background: ${colors.transparent};
   transition: background 0.2s, padding 0.2s;
-  height: ${maincolumnHeight};
 `
 
 const DisplayWorksViewer = styled.img`
@@ -72,16 +72,16 @@ export const Revision = (props: {
   }
 
   const sendFormData = async (file: File) => {
-    const res = await api.browser.works
+    await api.browser.works
       ._workId(props.workId)
       .revisions.$post({
         body: { uploadFile: file, projectId: props.projectId, deskId: props.deskId },
       })
       .catch(onErr)
 
-    const revisionsRes = await api.browser.works._workId(props.workId).revisions.$get()
+    const revisionsRes = await api.browser.works._workId(props.workId).revisions.$get().catch(onErr)
 
-    if (!res) return
+    if (!revisionsRes) return
 
     updateApiWholeData(
       'revisionsList',
