@@ -23,7 +23,7 @@ export type BrowserMessage = {
   content: string
   createdAt: number
   userName: string
-  replys: BrowserReply[]
+  replies: BrowserReply[]
 }
 
 export type BrowserEdition = {

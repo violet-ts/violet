@@ -37,7 +37,7 @@ export type ApiMessage = {
   content: string
   createdAt: number
   userName: string
-  replys: ApiReply[]
+  replies: ApiReply[]
 }
 
 export type ApiReply = {

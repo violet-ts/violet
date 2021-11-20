@@ -7,11 +7,12 @@ import { defineController } from './$relay'
 export default defineController(() => ({
   get: async ({ params }) => {
     const revisions = await getRevisions(params.workId as WorkId)
-    return revisions ? { status: 200, body: revisions } : { status: 404 }
+
+    return { status: 200, body: revisions }
   },
   post: async ({ params, body }) => {
     const deskId = await getDeskId(params.workId as WorkId)
-    if (deskId === undefined) return { status: 404 }
+    if (!deskId) return { status: 404 }
 
     const revision = await createRevision(params.workId as WorkId)
     const data = await sendNewWork({
