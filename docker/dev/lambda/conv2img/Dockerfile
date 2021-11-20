@@ -10,4 +10,4 @@ RUN yum install -y libwebp-tools
 
 ENV NODE_ENV development
 
-CMD ["pkg/lambda/conv2img/bin/index.handler"]
+CMD ["pkg/lambda/conv2img/build/index.handler"]
