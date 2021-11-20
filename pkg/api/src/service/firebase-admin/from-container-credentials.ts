@@ -2,7 +2,7 @@
 // その後、Firebase Admin Library で使える形にする
 // ExternalAccountClient や AwsClient を直接使わないのは、これらが instance metadata にしか対応していないため
 
-/* eslint-disable max-lines,@typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { CredentialProvider, Credentials } from '@aws-sdk/types'
 import type { AwsClientOptions, RefreshOptions } from 'google-auth-library'
 import { BaseExternalAccountClient } from 'google-auth-library'
