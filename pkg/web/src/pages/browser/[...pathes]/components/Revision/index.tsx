@@ -4,7 +4,7 @@ import { Modal } from '@violet/web/src/components/molecules/Modal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import { createWorkPath } from '@violet/web/src/utils'
-import { colors } from '@violet/web/src/utils/constants'
+import { colors, maincolumnHeight } from '@violet/web/src/utils/constants'
 import { useContext, useState } from 'react'
 import type { BrowserRevision } from 'src/types/browser'
 import styled from 'styled-components'
@@ -20,7 +20,7 @@ const DisplayWorksFrame = styled.div`
   padding: 48px;
   background: ${colors.transparent};
   transition: background 0.2s, padding 0.2s;
-  height: 100vh;
+  height: ${maincolumnHeight};
 `
 
 const DisplayWorksViewer = styled.img`

@@ -3,6 +3,7 @@ import type { WorkId } from '@violet/lib/types/branded'
 import { Fetching } from '@violet/web/src/components/organisms/Fetching'
 import { useMemo } from 'react'
 import type { BrowserRevision } from 'src/types/browser'
+import { maincolumnHeight } from 'src/utils/constants'
 import styled from 'styled-components'
 import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
@@ -27,7 +28,7 @@ const WorksHeader = styled.div`
   width: 100%;
 `
 const WroksMain = styled.div`
-  height: calc(100vh - 48px);
+  height: ${maincolumnHeight};
   overflow-y: auto;
 `
 

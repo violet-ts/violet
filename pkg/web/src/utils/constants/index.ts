@@ -26,3 +26,5 @@ export const fontSizes = {
 } as const
 
 export const forceToggleHash = '#forceToggle'
+
+export const maincolumnHeight = 'calc(100vh - 48px)'

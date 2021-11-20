@@ -1,4 +1,5 @@
 import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
+import { maincolumnHeight } from '@violet/web/src/utils/constants'
 import React from 'react'
 import { Spacer } from 'src/components/atoms/Spacer'
 import type { BrowserRevision } from 'src/types/browser'
@@ -9,7 +10,7 @@ import { StreamBar } from '../components/StreamBar'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: ${maincolumnHeight};
   width: 100%;
 `
 const MainContent = styled.div`
