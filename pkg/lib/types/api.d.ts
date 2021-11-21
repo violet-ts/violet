@@ -1,12 +1,4 @@
-import type {
-  DeskId,
-  EditionId,
-  MessageId,
-  ProjectId,
-  ReplyId,
-  RevisionId,
-  WorkId,
-} from './branded'
+import type { DeskId, MessageId, ProjectId, ReplyId, RevisionId, WorkId } from './branded'
 
 export type ApiProject = {
   id: ProjectId
@@ -28,7 +20,6 @@ export type ApiDesk = {
 
 export type ApiRevision = {
   id: RevisionId
-  editionIds: EditionId[] | undefined
   messageIds: MessageId[] | undefined
 }
 

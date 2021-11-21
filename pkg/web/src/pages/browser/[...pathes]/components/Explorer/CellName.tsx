@@ -74,7 +74,7 @@ export const CellName = (props: {
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
-  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
+  const { apiWholeDict, updateApiWholeDict } = useContext(BrowserContext)
   const { asPath, replace } = useRouter()
   const [editingType, setEditingType] = useState<'file' | 'folder'>('file')
   useEffect(() => {
@@ -103,19 +103,14 @@ export const CellName = (props: {
   }
   const submitNew = async (path: string, name: string, ext?: string) => {
     const { projectId, deskName } = getProjectInfo(pathChunks)
-    const desk = apiWholeData.desksList
-      .filter((d) => d.projectId === projectId)[0]
-      .desks.filter((d) => d.name === deskName)[0]
+    const desk = apiWholeDict.desksDict[projectId].filter((d) => d.name === deskName)[0]
     await api.browser.projects
       ._projectId(projectId)
       .desks._deskId(desk.id)
       .post({ body: { path, name, ext } })
       .catch(onErr)
     const deskRes = await api.browser.projects._projectId(projectId).desks.$get()
-    updateApiWholeData(
-      'desksList',
-      apiWholeData.desksList.map((d) => (d.projectId === deskRes.projectId ? deskRes : d))
-    )
+    updateApiWholeDict('desksDict', deskRes)
     replace(`${asPath}/${label}`)
     setIsClickNewAdd(false)
   }

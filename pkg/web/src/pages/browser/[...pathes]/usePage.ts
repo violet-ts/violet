@@ -73,7 +73,7 @@ const getFullPath = (
 ) => `${projectId}${deskName ? `/${deskName}` : ''}${path ?? ''}`
 
 export const usePage = () => {
-  const { projects, apiWholeData, updateProject } = useContext(BrowserContext)
+  const { projects, apiProjects, apiWholeDict, updateProject } = useContext(BrowserContext)
   const { asPath, replace } = useRouter()
   const { projectId, deskName, path } = usePathValues()
   const currentProject = useMemo(
@@ -84,15 +84,10 @@ export const usePage = () => {
   const projectApiData = useMemo((): ProjectApiData | undefined => {
     if (!currentProject) return
 
-    const data = apiWholeData.projects?.find((p) => p.id === currentProject.id)
-    const desks = apiWholeData.desksList.find((d) => d.projectId === currentProject.id)?.desks
-    const revisions = apiWholeData.revisionsList.find(
-      (d) => d.workId === currentProject.openedTabId
-    )?.revisions
-
-    const messages = apiWholeData.messagesList
-      .filter((m) => revisions?.some((revision) => revision.id === m.revisionId))
-      ?.flatMap((m) => m.messages)
+    const data = apiProjects.find((p) => p.id === currentProject.id)
+    const desks = apiWholeDict.desksDict[currentProject.id]
+    const revisions =
+      currentProject.openedTabId && apiWholeDict.revisionsDict[currentProject.openedTabId]
 
     return (
       data &&
@@ -100,11 +95,10 @@ export const usePage = () => {
         projectId: currentProject.id,
         name: data.name,
         desks,
-        revisions,
-        messages,
+        revisions: revisions?.map((r) => ({ ...r, messages: apiWholeDict.messagesDict[r.id] })),
       }
     )
-  }, [apiWholeData, currentProject])
+  }, [apiWholeDict, currentProject])
 
   useEffect(() => {
     if (!currentProject || !projectApiData) return

@@ -83,7 +83,7 @@ export const Revision = (props: {
   const [isFile, setIsFile] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
-  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
+  const { updateApiWholeDict } = useContext(BrowserContext)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -104,13 +104,7 @@ export const Revision = (props: {
       .catch(onErr)
 
     const revisionRes = await api.browser.works._workId(props.workId).revisions.$get()
-
-    if (!revisionRes) return
-
-    updateApiWholeData(
-      'revisionsList',
-      apiWholeData.revisionsList.map((r) => (r.workId === revisionRes.workId ? revisionRes : r))
-    )
+    updateApiWholeDict('revisionsDict', revisionRes)
   }
   const closeModal = () => {
     setOpenAlert(false)
