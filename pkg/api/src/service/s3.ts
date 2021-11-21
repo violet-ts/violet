@@ -1,7 +1,7 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { fileTypes, imageTypes } from '@violet/def/constants'
-import type { S3SaveProjectIconPath, S3SaveWorksPath } from '@violet/lib/types/branded'
+import type { S3ProjectIconPath, S3SaveWorksPath } from '@violet/lib/types/branded'
 import type { MultipartFile } from 'fastify-multipart'
 import { depend } from 'velona'
 import envValues from '../utils/envValues'
@@ -59,14 +59,15 @@ export const sendNewProjectIcon = depend(
   async (
     { getS3Client },
     props: {
-      imageFile: MultipartFile
-      path: S3SaveProjectIconPath
+      imageFile: MultipartFile | null
+      path: S3ProjectIconPath
     }
   ) => {
+    if (!props.imageFile) return
     const params = {
       Bucket: S3_BUCKET_ORIGINAL,
       Key: props.path,
-      ContentType: imageTypes.find((i) => props.imageFile.fieldname.endsWith(i.ex))?.type,
+      ContentType: imageTypes.find((i) => props.imageFile?.fieldname.endsWith(i.ex))?.type,
       Body: await props.imageFile.toBuffer(),
     }
 

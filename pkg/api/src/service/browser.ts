@@ -1,7 +1,18 @@
 import { PrismaClient } from '@prisma/client'
+import dotenv from '@violet/api/src/utils/envValues'
 import { generateId } from '@violet/api/src/utils/generateId'
 import type { ApiDesk, ApiProject, ApiRevision, ApiWork } from '@violet/lib/types/api'
-import type { DeskId, MessageId, ProjectId, RevisionId, WorkId } from '@violet/lib/types/branded'
+import type {
+  DeskId,
+  MessageId,
+  ProjectId,
+  RevisionId,
+  S3ProjectIconPath,
+  WorkId,
+} from '@violet/lib/types/branded'
+
+const s3Endpoint = dotenv.S3_ENDPOINT
+const bucketOriginal = dotenv.S3_BUCKET_ORIGINAL
 
 const prisma = new PrismaClient()
 export const getProjects = async () => {
@@ -10,6 +21,7 @@ export const getProjects = async () => {
   const projects = dbProjects.map<ApiProject>((p) => ({
     id: p.projectId as ProjectId,
     name: p.projectName,
+    iconUrl: createS3ProjectIconPath(p.projectId as ProjectId, `${p.projectId}.${p.iconExt}`),
   }))
   return projects
 }
@@ -25,19 +37,25 @@ export const createProject = async (projectName: ApiProject['name']) => {
   const apiProject: ApiProject = {
     id: newProject.projectId as ProjectId,
     name: newProject.projectName,
+    iconUrl: null,
   }
   return apiProject
 }
 
-export const updateProject = async (projectId: ProjectId, projectName: ApiProject['name']) => {
+export const updateProject = async (
+  projectId: ProjectId,
+  projectName: ApiProject['name'],
+  iconExt?: string | null
+) => {
   const dbProjects = await prisma.project.update({
     where: { projectId },
-    data: { projectName },
+    data: { projectName, iconExt },
   })
   if (!dbProjects) return
   const apiProject: ApiProject = {
     id: dbProjects.projectId as ProjectId,
     name: dbProjects.projectName,
+    iconUrl: createS3ProjectIconPath(dbProjects.projectId as ProjectId, dbProjects.iconExt),
   }
   return apiProject
 }
@@ -128,3 +146,6 @@ export const getDeskId = async (workId: WorkId) => {
 
   return data.deskId as DeskId
 }
+
+export const createS3ProjectIconPath = (projectId: ProjectId, iconExt?: string | null) =>
+  `${s3Endpoint}/${bucketOriginal}/icon/${projectId}/${projectId}.${iconExt}` as S3ProjectIconPath

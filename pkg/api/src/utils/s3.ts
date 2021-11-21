@@ -3,7 +3,7 @@ import type {
   DeskId,
   ProjectId,
   RevisionId,
-  S3SaveProjectIconPath,
+  S3ProjectIconPath,
   S3SaveWorksPath,
 } from '@violet/lib/types/branded'
 
@@ -15,5 +15,5 @@ export const createS3SaveWorksPath = (props: {
 }) =>
   `${worksOriginalKeyPrefix}/${props.projectId}/${props.deskId}/revisions/${props.revisionId}/${props.filename}` as S3SaveWorksPath
 
-export const createS3SaveProjectIconPath = (props: { projectId: ProjectId; filename: string }) =>
-  `icon/${props.projectId}/${props.filename}` as S3SaveProjectIconPath
+export const createS3ProjectIconPath = (props: { projectId: ProjectId; iconExt?: string | null }) =>
+  `icon/${props.projectId}/${props.projectId}.${props.iconExt}` as S3ProjectIconPath

@@ -1,16 +1,16 @@
 import { acceptImageExtensions } from '@violet/def/constants'
-import { ProjectId } from '@violet/lib/types/branded'
+import { ApiProject } from '@violet/lib/types/api'
 import { ImageIcon } from '@violet/web/src/components/atoms/ImageIcon'
+import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
-import { useApi } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import type { ChangeEvent } from 'react'
-import { useRef, useState } from 'react'
+import { Dispatch, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
 `
 
@@ -48,23 +48,37 @@ const IconWrapper = styled.div`
   transition: border-color 0.2s;
 `
 
-export const IconUpload = (props: { projectName: string; projectId: ProjectId }) => {
-  const { api, onErr } = useApi()
-  const inputImageElement = useRef<HTMLInputElement>(null)
-  const [imageFileName, setImageFileName] = useState('')
-  const [iconImageUrl, setIconImageUrl] = useState('')
+const IconImage = styled.img`
+  width: 30;
+  height: 30;
+`
 
-  const inputImageFile = async (e: ChangeEvent<HTMLInputElement>) => {
+export const IconUpload = (props: {
+  projectName: ApiProject['name']
+  setIconImageFile: Dispatch<File | null>
+}) => {
+  const inputImageElement = useRef<HTMLInputElement>(null)
+  const [iconImageUrl, setIconImageUrl] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const loadImageFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) return
-    const response = await api.browser.projects
-      ._projectId(props.projectId)
-      .post({ body: { imageFile: e.target.files[0] } })
-      .catch(onErr)
+
+    setIsLoading(true)
+    const imageFile = e.target.files[0]
+    const reader = new FileReader()
+    reader.readAsDataURL(imageFile)
+    reader.onload = () => {
+      setIconImageUrl(reader.result as string)
+    }
+    props.setIconImageFile(imageFile)
+    setIsLoading(false)
   }
+
   return (
     <Container>
+      {isLoading && <Loading />}
       {iconImageUrl ? (
-        <img src={iconImageUrl} />
+        <IconImage src={iconImageUrl} />
       ) : (
         <IconWrapper>
           <Icon>{props.projectName.slice(0, 2)}</Icon>
@@ -77,7 +91,7 @@ export const IconUpload = (props: { projectName: string; projectId: ProjectId })
           type="file"
           accept={acceptImageExtensions}
           ref={inputImageElement}
-          onChange={inputImageFile}
+          onChange={loadImageFile}
         />
       </StyleImageIcon>
     </Container>

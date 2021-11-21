@@ -1,4 +1,3 @@
-import { ResponseMetadata } from '@aws-sdk/types'
 import type { ApiDesk, ApiProject } from '@violet/lib/types/api'
 import type { ProjectId } from '@violet/lib/types/branded'
 
@@ -7,12 +6,12 @@ export type Methods = {
     resBody: { projectId: ProjectId; desks: ApiDesk[] }
   }
   put: {
-    reqBody: Pick<ApiProject, 'name'>
+    reqBody: { project: Pick<ApiProject, 'name'>; iconExt?: string | null }
     resBody: ApiProject
   }
   post: {
     reqFormat: FormData
-    reqBody: { imageFile: Blob }
-    resBody: ResponseMetadata
+    reqBody: { project: Pick<ApiProject, 'name'>; iconExt?: string | null; imageFile: Blob }
+    resBody: ApiProject
   }
 }

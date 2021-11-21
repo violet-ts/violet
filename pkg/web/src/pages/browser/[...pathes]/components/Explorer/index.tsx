@@ -1,8 +1,9 @@
 import type { ApiDesk } from '@violet/lib/types/api'
+import { ProjectId } from '@violet/lib/types/branded'
 import { ConfigIcon } from '@violet/web/src/components/atoms/ConfigIcon'
-import { RenameIcon } from '@violet/web/src/components/atoms/RenameIcon'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
+import { useApi } from '@violet/web/src/hooks'
 import type {
   BrowserDesk,
   BrowserDir,
@@ -30,7 +31,7 @@ const Container = styled.div`
 
 const Column = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
 `
 
 const SecondaryButton = styled.button`
@@ -39,6 +40,16 @@ const SecondaryButton = styled.button`
   color: ${colors.white};
   cursor: pointer;
   background-color: ${colors.gray};
+  border: none;
+  border-radius: 16px;
+`
+
+const UpdateButton = styled.button`
+  padding: 0.3em;
+  font-size: ${fontSizes.large};
+  color: ${colors.white};
+  cursor: pointer;
+  background-color: ${colors.green};
   border: none;
   border-radius: 16px;
 `
@@ -155,49 +166,62 @@ export const Explorer = ({
       })),
     [projectApiData.desks, project.openedFullPathDict, project.selectedFullPath]
   )
-  const [openRename, setOpenRename] = useState(false)
-  const [openConfigration, setOpenConfigration] = useState(false)
-
-  const openRenameModal = () => {
-    setOpenRename(true)
-  }
+  const [openConfiguration, setOpenConfiguration] = useState(false)
+  const [iconImageFile, setIconImageFile] = useState<File | null>(null)
+  const [newProjectName, setNewProjectName] = useState('')
+  const { api, onErr } = useApi()
 
   const closeModal = () => {
-    setOpenRename(false)
-    setOpenConfigration(false)
+    setOpenConfiguration(false)
   }
 
   const openConfigModal = () => {
-    setOpenConfigration(true)
+    setOpenConfiguration(true)
+  }
+
+  const updateProject = async (projectId: ProjectId) => {
+    if (!newProjectName && !iconImageFile) return
+    const name = newProjectName ? newProjectName : project.name
+    const iconExt = iconImageFile?.name.substring(iconImageFile.name.indexOf('.') + 1)
+    const projectData = await api.browser.projects
+      ._projectId(projectId)
+      .post({
+        body: {
+          imageFile: iconImageFile as File,
+          iconExt: iconExt,
+          project: { name },
+        },
+      })
+      .catch(onErr)
+    console.log(projectData)
+    setOpenConfiguration(false)
   }
 
   return (
     <Container>
       <ProjectArea>
         <ProjectName>{projectApiData.name}</ProjectName>
-        <StyleIcon onClick={openRenameModal}>
-          <RenameIcon />
-        </StyleIcon>
         <StyleIcon onClick={openConfigModal}>
-          <Spacer axis="x" size={10} />
           <ConfigIcon size={22} />
         </StyleIcon>
       </ProjectArea>
-      <CardModal onClose={closeModal} open={openConfigration}>
-        <Spacer axis="y" size={80} />
-        <Message>Upload a project icon images...</Message>
-        <IconUpload projectName={projectApiData.name} projectId={projectApiData.projectId} />
-        <Spacer axis="y" size={8} />
+      <CardModal onClose={closeModal} open={openConfiguration}>
+        <Spacer axis="y" size={20} />
+        <Message>Project icon</Message>
+        <IconUpload projectName={projectApiData.name} setIconImageFile={setIconImageFile} />
+        <Spacer axis="y" size={20} />
+        <Message>Project name</Message>
+        <ProjectNameUpdate
+          confirmName={closeModal}
+          projectId={projectApiData.projectId}
+          setNewProjectName={setNewProjectName}
+        />
+        <Spacer axis="y" size={10} />
         <Column>
-          <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
-        </Column>
-      </CardModal>
-      <CardModal onClose={closeModal} open={openRename}>
-        <Spacer axis="y" size={8} />
-        <Message>Enter a new project name</Message>
-        <ProjectNameUpdate confirmName={closeModal} projectId={projectApiData.projectId} />
-        <Spacer axis="y" size={8} />
-        <Column>
+          <UpdateButton onClick={() => updateProject(projectApiData.projectId)}>
+            Update
+          </UpdateButton>
+          <Spacer axis="x" size={50} />
           <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
         </Column>
       </CardModal>

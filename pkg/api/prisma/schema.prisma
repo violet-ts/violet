@@ -16,6 +16,7 @@ model Task {
 model Project {
   projectId   String   @id
   projectName String
+  iconExt     String?
   createdAt   DateTime @default(now())
   desks       Desk[]
 }

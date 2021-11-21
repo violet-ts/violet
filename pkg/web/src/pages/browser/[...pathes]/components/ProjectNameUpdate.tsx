@@ -3,16 +3,22 @@ import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import type { ChangeEvent, FormEvent } from 'react'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { Dispatch, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-const InputFormProject = styled.form`
-  text-align: center;
+const InputFormProject = styled.div`
+  text-align: left;
 `
 
-export const ProjectNameUpdate = (props: { confirmName: () => void; projectId: ProjectId }) => {
+export const ProjectNameUpdate = (props: {
+  confirmName: () => void
+  projectId: ProjectId
+  setNewProjectName: Dispatch<string>
+}) => {
   const [label, setLabel] = useState('')
-  const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
+  const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setLabel(e.target.value), props.setNewProjectName(e.target.value)
+  }, [])
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
   const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
@@ -24,7 +30,7 @@ export const ProjectNameUpdate = (props: { confirmName: () => void; projectId: P
   const updateProjectName = async (name: string) => {
     const projectData = await api.browser.projects
       ._projectId(props.projectId)
-      .put({ body: { name } })
+      .put({ body: { project: { name } } })
       .catch(onErr)
     if (!projectData) return
 
@@ -48,7 +54,7 @@ export const ProjectNameUpdate = (props: { confirmName: () => void; projectId: P
     props.confirmName()
   }
   return (
-    <InputFormProject onSubmit={updateName}>
+    <InputFormProject>
       <input ref={inputElement} type="text" onChange={inputLabel} />
       {isUpdating && <Loading />}
     </InputFormProject>
