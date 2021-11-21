@@ -5,6 +5,7 @@ import type {
   ProjectId,
   ReplyId,
   RevisionId,
+  S3RevisionPath,
   WorkId,
 } from './branded'
 
@@ -28,6 +29,7 @@ export type ApiDesk = {
 
 export type ApiRevision = {
   id: RevisionId
+  url: S3RevisionPath
   editionIds: EditionId[] | undefined
   messageIds: MessageId[] | undefined
 }

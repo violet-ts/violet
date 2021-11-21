@@ -8,6 +8,7 @@ import type {
   ProjectId,
   ReplyId,
   RevisionId,
+  S3RevisionPath,
   WorkId,
 } from '@violet/lib/types/branded'
 
@@ -32,6 +33,7 @@ export type BrowserEdition = {
 
 export type BrowserRevision = {
   id: RevisionId
+  url: S3RevisionPath
   editions: BrowserEdition[]
   messages: BrowserMessage[]
 }
