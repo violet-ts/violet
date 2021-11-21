@@ -31,8 +31,8 @@ const SecondaryButton = styled.button`
 `
 
 const DisplayWorksFrame = styled.div`
-  min-height: 100%;
   height: ${maincolumnHeight};
+  min-height: 100%;
   padding: 48px;
   background: ${colors.transparent};
   transition: background 0.2s, padding 0.2s;
