@@ -38,7 +38,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const refresh = useCallback(async () => {
     await mutate()
-  }, [mutate, currentUser])
+  }, [mutate])
 
   const signOut = useCallback(async () => {
     await api.auth.session.$delete({ body: {} })

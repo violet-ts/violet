@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { defineHooks } from './$relay'
 
-const injectionKeysFromReply = ['setCookie', 'generateCsrf'] as const
+const injectionKeysFromReply = ['generateCsrf'] as const
 
 type InjectionFromReply = Pick<FastifyReply, typeof injectionKeysFromReply[number]>
 
@@ -15,7 +15,9 @@ export type AdditionalRequest = Pick<
   | 'refreshUserClaims'
   | 'ensureUserClaims'
 > &
-  InjectionFromReply
+  InjectionFromReply & {
+    setCookie: (...args: Parameters<FastifyReply['setCookie']>) => void
+  }
 
 export default defineHooks((fastify) => ({
   onRequest: async (req, reply) => {
@@ -25,8 +27,13 @@ export default defineHooks((fastify) => ({
         [key]: typeof value === 'function' ? value.bind(reply) : value,
       })
     }
+    Object.assign(req, {
+      setCookie: (...args: Parameters<FastifyReply['setCookie']>) => void reply.setCookie(...args),
+    })
     if (req.method !== 'GET' && req.method !== 'OPTIONS') {
-      await new Promise<void>((resolve) => fastify.csrfProtection(req, reply, resolve))
+      await new Promise<void>((resolve) => {
+        fastify.csrfProtection(req, reply, resolve)
+      })
     }
   },
 }))

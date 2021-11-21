@@ -79,13 +79,13 @@ export const CellName = (props: {
   const [editingType, setEditingType] = useState<'file' | 'folder'>('file')
   useEffect(() => {
     inputElement.current?.focus()
-  }, [inputElement.current])
+  }, [inputElement])
   const href = useMemo(
     () =>
       pagesPath.browser
         ._pathes(pathChunks)
         .$url(props.selected && !props.isWork ? { hash: forceToggleHash } : undefined),
-    [props.selected, props.isWork]
+    [pathChunks, props.selected, props.isWork]
   )
   const openInputField = () => {
     setIsFocusing(false)
@@ -111,8 +111,8 @@ export const CellName = (props: {
       .catch(onErr)
     const deskRes = await api.browser.projects._projectId(projectId).desks.$get()
     updateApiWholeDict('desksDict', deskRes)
-    replace(`${asPath}/${label}`)
     setIsClickNewAdd(false)
+    void replace(`${asPath}/${label}`)
   }
   const createNew = () => {
     const pathArray = pathChunks.filter((d) => pathChunks.indexOf(d) > 1)
@@ -120,10 +120,10 @@ export const CellName = (props: {
       const path = `/${pathArray.join('/')}`
       const name = label.substring(0, label.lastIndexOf('.'))
       const ext = label.substring(label.lastIndexOf('.') + 1, label.length)
-      submitNew(path, name, ext)
+      void submitNew(path, name, ext)
     } else {
       const path = `/${pathArray.join('/')}/${label}`
-      submitNew(path, '')
+      void submitNew(path, '')
     }
   }
   const sendNewName = (e: FormEvent) => {

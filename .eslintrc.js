@@ -13,12 +13,13 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:eslint-comments/recommended',
     'prettier',
   ],
-  plugins: ['@typescript-eslint', 'react', 'import'],
-  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'import'],
   env: {
     browser: true,
     node: true,
@@ -29,31 +30,24 @@ module.exports = {
       version: 'detect',
     },
   },
-  parserOptions: {
-    sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true,
-    },
-  },
   rules: {
+    'react/function-component-definition': ['error', { namedComponents: 'arrow-function' }],
     'react/react-in-jsx-scope': 'off',
-    'react/prop-types': [2, { ignore: ['children'] }],
+    'react/prop-types': 'off',
     'react/self-closing-comp': 'error',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
+    'eslint-comments/disable-enable-pair': 'off',
+    'eslint-comments/no-unused-disable': 'error',
+    'eslint-comments/require-description': 'error',
+    'eslint-comments/no-use': ['error', { allow: ['eslint-disable', 'eslint-disable-next-line'] }],
     complexity: ['error', 5],
     'max-depth': ['error', 1],
     'max-nested-callbacks': ['error', 3],
     'max-lines': ['error', 200],
     'prefer-template': 'error',
     'import/order': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-empty-function': 'off',
-    '@typescript-eslint/consistent-type-imports': 'error',
-    '@typescript-eslint/no-unused-vars': [
-      'error',
-      {
-        argsIgnorePattern: '^_',
-      },
-    ],
+    'consistent-return': 'error',
     'object-shorthand': [
       'error',
       'always',
@@ -64,6 +58,45 @@ module.exports = {
     ],
   },
   overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        sourceType: 'module',
+        project: 'tsconfig.json',
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      rules: {
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+        '@typescript-eslint/no-empty-function': 'off',
+        '@typescript-eslint/no-floating-promises': 'error',
+        '@typescript-eslint/no-implicit-any-catch': 'error',
+        '@typescript-eslint/consistent-type-imports': 'error',
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            argsIgnorePattern: '^_',
+          },
+        ],
+      },
+    },
+    {
+      files: [
+        '**/test/**/*',
+        '**/tests/**/*',
+        '**/__test__/**/*',
+        '**/__tests__/**/*',
+        '*.test.*',
+        '*.spec.*',
+      ],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+      },
+    },
     {
       files: ['*.js'],
       rules: { '@typescript-eslint/no-var-requires': ['off'] },

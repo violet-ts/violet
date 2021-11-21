@@ -1,8 +1,8 @@
-import type { PrismaClient } from '@prisma/client'
+import type { PrismaSeeder } from '../types'
 import { deskData, projectData, revisionData, workData } from './dev-data/basic'
 import { messageData, replyData } from './dev-data/stream'
 
-export const main = async (prisma: PrismaClient) => {
+const main: PrismaSeeder = async (prisma) => {
   await Promise.all(
     projectData.map((p) =>
       prisma.project.upsert({
@@ -35,7 +35,7 @@ export const main = async (prisma: PrismaClient) => {
       prisma.work.upsert({
         where: { workId: w.workId },
         update: {},
-        create: { workId: w.workId, workName: w.workName, ext: w?.ext, path: w.path, desk: w.desk },
+        create: { workId: w.workId, workName: w.workName, ext: w.ext, path: w.path, desk: w.desk },
       })
     )
   )
@@ -83,3 +83,5 @@ export const main = async (prisma: PrismaClient) => {
     )
   )
 }
+
+export default main

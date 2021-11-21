@@ -97,25 +97,31 @@ const Home = () => {
       if (!res) return
 
       setLabel('')
-      mutate()
+      await mutate()
     },
-    [label]
+    [label, api.tasks, mutate, onErr]
   )
 
-  const toggleDone = useCallback(async (task: Task) => {
-    const res = await api.tasks
-      ._taskId(task.id)
-      .patch({ body: { done: !task.done } })
-      .catch(onErr)
+  const toggleDone = useCallback(
+    async (task: Task) => {
+      const res = await api.tasks
+        ._taskId(task.id)
+        .patch({ body: { done: !task.done } })
+        .catch(onErr)
 
-    if (res) mutate()
-  }, [])
+      if (res) await mutate()
+    },
+    [api.tasks, mutate, onErr]
+  )
 
-  const deleteTask = useCallback(async (task: Task) => {
-    const res = await api.tasks._taskId(task.id).delete().catch(onErr)
+  const deleteTask = useCallback(
+    async (task: Task) => {
+      const res = await api.tasks._taskId(task.id).delete().catch(onErr)
 
-    if (res) mutate()
-  }, [])
+      if (res) await mutate()
+    },
+    [api.tasks, mutate, onErr]
+  )
 
   if (!tasks) return <Fetching error={error} />
 

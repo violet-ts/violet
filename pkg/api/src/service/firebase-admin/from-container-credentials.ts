@@ -2,7 +2,6 @@
 // その後、Firebase Admin Library で使える形にする
 // ExternalAccountClient や AwsClient を直接使わないのは、これらが instance metadata にしか対応していないため
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { CredentialProvider, Credentials } from '@aws-sdk/types'
 import type { AwsClientOptions, RefreshOptions } from 'google-auth-library'
 import { BaseExternalAccountClient } from 'google-auth-library'
@@ -41,7 +40,7 @@ export class AwsCredentialsClient extends BaseExternalAccountClient {
     this.awsRefreshOptions = additionalOptions?.awsRefreshOptions
     this.environmentId = options.credential_source.environment_id
     this.regionalCredVerificationUrl = options.credential_source.regional_cred_verification_url
-    const match = this.environmentId?.match(/^(aws)(\d+)$/)
+    const match = this.environmentId.match(/^(aws)(\d+)$/)
     if (!match || !this.regionalCredVerificationUrl) {
       throw new Error('No valid AWS "credential_source" provided')
     } else if (parseInt(match[2], 10) !== 1) {
@@ -74,7 +73,7 @@ export class AwsCredentialsClient extends BaseExternalAccountClient {
     const reformattedHeader: { key: string; value: string }[] = []
     const extendedHeaders = Object.assign(
       {
-        'x-goog-cloud-target-resource': (this as any).audience,
+        'x-goog-cloud-target-resource': this.audience,
       },
       options.headers
     )
@@ -82,7 +81,7 @@ export class AwsCredentialsClient extends BaseExternalAccountClient {
     for (const key in extendedHeaders) {
       reformattedHeader.push({
         key,
-        value: extendedHeaders[key],
+        value: extendedHeaders[key] as string,
       })
     }
     // Serialize the reformatted signed request.

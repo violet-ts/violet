@@ -21,7 +21,10 @@ const main = async ({ from, to, watch, target }: Params) => {
 
   const watchOptions: boolean | WatchMode = watch && {
     onRebuild(error) {
-      if (error) return console.error(error)
+      if (error) {
+        console.error(error)
+        return
+      }
       console.log(`Build done for file ${fromPath}`)
     },
   }

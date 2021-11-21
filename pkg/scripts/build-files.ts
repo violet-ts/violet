@@ -23,7 +23,10 @@ const main = async ({ fromDir, toDir, watch, target, clean }: Params) => {
     .filter((e) => e.endsWith('.ts'))
   const watchOptions: boolean | WatchMode = watch && {
     onRebuild(error) {
-      if (error) return console.error(error)
+      if (error) {
+        console.error(error)
+        return
+      }
       console.log(`Build done for files under ${fromDirAbs}`)
     },
   }
@@ -34,7 +37,7 @@ const main = async ({ fromDir, toDir, watch, target, clean }: Params) => {
       build.onStart(() => {
         try {
           fs.rmSync(toDirAbs, { recursive: true, force: true, maxRetries: 3 })
-        } catch (_err) {
+        } catch (_err: unknown) {
           // ignore error
         }
         fs.mkdirSync(toDirAbs, { recursive: true })

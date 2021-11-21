@@ -128,7 +128,9 @@ export const convertObject = async ({
   // Todo: mozjpeg
 
   const info: InfoJson = {
-    fallbackImageExts: [...Array(fs.readdirSync(convertedDir).length / FALLBACK_EXTS.length)].map(
+    fallbackImageExts: [
+      ...(Array(fs.readdirSync(convertedDir).length / FALLBACK_EXTS.length) as undefined[]),
+    ].map(
       (_, i) =>
         FALLBACK_EXTS.map((ext) => ({
           ext,

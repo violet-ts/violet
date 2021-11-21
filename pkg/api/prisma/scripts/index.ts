@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-var-requires,@typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-var-requires -- 動的なrequire */
 import { PrismaClient } from '@prisma/client'
 import arg from 'arg'
 import * as fs from 'fs'
 import * as path from 'path'
+import type { PrismaSeeder } from './types'
 
 const prisma = new PrismaClient()
 
@@ -21,7 +22,7 @@ const prod = async () => {
   const prodScripts = fs.readdirSync(path.resolve(__dirname, 'prod')).sort()
   for (const s of prodScripts) {
     const scriptPath = `./${path.join('prod', s)}`
-    const { main } = require(scriptPath)
+    const main = require(scriptPath) as PrismaSeeder
     await main(prisma)
   }
 }
@@ -35,7 +36,7 @@ const seed = async () => {
     throw new Error(`seed name ${seedName} is invalid`)
   }
   const scriptPath = `./${path.join('seed', seedName)}`
-  const { main } = require(scriptPath)
+  const main = require(scriptPath) as PrismaSeeder
   await main(prisma)
   console.log(`Seed "${seedName}" successfully applied`)
 }

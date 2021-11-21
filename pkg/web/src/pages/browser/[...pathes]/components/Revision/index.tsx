@@ -77,14 +77,14 @@ export const Revision = (props: {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
-      dropFile(e.target.files[0])
+      void dropFile(e.target.files[0])
     }
     setIsFile(false)
     e.target.value = ''
   }
 
-  const dropFile = (file: File) => {
-    fileTypes.some((f) => file.type === f.type) ? sendFormData(file) : setOpenAlert(true)
+  const dropFile = async (file: File) => {
+    fileTypes.some((f) => file.type === f.type) ? await sendFormData(file) : setOpenAlert(true)
   }
 
   const sendFormData = async (file: File) => {
