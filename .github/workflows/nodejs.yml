@@ -51,6 +51,10 @@ jobs:
           run_install: |
             - recursive: true
               args: [--frozen-lockfile, --prefer-offline]
+      # https://github.com/prisma/prisma/issues/4267
+      - run: |
+          pnpm --dir=./pkg/api run prisma:format
+          git diff --exit-code --quiet -- ./pkg/api/prisma/schema.prisma
       - run: pnpm run lint
       - run: pnpm run typecheck
       - run: pnpm run build-all
