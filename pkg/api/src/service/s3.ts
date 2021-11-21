@@ -23,7 +23,7 @@ const getS3Client = () => {
   return s3Client
 }
 
-export const getRevisionsSidnedUrl = depend({ getS3Client }, ({ getS3Client }) =>
+export const getRevisionsSignedUrl = depend({ getS3Client }, ({ getS3Client }) =>
   getSignedUrl(getS3Client(), new GetObjectCommand({ Bucket: 'static', Key: 'sample.txt' }), {
     expiresIn: 3600,
   })
@@ -49,22 +49,6 @@ export const sendNewWork = depend(
     const data = await getS3Client()
       .send(new PutObjectCommand(uploadParams))
       .then((res) => res.$metadata)
-
-    return data
-  }
-)
-
-export const getDisplayWrok = depend(
-  { getS3Client },
-  async ({ getS3Client }, path: RevisionPath) => {
-    const params = {
-      Bucket: S3_BUCKET_ORIGINAL,
-      Key: path,
-    }
-
-    const data = await getS3Client()
-      .send(new GetObjectCommand(params))
-      .then((res) => res.Body)
 
     return data
   }
