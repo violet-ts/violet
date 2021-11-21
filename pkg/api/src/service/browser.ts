@@ -110,12 +110,7 @@ export const getRevisions = async (workId: WorkId) => {
   const revisions = dbRevision.map<ApiRevision>((r) => ({
     ...r,
     id: r.revisionId as RevisionId,
-    url: createS3RevisionPath(
-      ids.project.projectId as ProjectId,
-      ids.desk.deskId as DeskId,
-      r.revisionId as RevisionId,
-      '0.jpg'
-    ),
+    url: createS3RevisionPath(ids.projectId, ids.deskId, r.revisionId as RevisionId, '0.jpg'),
     editionIds: [],
     messageIds: r.message.map((m) => m.messageId as MessageId),
   }))
@@ -150,7 +145,7 @@ export const getPojectIdAndDeskId = async (workId: WorkId) => {
   })
   if (!desk || !project) return
 
-  return { project, desk }
+  return { projectId: project.projectId as ProjectId, deskId: desk.deskId as DeskId }
 }
 
 export const createS3RevisionPath = (
