@@ -1,9 +1,9 @@
 import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
-import { maincolumnHeight } from '@violet/web/src/utils/constants'
 import React from 'react'
 import styled from 'styled-components'
+import { mainColumnHeight } from '../../../../utils/constants'
 import { Revision } from '../components/Revision'
 import { StreamBar } from '../components/StreamBar'
 
@@ -11,7 +11,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: ${maincolumnHeight};
+  height: ${mainColumnHeight};
 `
 const MainContent = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const RevisionContent = styled.div`
   overflow-y: auto;
 `
 const StreamBarColumn = styled.div`
-  height: ${maincolumnHeight};
+  height: ${mainColumnHeight};
 `
 export const MainColumn = (props: {
   projectId: ProjectId

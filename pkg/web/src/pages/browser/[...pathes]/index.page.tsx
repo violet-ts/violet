@@ -2,9 +2,9 @@ import type { ApiDesk } from '@violet/lib/types/api'
 import type { WorkId } from '@violet/lib/types/branded'
 import { Fetching } from '@violet/web/src/components/organisms/Fetching'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
-import { maincolumnHeight } from '@violet/web/src/utils/constants'
 import { useMemo } from 'react'
 import styled from 'styled-components'
+import { mainColumnHeight } from '../../../utils/constants'
 import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
 import { LeftColumn } from './components/LeftColumn'
@@ -27,7 +27,7 @@ const WorksHeader = styled.div`
   width: 100%;
 `
 const WroksMain = styled.div`
-  height: ${maincolumnHeight};
+  height: ${mainColumnHeight};
   overflow-y: auto;
 `
 

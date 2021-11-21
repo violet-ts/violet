@@ -4,7 +4,7 @@ import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
-import { colors, fontSizes, maincolumnHeight } from '@violet/web/src/utils/constants'
+import { colors, fontSizes, mainColumnHeight } from '@violet/web/src/utils/constants'
 import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
@@ -31,7 +31,7 @@ const SecondaryButton = styled.button`
 `
 
 const DisplayWorksFrame = styled.div`
-  height: ${maincolumnHeight};
+  height: ${mainColumnHeight};
   min-height: 100%;
   padding: 48px;
   background: ${colors.transparent};
