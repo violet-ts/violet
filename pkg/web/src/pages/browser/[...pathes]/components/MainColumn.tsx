@@ -1,9 +1,9 @@
 import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
+import { mainColumnHeight } from '@violet/web/src/utils/constants'
 import React from 'react'
 import styled from 'styled-components'
-import { mainColumnHeight } from '../../../../utils/constants'
 import { Revision } from '../components/Revision'
 import { StreamBar } from '../components/StreamBar'
 
