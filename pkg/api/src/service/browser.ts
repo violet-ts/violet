@@ -72,7 +72,6 @@ export const getRevisions = async (workId: WorkId) => {
   const revisions = dbRevision.map(
     (r): ApiRevision => ({
       id: r.revisionId as RevisionId,
-      editionIds: [],
       messageIds: r.messages.map((m) => m.messageId as MessageId),
     })
   )
@@ -84,7 +83,7 @@ export const createRevision = async (workId: WorkId): Promise<ApiRevision> => {
   const revisionId = generateId<RevisionId>()
   await prisma.revision.create({ data: { revisionId, workId } })
 
-  return { id: revisionId, editionIds: [], messageIds: [] }
+  return { id: revisionId, messageIds: [] }
 }
 
 export const getDeskId = async (workId: WorkId) => {

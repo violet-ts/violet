@@ -36,8 +36,7 @@ const ProjectPage = () => {
       projectApiData?.revisions?.map<BrowserRevision>((p) => ({
         id: p.id,
         editions: [],
-        messages:
-          projectApiData.messages?.filter((message) => p.messageIds?.includes(message.id)) ?? [],
+        messages: projectApiData.revisions?.filter((r) => r.id === p.id)[0].messages ?? [],
       })) ?? [],
     [projectApiData]
   )

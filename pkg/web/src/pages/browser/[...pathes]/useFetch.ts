@@ -10,7 +10,8 @@ export const useFetch = (
   projectId: ProjectId | undefined,
   currentProject: BrowserProject | undefined
 ) => {
-  const { apiWholeData, updateProjects, updateApiWholeData } = useContext(BrowserContext)
+  const { apiWholeDict, updateProjects, updateApiProjects, updateApiWholeDict } =
+    useContext(BrowserContext)
   const { api } = useApi()
   const enabled = !!projectId
   const projectsRes = useAspidaSWR(api.browser.projects, { enabled })
@@ -22,7 +23,7 @@ export const useFetch = (
 
   const updateMessage = useCallback(
     async (revisionsData: { workId: WorkId; revisions: ApiRevision[] }) => {
-      const message = await Promise.all(
+      const messages = await Promise.all(
         revisionsData.revisions.map((revision) =>
           api.browser.works
             ._workId(currentProject?.openedTabId ?? '')
@@ -30,16 +31,19 @@ export const useFetch = (
             .messages.$get()
         )
       )
-      updateApiWholeData('messagesList', message)
+      updateApiWholeDict(
+        'messagesDict',
+        messages.reduce((dict, m) => ({ ...dict, ...m }), {})
+      )
     },
-    [apiWholeData.messagesList]
+    [apiWholeDict.messagesDict]
   )
 
   useEffect(() => {
     const projectsData = projectsRes.data
     if (!projectsData) return
 
-    updateApiWholeData('projects', projectsData)
+    updateApiProjects(projectsData)
     updateProjects(
       projectsData.map((d) => ({
         ...d,
@@ -55,26 +59,14 @@ export const useFetch = (
     const desksData = desksRes.data
     if (!desksData) return
 
-    updateApiWholeData(
-      'desksList',
-      apiWholeData.desksList.some((d) => d.projectId === desksData.projectId)
-        ? apiWholeData.desksList.map((d) => (d.projectId === desksData.projectId ? desksData : d))
-        : [...apiWholeData.desksList, desksData]
-    )
+    updateApiWholeDict('desksDict', desksData)
   }, [desksRes.data])
 
   useEffect(() => {
     const revisionsData = revisionsRes.data
     if (!revisionsData) return
 
-    updateApiWholeData(
-      'revisionsList',
-      apiWholeData.revisionsList.some((r) => r.workId === revisionsData.workId)
-        ? apiWholeData.revisionsList.map((r) =>
-            r.workId === revisionsData.workId ? revisionsData : r
-          )
-        : [...apiWholeData.revisionsList, revisionsData]
-    )
+    updateApiWholeDict('revisionsDict', revisionsData)
     updateMessage(revisionsData)
   }, [revisionsRes.data])
 
