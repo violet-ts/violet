@@ -11,7 +11,7 @@ import type {
   WorkId,
 } from '@violet/lib/types/branded'
 
-const s3endpoint = dotenv.S3_ENDPOINT
+const s3Endpoint = dotenv.S3_ENDPOINT
 const bucketConverted = dotenv.S3_BUCKET_CONVERTED
 const prisma = new PrismaClient()
 const orderByCreatedAtAsc = { orderBy: { createdAt: 'asc' } } as const
@@ -119,9 +119,10 @@ export const getPojectIdAndDeskId = async (workId: WorkId) => {
   return { projectId: project?.projectId as ProjectId, deskId: desk?.deskId as DeskId }
 }
 
+// TODO：get fileNames from info.json
 export const createS3RevisionPath = (
   projectId: ProjectId,
   deskId: DeskId,
   revisionId: RevisionId
 ) =>
-  `${s3endpoint}/${bucketConverted}/works/converted/${projectId}/${deskId}/revisions/${revisionId}/0.jpg` as RevisionPath
+  `${s3Endpoint}/${bucketConverted}/works/converted/${projectId}/${deskId}/revisions/${revisionId}/0.jpg` as RevisionPath

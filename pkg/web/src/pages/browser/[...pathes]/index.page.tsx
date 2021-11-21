@@ -35,7 +35,7 @@ const ProjectPage = () => {
   const { error, projectApiData, projects, currentProject } = usePage()
 
   const getDesk = (desks: ApiDesk[], openedTabId: WorkId) =>
-    desks.filter((c) => (c.works.some((w) => w.id === openedTabId) ? c.id : null))[0]?.id
+    desks.filter((c) => c.works.some((w) => w.id === openedTabId))[0].id
 
   const browserRevisionData = useMemo(
     () =>

@@ -1,5 +1,5 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
-import type { DeskId, ProjectId, RevisionPath, WorkId } from '@violet/lib/types/branded'
+import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
@@ -73,7 +73,7 @@ export const Revision = (props: {
   const { api, onErr } = useApi()
   const { updateApiWholeDict } = useContext(BrowserContext)
 
-  const [workUrl] = useState<RevisionPath>(props.revision.url)
+  const workUrl = props.revision.url
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {

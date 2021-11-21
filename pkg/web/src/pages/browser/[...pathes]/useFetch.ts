@@ -36,7 +36,7 @@ export const useFetch = (
         messages.reduce((dict, m) => ({ ...dict, [m.revisionId]: m.messages }), {})
       )
     },
-    [apiWholeDict.messagesDict]
+    [apiWholeDict?.messagesDict]
   )
 
   useEffect(() => {
