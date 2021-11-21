@@ -1,5 +1,4 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
-import type { ApiRevision } from '@violet/lib/types/api'
 import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
@@ -65,8 +64,8 @@ const AlertMessage = styled.div`
 `
 
 export const EmptyWork = (props: { projectId: ProjectId; deskId: DeskId; workId: WorkId }) => {
-  const { api } = useApi()
-  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
+  const { api, onErr } = useApi()
+  const { updateApiWholeDict } = useContext(BrowserContext)
   const [dragging, setDragging] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const dragEnter = () => setDragging(true)
@@ -81,26 +80,19 @@ export const EmptyWork = (props: { projectId: ProjectId; deskId: DeskId; workId:
     }
     e.target.value = ''
   }
-  const updateRevisions = (revisionRes: { workId: WorkId; revisions: ApiRevision[] }) => {
-    updateApiWholeData(
-      'revisionsList',
-      apiWholeData.revisionsList.some((r) => r.workId === revisionRes.workId)
-        ? apiWholeData.revisionsList.map((r) => (r.workId === revisionRes.workId ? revisionRes : r))
-        : [...apiWholeData.revisionsList, revisionRes]
-    )
-  }
   const sendFormData = async (file: FileList) => {
     setDragging(false)
     if (!file) return
-    const newRevision = await api.browser.works._workId(props.workId).revisions.$post({
-      body: { uploadFile: file[0], projectId: props.projectId, deskId: props.deskId },
-    })
 
-    if (!newRevision) return
+    await api.browser.works
+      ._workId(props.workId)
+      .revisions.$post({
+        body: { uploadFile: file[0], projectId: props.projectId, deskId: props.deskId },
+      })
+      .catch(onErr)
+
     const revisionRes = await api.browser.works._workId(props.workId).revisions.$get()
-
-    if (!revisionRes) return
-    updateRevisions(revisionRes)
+    updateApiWholeDict('revisionsDict', revisionRes)
   }
 
   const closeModal = () => {

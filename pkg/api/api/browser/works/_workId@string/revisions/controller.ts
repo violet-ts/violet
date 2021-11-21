@@ -7,10 +7,12 @@ import { defineController } from './$relay'
 export default defineController(() => ({
   get: async ({ params }) => {
     const revisions = await getRevisions(params.workId as WorkId)
-    return revisions ? { status: 200, body: revisions } : { status: 404 }
+
+    return { status: 200, body: revisions }
   },
   post: async ({ params, body }) => {
     const revision = await createRevision(body.projectId, body.deskId, params.workId as WorkId)
+
     const data = await sendNewWork({
       uploadFile: body.uploadFile,
       path: createS3SaveRevisionPath({

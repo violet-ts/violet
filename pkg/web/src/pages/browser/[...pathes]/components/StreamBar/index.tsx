@@ -45,7 +45,7 @@ export const StreamBar = (props: {
   workId: WorkId
   revision: BrowserRevision
 }) => {
-  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
+  const { updateApiWholeDict } = useContext(BrowserContext)
   const { api, onErr } = useApi()
   const [content, setContent] = useState('')
   const scrollBottomRef = useRef<HTMLDivElement>(null)
@@ -59,18 +59,15 @@ export const StreamBar = (props: {
       .post({ body: { content, userName } })
       .catch(onErr)
 
-    const messageRes = await api.browser.works
+    const messagesRes = await api.browser.works
       ._workId(props.workId)
       .revisions._revisionId(props.revision.id)
       .messages.$get()
+      .catch(onErr)
 
-    updateApiWholeData(
-      'messagesList',
-      apiWholeData.messagesList.map((m) =>
-        m.revisionId === messageRes.revisionId ? messageRes : m
-      )
-    )
+    if (!messagesRes) return
 
+    updateApiWholeDict('messagesDict', messagesRes)
     setContent('')
   }, [content])
 
@@ -95,10 +92,7 @@ export const StreamBar = (props: {
 
       if (!replyRes) return
 
-      updateApiWholeData(
-        'messagesList',
-        apiWholeData.messagesList.map((m) => (m.revisionId === replyRes.revisionId ? replyRes : m))
-      )
+      updateApiWholeDict('messagesDict', replyRes)
     },
     [content]
   )

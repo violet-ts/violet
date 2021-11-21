@@ -1,5 +1,5 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
-import type { DeskId, ProjectId, S3RevisionPath, WorkId } from '@violet/lib/types/branded'
+import type { DeskId, ProjectId, RevisionPath, WorkId } from '@violet/lib/types/branded'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
@@ -70,10 +70,10 @@ export const Revision = (props: {
 }) => {
   const [isFile, setIsFile] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
-  const { api } = useApi()
-  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
+  const { api, onErr } = useApi()
+  const { updateApiWholeDict } = useContext(BrowserContext)
 
-  const [workUrl] = useState<S3RevisionPath>(props.revision.url)
+  const [workUrl] = useState<RevisionPath>(props.revision.url)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -88,18 +88,15 @@ export const Revision = (props: {
   }
 
   const sendFormData = async (file: File) => {
-    await api.browser.works._workId(props.workId).revisions.$post({
-      body: { uploadFile: file, projectId: props.projectId, deskId: props.deskId },
-    })
+    await api.browser.works
+      ._workId(props.workId)
+      .revisions.$post({
+        body: { uploadFile: file, projectId: props.projectId, deskId: props.deskId },
+      })
+      .catch(onErr)
 
-    const revisionsRes = await api.browser.works._workId(props.workId).revisions.$get()
-
-    if (!revisionsRes) return
-
-    updateApiWholeData(
-      'revisionsList',
-      apiWholeData.revisionsList.map((r) => (r.workId === revisionsRes.workId ? revisionsRes : r))
-    )
+    const revisionRes = await api.browser.works._workId(props.workId).revisions.$get()
+    updateApiWholeDict('revisionsDict', revisionRes)
   }
 
   const closeModal = () => {

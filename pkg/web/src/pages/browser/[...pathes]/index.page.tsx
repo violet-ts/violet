@@ -43,8 +43,7 @@ const ProjectPage = () => {
         id: p.id,
         url: p.url,
         editions: [],
-        messages:
-          projectApiData.messages?.filter((message) => p.messageIds?.includes(message.id)) ?? [],
+        messages: projectApiData.revisions?.filter((r) => r.id === p.id)[0].messages ?? [],
       })) ?? [],
     [projectApiData]
   )

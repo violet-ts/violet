@@ -1,11 +1,10 @@
 import type {
   DeskId,
-  EditionId,
   MessageId,
   ProjectId,
   ReplyId,
   RevisionId,
-  S3RevisionPath,
+  RevisionPath,
   WorkId,
 } from './branded'
 
@@ -29,8 +28,7 @@ export type ApiDesk = {
 
 export type ApiRevision = {
   id: RevisionId
-  url: S3RevisionPath
-  editionIds: EditionId[] | undefined
+  url: RevisionPath
   messageIds: MessageId[] | undefined
 }
 
@@ -39,7 +37,7 @@ export type ApiMessage = {
   content: string
   createdAt: number
   userName: string
-  replys: ApiReply[]
+  replies: ApiReply[]
 }
 
 export type ApiReply = {

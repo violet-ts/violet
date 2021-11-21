@@ -16,7 +16,7 @@ export const ProjectNameInput = (props: { onComplete?: () => void }) => {
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
-  const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
+  const { projects, apiProjects, updateApiProjects, updateProjects } = useContext(BrowserContext)
   const { asPath, push } = useRouter()
   const [isCreating, setIsCreating] = useState(false)
   useEffect(() => {
@@ -26,8 +26,8 @@ export const ProjectNameInput = (props: { onComplete?: () => void }) => {
     const newProject = await api.browser.projects.post({ body: { name } }).catch(onErr)
     if (!newProject?.body) return
 
-    const projectsData = [...apiWholeData.projects, newProject.body]
-    const projectsStatus = [
+    updateApiProjects([...apiProjects, newProject.body])
+    updateProjects([
       ...projects,
       {
         id: newProject.body.id,
@@ -37,9 +37,7 @@ export const ProjectNameInput = (props: { onComplete?: () => void }) => {
         selectedFullPath: newProject.body.id,
         tabs: [],
       },
-    ]
-    updateApiWholeData('projects', projectsData)
-    updateProjects(projectsStatus)
+    ])
     push(`${asPath}/${newProject.body.id}`)
   }
   const sendProjectName = async (e: FormEvent) => {

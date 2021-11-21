@@ -9,6 +9,7 @@
     "prisma:prod": "pnpm run _:build && pnpm run _:prisma:prod",
     "prisma:seed": "pnpm run _:build && pnpm run _:prisma:seed",
     "prisma:seed:dev": "pnpm run _:build && pnpm run prisma:seed:dev",
+    "prisma:format": "prisma format",
     "_:migrate:dev": "prisma migrate dev",
     "_:migrate:reset": "prisma migrate reset",
     "_:prisma:prod": "node ./prisma/build/index.js --prod",
@@ -54,7 +55,6 @@
     "http-errors": "^1.8.1",
     "prisma": "^3.2.1",
     "source-map-support": "^0.5.20",
-    "uuid": "^8.3.2",
     "velona": "^0.7.0"
   },
   "devDependencies": {
