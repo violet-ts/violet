@@ -71,7 +71,7 @@ export const Revision = (props: {
   const [isFile, setIsFile] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
-  const { updateApiWholeDict } = useContext(BrowserContext)
+  const { apiWholeDict, updateApiWholeDict } = useContext(BrowserContext)
 
   const workUrl = props.revision.url
 
@@ -88,15 +88,17 @@ export const Revision = (props: {
   }
 
   const sendFormData = async (file: File) => {
-    await api.browser.works
+    const revisionRes = await api.browser.works
       ._workId(props.workId)
       .revisions.$post({
         body: { uploadFile: file, projectId: props.projectId, deskId: props.deskId },
       })
       .catch(onErr)
 
-    const revisionRes = await api.browser.works._workId(props.workId).revisions.$get()
-    updateApiWholeDict('revisionsDict', revisionRes)
+    if (!revisionRes) return
+    updateApiWholeDict('revisionsDict', {
+      [props.workId]: [...apiWholeDict.revisionsDict[props.workId], revisionRes],
+    })
   }
 
   const closeModal = () => {
