@@ -88,11 +88,10 @@ export const Revision = (props: {
   }
 
   const sendFormData = async (file: File) => {
-    const revisionRes = await api.browser.works
-      ._workId(props.workId)
-      .revisions.$post({
-        body: { uploadFile: file, projectId: props.projectId, deskId: props.deskId },
-      })
+    const revisionRes = await api.browser.projects
+      ._projectId(props.projectId)
+      .works._workId(props.workId)
+      .revisions.$post({ body: { uploadFile: file, deskId: props.deskId } })
       .catch(onErr)
 
     if (!revisionRes) return

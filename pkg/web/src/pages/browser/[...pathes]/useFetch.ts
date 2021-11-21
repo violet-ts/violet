@@ -17,7 +17,9 @@ export const useFetch = (
   const projectsRes = useAspidaSWR(api.browser.projects, { enabled })
   const desksRes = useAspidaSWR(api.browser.projects._projectId(projectId ?? ''), { enabled })
   const revisionsRes = useAspidaSWR(
-    api.browser.works._workId(currentProject?.openedTabId ?? '').revisions,
+    api.browser.projects
+      ._projectId(projectId ?? '')
+      .works._workId(currentProject?.openedTabId ?? '').revisions,
     { enabled: !!currentProject?.openedTabId }
   )
 
@@ -25,8 +27,9 @@ export const useFetch = (
     async (revisionsData: { workId: WorkId; revisions: ApiRevision[] }) => {
       const messages = await Promise.all(
         revisionsData.revisions.map((revision) =>
-          api.browser.works
-            ._workId(currentProject?.openedTabId ?? '')
+          api.browser.projects
+            ._projectId(projectId ?? '')
+            .works._workId(currentProject?.openedTabId ?? '')
             .revisions._revisionId(revision.id)
             .messages.$get()
         )
@@ -36,7 +39,7 @@ export const useFetch = (
         messages.reduce((dict, m) => ({ ...dict, [m.revisionId]: m.messages }), {})
       )
     },
-    [apiWholeDict?.messagesDict]
+    [projectId, apiWholeDict?.messagesDict]
   )
 
   useEffect(() => {

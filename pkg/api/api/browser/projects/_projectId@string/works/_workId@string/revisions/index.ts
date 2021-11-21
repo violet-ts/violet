@@ -1,5 +1,5 @@
 import type { ApiRevision } from '@violet/lib/types/api'
-import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
+import type { DeskId, WorkId } from '@violet/lib/types/branded'
 
 export type Methods = {
   get: {
@@ -7,7 +7,7 @@ export type Methods = {
   }
   post: {
     reqFormat: FormData
-    reqBody: { uploadFile: Blob; projectId: ProjectId; deskId: DeskId }
+    reqBody: { uploadFile: Blob; deskId: DeskId }
     resBody: ApiRevision
   }
 }

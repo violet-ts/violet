@@ -53,14 +53,17 @@ export const StreamBar = (props: {
 
   const submitMessage = useCallback(async () => {
     if (!content) return
-    await api.browser.works
-      ._workId(props.workId)
+
+    await api.browser.projects
+      ._projectId(props.projectId)
+      .works._workId(props.workId)
       .revisions._revisionId(props.revision.id)
       .post({ body: { content, userName } })
       .catch(onErr)
 
-    const messagesRes = await api.browser.works
-      ._workId(props.workId)
+    const messagesRes = await api.browser.projects
+      ._projectId(props.projectId)
+      .works._workId(props.workId)
       .revisions._revisionId(props.revision.id)
       .messages.$get()
       .catch(onErr)
@@ -69,7 +72,7 @@ export const StreamBar = (props: {
 
     updateApiWholeDict('messagesDict', messagesRes)
     setContent('')
-  }, [content])
+  }, [props.projectId, content])
 
   useEffect(() => {
     scrollBottomRef?.current?.scrollIntoView()
@@ -78,14 +81,17 @@ export const StreamBar = (props: {
   const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
       if (!content) return
-      await api.browser.works
-        ._workId(props.workId)
+
+      await api.browser.projects
+        ._projectId(props.projectId)
+        .works._workId(props.workId)
         .revisions._revisionId(props.revision.id)
         .messages._messageId(messageId)
         .replies.post({ body: { content, userName } })
 
-      const replyRes = await api.browser.works
-        ._workId(props.workId)
+      const replyRes = await api.browser.projects
+        ._projectId(props.projectId)
+        .works._workId(props.workId)
         .revisions._revisionId(props.revision.id)
         .messages.$get()
         .catch(onErr)
@@ -94,7 +100,7 @@ export const StreamBar = (props: {
 
       updateApiWholeDict('messagesDict', replyRes)
     },
-    [content]
+    [props.projectId, content]
   )
 
   return (
