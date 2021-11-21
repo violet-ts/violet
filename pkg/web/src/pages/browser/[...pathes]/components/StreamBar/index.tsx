@@ -13,7 +13,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
-  height: calc(100vh - 48px);
+  height: 100%;
   border-left: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const StreamBox = styled.div`

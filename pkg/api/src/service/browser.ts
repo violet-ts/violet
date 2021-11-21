@@ -1,8 +1,18 @@
 import { PrismaClient } from '@prisma/client'
+import dotenv from '@violet/api/src/utils/envValues'
 import { generateId } from '@violet/lib/generateId'
 import type { ApiDesk, ApiProject, ApiRevision, ApiWork } from '@violet/lib/types/api'
-import type { DeskId, MessageId, ProjectId, RevisionId, WorkId } from '@violet/lib/types/branded'
+import type {
+  DeskId,
+  MessageId,
+  ProjectId,
+  RevisionId,
+  RevisionPath,
+  WorkId,
+} from '@violet/lib/types/branded'
 
+const s3Endpoint = dotenv.S3_ENDPOINT
+const bucketConverted = dotenv.S3_BUCKET_CONVERTED
 const prisma = new PrismaClient()
 const orderByCreatedAtAsc = { orderBy: { createdAt: 'asc' } } as const
 
@@ -68,27 +78,51 @@ export const getRevisions = async (workId: WorkId) => {
     include: { messages: orderByCreatedAtAsc },
     ...orderByCreatedAtAsc,
   })
+  const ids = await getPojectIdAndDeskId(workId)
 
   const revisions = dbRevision.map(
     (r): ApiRevision => ({
       id: r.revisionId as RevisionId,
+      url: createS3RevisionPath(ids.projectId, ids.deskId, r.revisionId as RevisionId),
       messageIds: r.messages.map((m) => m.messageId as MessageId),
     })
   )
-
   return { workId, revisions }
 }
 
-export const createRevision = async (workId: WorkId): Promise<ApiRevision> => {
+export const createRevision = async (projectId: ProjectId, deskId: DeskId, workId: WorkId) => {
   const revisionId = generateId<RevisionId>()
-  await prisma.revision.create({ data: { revisionId, workId } })
+  const data = await prisma.revision.create({
+    data: {
+      revisionId,
+      workId,
+    },
+  })
 
-  return { id: revisionId, messageIds: [] }
+  const apiRevision: ApiRevision = {
+    id: data.revisionId as RevisionId,
+    url: createS3RevisionPath(projectId, deskId, revisionId),
+    messageIds: [],
+  }
+  return apiRevision
 }
 
-export const getDeskId = async (workId: WorkId) => {
-  const data = await prisma.work.findFirst({ where: { workId }, select: { deskId: true } })
-  if (!data) return
-
-  return data.deskId as DeskId
+export const getPojectIdAndDeskId = async (workId: WorkId) => {
+  const desk = await prisma.work.findFirst({
+    where: { workId },
+    select: { deskId: true },
+  })
+  const project = await prisma.desk.findFirst({
+    where: { deskId: desk?.deskId },
+    select: { projectId: true },
+  })
+  return { projectId: project?.projectId as ProjectId, deskId: desk?.deskId as DeskId }
 }
+
+// TODO：get fileNames from info.json
+export const createS3RevisionPath = (
+  projectId: ProjectId,
+  deskId: DeskId,
+  revisionId: RevisionId
+) =>
+  `${s3Endpoint}/${bucketConverted}/works/converted/${projectId}/${deskId}/revisions/${revisionId}/0.jpg` as RevisionPath

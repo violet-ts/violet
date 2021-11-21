@@ -7,4 +7,4 @@ export type RevisionId = Branded<string, '__revisionId'>
 export type MessageId = Branded<string, '__messageId'>
 export type ResisteredUserId = Branded<string, '__resisteredUserId'>
 export type ReplyId = Branded<string, '__replyId'>
-export type S3SaveWorksPath = Branded<string, '__s3SaveWorksPath'>
+export type RevisionPath = Branded<string, '__RevisionPath'>

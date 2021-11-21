@@ -7,6 +7,7 @@ import type {
   ProjectId,
   ReplyId,
   RevisionId,
+  RevisionPath,
   WorkId,
 } from '@violet/lib/types/branded'
 
@@ -27,6 +28,7 @@ export type BrowserMessage = {
 
 export type BrowserRevision = {
   id: RevisionId
+  url: RevisionPath
   messages: BrowserMessage[]
 }
 

@@ -33,10 +33,10 @@ export const useFetch = (
       )
       updateApiWholeDict(
         'messagesDict',
-        messages.reduce((dict, m) => ({ ...dict, ...m }), {})
+        messages.reduce((dict, m) => ({ ...dict, [m.revisionId]: m.messages }), {})
       )
     },
-    [apiWholeDict.messagesDict]
+    [apiWholeDict?.messagesDict]
   )
 
   useEffect(() => {
@@ -59,14 +59,14 @@ export const useFetch = (
     const desksData = desksRes.data
     if (!desksData) return
 
-    updateApiWholeDict('desksDict', desksData)
+    updateApiWholeDict('desksDict', { [desksData.projectId]: desksData.desks })
   }, [desksRes.data])
 
   useEffect(() => {
     const revisionsData = revisionsRes.data
     if (!revisionsData) return
 
-    updateApiWholeDict('revisionsDict', revisionsData)
+    updateApiWholeDict('revisionsDict', { [revisionsData.workId]: revisionsData.revisions })
     updateMessage(revisionsData)
   }, [revisionsRes.data])
 

@@ -1,4 +1,12 @@
-import type { DeskId, MessageId, ProjectId, ReplyId, RevisionId, WorkId } from './branded'
+import type {
+  DeskId,
+  MessageId,
+  ProjectId,
+  ReplyId,
+  RevisionId,
+  RevisionPath,
+  WorkId,
+} from './branded'
 
 export type ApiProject = {
   id: ProjectId
@@ -20,6 +28,7 @@ export type ApiDesk = {
 
 export type ApiRevision = {
   id: RevisionId
+  url: RevisionPath
   messageIds: MessageId[] | undefined
 }
 
