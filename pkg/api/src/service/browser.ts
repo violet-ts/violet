@@ -75,7 +75,7 @@ export const createWork = async (
 export const getRevisions = async (workId: WorkId) => {
   const dbRevision = await prisma.revision.findMany({
     where: { workId },
-    include: { message: orderByCreatedAtAsc },
+    include: { messages: orderByCreatedAtAsc },
     ...orderByCreatedAtAsc,
   })
   const ids = await getPojectIdAndDeskId(workId)
@@ -84,7 +84,7 @@ export const getRevisions = async (workId: WorkId) => {
     (r): ApiRevision => ({
       id: r.revisionId as RevisionId,
       url: createS3RevisionPath(ids.projectId, ids.deskId, r.revisionId as RevisionId),
-      messageIds: r.message.map((m) => m.messageId as MessageId),
+      messageIds: r.messages.map((m) => m.messageId as MessageId),
     })
   )
   return { workId, revisions }

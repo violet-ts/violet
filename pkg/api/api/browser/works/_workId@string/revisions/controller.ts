@@ -12,7 +12,6 @@ export default defineController(() => ({
   },
   post: async ({ params, body }) => {
     const revision = await createRevision(body.projectId, body.deskId, params.workId as WorkId)
-
     const data = await sendNewWork({
       uploadFile: body.uploadFile,
       path: createS3SaveRevisionPath({
