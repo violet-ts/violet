@@ -46,7 +46,7 @@ model Revision {
   work        Work     @relation(fields: [workId],references: [workId])
   workId      String
   editions    Edition[]
-  message     Message[]
+  messages     Message[]
 }
 
 model Edition {
@@ -63,7 +63,7 @@ model Message {
   userName    String
   revision    Revision @relation(fields: [revisionId], references:[revisionId])
   revisionId  String
-  reply       Reply[]
+  replies       Reply[]
 }
 
 model Reply {
