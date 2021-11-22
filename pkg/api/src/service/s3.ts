@@ -59,7 +59,7 @@ export const sendNewProjectIcon = depend(
   async (
     { getS3Client },
     props: {
-      imageFile: MultipartFile | null
+      imageFile: MultipartFile
       path: S3ProjectIconPath
     }
   ) => {

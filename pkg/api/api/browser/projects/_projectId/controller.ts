@@ -24,13 +24,15 @@ export default defineController(() => ({
       body.iconExt
     )
     if (!project) return { status: 404 }
-    const icon = await sendNewProjectIcon({
-      imageFile: body.imageFile,
-      path: createS3ProjectIconPath({
-        projectId: params.projectId as ProjectId,
-        iconExt: body.iconExt,
-      }),
-    })
-    return icon?.httpStatusCode === 200 ? { status: 201, body: project } : { status: 400 }
+    if (body.imageFile) {
+      await sendNewProjectIcon({
+        imageFile: body.imageFile,
+        path: createS3ProjectIconPath({
+          projectId: params.projectId as ProjectId,
+          iconExt: body.iconExt,
+        }),
+      })
+    }
+    return project ? { status: 201, body: project } : { status: 400 }
   },
 }))

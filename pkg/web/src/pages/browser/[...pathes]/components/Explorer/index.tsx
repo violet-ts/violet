@@ -3,6 +3,7 @@ import { ProjectId } from '@violet/lib/types/branded'
 import { ConfigIcon } from '@violet/web/src/components/atoms/ConfigIcon'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
+import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import type {
   BrowserDesk,
@@ -14,7 +15,7 @@ import type {
 } from '@violet/web/src/types/browser'
 import { getWorkFullName } from '@violet/web/src/utils'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
-import React, { useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { IconUpload } from '../IconUpload'
 import { ProjectNameUpdate } from '../ProjectNameUpdate'
@@ -169,6 +170,8 @@ export const Explorer = ({
   const [openConfiguration, setOpenConfiguration] = useState(false)
   const [iconImageFile, setIconImageFile] = useState<File | null>(null)
   const [newProjectName, setNewProjectName] = useState('')
+
+  const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
   const { api, onErr } = useApi()
 
   const closeModal = () => {
@@ -181,19 +184,32 @@ export const Explorer = ({
 
   const updateProject = async (projectId: ProjectId) => {
     if (!newProjectName && !iconImageFile) return
-    const name = newProjectName ? newProjectName : project.name
+    const name = await (newProjectName ? newProjectName : project.name)
     const iconExt = iconImageFile?.name.substring(iconImageFile.name.indexOf('.') + 1)
-    const projectData = await api.browser.projects
+    await api.browser.projects
       ._projectId(projectId)
       .post({
         body: {
-          imageFile: iconImageFile as File,
-          iconExt: iconExt,
           project: { name },
+          iconExt: iconExt,
+          imageFile: iconImageFile as File,
         },
       })
       .catch(onErr)
-    console.log(projectData)
+    const projectData = await api.browser.projects
+      ._projectId(projectId)
+      .put({ body: { project: { name } } })
+      .catch(onErr)
+    if (!projectData) return
+
+    const projectsData = apiWholeData.projects.map((d) =>
+      d.id === projectId ? projectData.body : d
+    )
+    const projectsStatus = projects.map((d) =>
+      d.id === projectId ? { ...d, name: projectData.body.name } : d
+    )
+    updateApiWholeData('projects', projectsData)
+    updateProjects(projectsStatus)
     setOpenConfiguration(false)
   }
 

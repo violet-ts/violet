@@ -6,7 +6,7 @@ import type { ChangeEvent, FormEvent } from 'react'
 import { Dispatch, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-const InputFormProject = styled.div`
+const InputFormProject = styled.form`
   text-align: left;
 `
 
@@ -54,7 +54,7 @@ export const ProjectNameUpdate = (props: {
     props.confirmName()
   }
   return (
-    <InputFormProject>
+    <InputFormProject onSubmit={updateName}>
       <input ref={inputElement} type="text" onChange={inputLabel} />
       {isUpdating && <Loading />}
     </InputFormProject>
