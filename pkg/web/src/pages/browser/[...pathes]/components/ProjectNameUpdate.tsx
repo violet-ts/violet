@@ -2,8 +2,8 @@ import type { ProjectId } from '@violet/lib/types/branded'
 import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
-import type { ChangeEvent, FormEvent } from 'react'
-import { Dispatch, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import type { ChangeEvent, Dispatch, FormEvent } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const InputFormProject = styled.form`
@@ -30,7 +30,7 @@ export const ProjectNameUpdate = (props: {
   const updateProjectName = async (name: string) => {
     const projectData = await api.browser.projects
       ._projectId(props.projectId)
-      .put({ body: { project: { name } } })
+      .put({ body: { projectName: name } })
       .catch(onErr)
     if (!projectData) return
 

@@ -1,5 +1,5 @@
 import type { ApiDesk } from '@violet/lib/types/api'
-import { ProjectId } from '@violet/lib/types/branded'
+import type { ProjectId } from '@violet/lib/types/branded'
 import { ConfigIcon } from '@violet/web/src/components/atoms/ConfigIcon'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
@@ -170,7 +170,6 @@ export const Explorer = ({
   const [openConfiguration, setOpenConfiguration] = useState(false)
   const [iconImageFile, setIconImageFile] = useState<File | null>(null)
   const [newProjectName, setNewProjectName] = useState('')
-
   const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
   const { api, onErr } = useApi()
 
@@ -184,21 +183,14 @@ export const Explorer = ({
 
   const updateProject = async (projectId: ProjectId) => {
     if (!newProjectName && !iconImageFile) return
-    const name = await (newProjectName ? newProjectName : project.name)
+
+    const projectName = newProjectName ? newProjectName : project.name
     const iconExt = iconImageFile?.name.substring(iconImageFile.name.indexOf('.') + 1)
-    await api.browser.projects
-      ._projectId(projectId)
-      .post({
-        body: {
-          project: { name },
-          iconExt: iconExt,
-          imageFile: iconImageFile as File,
-        },
-      })
-      .catch(onErr)
     const projectData = await api.browser.projects
       ._projectId(projectId)
-      .put({ body: { project: { name } } })
+      .put({
+        body: { projectName, iconExt, imageFile: iconImageFile as File },
+      })
       .catch(onErr)
     if (!projectData) return
 

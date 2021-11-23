@@ -147,5 +147,7 @@ export const getDeskId = async (workId: WorkId) => {
   return data.deskId as DeskId
 }
 
-export const createS3ProjectIconPath = (projectId: ProjectId, iconExt?: string | null) =>
-  `${s3Endpoint}/${bucketOriginal}/icon/${projectId}/${projectId}.${iconExt}` as S3ProjectIconPath
+export const createS3ProjectIconPath = (projectId: ProjectId, iconExt?: string | null) => {
+  if (!iconExt) return
+  return `${s3Endpoint}/${bucketOriginal}/icon/${projectId}/${projectId}.${iconExt}` as S3ProjectIconPath
+}

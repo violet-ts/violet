@@ -6,12 +6,8 @@ export type Methods = {
     resBody: { projectId: ProjectId; desks: ApiDesk[] }
   }
   put: {
-    reqBody: { project: Pick<ApiProject, 'name'>; iconExt?: string | null }
-    resBody: ApiProject
-  }
-  post: {
     reqFormat: FormData
-    reqBody: { project: Pick<ApiProject, 'name'>; iconExt?: string | null; imageFile: Blob }
+    reqBody: { projectName: string; iconExt?: string | null; imageFile?: Blob }
     resBody: ApiProject
   }
 }

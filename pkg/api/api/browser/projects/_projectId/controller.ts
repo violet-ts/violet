@@ -12,27 +12,18 @@ export default defineController(() => ({
   put: async ({ params, body }) => {
     const project = await updateProject(
       params.projectId as ProjectId,
-      body.project.name,
+      body.projectName,
       body.iconExt
     )
-    return project ? { status: 200, body: project } : { status: 404 }
-  },
-  post: async ({ params, body }) => {
-    const project = await updateProject(
-      params.projectId as ProjectId,
-      body.project.name,
-      body.iconExt
-    )
-    if (!project) return { status: 404 }
     if (body.imageFile) {
       await sendNewProjectIcon({
         imageFile: body.imageFile,
-        path: createS3ProjectIconPath({
+        path: await createS3ProjectIconPath({
           projectId: params.projectId as ProjectId,
           iconExt: body.iconExt,
         }),
       })
     }
-    return project ? { status: 201, body: project } : { status: 400 }
+    return project ? { status: 200, body: project } : { status: 404 }
   },
 }))

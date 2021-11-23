@@ -1,11 +1,11 @@
 import { acceptImageExtensions } from '@violet/def/constants'
-import { ApiProject } from '@violet/lib/types/api'
+import type { ApiProject } from '@violet/lib/types/api'
 import { ImageIcon } from '@violet/web/src/components/atoms/ImageIcon'
 import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
-import type { ChangeEvent } from 'react'
-import { Dispatch, useRef, useState } from 'react'
+import type { ChangeEvent, Dispatch } from 'react'
+import { useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
