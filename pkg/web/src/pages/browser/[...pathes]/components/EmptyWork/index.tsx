@@ -84,14 +84,16 @@ export const EmptyWork = (props: { projectId: ProjectId; deskId: DeskId; workId:
     setDragging(false)
     if (!file) return
 
-    await api.browser.works
-      ._workId(props.workId)
-      .revisions.$post({
-        body: { uploadFile: file[0], projectId: props.projectId, deskId: props.deskId },
-      })
+    await api.browser.projects
+      ._projectId(props.projectId)
+      .works._workId(props.workId)
+      .revisions.$post({ body: { uploadFile: file[0], deskId: props.deskId } })
       .catch(onErr)
 
-    const revisionRes = await api.browser.works._workId(props.workId).revisions.$get()
+    const revisionRes = await api.browser.projects
+      ._projectId(props.projectId)
+      .works._workId(props.workId)
+      .revisions.$get()
     updateApiWholeDict('revisionsDict', revisionRes)
   }
 

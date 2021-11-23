@@ -1,7 +1,7 @@
 import { createRevision, getRevisions } from '@violet/api/src/service/browser'
 import { sendNewWork } from '@violet/api/src/service/s3'
 import { createS3SaveRevisionPath } from '@violet/api/src/utils/s3'
-import type { WorkId } from '@violet/lib/types/branded'
+import type { ProjectId, WorkId } from '@violet/lib/types/branded'
 import { defineController } from './$relay'
 
 export default defineController(() => ({
@@ -11,11 +11,15 @@ export default defineController(() => ({
     return { status: 200, body: revisions }
   },
   post: async ({ params, body }) => {
-    const revision = await createRevision(body.projectId, body.deskId, params.workId as WorkId)
+    const revision = await createRevision(
+      params.projectId as ProjectId,
+      body.deskId,
+      params.workId as WorkId
+    )
     const data = await sendNewWork({
       uploadFile: body.uploadFile,
       path: createS3SaveRevisionPath({
-        projectId: body.projectId,
+        projectId: params.projectId as ProjectId,
         deskId: body.deskId,
         revisionId: revision.id,
         filename: body.uploadFile.filename,

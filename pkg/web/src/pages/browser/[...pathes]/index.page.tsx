@@ -26,7 +26,7 @@ const WorksView = styled.div`
 const WorksHeader = styled.div`
   width: 100%;
 `
-const WroksMain = styled.div`
+const WorksMain = styled.div`
   height: ${mainColumnHeight};
   overflow-y: auto;
 `
@@ -63,14 +63,14 @@ const ProjectPage = () => {
               <WorksHeader>
                 <TabBar project={currentProject} projectApiData={projectApiData} />
               </WorksHeader>
-              <WroksMain>
+              <WorksMain>
                 <MainColumn
                   projectId={currentProject.id}
                   deskId={getDesk(projectApiData.desks, currentProject.openedTabId)}
                   workId={currentProject.openedTabId}
                   revisions={browserRevisionData}
                 />
-              </WroksMain>
+              </WorksMain>
             </>
           ) : (
             <>
