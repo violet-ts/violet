@@ -10,8 +10,7 @@ export const useFetch = (
   projectId: ProjectId | undefined,
   currentProject: BrowserProject | undefined
 ) => {
-  const { apiWholeDict, updateProjects, updateApiProjects, updateApiWholeDict } =
-    useContext(BrowserContext)
+  const { updateProjects, updateApiProjects, updateApiWholeDict } = useContext(BrowserContext)
   const { api } = useApi()
   const enabled = !!projectId
   const projectsRes = useAspidaSWR(api.browser.projects, { enabled })
@@ -39,7 +38,7 @@ export const useFetch = (
         messages.reduce((dict, m) => ({ ...dict, [m.revisionId]: m.messages }), {})
       )
     },
-    [projectId, apiWholeDict?.messagesDict]
+    [api.browser.projects, currentProject?.openedTabId, projectId, updateApiWholeDict]
   )
 
   useEffect(() => {
@@ -56,26 +55,26 @@ export const useFetch = (
         selectedFullPath: d.id,
       }))
     )
-  }, [projectsRes.data])
+  }, [projectsRes.data, updateApiProjects, updateProjects])
 
   useEffect(() => {
     const desksData = desksRes.data
     if (!desksData) return
 
     updateApiWholeDict('desksDict', { [desksData.projectId]: desksData.desks })
-  }, [desksRes.data])
+  }, [desksRes.data, updateApiWholeDict])
 
   useEffect(() => {
     const revisionsData = revisionsRes.data
     if (!revisionsData) return
 
     updateApiWholeDict('revisionsDict', { [revisionsData.workId]: revisionsData.revisions })
-    updateMessage(revisionsData)
-  }, [revisionsRes.data])
+    void updateMessage(revisionsData)
+  }, [revisionsRes.data, updateApiWholeDict, updateMessage])
 
   return {
     error: [projectsRes.error, desksRes.error, revisionsRes.error, revisionsRes.error].find(
       Boolean
-    ),
+    ) as unknown,
   }
 }

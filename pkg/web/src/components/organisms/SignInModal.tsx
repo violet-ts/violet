@@ -44,7 +44,7 @@ export const SignInModal: React.FC<Props> = ({ open, onAuthCancel, onAuthSuccess
         signInSuccessWithAuthResult: () => {
           const newUser = auth?.currentUser
           if (!newUser) throw new Error('Failed to get current user.')
-          newUser.getIdToken().then(async (idToken) => {
+          void newUser.getIdToken().then(async (idToken) => {
             try {
               onAuthSuccess?.()
             } finally {

@@ -72,10 +72,18 @@ export const StreamBar = (props: {
 
     updateApiWholeDict('messagesDict', messagesRes)
     setContent('')
-  }, [props.projectId, content])
+  }, [
+    api.browser.projects,
+    content,
+    onErr,
+    props.projectId,
+    props.revision.id,
+    props.workId,
+    updateApiWholeDict,
+  ])
 
   useEffect(() => {
-    scrollBottomRef?.current?.scrollIntoView()
+    scrollBottomRef.current?.scrollIntoView()
   }, [props.revision.messages.length])
 
   const replyMessage = useCallback(
@@ -95,12 +103,18 @@ export const StreamBar = (props: {
         .revisions._revisionId(props.revision.id)
         .messages.$get()
         .catch(onErr)
-
       if (!replyRes) return
 
       updateApiWholeDict('messagesDict', replyRes)
     },
-    [props.projectId, content]
+    [
+      api.browser.projects,
+      onErr,
+      props.projectId,
+      props.revision.id,
+      props.workId,
+      updateApiWholeDict,
+    ]
   )
 
   return (

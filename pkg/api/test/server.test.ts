@@ -28,10 +28,8 @@ test('dependency injection into controller', async () => {
   const message = 'test message'
   const res = await injectedController.get({
     query: { limit, message },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     logger: null as any,
     cookies: {},
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     env: {} as any,
     unsignCookie: () => {
       throw new Error('not implemented')

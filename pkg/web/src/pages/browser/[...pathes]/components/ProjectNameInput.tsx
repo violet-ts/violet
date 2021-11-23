@@ -38,7 +38,7 @@ export const ProjectNameInput = (props: { onComplete?: () => void }) => {
         tabs: [],
       },
     ])
-    push(`${asPath}/${newProject.body.id}`)
+    void push(`${asPath}/${newProject.body.id}`)
   }
   const sendProjectName = async (e: FormEvent) => {
     e.preventDefault()

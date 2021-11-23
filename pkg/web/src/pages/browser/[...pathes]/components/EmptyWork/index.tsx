@@ -75,7 +75,7 @@ export const EmptyWork = (props: { projectId: ProjectId; deskId: DeskId; workId:
     if (e.target.files?.length === 1) {
       const targetFileType = e.target.files[0].type
       fileTypes.some((f) => f.type === targetFileType)
-        ? sendFormData(e.target.files)
+        ? void sendFormData(e.target.files)
         : setOpenAlert(true)
     }
     e.target.value = ''

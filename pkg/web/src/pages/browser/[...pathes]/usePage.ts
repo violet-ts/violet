@@ -82,7 +82,7 @@ export const usePage = () => {
   )
   const { error } = useFetch(projectId, currentProject)
   const projectApiData = useMemo((): ProjectApiData | undefined => {
-    if (!currentProject) return
+    if (!currentProject) return undefined
 
     const desks = apiWholeDict.desksDict[currentProject.id]
     const revisions =
@@ -117,8 +117,8 @@ export const usePage = () => {
       openedFullPathDict: getOpenedFullPathDict(currentProject, selectedFullPath, !!work),
     })
 
-    if (forceToggle) replace(asPath.split('#')[0])
-  }, [currentProject, deskName, path, asPath, projectApiData])
+    if (forceToggle) void replace(asPath.split('#')[0])
+  }, [currentProject, deskName, path, asPath, projectApiData, updateProject, replace])
 
   return {
     error,

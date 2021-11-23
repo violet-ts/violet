@@ -122,7 +122,7 @@ const Home = () => {
         onAuthCancel={() => setIsSignInModalOpen(false)}
         onAuthSuccess={() => {
           setIsSignInModalOpen(false)
-          mutate()
+          void mutate()
         }}
       />
 
