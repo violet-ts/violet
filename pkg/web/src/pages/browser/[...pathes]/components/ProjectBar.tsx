@@ -2,11 +2,12 @@ import type { ProjectId } from '@violet/lib/types/branded'
 import { PlusIcon } from '@violet/web/src/components/atoms/PlusIcon'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
+import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserProject } from '@violet/web/src/types/browser'
 import { pagesPath } from '@violet/web/src/utils/$path'
 import { alphaLevel, colors, fontSizes } from '@violet/web/src/utils/constants'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { ProjectNameInput } from './ProjectNameInput'
 
@@ -68,15 +69,35 @@ const Icon = styled.div`
 const Message = styled.div`
   white-space: nowrap;
 `
+const StyleIconImage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`
+
+const IconImage = styled.img`
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+`
 
 export const ProjectBar = (props: { projects: BrowserProject[]; projectId: ProjectId }) => {
   const [isClickAddProject, setIsClickAddProject] = useState(false)
+  const { apiWholeData } = useContext(BrowserContext)
+
   const addNewProject = () => {
     setIsClickAddProject(true)
   }
 
   const closeModal = () => {
     setIsClickAddProject(false)
+  }
+
+  const getIconImageUrl = (projectId: ProjectId) => {
+    const iconUrl = apiWholeData.projects.find((d) => d.id === projectId)?.iconUrl
+    if (!iconUrl) return
+    return iconUrl
   }
 
   return (
@@ -88,7 +109,13 @@ export const ProjectBar = (props: { projects: BrowserProject[]; projectId: Proje
           passHref
         >
           <IconWrapper title={p.name} selected={p.id === props.projectId}>
-            <Icon>{p.name.slice(0, 2)}</Icon>
+            {getIconImageUrl(p.id) ? (
+              <StyleIconImage>
+                <IconImage src={getIconImageUrl(p.id)} />
+              </StyleIconImage>
+            ) : (
+              <Icon>{p.name.slice(0, 2)}</Icon>
+            )}
           </IconWrapper>
         </Link>
       ))}

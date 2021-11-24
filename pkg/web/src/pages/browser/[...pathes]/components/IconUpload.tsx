@@ -49,8 +49,10 @@ const IconWrapper = styled.div`
 `
 
 const IconImage = styled.img`
-  width: 30;
-  height: 30;
+  margin: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
 `
 
 export const IconUpload = (props: {

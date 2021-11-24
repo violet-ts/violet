@@ -21,7 +21,7 @@ export const getProjects = async () => {
   const projects = dbProjects.map<ApiProject>((p) => ({
     id: p.projectId as ProjectId,
     name: p.projectName,
-    iconUrl: createS3ProjectIconPath(p.projectId as ProjectId, `${p.projectId}.${p.iconExt}`),
+    iconUrl: createS3ProjectIconPath(p.projectId as ProjectId, p.iconExt),
   }))
   return projects
 }
