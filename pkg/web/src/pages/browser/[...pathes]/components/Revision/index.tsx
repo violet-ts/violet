@@ -1,11 +1,12 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
-import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
+import type { DeskId, ProjectId, RevisionPath, WorkId } from '@violet/lib/types/branded'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
+import type { InfoJson } from '@violet/web/src/types/files'
 import { colors, fontSizes, mainColumnHeight } from '@violet/web/src/utils/constants'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -31,6 +32,8 @@ const SecondaryButton = styled.button`
 `
 
 const DisplayWorksFrame = styled.div`
+  display: flex;
+  flex-direction: column;
   height: ${mainColumnHeight};
   min-height: 100%;
   padding: 48px;
@@ -39,8 +42,8 @@ const DisplayWorksFrame = styled.div`
 `
 
 const DisplayWorksViewer = styled.img`
-  width: 100%;
   height: 100%;
+  vertical-align: middle;
 `
 
 const Dropper = styled.input`
@@ -72,8 +75,24 @@ export const Revision = (props: {
   const [openAlert, setOpenAlert] = useState(false)
   const { api, onErr } = useApi()
   const { apiWholeDict, updateApiWholeDict } = useContext(BrowserContext)
+  const [workPath, setWorkPath] = useState<RevisionPath[]>([props.revision.url])
 
-  const workUrl = props.revision.url
+  const revisionpath = props.revision.url.substring(0, props.revision.url.lastIndexOf('/'))
+
+  useEffect(() => {
+    async function fetchInfoJson() {
+      setWorkPath(
+        await fetch(props.revision.url).then(async (res) => {
+          const json = JSON.stringify(await res?.json())
+          const infoJson = JSON.parse(json) as InfoJson
+          return infoJson?.fallbackImageExts?.map(
+            (j, i) => `${revisionpath}/${i}.${j}` as RevisionPath
+          )
+        })
+      )
+    }
+    void fetchInfoJson()
+  }, [props.revision.url, revisionpath])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -118,7 +137,7 @@ export const Revision = (props: {
       </CardModal>
       {isFile && <Dropper type="file" accept={acceptExtensions} />}
       <DisplayWorksFrame>
-        <DisplayWorksViewer src={workUrl} />
+        {workPath && workPath.map((p, i) => <DisplayWorksViewer key={i} src={p} />)}
       </DisplayWorksFrame>
     </Container>
   )
