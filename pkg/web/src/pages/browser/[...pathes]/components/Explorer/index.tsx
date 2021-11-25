@@ -1,10 +1,6 @@
 import type { ApiDesk } from '@violet/lib/types/api'
-import type { ProjectId } from '@violet/lib/types/branded'
 import { ConfigIcon } from '@violet/web/src/components/atoms/ConfigIcon'
-import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
-import { BrowserContext } from '@violet/web/src/contexts/Browser'
-import { useApi } from '@violet/web/src/hooks'
 import type {
   BrowserDesk,
   BrowserDir,
@@ -14,11 +10,10 @@ import type {
   ProjectApiData,
 } from '@violet/web/src/types/browser'
 import { getWorkFullName } from '@violet/web/src/utils'
-import { colors, fontSizes } from '@violet/web/src/utils/constants'
-import React, { useContext, useMemo, useState } from 'react'
+import { fontSizes } from '@violet/web/src/utils/constants'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { IconUpload } from '../IconUpload'
-import { ProjectNameUpdate } from '../ProjectNameUpdate'
+import { ProjectConfig } from '../ProjectConfig'
 import { CellName } from './CellName'
 import { DirectoryCell } from './DirectoryCell'
 import { WorkCell } from './WorkCell'
@@ -28,31 +23,6 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
   user-select: none;
-`
-
-const Column = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-
-const SecondaryButton = styled.button`
-  padding: 0.3em;
-  font-size: ${fontSizes.large};
-  color: ${colors.white};
-  cursor: pointer;
-  background-color: ${colors.gray};
-  border: none;
-  border-radius: 16px;
-`
-
-const UpdateButton = styled.button`
-  padding: 0.3em;
-  font-size: ${fontSizes.large};
-  color: ${colors.white};
-  cursor: pointer;
-  background-color: ${colors.green};
-  border: none;
-  border-radius: 16px;
 `
 
 const ProjectName = styled.div`
@@ -80,10 +50,6 @@ const StyleIcon = styled.i`
   &:hover {
     opacity: 1;
   }
-`
-
-const Message = styled.div`
-  white-space: nowrap;
 `
 
 type Params = {
@@ -168,41 +134,12 @@ export const Explorer = ({
     [projectApiData.desks, project.openedFullPathDict, project.selectedFullPath]
   )
   const [openConfiguration, setOpenConfiguration] = useState(false)
-  const [iconImageFile, setIconImageFile] = useState<File | null>(null)
-  const [newProjectName, setNewProjectName] = useState('')
-  const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
-  const { api, onErr } = useApi()
-
   const closeModal = () => {
     setOpenConfiguration(false)
   }
 
   const openConfigModal = () => {
     setOpenConfiguration(true)
-  }
-
-  const updateProject = async (projectId: ProjectId) => {
-    if (!newProjectName && !iconImageFile) return
-
-    const projectName = newProjectName ? newProjectName : project.name
-    const iconExt = iconImageFile?.name.substring(iconImageFile.name.indexOf('.') + 1)
-    const projectData = await api.browser.projects
-      ._projectId(projectId)
-      .put({
-        body: { projectName, iconExt, imageFile: iconImageFile as File },
-      })
-      .catch(onErr)
-    if (!projectData) return
-
-    const projectsData = apiWholeData.projects.map((d) =>
-      d.id === projectId ? projectData.body : d
-    )
-    const projectsStatus = projects.map((d) =>
-      d.id === projectId ? { ...d, name: projectData.body.name } : d
-    )
-    updateApiWholeData('projects', projectsData)
-    updateProjects(projectsStatus)
-    setOpenConfiguration(false)
   }
 
   return (
@@ -214,24 +151,7 @@ export const Explorer = ({
         </StyleIcon>
       </ProjectArea>
       <CardModal onClose={closeModal} open={openConfiguration}>
-        <Spacer axis="y" size={20} />
-        <Message>Project icon</Message>
-        <IconUpload projectName={projectApiData.name} setIconImageFile={setIconImageFile} />
-        <Spacer axis="y" size={20} />
-        <Message>Project name</Message>
-        <ProjectNameUpdate
-          confirmName={closeModal}
-          projectId={projectApiData.projectId}
-          setNewProjectName={setNewProjectName}
-        />
-        <Spacer axis="y" size={10} />
-        <Column>
-          <UpdateButton onClick={() => updateProject(projectApiData.projectId)}>
-            Update
-          </UpdateButton>
-          <Spacer axis="x" size={50} />
-          <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
-        </Column>
+        <ProjectConfig projectApiData={projectApiData} project={project} onComplete={closeModal} />
       </CardModal>
       <TreeViewer>
         {nestedDesks.map((desk) => (

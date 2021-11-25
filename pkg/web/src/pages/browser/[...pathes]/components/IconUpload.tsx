@@ -10,8 +10,8 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   display: flex;
-  justify-content: left;
   align-items: center;
+  justify-content: left;
 `
 
 const StyleInput = styled.input`
@@ -49,9 +49,9 @@ const IconWrapper = styled.div`
 `
 
 const IconImage = styled.img`
-  margin: 4px;
   width: 28px;
   height: 28px;
+  margin: 4px;
   border-radius: 6px;
 `
 
@@ -69,8 +69,8 @@ export const IconUpload = (props: {
     const imageFile = e.target.files[0]
     const reader = new FileReader()
     reader.readAsDataURL(imageFile)
-    reader.onload = () => {
-      setIconImageUrl(reader.result as string)
+    reader.onload = async () => {
+      await setIconImageUrl(reader.result as string)
     }
     props.setIconImageFile(imageFile)
     setIsLoading(false)
