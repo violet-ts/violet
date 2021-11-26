@@ -21,7 +21,7 @@ const Container = styled.div`
   width: 100%;
 `
 const WorksView = styled.div`
-  width: 100%;
+  flex: 1;
 `
 const WorksHeader = styled.div`
   width: 100%;
@@ -42,7 +42,6 @@ const ProjectPage = () => {
       projectApiData?.revisions?.map<BrowserRevision>((p) => ({
         id: p.id,
         url: p.url,
-        editions: [],
         messages: projectApiData.revisions?.filter((r) => r.id === p.id)[0].messages ?? [],
       })) ?? [],
     [projectApiData]

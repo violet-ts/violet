@@ -1,6 +1,6 @@
 import useAspidaSWR from '@aspida/swr'
 import type { ApiRevision } from '@violet/lib/types/api'
-import type { ProjectId, WorkId } from '@violet/lib/types/branded'
+import type { ProjectId } from '@violet/lib/types/branded'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
 import type { BrowserProject } from '@violet/web/src/types/browser'
@@ -23,9 +23,9 @@ export const useFetch = (
   )
 
   const updateMessage = useCallback(
-    async (revisionsData: { workId: WorkId; revisions: ApiRevision[] }) => {
+    async (revisions: ApiRevision[]) => {
       const messages = await Promise.all(
-        revisionsData.revisions.map((revision) =>
+        revisions.map((revision) =>
           api.browser.projects
             ._projectId(projectId ?? '')
             .works._workId(currentProject?.openedTabId ?? '')
@@ -69,7 +69,7 @@ export const useFetch = (
     if (!revisionsData) return
 
     updateApiWholeDict('revisionsDict', { [revisionsData.workId]: revisionsData.revisions })
-    void updateMessage(revisionsData)
+    void updateMessage(revisionsData.revisions)
   }, [revisionsRes.data, updateApiWholeDict, updateMessage])
 
   return {

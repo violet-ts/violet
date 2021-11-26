@@ -16,6 +16,9 @@ const bucketConverted = dotenv.S3_BUCKET_CONVERTED
 const prisma = new PrismaClient()
 const orderByCreatedAtAsc = { orderBy: { createdAt: 'asc' } } as const
 
+const infoJsonPath = (projectId: ProjectId, deskId: DeskId, revisionId: RevisionId) =>
+  `${s3Endpoint}/${bucketConverted}/works/converted/${projectId}/${deskId}/revisions/${revisionId}/info.json` as RevisionPath
+
 export const getProjects = async () => {
   const dbProjects = await prisma.project.findMany(orderByCreatedAtAsc)
 
@@ -83,7 +86,7 @@ export const getRevisions = async (workId: WorkId) => {
   const revisions = dbRevision.map(
     (r): ApiRevision => ({
       id: r.revisionId as RevisionId,
-      url: createS3RevisionPath(ids.projectId, ids.deskId, r.revisionId as RevisionId),
+      url: infoJsonPath(ids.projectId, ids.deskId, r.revisionId as RevisionId),
       messageIds: r.messages.map((m) => m.messageId as MessageId),
     })
   )
@@ -101,7 +104,7 @@ export const createRevision = async (projectId: ProjectId, deskId: DeskId, workI
 
   const apiRevision: ApiRevision = {
     id: data.revisionId as RevisionId,
-    url: createS3RevisionPath(projectId, deskId, revisionId),
+    url: infoJsonPath(projectId, deskId, data.revisionId as RevisionId),
     messageIds: [],
   }
   return apiRevision
@@ -118,11 +121,3 @@ const getPojectIdAndDeskId = async (workId: WorkId) => {
   })
   return { projectId: project?.projectId as ProjectId, deskId: desk?.deskId as DeskId }
 }
-
-// TODO：get fileNames from info.json
-export const createS3RevisionPath = (
-  projectId: ProjectId,
-  deskId: DeskId,
-  revisionId: RevisionId
-) =>
-  `${s3Endpoint}/${bucketConverted}/works/converted/${projectId}/${deskId}/revisions/${revisionId}/0.jpg` as RevisionPath
