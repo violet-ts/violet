@@ -5,25 +5,24 @@ import type { ProjectId, WorkId } from '@violet/lib/types/branded'
 import { defineController } from './$relay'
 
 export default defineController(() => ({
-  get: async ({ params }) => {
-    const revisions = await getRevisions(params.workId as WorkId)
+  get: async ({ params, query }) => {
+    const revisions = await getRevisions(
+      params.projectId as ProjectId,
+      params.workId as WorkId,
+      query
+    )
 
     return { status: 200, body: revisions }
   },
   post: async ({ params, body }) => {
-    const revision = await createRevision(
-      params.projectId as ProjectId,
-      body.deskId,
-      params.workId as WorkId
-    )
+    const revision = await createRevision(params.projectId as ProjectId, params.workId as WorkId)
     const data = await sendNewWork({
       uploadFile: body.uploadFile,
-      path: createS3SaveRevisionPath({
-        projectId: params.projectId as ProjectId,
-        deskId: body.deskId,
-        revisionId: revision.id,
-        filename: body.uploadFile.filename,
-      }),
+      path: createS3SaveRevisionPath(
+        params.projectId as ProjectId,
+        revision.id,
+        body.uploadFile.filename
+      ),
     })
 
     return data.httpStatusCode === 200 ? { status: 201, body: revision } : { status: 400 }

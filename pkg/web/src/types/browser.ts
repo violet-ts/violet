@@ -1,80 +1,69 @@
 // Next.jsのskipLibCheckの影響で@violet/web配下で拡張子がd.tsだと以下のような自身の型エラーに気付けない
 // export type BrokenType = { a: NotExistsType }
-import type { ApiDesk, ApiMessage, ApiProject, ApiRevision, ApiWork } from '@violet/lib/types/api'
 import type {
-  DeskId,
-  MessageId,
-  ProjectId,
-  ReplyId,
-  RevisionId,
-  RevisionPath,
-  WorkId,
-} from '@violet/lib/types/branded'
+  ApiChildDir,
+  ApiMessage,
+  ApiProject,
+  ApiReply,
+  ApiRevision,
+  ApiRootDir,
+  ApiWork,
+} from '@violet/lib/types/api'
+import type { DirId, MessageId, ProjectId, RevisionId, WorkId } from '@violet/lib/types/branded'
 
-export type BrowserReply = {
-  id: ReplyId
-  content: string
-  createdAt: number
-  userName: string
+export type BrowserProject = ApiProject
+
+export type BrowserRootDir = { projectId: ProjectId; works: BrowserWork[] } & Omit<
+  ApiRootDir,
+  'works'
+>
+
+export type BrowserChildDir = { projectId: ProjectId; works: BrowserWork[] } & Omit<
+  ApiChildDir,
+  'works'
+>
+
+export type BrowserDir = BrowserRootDir | BrowserChildDir
+
+export type BrowserWork = { dirId: DirId } & ApiWork
+
+export type BrowserRevision = { workId: WorkId } & ApiRevision
+
+export type BrowserMessage = { revisionId: RevisionId; replies: BrowserReply[] } & ApiMessage
+
+export type BrowserReply = { messageId: MessageId } & ApiReply
+
+export type BrowserWholeDict = {
+  dirsForProjectId: Record<ProjectId, BrowserDir[]>
+  revisionsForWorkId: Record<WorkId, BrowserRevision[] | undefined>
+  messagesForRevisionId: Record<RevisionId, BrowserMessage[] | undefined>
 }
 
-export type BrowserMessage = {
-  id: MessageId
-  content: string
-  createdAt: number
-  userName: string
-  replies: BrowserReply[]
+export type Tab = { type: 'work'; id: WorkId } | { type: 'dir'; id: DirId }
+
+export type OperationData = {
+  tabs: Tab[]
+  activeTab: Tab | undefined
+  openedDirDict: Record<DirId, boolean | undefined>
 }
 
-export type BrowserRevision = {
-  id: RevisionId
-  url: RevisionPath
-  messages: BrowserMessage[]
+export type CurrentDirsAndWork = {
+  dirs: [BrowserRootDir, ...BrowserChildDir[]]
+  work: BrowserWork | undefined
 }
 
-export type BrowserWork = {
-  type: 'work'
-  fullPath: string
-  selected: boolean
-} & ApiWork
+export type DirsDict = Record<DirId, BrowserDir>
 
-export type BrowserDir = {
-  type: 'dir'
-  name: string
-  fullPath: string
-  selected: boolean
-  opened: boolean | undefined
-  children: (BrowserDir | BrowserWork)[]
-}
+export type DirsDictForProjectId = Record<ProjectId, DirsDict>
 
-export type BrowserDesk = {
-  type: 'desk'
-  id: DeskId
-  name: string
-  fullPath: string
-  selected: boolean
-  opened: boolean | undefined
-  children: (BrowserDir | BrowserWork)[]
-}
+export type WorksDict = Record<WorkId, BrowserWork>
 
-export type OpenedFullPathDict = Record<string, boolean | undefined>
+export type WorksDictForProjectId = Record<ProjectId, WorksDict>
 
-export type BrowserProject = {
-  tabs: ApiWork[]
-  openedTabId: WorkId | undefined
-  selectedFullPath: string
-  openedFullPathDict: OpenedFullPathDict
-} & ApiProject
-
-export type BrowserApiWholeDict = {
-  desksDict: Record<ProjectId, ApiDesk[]>
-  revisionsDict: Record<WorkId, ApiRevision[]>
-  messagesDict: Record<RevisionId, ApiMessage[]>
-}
-
-export type ProjectApiData = {
-  projectId: ProjectId
-  name: string
-  desks: ApiDesk[]
-  revisions: BrowserRevision[] | undefined
+export type BrowserPageParams = {
+  currentProject?: BrowserProject
+  currentDirsAndWork?: CurrentDirsAndWork
+  operationData?: OperationData
+  projects: BrowserProject[]
+  wholeDict: BrowserWholeDict
 }

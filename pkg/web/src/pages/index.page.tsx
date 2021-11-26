@@ -2,12 +2,12 @@ import useAspidaSWR from '@aspida/swr'
 import type { Task } from '@prisma/client'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { Fetching } from '@violet/web/src/components/organisms/Fetching'
-import { useApi } from '@violet/web/src/hooks'
 import { staticPath } from '@violet/web/src/utils/$path'
 import Head from 'next/head'
 import type { ChangeEvent, FormEvent } from 'react'
 import { Fragment, useCallback, useState } from 'react'
 import styled from 'styled-components'
+import { useApiContext } from '../contexts/Api'
 import { UserBanner } from './components/UserBanner'
 
 const Container = styled.div`
@@ -82,7 +82,7 @@ const Logo = styled.img`
 `
 
 const Home = () => {
-  const { api, onErr } = useApi()
+  const { api, onErr } = useApiContext()
   const { data: tasks, error, mutate } = useAspidaSWR(api.tasks)
   const [label, setLabel] = useState('')
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])

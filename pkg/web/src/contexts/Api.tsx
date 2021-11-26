@@ -1,9 +1,9 @@
 import aspida from '@aspida/fetch'
 import useAspidaSWR from '@aspida/swr'
 import $api from '@violet/api/api/$api'
-import { createContext, useMemo } from 'react'
+import { createContext, useContext, useMemo } from 'react'
 
-export const ApiContext = createContext({
+const ApiContext = createContext({
   api: $api(
     aspida((() => {
       throw new Error('not provided')
@@ -13,14 +13,11 @@ export const ApiContext = createContext({
   onErr: () => {},
 })
 
+export const useApiContext = () => useContext(ApiContext)
+
 export const ApiProvider: React.FC = ({ children }) => {
   const plainApi = useMemo(
-    () =>
-      $api(
-        aspida(fetch, {
-          credentials: 'include',
-        })
-      ),
+    () => $api(aspida(fetch, { credentials: 'include', throwHttpErrors: true })),
     []
   )
   const { data: csrfToken } = useAspidaSWR(plainApi.csrf, {
@@ -32,11 +29,8 @@ export const ApiProvider: React.FC = ({ children }) => {
       $api(
         aspida(fetch, {
           credentials: 'include',
-          headers: csrfToken
-            ? {
-                'csrf-token': csrfToken,
-              }
-            : {},
+          throwHttpErrors: true,
+          headers: csrfToken ? { 'csrf-token': csrfToken } : {},
         })
       ),
     [csrfToken]
