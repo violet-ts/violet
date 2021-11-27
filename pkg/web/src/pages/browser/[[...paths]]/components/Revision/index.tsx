@@ -2,12 +2,11 @@ import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { ApiRevision } from '@violet/lib/types/api'
 import type { ProjectId, RevisionPath, WorkId } from '@violet/lib/types/branded'
 import type { InfoJson } from '@violet/lib/types/files'
-import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import { colors, fontSizes, mainColumnHeight } from '@violet/web/src/utils/constants'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 import { DataConvert } from './DataConverting'
@@ -81,6 +80,24 @@ export const Revision = (props: {
   const [workPath, setWorkPath] = useState([props.revision.url])
   const revisionPath = props.revision.url.substring(0, props.revision.url.lastIndexOf('/'))
 
+  const fetcher = async () =>
+    await fetch(props.revision.url).then(async (res) => {
+      if (!res.ok) {
+        console.log('status->', res.status)
+        throw new Error()
+      }
+      const json = JSON.stringify(await res?.json())
+      const infoJson = JSON.parse(json) as InfoJson
+      return infoJson
+    })
+  const { data, error } = useSWR(props.revision.url, fetcher)
+  useEffect(() => {
+    if (!data) return
+    setWorkPath(
+      data.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
+    )
+  }, [revisionPath, data])
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
       dropFile(e.target.files[0])
@@ -114,24 +131,7 @@ export const Revision = (props: {
     setOpenAlert(false)
   }
 
-  const fetcher = async () =>
-    await fetch(props.revision.url).then(async (res) => {
-      if (res.status === 200) {
-        const json = JSON.stringify(await res?.json())
-        const infoJson = JSON.parse(json) as InfoJson
-        setWorkPath(
-          infoJson.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
-        )
-      }
-      return res.status
-    })
-
-  const { data } = useSWR(revisionPath, fetcher)
-
-  if (data === undefined) {
-    return <Loading />
-  }
-  if (data !== 200) {
+  if (error) {
     return (
       <Container>
         {' '}
@@ -139,6 +139,7 @@ export const Revision = (props: {
       </Container>
     )
   }
+
   return (
     <Container
       onDragEnter={() => setIsFile(true)}
