@@ -2,6 +2,7 @@ import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { ApiRevision } from '@violet/lib/types/api'
 import type { ProjectId, RevisionPath, WorkId } from '@violet/lib/types/branded'
 import type { InfoJson } from '@violet/lib/types/files'
+import { DataIcon } from '@violet/web/src/components/atoms/DataIcon'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
@@ -9,7 +10,6 @@ import { colors, fontSizes, mainColumnHeight } from '@violet/web/src/utils/const
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
-import { DataConvert } from './DataConverting'
 
 const Container = styled.div`
   display: flex;
@@ -67,6 +67,20 @@ const Dropper = styled.input`
   background-color: ${colors.transparent};
   opacity: 0;
 `
+const Character = styled.div`
+  font-size: ${fontSizes.large};
+  line-height: 48px;
+  color: ${colors.gray};
+`
+const fetcher = async (url: RevisionPath) => {
+  const res = await fetch(url)
+  if (!res.ok) {
+    throw new Error()
+  }
+  const revisionPath = url.substring(0, url.lastIndexOf('/'))
+  const infoJson = JSON.parse(await res.json()) as InfoJson
+  return infoJson.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
+}
 
 export const Revision = (props: {
   projectId: ProjectId
@@ -78,20 +92,7 @@ export const Revision = (props: {
   const { api, onErr } = useApiContext()
   const { wholeDict, updateWholeDict } = useBrowserContext()
   const [workPath, setWorkPath] = useState([props.revision.url])
-  const revisionPath = props.revision.url.substring(0, props.revision.url.lastIndexOf('/'))
-
-  const fetcher = async () =>
-    await fetch(props.revision.url).then(async (res) => {
-      if (!res.ok) {
-        throw new Error()
-      }
-      const json = JSON.stringify(await res?.json())
-      const infoJson = JSON.parse(json) as InfoJson
-      return infoJson.fallbackImageExts.map(
-        (ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath
-      )
-    })
-  const { data, error } = useSWR(props.revision.url, fetcher)
+  const { data, error } = useSWR(props.revision.url, () => fetcher(props.revision.url))
   useEffect(() => {
     if (data !== undefined) setWorkPath(data)
   }, [data])
@@ -132,8 +133,8 @@ export const Revision = (props: {
   if (error) {
     return (
       <Container>
-        {' '}
-        <DataConvert />
+        <DataIcon />
+        <Character>CONVERTING...</Character>
       </Container>
     )
   }

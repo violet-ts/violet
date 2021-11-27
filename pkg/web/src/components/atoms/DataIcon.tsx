@@ -1,12 +1,7 @@
-import { colors, fontSizes } from '@violet/web/src/utils/constants'
+import { colors } from '@violet/web/src/utils/constants'
 import React from 'react'
 import styled from 'styled-components'
 
-const IconContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
 const StyledData = styled.i`
   color: ${colors.gray};
   transform: scale(var(--ggs, 1));
@@ -44,16 +39,7 @@ const StyledData = styled.i`
     border-bottom-color: transparent;
   }
 `
-const Character = styled.div`
-  font-size: ${fontSizes.large};
-  line-height: 48px;
-  color: ${colors.gray};
-`
-export const DataConvert = () => {
-  return (
-    <IconContainer>
-      <StyledData />
-      <Character>CONVERTING...</Character>
-    </IconContainer>
-  )
+
+export const DataIcon = () => {
+  return <StyledData />
 }
