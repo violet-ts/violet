@@ -77,9 +77,11 @@ const fetcher = async (url: RevisionPath) => {
     throw new Error()
   }
   const revisionPath = url.substring(0, url.lastIndexOf('/'))
-  return ((await res.json()) as InfoJson).fallbackImageExts.map(
-    (ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath
-  )
+  return res
+    .json()
+    .then((d: InfoJson) =>
+      d.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
+    )
 }
 
 export const Revision = (props: {
