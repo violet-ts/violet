@@ -78,8 +78,9 @@ const fetcher = async (url: RevisionPath) => {
     throw new Error()
   }
   const revisionPath = url.substring(0, url.lastIndexOf('/'))
-  const infoJson = JSON.parse(await res.json()) as InfoJson
-  return infoJson.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
+  return ((await res.json()) as InfoJson).fallbackImageExts.map(
+    (ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath
+  )
 }
 
 export const Revision = (props: {
@@ -92,7 +93,7 @@ export const Revision = (props: {
   const { api, onErr } = useApiContext()
   const { wholeDict, updateWholeDict } = useBrowserContext()
   const [workPath, setWorkPath] = useState([props.revision.url])
-  const { data, error } = useSWR(props.revision.url, () => fetcher(props.revision.url))
+  const { data, error } = useSWR(props.revision.url, fetcher)
   useEffect(() => {
     if (data !== undefined) setWorkPath(data)
   }, [data])
