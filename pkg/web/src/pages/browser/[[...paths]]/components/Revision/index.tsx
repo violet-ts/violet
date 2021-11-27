@@ -3,6 +3,7 @@ import type { ApiRevision } from '@violet/lib/types/api'
 import type { ProjectId, RevisionPath, WorkId } from '@violet/lib/types/branded'
 import type { InfoJson } from '@violet/lib/types/files'
 import { DataIcon } from '@violet/web/src/components/atoms/DataIcon'
+import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
@@ -22,13 +23,11 @@ const Container = styled.div`
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: end;
 `
 
 const AlertMessage = styled.div`
   font-size: ${fontSizes.large};
-  line-height: 80px;
-  text-align: center;
 `
 
 const SecondaryButton = styled.button`
@@ -68,8 +67,8 @@ const Dropper = styled.input`
   opacity: 0;
 `
 const Character = styled.div`
+  height: 48px;
   font-size: ${fontSizes.large};
-  line-height: 48px;
   color: ${colors.gray};
 `
 const fetcher = async (url: RevisionPath) => {
@@ -135,6 +134,7 @@ export const Revision = (props: {
     return (
       <Container>
         <DataIcon />
+        <Spacer axis="y" size={16} />
         <Character>CONVERTING...</Character>
       </Container>
     )
@@ -148,7 +148,9 @@ export const Revision = (props: {
     >
       <CardModal open={openAlert} onClose={closeModal}>
         <Column>
+          <Spacer axis="y" size={36} />
           <AlertMessage>UnSupported File Format!</AlertMessage>
+          <Spacer axis="y" size={36} />
           <SecondaryButton onClick={closeModal}>Confirm</SecondaryButton>
         </Column>
       </CardModal>
