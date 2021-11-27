@@ -1,8 +1,7 @@
 import { colors } from '@violet/web/src/utils/constants'
-import React from 'react'
 import styled from 'styled-components'
 
-const StyledData = styled.i`
+export const DataIcon = styled.i`
   color: ${colors.gray};
   transform: scale(var(--ggs, 1));
   &,
@@ -39,7 +38,3 @@ const StyledData = styled.i`
     border-bottom-color: transparent;
   }
 `
-
-export const DataIcon = () => {
-  return <StyledData />
-}
