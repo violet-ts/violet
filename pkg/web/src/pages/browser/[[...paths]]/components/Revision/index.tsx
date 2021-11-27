@@ -88,15 +88,15 @@ export const Revision = (props: {
       }
       const json = JSON.stringify(await res?.json())
       const infoJson = JSON.parse(json) as InfoJson
-      return infoJson
+      return infoJson.fallbackImageExts.map(
+        (ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath
+      )
     })
   const { data, error } = useSWR(props.revision.url, fetcher)
   useEffect(() => {
     if (!data) return
-    setWorkPath(
-      data.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
-    )
-  }, [revisionPath, data])
+    setWorkPath(data)
+  }, [data])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
