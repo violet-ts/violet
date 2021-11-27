@@ -94,7 +94,8 @@ export const Revision = (props: {
     })
   const { data, error } = useSWR(props.revision.url, fetcher)
   useEffect(() => {
-    if (data) setWorkPath(data)
+    if (!data) return
+    setWorkPath(data)
   }, [data])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
