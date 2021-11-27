@@ -6,8 +6,9 @@ import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import { colors, fontSizes, mainColumnHeight } from '@violet/web/src/utils/constants'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
+import useSWR from 'swr'
 
 const Container = styled.div`
   display: flex;
@@ -110,15 +111,26 @@ export const Revision = (props: {
     setOpenAlert(false)
   }
 
-  useEffect(() => {
-    void (async () => {
-      const json: InfoJson = await fetch(props.revision.url).then((res) => res.json())
+  const fetcher = async () =>
+    await fetch(props.revision.url).then(async (res) => {
+      if (res.status !== 200) return res.status
+      const json = JSON.stringify(await res?.json())
+      const infoJson = JSON.parse(json) as InfoJson
       setWorkPath(
-        json.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
+        infoJson.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
       )
-    })()
-  }, [props.revision.url, revisionPath])
+      return res.status
+    })
 
+  const { data } = useSWR(revisionPath, fetcher)
+
+  if (data === undefined) {
+    return <div>!! ERROR... </div>
+  }
+  if (data !== 200) {
+    //TODO: Create Component
+    return <div> CONVERTING ... </div>
+  }
   return (
     <Container
       onDragEnter={() => setIsFile(true)}
