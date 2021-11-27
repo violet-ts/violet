@@ -2,6 +2,7 @@ import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { ApiRevision } from '@violet/lib/types/api'
 import type { ProjectId, RevisionPath, WorkId } from '@violet/lib/types/branded'
 import type { InfoJson } from '@violet/lib/types/files'
+import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
@@ -9,11 +10,13 @@ import { colors, fontSizes, mainColumnHeight } from '@violet/web/src/utils/const
 import { useState } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
+import { DataConvert } from './DataConverting'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 100%;
 `
 
@@ -113,23 +116,28 @@ export const Revision = (props: {
 
   const fetcher = async () =>
     await fetch(props.revision.url).then(async (res) => {
-      if (res.status !== 200) return res.status
-      const json = JSON.stringify(await res?.json())
-      const infoJson = JSON.parse(json) as InfoJson
-      setWorkPath(
-        infoJson.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
-      )
+      if (res.status === 200) {
+        const json = JSON.stringify(await res?.json())
+        const infoJson = JSON.parse(json) as InfoJson
+        setWorkPath(
+          infoJson.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
+        )
+      }
       return res.status
     })
 
   const { data } = useSWR(revisionPath, fetcher)
 
   if (data === undefined) {
-    return <div>!! ERROR... </div>
+    return <Loading />
   }
   if (data !== 200) {
-    //TODO: Create Component
-    return <div> CONVERTING ... </div>
+    return (
+      <Container>
+        {' '}
+        <DataConvert />
+      </Container>
+    )
   }
   return (
     <Container
