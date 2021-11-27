@@ -83,7 +83,6 @@ export const Revision = (props: {
   const fetcher = async () =>
     await fetch(props.revision.url).then(async (res) => {
       if (!res.ok) {
-        console.log('status->', res.status)
         throw new Error()
       }
       const json = JSON.stringify(await res?.json())
@@ -94,8 +93,7 @@ export const Revision = (props: {
     })
   const { data, error } = useSWR(props.revision.url, fetcher)
   useEffect(() => {
-    if (!data) return
-    setWorkPath(data)
+    if (data !== undefined) setWorkPath(data)
   }, [data])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
