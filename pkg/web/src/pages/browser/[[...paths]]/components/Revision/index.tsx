@@ -22,11 +22,19 @@ const Container = styled.div`
 
 const Column = styled.div`
   display: flex;
-  justify-content: end;
+  flex-direction: column;
+  align-items: flex-end;
+`
+
+const AlertMessage = styled.div`
+  font-size: ${fontSizes.large};
+  line-height: 80px;
+  text-align: center;
 `
 
 const SecondaryButton = styled.button`
-  padding: 0.3em;
+  width: 108px;
+  height: 36px;
   font-size: ${fontSizes.large};
   color: ${colors.white};
   cursor: pointer;
@@ -59,14 +67,6 @@ const Dropper = styled.input`
   cursor: pointer;
   background-color: ${colors.transparent};
   opacity: 0;
-`
-
-const AlertMessage = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  white-space: nowrap;
-  transform: translate(-50%, -50%);
 `
 
 export const Revision = (props: {
@@ -146,8 +146,8 @@ export const Revision = (props: {
       onChange={onChange}
     >
       <CardModal open={openAlert} onClose={closeModal}>
-        <AlertMessage>UnSupported File Format!</AlertMessage>
         <Column>
+          <AlertMessage>UnSupported File Format!</AlertMessage>
           <SecondaryButton onClick={closeModal}>Confirm</SecondaryButton>
         </Column>
       </CardModal>
