@@ -2,27 +2,37 @@ import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { ApiRevision } from '@violet/lib/types/api'
 import type { ProjectId, RevisionPath, WorkId } from '@violet/lib/types/branded'
 import type { InfoJson } from '@violet/lib/types/files'
+import { DataIcon } from '@violet/web/src/components/atoms/DataIcon'
+import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import { colors, fontSizes, mainColumnHeight } from '@violet/web/src/utils/constants'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import useSWR from 'swr'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 100%;
 `
 
 const Column = styled.div`
   display: flex;
-  justify-content: end;
+  flex-direction: column;
+  align-items: end;
+`
+
+const AlertMessage = styled.div`
+  font-size: ${fontSizes.large};
 `
 
 const SecondaryButton = styled.button`
-  padding: 0.3em;
+  width: 108px;
+  height: 36px;
   font-size: ${fontSizes.large};
   color: ${colors.white};
   cursor: pointer;
@@ -56,14 +66,23 @@ const Dropper = styled.input`
   background-color: ${colors.transparent};
   opacity: 0;
 `
-
-const AlertMessage = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  white-space: nowrap;
-  transform: translate(-50%, -50%);
+const Character = styled.div`
+  height: 48px;
+  font-size: ${fontSizes.large};
+  color: ${colors.gray};
 `
+const fetcher = async (url: RevisionPath) => {
+  const res = await fetch(url)
+  if (!res.ok) {
+    throw new Error()
+  }
+  const revisionPath = url.substring(0, url.lastIndexOf('/'))
+  return res
+    .json()
+    .then((d: InfoJson) =>
+      d.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
+    )
+}
 
 export const Revision = (props: {
   projectId: ProjectId
@@ -75,7 +94,10 @@ export const Revision = (props: {
   const { api, onErr } = useApiContext()
   const { wholeDict, updateWholeDict } = useBrowserContext()
   const [workPath, setWorkPath] = useState([props.revision.url])
-  const revisionPath = props.revision.url.substring(0, props.revision.url.lastIndexOf('/'))
+  const { data, error } = useSWR(props.revision.url, fetcher)
+  useEffect(() => {
+    if (data !== undefined) setWorkPath(data)
+  }, [data])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -110,14 +132,15 @@ export const Revision = (props: {
     setOpenAlert(false)
   }
 
-  useEffect(() => {
-    void (async () => {
-      const json: InfoJson = await fetch(props.revision.url).then((res) => res.json())
-      setWorkPath(
-        json.fallbackImageExts.map((ext, i) => `${revisionPath}/${i}.${ext}` as RevisionPath)
-      )
-    })()
-  }, [props.revision.url, revisionPath])
+  if (error) {
+    return (
+      <Container>
+        <DataIcon />
+        <Spacer axis="y" size={16} />
+        <Character>CONVERTING...</Character>
+      </Container>
+    )
+  }
 
   return (
     <Container
@@ -126,8 +149,10 @@ export const Revision = (props: {
       onChange={onChange}
     >
       <CardModal open={openAlert} onClose={closeModal}>
-        <AlertMessage>UnSupported File Format!</AlertMessage>
         <Column>
+          <Spacer axis="y" size={36} />
+          <AlertMessage>Unsupported file format!</AlertMessage>
+          <Spacer axis="y" size={36} />
           <SecondaryButton onClick={closeModal}>Confirm</SecondaryButton>
         </Column>
       </CardModal>
