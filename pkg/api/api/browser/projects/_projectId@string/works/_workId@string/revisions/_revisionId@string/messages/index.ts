@@ -1,8 +1,13 @@
-import type { ApiMessage } from '@violet/lib/types/api'
-import type { RevisionId } from '@violet/lib/types/branded'
+import type { ApiMessage, ApiReply, Cursor } from '@violet/lib/types/api'
+import type { MessageId } from '@violet/lib/types/branded'
 
 export type Methods = {
   get: {
-    resBody: { revisionId: RevisionId; messages: ApiMessage[] }
+    query: Cursor<MessageId>
+    resBody: (ApiMessage & { replies: ApiReply[] })[]
+  }
+  post: {
+    reqBody: Pick<ApiMessage, 'content' | 'userName'>
+    resBody: ApiMessage
   }
 }

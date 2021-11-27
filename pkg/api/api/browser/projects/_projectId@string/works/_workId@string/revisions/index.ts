@@ -1,13 +1,14 @@
-import type { ApiRevision } from '@violet/lib/types/api'
-import type { DeskId, WorkId } from '@violet/lib/types/branded'
+import type { ApiMessage, ApiReply, ApiRevision, Cursor } from '@violet/lib/types/api'
+import type { RevisionId } from '@violet/lib/types/branded'
 
 export type Methods = {
   get: {
-    resBody: { workId: WorkId; revisions: ApiRevision[] }
+    query: Cursor<RevisionId>
+    resBody: (ApiRevision & { messages: (ApiMessage & { replies: ApiReply[] })[] })[]
   }
   post: {
     reqFormat: FormData
-    reqBody: { uploadFile: Blob; deskId: DeskId }
+    reqBody: { uploadFile: Blob }
     resBody: ApiRevision
   }
 }

@@ -53,3 +53,19 @@ export const sendNewWork = depend(
     return data
   }
 )
+
+export const getDisplayWork = depend(
+  { getS3Client },
+  async ({ getS3Client }, path: RevisionPath) => {
+    const params = {
+      Bucket: S3_BUCKET_ORIGINAL,
+      Key: path,
+    }
+
+    const data = await getS3Client()
+      .send(new GetObjectCommand(params))
+      .then((res) => res.Body)
+
+    return data
+  }
+)

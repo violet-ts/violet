@@ -1,9 +1,8 @@
-import type { ApiDesk, ApiProject } from '@violet/lib/types/api'
-import type { ProjectId } from '@violet/lib/types/branded'
+import type { ApiProject } from '@violet/lib/types/api'
 
 export type Methods = {
   get: {
-    resBody: { projectId: ProjectId; desks: ApiDesk[] }
+    resBody: ApiProject
   }
   put: {
     reqBody: Pick<ApiProject, 'name'>

@@ -15,29 +15,34 @@ model Task {
 
 model Project {
   projectId   String   @id
-  projectName String
+  projectName String   @unique
   createdAt   DateTime @default(now())
-  desks       Desk[]
+  dirs        Dir[]
 }
 
-model Desk {
-  deskId    String   @id
-  deskName  String
-  createdAt DateTime @default(now())
-  project   Project  @relation(fields: [projectId], references: [projectId])
-  projectId String
-  works     Work[]
+model Dir {
+  dirId       String   @id
+  dirName     String
+  createdAt   DateTime @default(now())
+  project     Project  @relation(fields: [projectId], references: [projectId])
+  projectId   String
+  childDirs   Dir[]    @relation("childDirs")
+  parentDir   Dir?     @relation("childDirs", fields: [parentDirId], references: [dirId])
+  parentDirId String?
+  works       Work[]
+
+  @@unique([dirName, parentDirId])
 }
 
 model Work {
   workId    String     @id
   workName  String
   createdAt DateTime   @default(now())
-  ext       String?
-  path      String
-  desk      Desk       @relation(fields: [deskId], references: [deskId])
-  deskId    String
+  dir       Dir        @relation(fields: [dirId], references: [dirId])
+  dirId     String
   revisions Revision[]
+
+  @@unique([workName, dirId])
 }
 
 model Revision {
@@ -45,15 +50,7 @@ model Revision {
   createdAt  DateTime  @default(now())
   work       Work      @relation(fields: [workId], references: [workId])
   workId     String
-  editions   Edition[]
   messages   Message[]
-}
-
-model Edition {
-  editionId  String   @id
-  createdAt  DateTime @default(now())
-  revision   Revision @relation(fields: [revisionId], references: [revisionId])
-  revisionId String
 }
 
 model Message {

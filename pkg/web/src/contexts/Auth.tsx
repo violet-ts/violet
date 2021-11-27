@@ -1,7 +1,7 @@
 import useAspidaSWR from '@aspida/swr'
 import type { UserClaims } from '@violet/def/user/session-claims'
-import { useApi } from '@violet/web/src/hooks'
-import { createContext, useCallback, useMemo } from 'react'
+import { createContext, useCallback, useContext, useMemo } from 'react'
+import { useApiContext } from './Api'
 
 interface AuthContextValue {
   readonly currentUser: UserClaims | null
@@ -12,7 +12,7 @@ interface AuthContextValue {
   readonly isValidating: boolean
 }
 
-export const AuthContext = createContext<AuthContextValue>({
+const AuthContext = createContext<AuthContextValue>({
   currentUser: null,
   refresh: async () => {},
   initialized: false,
@@ -21,8 +21,10 @@ export const AuthContext = createContext<AuthContextValue>({
   isValidating: false,
 })
 
+export const useAuthContext = () => useContext(AuthContext)
+
 export const AuthProvider: React.FC = ({ children }) => {
-  const { api } = useApi()
+  const { api } = useApiContext()
   const {
     data: userClaims,
     mutate,

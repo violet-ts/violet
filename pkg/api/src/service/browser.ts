@@ -1,28 +1,47 @@
+import type { Revision, Work } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
 import dotenv from '@violet/api/src/utils/envValues'
 import { generateId } from '@violet/lib/generateId'
-import type { ApiDesk, ApiProject, ApiRevision, ApiWork } from '@violet/lib/types/api'
 import type {
-  DeskId,
-  MessageId,
-  ProjectId,
-  RevisionId,
-  RevisionPath,
-  WorkId,
-} from '@violet/lib/types/branded'
+  ApiDir,
+  ApiMessage,
+  ApiProject,
+  ApiReply,
+  ApiRevision,
+  ApiWork,
+  Cursor,
+} from '@violet/lib/types/api'
+import type { DirId, ProjectId, RevisionId, RevisionPath, WorkId } from '@violet/lib/types/branded'
+import {
+  getDirId,
+  getMessageId,
+  getParentDirId,
+  getProjectId,
+  getRevisionId,
+  getWorkId,
+} from '../utils/getBrandedId'
+import { toApiMessageWithReply } from './streamBar'
 
 const s3Endpoint = dotenv.S3_ENDPOINT
 const bucketConverted = dotenv.S3_BUCKET_CONVERTED
 const prisma = new PrismaClient()
 const orderByCreatedAtAsc = { orderBy: { createdAt: 'asc' } } as const
+const orderByWorkNameAsc = { orderBy: { workName: 'asc' } } as const
 
-const infoJsonPath = (projectId: ProjectId, deskId: DeskId, revisionId: RevisionId) =>
-  `${s3Endpoint}/${bucketConverted}/works/converted/${projectId}/${deskId}/revisions/${revisionId}/info.json` as RevisionPath
+const infoJsonPath = (projectId: ProjectId, revisionId: RevisionId) =>
+  `${s3Endpoint}/${bucketConverted}/works/converted/projects/${projectId}/revisions/${revisionId}/info.json` as RevisionPath
+
+export const getProject = async (projectId: ProjectId): Promise<ApiProject | undefined> => {
+  const project = await prisma.project.findFirst({ where: { projectId } })
+  if (!project) return undefined
+
+  return { id: projectId, name: project.projectName }
+}
 
 export const getProjects = async () => {
-  const dbProjects = await prisma.project.findMany(orderByCreatedAtAsc)
+  const projects = await prisma.project.findMany(orderByCreatedAtAsc)
 
-  return dbProjects.map((p): ApiProject => ({ id: p.projectId as ProjectId, name: p.projectName }))
+  return projects.map((p): ApiProject => ({ id: getProjectId(p), name: p.projectName }))
 }
 
 export const createProject = async (projectName: ApiProject['name']) => {
@@ -41,83 +60,118 @@ export const updateProject = async (
   return { id: projectId, name: projectName }
 }
 
-export const getDesks = async (projectId: ProjectId) => {
-  const dbDesks = await prisma.desk.findMany({
+const toApiWork = (w: Work & { revisions: Revision[] }) => ({
+  id: getWorkId(w),
+  name: w.workName,
+  latestRevisionId: w.revisions.length ? (w.revisions[0].revisionId as RevisionId) : null,
+})
+
+export const getDirs = async (projectId: ProjectId) => {
+  const dirs = await prisma.dir.findMany({
     where: { projectId },
-    include: { works: orderByCreatedAtAsc },
-    ...orderByCreatedAtAsc,
+    include: {
+      works: {
+        ...orderByWorkNameAsc,
+        include: { revisions: { take: 1, orderBy: { createdAt: 'desc' } } },
+      },
+    },
+    orderBy: { dirName: 'asc' },
   })
 
-  const desks = dbDesks.map(
-    (d): ApiDesk => ({
-      id: d.deskId as DeskId,
-      name: d.deskName,
-      works: d.works.map((w) => ({
-        id: w.workId as WorkId,
-        name: w.workName,
-        ext: w.ext,
-        path: w.path,
-      })),
+  return dirs.map(
+    (d): ApiDir => ({
+      id: getDirId(d),
+      name: d.dirName,
+      parentDirId: getParentDirId(d),
+      works: d.works.map(toApiWork),
     })
   )
-  return { projectId, desks }
 }
 
-export const createWork = async (
-  deskId: DeskId,
-  path: ApiWork['path'],
-  workName: ApiWork['name'],
-  ext?: ApiWork['ext']
-): Promise<ApiWork> => {
-  const workId = generateId<WorkId>()
-  await prisma.work.create({ data: { workId, path, deskId, workName, ext } })
+export const createDirs = async (
+  projectId: ProjectId,
+  parentDirId: ApiDir['parentDirId'],
+  names: string[]
+) => {
+  const ids = names.map(() => generateId<DirId>())
+  const dirs = names.map((n, i) => ({
+    dirId: ids[i],
+    dirName: n,
+    projectId,
+    parentDirId: i > 0 ? ids[i - 1] : parentDirId,
+  }))
+  await prisma.dir.createMany({ data: dirs })
 
-  return { id: workId, name: workName, path, ext }
+  return getDirs(projectId)
 }
 
-export const getRevisions = async (workId: WorkId) => {
-  const dbRevision = await prisma.revision.findMany({
-    where: { workId },
-    include: { messages: orderByCreatedAtAsc },
-    ...orderByCreatedAtAsc,
-  })
-  const ids = await getPojectIdAndDeskId(workId)
-
-  const revisions = dbRevision.map(
-    (r): ApiRevision => ({
-      id: r.revisionId as RevisionId,
-      url: infoJsonPath(ids.projectId, ids.deskId, r.revisionId as RevisionId),
-      messageIds: r.messages.map((m) => m.messageId as MessageId),
-    })
-  )
-  return { workId, revisions }
-}
-
-export const createRevision = async (projectId: ProjectId, deskId: DeskId, workId: WorkId) => {
-  const revisionId = generateId<RevisionId>()
-  const data = await prisma.revision.create({
-    data: {
-      revisionId,
-      workId,
+export const updateDir = async (
+  dirId: DirId,
+  data: Partial<Pick<ApiDir, 'name' | 'parentDirId'>>
+): Promise<ApiDir> => {
+  const dir = await prisma.dir.update({
+    where: { dirId },
+    data,
+    include: {
+      works: {
+        ...orderByWorkNameAsc,
+        include: { revisions: { take: 1, orderBy: { createdAt: 'desc' } } },
+      },
     },
   })
 
-  const apiRevision: ApiRevision = {
-    id: data.revisionId as RevisionId,
-    url: infoJsonPath(projectId, deskId, data.revisionId as RevisionId),
-    messageIds: [],
+  return {
+    id: dirId,
+    name: dir.dirName,
+    parentDirId: getParentDirId(dir),
+    works: dir.works.map(toApiWork),
   }
-  return apiRevision
 }
 
-const getPojectIdAndDeskId = async (workId: WorkId) => {
-  const desk = await prisma.work.findFirst({
+export const createWork = async (dirId: DirId, workName: ApiWork['name']): Promise<ApiWork[]> => {
+  const workId = generateId<WorkId>()
+  await prisma.work.create({ data: { workId, dirId, workName } })
+  const works = await prisma.work.findMany({
+    where: { dirId },
+    include: { revisions: { take: 1, orderBy: { createdAt: 'desc' } } },
+    ...orderByWorkNameAsc,
+  })
+
+  return works.map(toApiWork)
+}
+
+export const getRevisions = async (
+  projectId: ProjectId,
+  workId: WorkId,
+  { take, cursorId, skipCursor }: Cursor<RevisionId>
+) => {
+  const revisions = await prisma.revision.findMany({
+    skip: +skipCursor,
+    take,
+    cursor: { revisionId: cursorId },
     where: { workId },
-    select: { deskId: true },
+    include: {
+      messages: { ...orderByCreatedAtAsc, take: 10, include: { replies: orderByCreatedAtAsc } },
+    },
+    ...orderByCreatedAtAsc,
   })
-  const project = await prisma.desk.findFirst({
-    where: { deskId: desk?.deskId },
-    select: { projectId: true },
-  })
-  return { projectId: project?.projectId as ProjectId, deskId: desk?.deskId as DeskId }
+
+  return revisions.map(
+    (r): ApiRevision & { messages: (ApiMessage & { replies: ApiReply[] })[] } => ({
+      id: getRevisionId(r),
+      url: infoJsonPath(projectId, getRevisionId(r)),
+      latestMessageId: r.messages.length > 0 ? getMessageId(r.messages[0]) : null,
+      messages: r.messages.map(toApiMessageWithReply),
+    })
+  )
+}
+
+export const createRevision = async (
+  projectId: ProjectId,
+  workId: WorkId
+): Promise<ApiRevision> => {
+  const revisionId = generateId<RevisionId>()
+  await prisma.revision.create({ data: { revisionId, workId } })
+
+  return { id: revisionId, url: infoJsonPath(projectId, revisionId), latestMessageId: null }
 }
