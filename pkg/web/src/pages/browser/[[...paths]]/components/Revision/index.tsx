@@ -151,7 +151,7 @@ export const Revision = (props: {
       <CardModal open={openAlert} onClose={closeModal}>
         <Column>
           <Spacer axis="y" size={36} />
-          <AlertMessage>UnSupported File Format!</AlertMessage>
+          <AlertMessage>Unsupported file format!</AlertMessage>
           <Spacer axis="y" size={36} />
           <SecondaryButton onClick={closeModal}>Confirm</SecondaryButton>
         </Column>
