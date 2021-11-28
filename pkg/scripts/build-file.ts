@@ -1,5 +1,5 @@
 import arg from 'arg'
-import type { WatchMode } from 'esbuild'
+import type { Plugin, WatchMode } from 'esbuild'
 import { build } from 'esbuild'
 import { nodeExternalsPlugin } from 'esbuild-node-externals'
 import * as fs from 'fs'
@@ -10,6 +10,18 @@ interface Params {
   to: string
   watch: boolean
   target: string
+}
+
+const omitImportNodeNSPlugin: Plugin = {
+  name: 'omit-import-node-ns',
+  setup(build) {
+    build.onResolve({ filter: /^node:/ }, (args) => {
+      return {
+        path: args.path.slice(5),
+        external: true,
+      }
+    })
+  },
 }
 
 const main = async ({ from, to, watch, target }: Params) => {
@@ -41,6 +53,7 @@ const main = async ({ from, to, watch, target }: Params) => {
     entryPoints: [fromPath],
     watch: watchOptions,
     plugins: [
+      omitImportNodeNSPlugin,
       nodeExternalsPlugin({
         allowList: [
           '@violet/web',

@@ -11,6 +11,14 @@
 /pkg/lambda/ @violet-ts/backend
 /package.json @violet-ts/backend
 
+# test
+**/test/**/* @violet-ts/test
+**/tests/**/* @violet-ts/test
+**/__test__/**/* @violet-ts/test
+**/__tests__/**/* @violet-ts/test
+*.test.* @violet-ts/test
+*.spec.* @violet-ts/test
+
 # security
 /.github/ @violet-ts/security
 package.json @violet-ts/security

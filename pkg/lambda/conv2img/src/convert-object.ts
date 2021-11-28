@@ -9,6 +9,7 @@ import type { InfoJson } from '@violet/lib/types/files'
 import * as fs from 'fs'
 import type { IncomingMessage } from 'http'
 import * as path from 'path'
+import { v4 as uuidv4 } from 'uuid'
 import { createS3Client, getObject } from './s3'
 
 const CONTENT_TYPES = {
@@ -84,7 +85,7 @@ export const convertObject = async ({
     worksConvertedKeyPrefix
   )
 
-  const filename = `${Date.now()}-${key.split('/').pop()}`
+  const filename = `${Date.now()}-${uuidv4()}-${key.split('/').pop()}`
   const convertedDir = path.join(LOCAL_DIR_NAMES.converted, filename.replace(/\.[^.]+$/, ''))
   fs.mkdirSync(convertedDir, { recursive: true })
   logger.info('Destination directory created.')
