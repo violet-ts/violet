@@ -14,6 +14,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
   height: 100%;
 `
 const DisplayWorksFrame = styled.div`
@@ -25,12 +26,12 @@ const DisplayWorksFrame = styled.div`
   background: ${colors.transparent};
   transition: background 0.2s, padding 0.2s;
 `
-
 const DisplayWorksViewer = styled.img`
+  flex: 1;
+  max-width: 100%;
   height: 100%;
   vertical-align: middle;
 `
-
 const Dropper = styled.input`
   position: absolute;
   top: 0;
