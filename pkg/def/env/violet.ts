@@ -18,6 +18,7 @@ export interface VioletEnv {
   readonly MINIO_ROOT_USER: string | undefined
   readonly MINIO_ROOT_PASSWORD: string | undefined
   readonly S3_ENDPOINT: string | undefined
+  readonly LOGGING_LEVEL: string | undefined
   readonly PRETTY_LOGGING: string | undefined
   readonly FIREBASE_AUTH_EMULATOR_HOST: string | undefined
   readonly GOOGLE_APPLICATION_CREDENTIALS: string | undefined
@@ -35,6 +36,7 @@ export const parseVioletEnv = (obj: Record<string, string | undefined>): VioletE
     GCIP_CONFIG_JSON,
     GCIP_PROJECT,
     CLOUDWATCH_CRITICAL_LOG_GROUP,
+    LOGGING_LEVEL,
     PRETTY_LOGGING,
     FIREBASE_AUTH_EMULATOR_HOST,
     GOOGLE_APPLICATION_CREDENTIALS,
@@ -59,6 +61,7 @@ export const parseVioletEnv = (obj: Record<string, string | undefined>): VioletE
     GCIP_CONFIG_JSON,
     GCIP_PROJECT,
     CLOUDWATCH_CRITICAL_LOG_GROUP,
+    LOGGING_LEVEL,
     PRETTY_LOGGING,
     FIREBASE_AUTH_EMULATOR_HOST,
     GOOGLE_APPLICATION_CREDENTIALS,
