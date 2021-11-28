@@ -1,6 +1,6 @@
 import { SignInModal } from '@violet/web/src/components/organisms/SignInModal'
-import { AuthContext } from '@violet/web/src/contexts/Auth'
-import { useContext, useState } from 'react'
+import { useAuthContext } from '@violet/web/src/contexts/Auth'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -18,7 +18,7 @@ const Icon = styled.img`
 `
 
 export const UserBanner = () => {
-  const { currentUser, signOut } = useContext(AuthContext)
+  const { currentUser, signOut } = useAuthContext()
   const [modalOpen, setModalOpen] = useState(false)
 
   return (

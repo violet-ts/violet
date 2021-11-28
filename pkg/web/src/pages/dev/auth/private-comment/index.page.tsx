@@ -1,7 +1,8 @@
 import useAspidaSWR from '@aspida/swr'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { SignInModal } from '@violet/web/src/components/organisms/SignInModal'
-import { useApi, useAuth } from '@violet/web/src/hooks'
+import { useApiContext } from '@violet/web/src/contexts/Api'
+import { useAuthContext } from '@violet/web/src/contexts/Auth'
 import { pagesPath } from '@violet/web/src/utils/$path'
 import Link from 'next/link'
 import type { FormEvent } from 'react'
@@ -74,10 +75,10 @@ const UserPicture = ({ picture }: { picture: string | null | undefined }) => (
 const LoadingIcon = () => <span>loading...</span>
 
 const Home = () => {
-  const { api } = useApi()
+  const { api } = useApiContext()
   const { data: comments, mutate } = useAspidaSWR(api.dev.comment.private)
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
-  const { currentUser, initialized, signOut } = useAuth()
+  const { currentUser, initialized, signOut } = useAuthContext()
 
   const onSubmit = async (ev: FormEvent) => {
     ev.preventDefault()

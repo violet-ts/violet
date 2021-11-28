@@ -1,10 +1,11 @@
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
-import { useApi, useAuth } from '@violet/web/src/hooks'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import { auth, EmailAuthProvider, GithubAuthProvider } from '@violet/web/src/utils/firebase'
 import { useMemo } from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import styled from 'styled-components'
+import { useApiContext } from '../../contexts/Api'
+import { useAuthContext } from '../../contexts/Auth'
 
 const Message = styled.div`
   font-size: ${fontSizes.large};
@@ -30,8 +31,8 @@ interface Props {
 }
 
 export const SignInModal: React.FC<Props> = ({ open, onAuthCancel, onAuthSuccess }: Props) => {
-  const { api } = useApi()
-  const { currentUser, refresh: refreshAuth, initialized } = useAuth()
+  const { api } = useApiContext()
+  const { currentUser, refresh: refreshAuth, initialized } = useAuthContext()
   const uiConfig: firebaseui.auth.Config = useMemo(
     () => ({
       signInFlow: 'popup',

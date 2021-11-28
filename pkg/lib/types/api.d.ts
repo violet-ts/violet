@@ -1,5 +1,5 @@
 import type {
-  DeskId,
+  DirId,
   MessageId,
   ProjectId,
   ReplyId,
@@ -14,23 +14,32 @@ export type ApiProject = {
   iconUrl?: string | null
 }
 
+export type ApiRootDir = {
+  id: DirId
+  name: string
+  parentDirId: null
+  works: ApiWork[]
+}
+
+export type ApiChildDir = {
+  id: DirId
+  name: string
+  parentDirId: DirId
+  works: ApiWork[]
+}
+
+export type ApiDir = ApiRootDir | ApiChildDir
+
 export type ApiWork = {
   id: WorkId
   name: string
-  ext?: string | null
-  path: string
-}
-
-export type ApiDesk = {
-  id: DeskId
-  name: string
-  works: ApiWork[]
+  latestRevisionId: RevisionId | null
 }
 
 export type ApiRevision = {
   id: RevisionId
   url: RevisionPath
-  messageIds: MessageId[] | undefined
+  latestMessageId: MessageId | null
 }
 
 export type ApiMessage = {
@@ -38,7 +47,7 @@ export type ApiMessage = {
   content: string
   createdAt: number
   userName: string
-  replies: ApiReply[]
+  latestReplyId: ReplyId | null
 }
 
 export type ApiReply = {
@@ -46,4 +55,10 @@ export type ApiReply = {
   content: string
   createdAt: number
   userName: string
+}
+
+export type Cursor<T extends string> = {
+  cursorId: T
+  skipCursor: boolean
+  take: number
 }
