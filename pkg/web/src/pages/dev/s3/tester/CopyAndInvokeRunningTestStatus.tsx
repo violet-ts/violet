@@ -1,5 +1,6 @@
-import type { ResultStatus, RunningStatus } from '@violet/lib/s3/tester'
-import { useEffect, useState } from 'react'
+import type { ResultStatus, RunningStatus } from '@violet/lib/s3/tester/types'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import MinioLink from './MinioLink'
 
@@ -91,7 +92,14 @@ const CopyAndInvokeRunningTestStatus: React.FC<Params> = ({ status }) => {
             <ul>
               {Object.entries(status.results).map(([key, resultStatus]) => (
                 <li key={key}>
-                  <code>{encodeURI(key)}</code>: <Result status={resultStatus} />
+                  <code>{encodeURI(key)}</code>
+                  {'  '}
+                  <Link
+                    href={`https://${status.bucket}.s3.amazonaws.com/${encodeURIComponent(key)}`}
+                  >
+                    <a target="_blank">[DL]</a>
+                  </Link>
+                  : <Result status={resultStatus} />
                 </li>
               ))}
             </ul>

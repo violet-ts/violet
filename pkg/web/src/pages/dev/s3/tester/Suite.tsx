@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import Link from 'next/link'
+import React, { useState } from 'react'
 
 interface Props {
+  bucket: string
   allKeys: string[]
   folder: string
   selectedKeys?: Set<string> | undefined
@@ -16,7 +18,7 @@ const listObjects = (keys: string[], folder: string): string[] => {
   )
 }
 
-const TestSuite: React.FC<Props> = ({ folder, allKeys, selectedKeys, onChange }) => {
+const TestSuite: React.FC<Props> = ({ bucket, folder, allKeys, selectedKeys, onChange }) => {
   const objectKeys = listObjects(allKeys, folder)
   const [open, setOpen] = useState(false)
   return (
@@ -63,6 +65,10 @@ const TestSuite: React.FC<Props> = ({ folder, allKeys, selectedKeys, onChange })
                 />
                 {encodeURI(key)}
               </label>
+              {'  '}
+              <Link href={`https://${bucket}.s3.amazonaws.com/${encodeURIComponent(key)}`}>
+                <a target="_blank">[DL]</a>
+              </Link>
             </li>
           ))}
         </ul>

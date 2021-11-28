@@ -1,4 +1,4 @@
-import type { RunningStatus } from '@violet/lib/s3/tester'
+import type { RunningStatus } from '@violet/lib/s3/tester/types'
 
 export type Methods = {
   get: {

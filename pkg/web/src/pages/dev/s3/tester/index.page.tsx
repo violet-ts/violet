@@ -124,6 +124,7 @@ const Page: NextPage = () => {
             {suites.map((suite) => (
               <li key={suite}>
                 <TestSuite
+                  bucket={bucket}
                   allKeys={allKeys}
                   folder={suite}
                   selectedKeys={keysMap.get(suite)}

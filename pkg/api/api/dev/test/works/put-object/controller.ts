@@ -1,6 +1,16 @@
 import { defineController } from './$relay'
 
 export default defineController(() => ({
-  get: () => {},
-  post: () => {},
+  get: () => {
+    return {
+      status: 200,
+      body: null,
+    }
+  },
+  post: () => {
+    return {
+      status: 200,
+      body: null,
+    }
+  },
 }))

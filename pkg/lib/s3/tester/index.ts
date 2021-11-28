@@ -6,47 +6,17 @@ import type { winston } from '@violet/lib/logger'
 import { createChildLogger } from '@violet/lib/logger'
 import { replaceKeyPrefix } from '@violet/lib/s3'
 import { downloadObjectTo } from '@violet/lib/s3/public-server'
+import type {
+  RunningStatusInternal,
+  S3PutObjectTestContext,
+  StartParams,
+} from '@violet/lib/s3/tester/types'
 import { createTmpdirContext } from '@violet/lib/tmpdir'
 import type { InfoJson } from '@violet/lib/types/files'
 import { Sema } from 'async-sema'
 import fetch from 'node-fetch'
 import PLazy from 'p-lazy'
 import * as path from 'path'
-
-export type ResultStatusType = 'running' | 'waiting' | 'succeeded' | 'failed'
-export interface ResultStatus {
-  readonly type: ResultStatusType
-  readonly errorMessage?: string
-  readonly startTime?: number
-  readonly endTime?: number
-}
-
-interface RunningStatusInternal {
-  bucket: string
-  id: string
-  minioOriginalDir: string
-  minioConvertedDir: string
-  tmpdir: string
-  results: Record<string, ResultStatus>
-}
-
-export interface RunningStatus extends RunningStatusInternal {
-  running: boolean
-}
-
-interface StartParams {
-  bucket: string
-  keys: string[]
-  concurrency: number
-  env: VioletEnv
-  logger: winston.Logger
-}
-
-interface S3PutObjectTestContext {
-  getStatus: () => RunningStatus | null
-  isRunning: () => boolean
-  start: (params: StartParams) => Promise<void>
-}
 
 export const createS3PutObjectTestContext = (): S3PutObjectTestContext => {
   let status: RunningStatusInternal | null = null

@@ -1,3 +1,1 @@
-import { defineController } from './$relay'
-
-export default defineController(() => ({}))
+export type Methods = Record<string, never>
