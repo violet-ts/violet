@@ -11,7 +11,7 @@ import { ReplyMessageCell } from './ReplyMessageCell'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid ${colors.violet}${alphaLevel[2]};
+  border-bottom: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const Message = styled.div`
   position: relative;
