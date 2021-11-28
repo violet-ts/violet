@@ -1,6 +1,4 @@
 import { Chevron } from '@violet/web/src/components/atoms/Chevron'
-import { Spacer } from '@violet/web/src/components/atoms/Spacer'
-import { mainColumnHeight } from '@violet/web/src/utils/constants'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -8,9 +6,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   width: 48px;
-  height: ${mainColumnHeight};
+  height: 100%;
 `
 const ChevronUP = styled.div`
   text-align: inherit;
@@ -26,7 +24,6 @@ export const PaginationBar = (props: { clickchevron: (chevronup: boolean) => boo
       <ChevronUP onClick={() => props.clickchevron(true)}>
         <Chevron />
       </ChevronUP>
-      <Spacer axis="y" size={160} />
       <ChevronDown onClick={() => props.clickchevron(false)}>
         <Chevron />
       </ChevronDown>

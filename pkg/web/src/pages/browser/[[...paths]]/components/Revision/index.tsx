@@ -5,7 +5,7 @@ import type { InfoJson } from '@violet/lib/types/files'
 import { DataIcon } from '@violet/web/src/components/atoms/DataIcon'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { colors, fontSizes, mainColumnHeight } from '@violet/web/src/utils/constants'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 

@@ -1,13 +1,14 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { ProjectId, RevisionId, WorkId } from '@violet/lib/types/branded'
+import { AddButton } from '@violet/web/src/components/atoms/AddButton'
+import { Scroller } from '@violet/web/src/components/atoms/Scroller'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
 import { mainColumnHeight } from '@violet/web/src/utils/constants'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { AddButton } from '../../../../components/atoms/AddButton'
 import { Revision } from '../components/Revision'
 import { StreamBar } from '../components/StreamBar'
 import { PaginationBar } from './PaginationBar'
@@ -33,9 +34,12 @@ const StreamBarColumn = styled.div`
 const FileUpload = styled.input`
   display: none;
 `
-const ButtonWrap = styled.div`
-  position: fixed;
-  bottom: 8px;
+const ToolBar = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: ${mainColumnHeight};
 `
 export const MainColumn = (props: {
   projectId: ProjectId
@@ -45,6 +49,11 @@ export const MainColumn = (props: {
   const { api, onErr } = useApiContext()
   const { wholeDict, updateWholeDict } = useBrowserContext()
   const [openModal, setOpenModal] = useState(false)
+  const [scroller, setScroller] = useState<string>('0')
+
+  useEffect(() => {
+    Scroller(scroller)
+  }, [scroller])
   const sendFormData = async (file: File) => {
     const revisionRes = await api.browser.projects
       ._projectId(props.projectId)
@@ -74,14 +83,23 @@ export const MainColumn = (props: {
     e.target.value = ''
   }
   const clickchevron = (id: RevisionId, chevronup: boolean) => {
-    console.log(id, chevronup)
+    const arrRevisionId = props.revisions.map((r) => r.id)
+    const index = arrRevisionId.findIndex((d) => d === id)
+    const scrollId = chevronup ? arrRevisionId[index - 1] : arrRevisionId[index + 1]
+    setScroller(scrollId)
+
     return chevronup
   }
   return (
     <Container>
       {props.revisions.map((revision, i) => (
-        <MainContent key={i}>
-          <PaginationBar clickchevron={(result: boolean) => clickchevron(revision.id, result)} />
+        <MainContent key={i} data-search-id={revision.id}>
+          <ToolBar>
+            <PaginationBar clickchevron={(result: boolean) => clickchevron(revision.id, result)} />
+            <AddButton>
+              <FileUpload type="file" accept={acceptExtensions} onChange={onChange} />
+            </AddButton>
+          </ToolBar>
           <RevisionContent>
             <Revision
               projectId={props.projectId}
@@ -97,11 +115,6 @@ export const MainColumn = (props: {
           </StreamBarColumn>
         </MainContent>
       ))}
-      <ButtonWrap>
-        <AddButton>
-          <FileUpload type="file" accept={acceptExtensions} onChange={onChange} />
-        </AddButton>
-      </ButtonWrap>
       <AlertModal isOpen={openModal} />
     </Container>
   )
