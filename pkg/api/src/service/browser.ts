@@ -141,6 +141,6 @@ export const createS3RevisionPath = (
   `${s3Endpoint}/${bucketConverted}/works/converted/${projectId}/${deskId}/revisions/${revisionId}/0.jpg` as RevisionPath
 
 export const createS3ProjectIconPath = (projectId: ProjectId, iconExt?: string | null) => {
-  if (!iconExt) return
+  if (!iconExt) return null
   return `${s3Endpoint}/${bucketOriginal}/icon/${projectId}/${projectId}.${iconExt}` as S3ProjectIconPath
 }

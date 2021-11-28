@@ -53,7 +53,7 @@ export const ProjectConfig = (props: {
 }) => {
   const [iconImageFile, setIconImageFile] = useState<File | null>(null)
   const [newProjectName, setNewProjectName] = useState('')
-  const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
+  const { projects, updateApiProjects, updateProjects } = useContext(BrowserContext)
   const { api, onErr } = useApi()
   const [isUpdating, setIsUpdating] = useState(false)
 
@@ -66,18 +66,16 @@ export const ProjectConfig = (props: {
     const projectData = await api.browser.projects
       ._projectId(projectId)
       .put({
-        body: { projectName, iconExt, imageFile: iconImageFile as File },
+        body: { name: projectName, iconExt, imageFile: iconImageFile as File },
       })
       .catch(onErr)
     if (!projectData) return
 
-    const projectsData = apiWholeData.projects.map((d) =>
-      d.id === projectId ? projectData.body : d
-    )
+    const projectsData = projects.map((d) => (d.id === projectId ? projectData.body : d))
     const projectsStatus = projects.map((d) =>
       d.id === projectId ? { ...d, name: projectData.body.name } : d
     )
-    updateApiWholeData('projects', projectsData)
+    updateApiProjects(projectsData)
     updateProjects(projectsStatus)
     props.onComplete()
     setIsUpdating(false)

@@ -30,7 +30,7 @@ export const ProjectNameUpdate = (props: {
   const updateProjectName = async (name: string) => {
     const projectData = await api.browser.projects
       ._projectId(props.projectId)
-      .put({ body: { projectName: name } })
+      .put({ body: { name } })
       .catch(onErr)
     if (!projectData) return
 
