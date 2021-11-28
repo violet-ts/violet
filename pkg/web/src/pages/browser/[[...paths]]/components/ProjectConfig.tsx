@@ -5,7 +5,7 @@ import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserProject } from '@violet/web/src/types/browser'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { IconUpload } from './IconUpload'
 import { ProjectNameUpdate } from './ProjectNameUpdate'
@@ -26,7 +26,7 @@ const Column = styled.div`
   justify-content: space-between;
 `
 
-const UpdateButton = styled.button`
+const Button = styled.button`
   padding: 0.3em;
   font-size: ${fontSizes.large};
   color: ${colors.white};
@@ -47,14 +47,20 @@ const SecondaryButton = styled.button`
 `
 
 export const ProjectConfig = (props: { onComplete: () => void; project: BrowserProject }) => {
-  const [iconImageFile, setIconImageFile] = useState<File | null>(null)
+  const [iconImageFile, setIconImageFile] = useState<File | undefined>(undefined)
   const [newProjectName, setNewProjectName] = useState('')
   const { updateProject } = useBrowserContext()
   const { api, onErr } = useApiContext()
   const [isUpdating, setIsUpdating] = useState(false)
+  useEffect(() => {
+    return () => {
+      setIconImageFile(undefined)
+      setNewProjectName('')
+    }
+  }, [])
 
   const updateProjectName = async (projectId: ProjectId) => {
-    if (!newProjectName && !iconImageFile) props.onComplete()
+    if (!newProjectName && !iconImageFile) return props.onComplete()
 
     setIsUpdating(true)
     const projectName = newProjectName ? newProjectName : props.project.name
@@ -62,13 +68,13 @@ export const ProjectConfig = (props: { onComplete: () => void; project: BrowserP
     const projectRes = await api.browser.projects
       ._projectId(projectId)
       .$put({
-        body: { name: projectName, iconExt, imageFile: iconImageFile as File },
+        body: { name: projectName, iconExt, imageFile: iconImageFile },
       })
       .catch(onErr)
     if (projectRes) updateProject(projectRes)
 
-    props.onComplete()
     setIsUpdating(false)
+    return props.onComplete()
   }
   return (
     <Container>
@@ -85,7 +91,7 @@ export const ProjectConfig = (props: { onComplete: () => void; project: BrowserP
       />
       <Spacer axis="y" size={10} />
       <Column>
-        <UpdateButton onClick={() => updateProjectName(props.project.id)}>Update</UpdateButton>
+        <Button onClick={() => updateProjectName(props.project.id)}>Update</Button>
         <Spacer axis="x" size={50} />
         <SecondaryButton onClick={props.onComplete}>Cancel</SecondaryButton>
       </Column>

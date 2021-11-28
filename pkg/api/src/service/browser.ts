@@ -77,8 +77,9 @@ export const updateProject = async (
   return {
     id: projectId,
     name: projectName,
-    iconUrl:
-      `${s3Endpoint}/${bucketOriginal}/icon/${projectId}/${projectId}.${iconExt}` as ProjectIconPath,
+    iconUrl: iconExt
+      ? (`${s3Endpoint}/${bucketOriginal}/icon/${projectId}/${projectId}.${iconExt}` as ProjectIconPath)
+      : null,
   }
 }
 

@@ -57,7 +57,7 @@ const IconImage = styled.img`
 
 export const IconUpload = (props: {
   projectName: ApiProject['name']
-  setIconImageFile: Dispatch<File | null>
+  setIconImageFile: Dispatch<File | undefined>
 }) => {
   const inputImageElement = useRef<HTMLInputElement>(null)
   const [iconImageUrl, setIconImageUrl] = useState('')
