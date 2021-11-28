@@ -1,7 +1,7 @@
 import { colors } from '@violet/web/src/utils/constants'
 import styled from 'styled-components'
 
-export const ChevronUp = styled.button`
+export const Chevron = styled.button`
   position: relative;
   box-sizing: border-box;
   display: block;

@@ -16,7 +16,6 @@ import { LeftColumn } from './components/LeftColumn'
 import { MainColumn } from './components/MainColumn'
 import { ProjectBar } from './components/ProjectBar'
 import { TabBar } from './components/TabBar'
-import { WorkPagingBar } from './components/WorkPagingBar'
 import { usePage } from './usePage'
 
 const Container = styled.div`
@@ -56,7 +55,6 @@ const Columns = (props: {
           dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
         />
       </LeftColumn>
-      <WorkPagingBar />
       <WorksView>
         <TabBar
           project={props.currentProject}
