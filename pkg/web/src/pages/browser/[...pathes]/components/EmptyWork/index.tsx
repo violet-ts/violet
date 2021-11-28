@@ -1,6 +1,5 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
-import type { ApiRevision } from '@violet/lib/types/api'
-import type { ProjectId, WorkId } from '@violet/lib/types/branded'
+import type { DeskId, ProjectId, WorkId } from '@violet/lib/types/branded'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { BrowserContext } from '@violet/web/src/contexts/Browser'
 import { useApi } from '@violet/web/src/hooks'
@@ -64,9 +63,9 @@ const AlertMessage = styled.div`
   white-space: nowrap;
 `
 
-export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
+export const EmptyWork = (props: { projectId: ProjectId; deskId: DeskId; workId: WorkId }) => {
   const { api, onErr } = useApi()
-  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
+  const { updateApiWholeDict } = useContext(BrowserContext)
   const [dragging, setDragging] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const dragEnter = () => setDragging(true)
@@ -76,32 +75,26 @@ export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
     if (e.target.files?.length === 1) {
       const targetFileType = e.target.files[0].type
       fileTypes.some((f) => f.type === targetFileType)
-        ? sendFormData(e.target.files)
+        ? void sendFormData(e.target.files)
         : setOpenAlert(true)
     }
     e.target.value = ''
   }
-  const updateRevisions = (revisionRes: { workId: WorkId; revisions: ApiRevision[] }) => {
-    updateApiWholeData(
-      'revisionsList',
-      apiWholeData.revisionsList.some((r) => r.workId === revisionRes.workId)
-        ? apiWholeData.revisionsList.map((r) => (r.workId === revisionRes.workId ? revisionRes : r))
-        : [...apiWholeData.revisionsList, revisionRes]
-    )
-  }
   const sendFormData = async (file: FileList) => {
     setDragging(false)
     if (!file) return
-    const newRevision = await api.browser.works
-      ._workId(props.workId)
-      .revisions.$post({ body: { uploadFile: file[0], projectId: props.projectId } })
+
+    await api.browser.projects
+      ._projectId(props.projectId)
+      .works._workId(props.workId)
+      .revisions.$post({ body: { uploadFile: file[0], deskId: props.deskId } })
       .catch(onErr)
 
-    if (!newRevision) return
-    const revisionRes = await api.browser.works._workId(props.workId).revisions.$get()
-
-    if (!revisionRes) return
-    updateRevisions(revisionRes)
+    const revisionRes = await api.browser.projects
+      ._projectId(props.projectId)
+      .works._workId(props.workId)
+      .revisions.$get()
+    updateApiWholeDict('revisionsDict', revisionRes)
   }
 
   const closeModal = () => {

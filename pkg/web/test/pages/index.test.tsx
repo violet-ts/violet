@@ -17,9 +17,9 @@ let fastify: FastifyInstance
 
 beforeAll(() => {
   fastify = Fastify()
-  fastify.register(cors)
+  void fastify.register(cors)
   fastify.get(apiClient.tasks.$path(), (_, reply) => {
-    reply.send(
+    void reply.send(
       res<typeof apiClient.tasks.$get>([
         { id: 1, label: 'foo task', done: false },
         { id: 2, label: 'bar task', done: true },

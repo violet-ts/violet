@@ -131,7 +131,7 @@ export const Explorer = ({
           path: '',
         })[0],
       })),
-    [projectApiData.desks, project.openedFullPathDict, project.selectedFullPath]
+    [projectApiData.desks, project.id, project.openedFullPathDict, project.selectedFullPath]
   )
   const [openConfiguration, setOpenConfiguration] = useState(false)
   const closeModal = () => {

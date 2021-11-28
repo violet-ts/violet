@@ -6,7 +6,7 @@ Create .env files:
 
 ```sh
 $ cp .env.example .env
-$ cp packges/api/prisma/.env.example packges/api/prisma/.env
+$ cp pkg/api/prisma/.env.example pkg/api/prisma/.env
 ```
 
 Input your values to `.env`

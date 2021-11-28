@@ -10,36 +10,42 @@ export const useFetch = (
   projectId: ProjectId | undefined,
   currentProject: BrowserProject | undefined
 ) => {
-  const { apiWholeData, updateProjects, updateApiWholeData } = useContext(BrowserContext)
+  const { updateProjects, updateApiProjects, updateApiWholeDict } = useContext(BrowserContext)
   const { api } = useApi()
   const enabled = !!projectId
   const projectsRes = useAspidaSWR(api.browser.projects, { enabled })
   const desksRes = useAspidaSWR(api.browser.projects._projectId(projectId ?? ''), { enabled })
   const revisionsRes = useAspidaSWR(
-    api.browser.works._workId(currentProject?.openedTabId ?? '').revisions,
+    api.browser.projects
+      ._projectId(projectId ?? '')
+      .works._workId(currentProject?.openedTabId ?? '').revisions,
     { enabled: !!currentProject?.openedTabId }
   )
 
   const updateMessage = useCallback(
     async (revisionsData: { workId: WorkId; revisions: ApiRevision[] }) => {
-      const message = await Promise.all(
+      const messages = await Promise.all(
         revisionsData.revisions.map((revision) =>
-          api.browser.works
-            ._workId(currentProject?.openedTabId ?? '')
+          api.browser.projects
+            ._projectId(projectId ?? '')
+            .works._workId(currentProject?.openedTabId ?? '')
             .revisions._revisionId(revision.id)
             .messages.$get()
         )
       )
-      updateApiWholeData('messagesList', message)
+      updateApiWholeDict(
+        'messagesDict',
+        messages.reduce((dict, m) => ({ ...dict, [m.revisionId]: m.messages }), {})
+      )
     },
-    [apiWholeData.messagesList]
+    [api.browser.projects, currentProject?.openedTabId, projectId, updateApiWholeDict]
   )
 
   useEffect(() => {
     const projectsData = projectsRes.data
     if (!projectsData) return
 
-    updateApiWholeData('projects', projectsData)
+    updateApiProjects(projectsData)
     updateProjects(
       projectsData.map((d) => ({
         ...d,
@@ -49,38 +55,26 @@ export const useFetch = (
         selectedFullPath: d.id,
       }))
     )
-  }, [projectsRes.data])
+  }, [projectsRes.data, updateApiProjects, updateProjects])
 
   useEffect(() => {
     const desksData = desksRes.data
     if (!desksData) return
 
-    updateApiWholeData(
-      'desksList',
-      apiWholeData.desksList.some((d) => d.projectId === desksData.projectId)
-        ? apiWholeData.desksList.map((d) => (d.projectId === desksData.projectId ? desksData : d))
-        : [...apiWholeData.desksList, desksData]
-    )
-  }, [desksRes.data])
+    updateApiWholeDict('desksDict', { [desksData.projectId]: desksData.desks })
+  }, [desksRes.data, updateApiWholeDict])
 
   useEffect(() => {
     const revisionsData = revisionsRes.data
     if (!revisionsData) return
 
-    updateApiWholeData(
-      'revisionsList',
-      apiWholeData.revisionsList.some((r) => r.workId === revisionsData.workId)
-        ? apiWholeData.revisionsList.map((r) =>
-            r.workId === revisionsData.workId ? revisionsData : r
-          )
-        : [...apiWholeData.revisionsList, revisionsData]
-    )
-    updateMessage(revisionsData)
-  }, [revisionsRes.data])
+    updateApiWholeDict('revisionsDict', { [revisionsData.workId]: revisionsData.revisions })
+    void updateMessage(revisionsData)
+  }, [revisionsRes.data, updateApiWholeDict, updateMessage])
 
   return {
     error: [projectsRes.error, desksRes.error, revisionsRes.error, revisionsRes.error].find(
       Boolean
-    ),
+    ) as unknown,
   }
 }

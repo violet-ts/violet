@@ -24,8 +24,8 @@ export const MessageCell = (props: {
   message: BrowserMessage
   replyMessage: (messageId: MessageId, content: string) => Promise<void>
 }) => {
-  const sendContent = (content: string) => {
-    props.replyMessage(props.message.id, content)
+  const sendContent = async (content: string) => {
+    await props.replyMessage(props.message.id, content)
   }
 
   return (
@@ -34,7 +34,7 @@ export const MessageCell = (props: {
       <Spacer axis="y" size={8} />
       <Message>{props.message.content}</Message>
       <Spacer axis="y" size={16} />
-      <ReplyMessageCell replies={props.message.replys} />
+      <ReplyMessageCell replies={props.message.replies} />
       <Spacer axis="y" size={8} />
       <ReplyInputForm sendContent={sendContent} />
       <Spacer axis="y" size={8} />

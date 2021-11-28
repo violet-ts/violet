@@ -3,11 +3,11 @@
 import type { ApiDesk, ApiMessage, ApiProject, ApiRevision, ApiWork } from '@violet/lib/types/api'
 import type {
   DeskId,
-  EditionId,
   MessageId,
   ProjectId,
   ReplyId,
   RevisionId,
+  RevisionPath,
   WorkId,
 } from '@violet/lib/types/branded'
 
@@ -23,16 +23,12 @@ export type BrowserMessage = {
   content: string
   createdAt: number
   userName: string
-  replys: BrowserReply[]
-}
-
-export type BrowserEdition = {
-  id: EditionId
+  replies: BrowserReply[]
 }
 
 export type BrowserRevision = {
   id: RevisionId
-  editions: BrowserEdition[]
+  url: RevisionPath
   messages: BrowserMessage[]
 }
 
@@ -70,17 +66,15 @@ export type BrowserProject = {
   openedFullPathDict: OpenedFullPathDict
 } & ApiProject
 
-export type BrowserApiWholeData = {
-  projects: ApiProject[]
-  desksList: { projectId: ProjectId; desks: ApiDesk[] }[]
-  revisionsList: { workId: WorkId; revisions: ApiRevision[] }[]
-  messagesList: { revisionId: RevisionId; messages: ApiMessage[] }[]
+export type BrowserApiWholeDict = {
+  desksDict: Record<ProjectId, ApiDesk[]>
+  revisionsDict: Record<WorkId, ApiRevision[]>
+  messagesDict: Record<RevisionId, ApiMessage[]>
 }
 
 export type ProjectApiData = {
   projectId: ProjectId
   name: string
   desks: ApiDesk[]
-  revisions: ApiRevision[] | undefined
-  messages: ApiMessage[] | undefined
+  revisions: BrowserRevision[] | undefined
 }

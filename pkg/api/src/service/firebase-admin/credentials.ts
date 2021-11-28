@@ -44,8 +44,8 @@ export const createFirebaseCredentialFromAwsCredentials = (
       await client.getAccessToken()
       // リフレッシュについては google-auth-library で管理されており、 private 修飾子がついている
       // TODO: google-auth-library, firebase-admin-node に issue を立てて追っていく必要あり
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const gapiCred: GoogleAPICredentials = (client as any).cachedAccessToken
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- touching private prop: https://github.com/googleapis/google-auth-library-nodejs/issues/1322
+      const gapiCred = (client as any).cachedAccessToken as GoogleAPICredentials
       return convertToFirebaseCredential(gapiCred)
     },
   }

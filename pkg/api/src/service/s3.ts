@@ -1,7 +1,7 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { fileTypes, imageTypes } from '@violet/def/constants'
-import type { S3ProjectIconPath, S3SaveWorksPath } from '@violet/lib/types/branded'
+import type { RevisionPath, S3ProjectIconPath } from '@violet/lib/types/branded'
 import type { MultipartFile } from 'fastify-multipart'
 import { depend } from 'velona'
 import envValues from '../utils/envValues'
@@ -23,7 +23,7 @@ const getS3Client = () => {
   return s3Client
 }
 
-export const getRevisionsSidnedUrl = depend({ getS3Client }, ({ getS3Client }) =>
+export const getRevisionsSignedUrl = depend({ getS3Client }, ({ getS3Client }) =>
   getSignedUrl(getS3Client(), new GetObjectCommand({ Bucket: 'static', Key: 'sample.txt' }), {
     expiresIn: 3600,
   })
@@ -36,7 +36,7 @@ export const sendNewWork = depend(
     { getS3Client },
     props: {
       uploadFile: MultipartFile
-      path: S3SaveWorksPath
+      path: RevisionPath
     }
   ) => {
     const uploadParams = {

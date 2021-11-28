@@ -74,18 +74,18 @@ export const CellName = (props: {
   const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
-  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
+  const { apiWholeDict, updateApiWholeDict } = useContext(BrowserContext)
   const { asPath, replace } = useRouter()
   const [editingType, setEditingType] = useState<'file' | 'folder'>('file')
   useEffect(() => {
     inputElement.current?.focus()
-  }, [inputElement.current])
+  }, [inputElement])
   const href = useMemo(
     () =>
       pagesPath.browser
         ._pathes(pathChunks)
         .$url(props.selected && !props.isWork ? { hash: forceToggleHash } : undefined),
-    [props.selected, props.isWork]
+    [pathChunks, props.selected, props.isWork]
   )
   const openInputField = () => {
     setIsFocusing(false)
@@ -103,21 +103,16 @@ export const CellName = (props: {
   }
   const submitNew = async (path: string, name: string, ext?: string) => {
     const { projectId, deskName } = getProjectInfo(pathChunks)
-    const desk = apiWholeData.desksList
-      .filter((d) => d.projectId === projectId)[0]
-      .desks.filter((d) => d.name === deskName)[0]
+    const desk = apiWholeDict.desksDict[projectId].filter((d) => d.name === deskName)[0]
     await api.browser.projects
       ._projectId(projectId)
       .desks._deskId(desk.id)
       .post({ body: { path, name, ext } })
       .catch(onErr)
     const deskRes = await api.browser.projects._projectId(projectId).desks.$get()
-    updateApiWholeData(
-      'desksList',
-      apiWholeData.desksList.map((d) => (d.projectId === deskRes.projectId ? deskRes : d))
-    )
-    replace(`${asPath}/${label}`)
+    updateApiWholeDict('desksDict', deskRes)
     setIsClickNewAdd(false)
+    void replace(`${asPath}/${label}`)
   }
   const createNew = () => {
     const pathArray = pathChunks.filter((d) => pathChunks.indexOf(d) > 1)
@@ -125,10 +120,10 @@ export const CellName = (props: {
       const path = `/${pathArray.join('/')}`
       const name = label.substring(0, label.lastIndexOf('.'))
       const ext = label.substring(label.lastIndexOf('.') + 1, label.length)
-      submitNew(path, name, ext)
+      void submitNew(path, name, ext)
     } else {
       const path = `/${pathArray.join('/')}/${label}`
-      submitNew(path, '')
+      void submitNew(path, '')
     }
   }
   const sendNewName = (e: FormEvent) => {

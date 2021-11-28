@@ -25,16 +25,16 @@ const startServer = async () => {
 
   server(fastify, { basePath: API_BASE_PATH })
 
-  fastify.register(helmet)
+  await fastify.register(helmet)
   // TODO(security): CORS の設定を制限しないと CSRF の効果はない
-  fastify.register(cors, {
+  await fastify.register(cors, {
     origin: true,
     credentials: true,
   })
   // TODO(security): use cookie secret with secrets manager rotation
-  fastify.register(cookie, { secret: 'secretforawhile' })
-  fastify.register(violetInject, { env, logger })
-  fastify.register(user)
+  await fastify.register(cookie, { secret: 'secretforawhile' })
+  await fastify.register(violetInject, { env, logger })
+  await fastify.register(user)
   await fastify.register(csrf, {
     cookieOpts: {
       signed: true,
@@ -44,8 +44,11 @@ const startServer = async () => {
     },
   })
 
-  fastify.listen(API_PORT, '::')
   console.log(`API started on :: port ${API_PORT}`)
+  await fastify.listen(API_PORT, '::')
 }
 
-startServer()
+void startServer().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})

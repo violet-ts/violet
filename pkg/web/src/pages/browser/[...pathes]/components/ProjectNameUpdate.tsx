@@ -21,7 +21,7 @@ export const ProjectNameUpdate = (props: {
   }, [])
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApi()
-  const { apiWholeData, projects, updateApiWholeData, updateProjects } = useContext(BrowserContext)
+  const { projects, apiProjects, updateApiProjects, updateProjects } = useContext(BrowserContext)
   const [isUpdating, setIsUpdating] = useState(false)
   useEffect(() => {
     inputElement.current?.focus()
@@ -34,13 +34,11 @@ export const ProjectNameUpdate = (props: {
       .catch(onErr)
     if (!projectData) return
 
-    const projectsData = apiWholeData.projects.map((d) =>
-      d.id === props.projectId ? projectData.body : d
-    )
+    const projectsData = apiProjects.map((d) => (d.id === props.projectId ? projectData.body : d))
     const projectsStatus = projects.map((d) =>
       d.id === props.projectId ? { ...d, name: projectData.body.name } : d
     )
-    updateApiWholeData('projects', projectsData)
+    updateApiProjects(projectsData)
     updateProjects(projectsStatus)
   }
 

@@ -1,5 +1,8 @@
+import type { ApiDesk } from '@violet/lib/types/api'
+import type { WorkId } from '@violet/lib/types/branded'
 import { Fetching } from '@violet/web/src/components/organisms/Fetching'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
+import { mainColumnHeight } from '@violet/web/src/utils/constants'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 import { EmptyWork } from './components/EmptyWork'
@@ -23,21 +26,24 @@ const WorksView = styled.div`
 const WorksHeader = styled.div`
   width: 100%;
 `
-const WroksMain = styled.div`
-  height: 100vh;
+const WorksMain = styled.div`
+  height: ${mainColumnHeight};
   overflow-y: auto;
 `
 
 const ProjectPage = () => {
   const { error, projectApiData, projects, currentProject } = usePage()
 
+  const getDesk = (desks: ApiDesk[], openedTabId: WorkId) =>
+    desks.filter((c) => c.works.some((w) => w.id === openedTabId))[0].id
+
   const browserRevisionData = useMemo(
     () =>
       projectApiData?.revisions?.map<BrowserRevision>((p) => ({
         id: p.id,
+        url: p.url,
         editions: [],
-        messages:
-          projectApiData.messages?.filter((message) => p.messageIds?.includes(message.id)) ?? [],
+        messages: projectApiData.revisions?.filter((r) => r.id === p.id)[0].messages ?? [],
       })) ?? [],
     [projectApiData]
   )
@@ -57,18 +63,23 @@ const ProjectPage = () => {
               <WorksHeader>
                 <TabBar project={currentProject} projectApiData={projectApiData} />
               </WorksHeader>
-              <WroksMain>
+              <WorksMain>
                 <MainColumn
                   projectId={currentProject.id}
+                  deskId={getDesk(projectApiData.desks, currentProject.openedTabId)}
                   workId={currentProject.openedTabId}
                   revisions={browserRevisionData}
                 />
-              </WroksMain>
+              </WorksMain>
             </>
           ) : (
             <>
               <TabBar project={currentProject} projectApiData={projectApiData} />
-              <EmptyWork projectId={currentProject.id} workId={currentProject.openedTabId} />
+              <EmptyWork
+                projectId={currentProject.id}
+                workId={currentProject.openedTabId}
+                deskId={getDesk(projectApiData.desks, currentProject.openedTabId)}
+              />
             </>
           )
         ) : (

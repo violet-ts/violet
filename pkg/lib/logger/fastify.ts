@@ -55,7 +55,7 @@ const summarizeHeaders = (headers: Record<string, unknown>) => {
 const extractInfo = (obj: unknown): unknown => {
   if (typeof obj !== 'object') return obj
   if (obj === null) return obj
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- object型はプロパティが取れない
   const anyObj: any = obj
   const maybeRequest: DeepPartial<FastifyRequest> = anyObj.req
   const maybeReply: DeepPartial<FastifyReply> = anyObj.reply

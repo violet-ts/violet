@@ -1,24 +1,27 @@
+import type { ApiProject } from '@violet/lib/types/api'
 import { createContext, useCallback, useState } from 'react'
-import type { BrowserApiWholeData, BrowserProject } from '../types/browser'
+import type { BrowserApiWholeDict, BrowserProject } from '../types/browser'
 
 export const BrowserContext = createContext({
   projects: [] as BrowserProject[],
-  apiWholeData: {} as BrowserApiWholeData,
+  apiProjects: [] as ApiProject[],
+  apiWholeDict: {} as BrowserApiWholeDict,
   updateProjects: (() => {}) as (projects: BrowserProject[]) => void,
   updateProject: (() => {}) as (project: BrowserProject) => void,
-  updateApiWholeData: (() => {}) as <T extends keyof BrowserApiWholeData>(
+  updateApiProjects: (() => {}) as (apiProjects: ApiProject[]) => void,
+  updateApiWholeDict: (() => {}) as <T extends keyof BrowserApiWholeDict>(
     key: T,
-    data: BrowserApiWholeData[T]
+    dict: BrowserApiWholeDict[T]
   ) => void,
 })
 
 export const BrowserProvider: React.FC = ({ children }) => {
   const [projects, setProjects] = useState<BrowserProject[]>([])
-  const [apiWholeData, setApiWholeData] = useState<BrowserApiWholeData>({
-    projects: [],
-    desksList: [],
-    revisionsList: [],
-    messagesList: [],
+  const [apiProjects, setApiProjects] = useState<ApiProject[]>([])
+  const [apiWholeDict, setApiWholeDict] = useState<BrowserApiWholeDict>({
+    desksDict: {},
+    revisionsDict: {},
+    messagesDict: {},
   })
   const updateProjects = useCallback((projects: BrowserProject[]) => {
     setProjects(projects)
@@ -26,9 +29,12 @@ export const BrowserProvider: React.FC = ({ children }) => {
   const updateProject = useCallback((project: BrowserProject) => {
     setProjects((ps) => ps.map((p) => (p.id === project.id ? project : p)))
   }, [])
-  const updateApiWholeData = useCallback(
-    <T extends keyof BrowserApiWholeData>(key: T, data: BrowserApiWholeData[T]) => {
-      setApiWholeData((d) => ({ ...d, [key]: data }))
+  const updateApiProjects = useCallback((apiProjects: ApiProject[]) => {
+    setApiProjects(apiProjects)
+  }, [])
+  const updateApiWholeDict = useCallback(
+    <T extends keyof BrowserApiWholeDict>(key: T, dict: BrowserApiWholeDict[T]) => {
+      setApiWholeDict((d) => ({ ...d, [key]: { ...d[key], ...dict } }))
     },
     []
   )
@@ -37,10 +43,12 @@ export const BrowserProvider: React.FC = ({ children }) => {
     <BrowserContext.Provider
       value={{
         projects,
-        apiWholeData,
+        apiWholeDict,
+        apiProjects,
         updateProjects,
         updateProject,
-        updateApiWholeData,
+        updateApiProjects,
+        updateApiWholeDict,
       }}
     >
       {children}

@@ -13,7 +13,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
-  height: calc(100vh - 48px);
+  height: 100%;
   border-left: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const StreamBox = styled.div`
@@ -45,7 +45,7 @@ export const StreamBar = (props: {
   workId: WorkId
   revision: BrowserRevision
 }) => {
-  const { apiWholeData, updateApiWholeData } = useContext(BrowserContext)
+  const { updateApiWholeDict } = useContext(BrowserContext)
   const { api, onErr } = useApi()
   const [content, setContent] = useState('')
   const scrollBottomRef = useRef<HTMLDivElement>(null)
@@ -53,54 +53,68 @@ export const StreamBar = (props: {
 
   const submitMessage = useCallback(async () => {
     if (!content) return
-    await api.browser.works
-      ._workId(props.workId)
+
+    await api.browser.projects
+      ._projectId(props.projectId)
+      .works._workId(props.workId)
       .revisions._revisionId(props.revision.id)
       .post({ body: { content, userName } })
       .catch(onErr)
 
-    const messageRes = await api.browser.works
-      ._workId(props.workId)
+    const messagesRes = await api.browser.projects
+      ._projectId(props.projectId)
+      .works._workId(props.workId)
       .revisions._revisionId(props.revision.id)
       .messages.$get()
+      .catch(onErr)
 
-    updateApiWholeData(
-      'messagesList',
-      apiWholeData.messagesList.map((m) =>
-        m.revisionId === messageRes.revisionId ? messageRes : m
-      )
-    )
+    if (!messagesRes) return
 
+    updateApiWholeDict('messagesDict', messagesRes)
     setContent('')
-  }, [content])
+  }, [
+    api.browser.projects,
+    content,
+    onErr,
+    props.projectId,
+    props.revision.id,
+    props.workId,
+    updateApiWholeDict,
+  ])
 
   useEffect(() => {
-    scrollBottomRef?.current?.scrollIntoView()
+    scrollBottomRef.current?.scrollIntoView()
   }, [props.revision.messages.length])
 
   const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
       if (!content) return
-      await api.browser.works
-        ._workId(props.workId)
+
+      await api.browser.projects
+        ._projectId(props.projectId)
+        .works._workId(props.workId)
         .revisions._revisionId(props.revision.id)
         .messages._messageId(messageId)
         .replies.post({ body: { content, userName } })
 
-      const replyRes = await api.browser.works
-        ._workId(props.workId)
+      const replyRes = await api.browser.projects
+        ._projectId(props.projectId)
+        .works._workId(props.workId)
         .revisions._revisionId(props.revision.id)
         .messages.$get()
         .catch(onErr)
-
       if (!replyRes) return
 
-      updateApiWholeData(
-        'messagesList',
-        apiWholeData.messagesList.map((m) => (m.revisionId === replyRes.revisionId ? replyRes : m))
-      )
+      updateApiWholeDict('messagesDict', replyRes)
     },
-    [content]
+    [
+      api.browser.projects,
+      onErr,
+      props.projectId,
+      props.revision.id,
+      props.workId,
+      updateApiWholeDict,
+    ]
   )
 
   return (

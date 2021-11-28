@@ -1,9 +1,8 @@
-/* eslint-disable no-restricted-imports */
+/* eslint-disable no-restricted-imports -- firebase/* はここだけ許可 */
 import { initializeApp } from 'firebase/app'
 import type { Auth } from 'firebase/auth'
 import { connectAuthEmulator, getAuth, inMemoryPersistence } from 'firebase/auth'
 export { EmailAuthProvider, GithubAuthProvider } from 'firebase/auth'
-/* eslint-enable no-restricted-imports */
 
 const createAuth = () => {
   if (process.env.NEXT_PUBLIC_AUTH_EMULATOR) {
@@ -13,7 +12,7 @@ const createAuth = () => {
       apiKey: 'fake-api-key',
     })
     const auth = getAuth(app)
-    auth.setPersistence(inMemoryPersistence)
+    void auth.setPersistence(inMemoryPersistence)
     connectAuthEmulator(auth, process.env.NEXT_PUBLIC_AUTH_EMULATOR, {
       disableWarnings: process.env.NEXT_PUBLIC_AUTH_DISABLE_UI_WARNING === '1',
     })
@@ -26,7 +25,7 @@ const createAuth = () => {
     }
     const app = initializeApp(config)
     const auth = getAuth(app)
-    auth.setPersistence(inMemoryPersistence)
+    void auth.setPersistence(inMemoryPersistence)
     return auth
   }
 }
@@ -37,7 +36,7 @@ const cacheAuth = (): Auth | null => {
   if (typeof window === 'undefined') return null
   if (process.env.NODE_ENV === 'production') return createAuth()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- prevent HMR
-  return ((window as any)._firebase_auth = (window as any)._firebase_auth ?? createAuth())
+  return ((window as any)._firebase_auth = ((window as any)._firebase_auth as Auth) ?? createAuth())
 }
 
 export const auth = cacheAuth()
