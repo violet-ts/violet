@@ -1,7 +1,7 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { ProjectId, RevisionId, WorkId } from '@violet/lib/types/branded'
 import { AddButton } from '@violet/web/src/components/atoms/AddButton'
-import { Scroller } from '@violet/web/src/components/atoms/Scroller'
+import { scroller } from '@violet/web/src/components/atoms/Scroller'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
@@ -48,12 +48,12 @@ export const MainColumn = (props: {
 }) => {
   const { api, onErr } = useApiContext()
   const { wholeDict, updateWholeDict } = useBrowserContext()
-  const [openModal, setOpenModal] = useState(false)
-  const [scroller, setScroller] = useState<string>('0')
+  const [open, setOpen] = useState(false)
+  const [scrollId, setScrollId] = useState<string>('0')
 
   useEffect(() => {
-    Scroller(scroller)
-  }, [scroller])
+    scroller(scrollId)
+  }, [scrollId])
   const sendFormData = async (file: File) => {
     const revisionRes = await api.browser.projects
       ._projectId(props.projectId)
@@ -70,11 +70,11 @@ export const MainColumn = (props: {
       ],
     })
   }
-  const openAlertModal = (isOpen: boolean) => {
-    setOpenModal(isOpen)
+  const stateModal = (state: boolean) => {
+    setOpen(state)
   }
   const dropFile = (file: File) => {
-    fileTypes.some((f) => file.type === f.type) ? void sendFormData(file) : setOpenModal(true)
+    fileTypes.some((f) => file.type === f.type) ? void sendFormData(file) : setOpen(true)
   }
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -82,20 +82,20 @@ export const MainColumn = (props: {
     }
     e.target.value = ''
   }
-  const clickchevron = (id: RevisionId, chevronup: boolean) => {
+  const clickChevron = (id: RevisionId, chevronUp: boolean) => {
     const arrRevisionId = props.revisions.map((r) => r.id)
     const index = arrRevisionId.findIndex((d) => d === id)
-    const scrollId = chevronup ? arrRevisionId[index - 1] : arrRevisionId[index + 1]
-    setScroller(scrollId)
+    const scrollId = chevronUp ? arrRevisionId[index - 1] : arrRevisionId[index + 1]
+    setScrollId(scrollId)
 
-    return chevronup
+    return chevronUp
   }
   return (
     <Container>
       {props.revisions.map((revision, i) => (
         <MainContent key={i} data-search-id={revision.id}>
           <ToolBar>
-            <PaginationBar clickchevron={(result: boolean) => clickchevron(revision.id, result)} />
+            <PaginationBar clickChevron={(result: boolean) => clickChevron(revision.id, result)} />
             <AddButton>
               <FileUpload type="file" accept={acceptExtensions} onChange={onChange} />
             </AddButton>
@@ -106,7 +106,7 @@ export const MainColumn = (props: {
               workId={props.workId}
               revision={revision}
               sendFormData={sendFormData}
-              openAlertModal={openAlertModal}
+              stateModal={stateModal}
             />
           </RevisionContent>
           <Spacer axis="y" size={8} />
@@ -115,7 +115,7 @@ export const MainColumn = (props: {
           </StreamBarColumn>
         </MainContent>
       ))}
-      <AlertModal isOpen={openModal} />
+      <AlertModal open={open} onClose={(state: boolean) => stateModal(state)} />
     </Container>
   )
 }

@@ -10,7 +10,7 @@ const Container = styled.div`
   width: 48px;
   height: 100%;
 `
-const ChevronUP = styled.div`
+const ChevronUp = styled.div`
   text-align: inherit;
 `
 const ChevronDown = styled.div`
@@ -18,13 +18,13 @@ const ChevronDown = styled.div`
   transform: rotate(180deg);
 `
 
-export const PaginationBar = (props: { clickchevron: (chevronup: boolean) => boolean }) => {
+export const PaginationBar = (props: { clickChevron: (chevronUp: boolean) => boolean }) => {
   return (
     <Container>
-      <ChevronUP onClick={() => props.clickchevron(true)}>
+      <ChevronUp onClick={() => props.clickChevron(true)}>
         <Chevron />
-      </ChevronUP>
-      <ChevronDown onClick={() => props.clickchevron(false)}>
+      </ChevronUp>
+      <ChevronDown onClick={() => props.clickChevron(false)}>
         <Chevron />
       </ChevronDown>
     </Container>

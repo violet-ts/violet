@@ -29,8 +29,9 @@ const DisplayWorksFrame = styled.div`
 const DisplayWorksViewer = styled.img`
   flex: 1;
   max-width: 100%;
-  height: 100%;
+  max-height: 100%;
   vertical-align: middle;
+  object-fit: cover;
 `
 const Dropper = styled.input`
   position: absolute;
@@ -65,7 +66,7 @@ export const Revision = (props: {
   workId: WorkId
   revision: ApiRevision
   sendFormData: (file: File) => Promise<void>
-  openAlertModal: (isModal: boolean) => void
+  stateModal: (isModal: boolean) => void
 }) => {
   const [isFile, setIsFile] = useState(false)
   const [workPath, setWorkPath] = useState([props.revision.url])
@@ -85,7 +86,7 @@ export const Revision = (props: {
   const dropFile = (file: File) => {
     fileTypes.some((f) => file.type === f.type)
       ? void props.sendFormData(file)
-      : props.openAlertModal(true)
+      : props.stateModal(true)
   }
 
   if (error) {

@@ -1,7 +1,7 @@
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 const Column = styled.div`
@@ -22,17 +22,14 @@ const SecondaryButton = styled.button`
   border: none;
   border-radius: 16px;
 `
-export const AlertModal = (props: { isOpen: boolean }) => {
-  const [openAlert, setOpenAlert] = useState(false)
-  useEffect(() => setOpenAlert(props.isOpen), [props.isOpen])
-
+export const AlertModal = (props: { open: boolean; onClose: (state: boolean) => void }) => {
   return (
-    <CardModal open={openAlert} onClose={() => setOpenAlert(false)}>
+    <CardModal open={props.open} onClose={() => props.onClose(false)}>
       <Column>
         <Spacer axis="y" size={36} />
         <AlertMessage>Unsupported file format!</AlertMessage>
         <Spacer axis="y" size={36} />
-        <SecondaryButton onClick={() => setOpenAlert(false)}>Confirm</SecondaryButton>
+        <SecondaryButton onClick={() => props.onClose(false)}>Confirm</SecondaryButton>
       </Column>
     </CardModal>
   )
