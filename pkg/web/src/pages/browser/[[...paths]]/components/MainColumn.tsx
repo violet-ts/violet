@@ -70,11 +70,15 @@ export const MainColumn = (props: {
       ],
     })
   }
-  const stateModal = (state: boolean) => {
+  const unsupportedFileType = (state: boolean) => {
     setOpen(state)
   }
   const dropFile = (file: File) => {
-    fileTypes.some((f) => file.type === f.type) ? void sendFormData(file) : setOpen(true)
+    const searchFileType = fileTypes.some((f) => file.type === f.type)
+    if (searchFileType) {
+      void sendFormData(file)
+    }
+    unsupportedFileType(!searchFileType)
   }
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -92,8 +96,8 @@ export const MainColumn = (props: {
   }
   return (
     <Container>
-      {props.revisions.map((revision, i) => (
-        <MainContent key={i} data-search-id={revision.id}>
+      {props.revisions.map((revision) => (
+        <MainContent key={revision.id} data-search-id={revision.id}>
           <ToolBar>
             <PaginationBar clickChevron={(result: boolean) => clickChevron(revision.id, result)} />
             <AddButton>
@@ -105,8 +109,7 @@ export const MainColumn = (props: {
               projectId={props.projectId}
               workId={props.workId}
               revision={revision}
-              sendFormData={sendFormData}
-              stateModal={stateModal}
+              dropFile={dropFile}
             />
           </RevisionContent>
           <Spacer axis="y" size={8} />
@@ -115,7 +118,7 @@ export const MainColumn = (props: {
           </StreamBarColumn>
         </MainContent>
       ))}
-      <AlertModal open={open} onClose={(state: boolean) => stateModal(state)} />
+      <AlertModal open={open} onClose={(state: boolean) => unsupportedFileType(state)} />
     </Container>
   )
 }

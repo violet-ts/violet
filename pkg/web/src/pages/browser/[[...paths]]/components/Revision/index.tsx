@@ -1,4 +1,4 @@
-import { acceptExtensions, fileTypes } from '@violet/def/constants'
+import { acceptExtensions } from '@violet/def/constants'
 import type { ApiRevision } from '@violet/lib/types/api'
 import type { ProjectId, RevisionPath, WorkId } from '@violet/lib/types/branded'
 import type { InfoJson } from '@violet/lib/types/files'
@@ -31,7 +31,7 @@ const DisplayWorksViewer = styled.img`
   max-width: 100%;
   max-height: 100%;
   vertical-align: middle;
-  object-fit: cover;
+  object-fit: contain;
 `
 const Dropper = styled.input`
   position: absolute;
@@ -65,8 +65,7 @@ export const Revision = (props: {
   projectId: ProjectId
   workId: WorkId
   revision: ApiRevision
-  sendFormData: (file: File) => Promise<void>
-  stateModal: (isModal: boolean) => void
+  dropFile: (file: File) => void
 }) => {
   const [isFile, setIsFile] = useState(false)
   const [workPath, setWorkPath] = useState([props.revision.url])
@@ -77,16 +76,10 @@ export const Revision = (props: {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
-      dropFile(e.target.files[0])
+      props.dropFile(e.target.files[0])
     }
     setIsFile(false)
     e.target.value = ''
-  }
-
-  const dropFile = (file: File) => {
-    fileTypes.some((f) => file.type === f.type)
-      ? void props.sendFormData(file)
-      : props.stateModal(true)
   }
 
   if (error) {
@@ -107,8 +100,8 @@ export const Revision = (props: {
     >
       {isFile && <Dropper type="file" accept={acceptExtensions} />}
       <DisplayWorksFrame>
-        {workPath.map((p, i) => (
-          <DisplayWorksViewer key={i} src={p} />
+        {workPath.map((p) => (
+          <DisplayWorksViewer key={p} src={p} />
         ))}
       </DisplayWorksFrame>
     </Container>

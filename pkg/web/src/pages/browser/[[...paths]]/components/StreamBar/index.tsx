@@ -124,8 +124,8 @@ export const StreamBar = (props: {
   return (
     <Container>
       <StreamBox>
-        {messages?.map((m, i) => (
-          <MessageCell key={i} message={m} replyMessage={replyMessage} />
+        {messages?.map((m) => (
+          <MessageCell key={m.id} message={m} replyMessage={replyMessage} />
         ))}
         <div ref={scrollBottomRef} />
       </StreamBox>

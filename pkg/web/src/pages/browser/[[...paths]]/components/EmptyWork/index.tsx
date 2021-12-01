@@ -109,7 +109,7 @@ export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
     <Container>
       {openAlert ? (
         <CardModal open={openAlert} onClose={closeModal}>
-          <AlertMessage>UnSupported File Format!</AlertMessage>
+          <AlertMessage>Unsupported File Format!</AlertMessage>
           <Column>
             <SecondaryButton onClick={closeModal}>Confirm</SecondaryButton>
           </Column>
