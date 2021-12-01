@@ -10,17 +10,24 @@ const InputFormProject = styled.form`
   text-align: left;
 `
 
-export const ProjectNameUpdate = (props: {
-  confirmName: () => void
+interface Props {
+  onConfirmName?: () => void
   projectId: ProjectId
   setNewProjectName: Dispatch<string>
-}) => {
+}
+
+export const ProjectNameUpdate: React.FC<Props> = ({
+  onConfirmName,
+  projectId,
+  setNewProjectName,
+}: Props) => {
   const [label, setLabel] = useState('')
   const inputLabel = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      setLabel(e.target.value), props.setNewProjectName(e.target.value)
+      setLabel(e.target.value)
+      setNewProjectName(e.target.value)
     },
-    [props]
+    [setNewProjectName]
   )
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApiContext()
@@ -32,7 +39,7 @@ export const ProjectNameUpdate = (props: {
 
   const updateProjectName = async (name: string) => {
     const projectRes = await api.browser.projects
-      ._projectId(props.projectId)
+      ._projectId(projectId)
       .$put({ body: { name } })
       .catch(onErr)
 
@@ -46,7 +53,7 @@ export const ProjectNameUpdate = (props: {
     setIsUpdating(true)
     await updateProjectName(label)
     setIsUpdating(false)
-    props.confirmName()
+    onConfirmName?.()
   }
   return (
     <InputFormProject onSubmit={updateName}>

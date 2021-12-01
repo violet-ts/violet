@@ -5,7 +5,7 @@ import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserProject } from '@violet/web/src/types/browser'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { IconUpload } from './IconUpload'
 import { ProjectNameUpdate } from './ProjectNameUpdate'
@@ -46,25 +46,19 @@ const SecondaryButton = styled.button`
   border-radius: 16px;
 `
 
-export const ProjectConfig = (props: { onComplete: () => void; project: BrowserProject }) => {
+export const ProjectConfig = (props: { onComplete?: () => void; project: BrowserProject }) => {
   const [iconImageFile, setIconImageFile] = useState<File | undefined>(undefined)
   const [newProjectName, setNewProjectName] = useState('')
   const { updateProject } = useBrowserContext()
   const { api, onErr } = useApiContext()
   const [isUpdating, setIsUpdating] = useState(false)
-  useEffect(() => {
-    return () => {
-      setIconImageFile(undefined)
-      setNewProjectName('')
-    }
-  }, [])
 
   const updateProjectName = async (projectId: ProjectId) => {
-    if (!newProjectName && !iconImageFile) return props.onComplete()
+    if (!newProjectName && !iconImageFile) return props.onComplete?.()
 
     setIsUpdating(true)
     const projectName = newProjectName ? newProjectName : props.project.name
-    const iconExt = iconImageFile?.name.substring(iconImageFile.name.indexOf('.') + 1)
+    const iconExt = iconImageFile?.name.substring(iconImageFile.name.lastIndexOf('.') + 1)
     const projectRes = await api.browser.projects
       ._projectId(projectId)
       .$put({
@@ -74,7 +68,7 @@ export const ProjectConfig = (props: { onComplete: () => void; project: BrowserP
     if (projectRes) updateProject(projectRes)
 
     setIsUpdating(false)
-    return props.onComplete()
+    return props.onComplete?.()
   }
   return (
     <Container>
@@ -85,7 +79,7 @@ export const ProjectConfig = (props: { onComplete: () => void; project: BrowserP
       <Spacer axis="y" size={20} />
       <Message>Project name</Message>
       <ProjectNameUpdate
-        confirmName={props.onComplete}
+        onConfirmName={props.onComplete}
         projectId={props.project.id}
         setNewProjectName={setNewProjectName}
       />
