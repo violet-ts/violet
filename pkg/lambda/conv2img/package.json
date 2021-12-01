@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "_:dev": "pnpm run _:build -- --watch",
-    "_:build": "ts-node -T ./node_modules/@violet/scripts/build-file.ts --from=./src/index.ts --to=./build/index.js --target=node14"
+    "_:build": "ts-node -T ./node_modules/@violet/scripts/build-files.ts --from-dir=./src/entries --to-dir=./build --target=node14"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.84",
@@ -17,6 +17,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.41.0",
     "@aws-sdk/credential-providers": "^3.41.0",
-    "source-map-support": "^0.5.20"
+    "source-map-support": "^0.5.20",
+    "uuid": "^8.3.2"
   }
 }

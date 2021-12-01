@@ -13,6 +13,18 @@ interface Params {
   clean: boolean
 }
 
+const omitImportNodeNSPlugin: Plugin = {
+  name: 'omit-import-node-ns',
+  setup(build) {
+    build.onResolve({ filter: /^node:/ }, (args) => {
+      return {
+        path: args.path.slice(5),
+        external: true,
+      }
+    })
+  },
+}
+
 const main = async ({ fromDir, toDir, watch, target, clean }: Params) => {
   const fromDirAbs = path.resolve(process.cwd(), fromDir)
   const toDirAbs = path.resolve(process.cwd(), toDir)
@@ -58,6 +70,7 @@ const main = async ({ fromDir, toDir, watch, target, clean }: Params) => {
     watch: watchOptions,
     plugins: [
       ...(clean ? [cleanPlugin] : []),
+      omitImportNodeNSPlugin,
       nodeExternalsPlugin({
         allowList: [
           '@violet/web',

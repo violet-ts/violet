@@ -1,4 +1,4 @@
-const withTM = require('next-transpile-modules')(['@violet/api', '@violet/def'])
+const withTM = require('next-transpile-modules')(['@violet/api', '@violet/def', '@violet/lib'])
 
 module.exports = withTM({
   reactStrictMode: true,
