@@ -29,7 +29,7 @@ const orderByCreatedAtAsc = { orderBy: { createdAt: 'asc' } } as const
 const orderByWorkNameAsc = { orderBy: { workName: 'asc' } } as const
 
 const infoJsonPath = (projectId: ProjectId, revisionId: RevisionId) =>
-  `${s3Endpoint}/${bucketConverted}/works/converted/projects/${projectId}/revisions/${revisionId}/info.json` as RevisionPath
+  `${s3Endpoint}/works/converted/projects/${projectId}/revisions/${revisionId}/info.json` as RevisionPath
 
 export const getProject = async (projectId: ProjectId): Promise<ApiProject | undefined> => {
   const project = await prisma.project.findFirst({ where: { projectId } })
