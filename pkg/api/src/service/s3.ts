@@ -44,6 +44,7 @@ export const sendNewWork = depend(
       Key: props.path,
       ContentType: fileTypes.find((f) => props.uploadFile.filename.endsWith(f.ex))?.type,
       Body: await props.uploadFile.toBuffer(),
+      ACL: 'public-read',
     }
 
     const data = await getS3Client()

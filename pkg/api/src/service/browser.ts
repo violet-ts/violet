@@ -22,8 +22,8 @@ import {
 } from '../utils/getBrandedId'
 import { toApiMessageWithReply } from './streamBar'
 
-const s3Endpoint = dotenv.S3_ENDPOINT
 const bucketConverted = dotenv.S3_BUCKET_CONVERTED
+const s3Endpoint = dotenv.S3_ENDPOINT ?? `https://${bucketConverted}.s3.amazonaws.com`
 const prisma = new PrismaClient()
 const orderByCreatedAtAsc = { orderBy: { createdAt: 'asc' } } as const
 const orderByWorkNameAsc = { orderBy: { workName: 'asc' } } as const
