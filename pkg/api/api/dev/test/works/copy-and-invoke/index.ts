@@ -8,7 +8,10 @@ export type Methods = {
     reqBody: {
       bucket: string
       concurrency: number
-      objectKeys: string[]
+      keys: Array<{
+        contentKey: string
+        jsonKey?: string
+      }>
     }
     resBody: null
   }

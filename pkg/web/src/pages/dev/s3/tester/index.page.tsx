@@ -1,4 +1,5 @@
 import useAspidaSWR from '@aspida/swr'
+import { listFolders } from '@violet/lib/s3'
 import { listAllKeysForPublicBucket } from '@violet/lib/s3/public-client'
 import Dev from '@violet/web/src/components/layout/Dev'
 import { useApiContext } from '@violet/web/src/contexts/Api'
@@ -10,19 +11,11 @@ import useSWR from 'swr'
 import CopyAndInvokeRunningTestStatus from './CopyAndInvokeRunningTestStatus'
 import TestSuite from './Suite'
 
-const listFolders = (keys: string[], folder: string): string[] => {
-  return keys.filter(
-    (key) =>
-      key.startsWith(folder) &&
-      key.endsWith('/') &&
-      key.slice(folder.length).split('/').length === 2
-  )
-}
-
 const Page: NextPage = () => {
   const [concurrency, setConcurrency] = useState(1)
   const [bucket, setBucket] = useState('violet-public-dev')
   const [newBucket, setNewBucket] = useState('violet-public-dev')
+  const [isUriEncoded, setIsUriEncoded] = useState(false)
   const { api } = useApiContext()
   const copyAndInvokeRunningTest = useAspidaSWR(api.dev.test.works.copy_and_invoke, {
     refreshInterval: 3000, // 3s
@@ -30,6 +23,15 @@ const Page: NextPage = () => {
   const { data: allKeys } = useSWR(bucket, listAllKeysForPublicBucket)
   const suites = useMemo(
     () => (allKeys != null ? listFolders(allKeys, 'tests/works/') : []),
+    [allKeys]
+  )
+  const jsonKeyMap = useMemo(
+    () =>
+      new Map(
+        (allKeys ?? [])
+          .filter((key) => key.toLowerCase().endsWith('.json'))
+          .map((key) => [key.slice(0, -'.json'.length), key])
+      ),
     [allKeys]
   )
   const [keysMap, setKeysMap] = useState(new Map<string, Set<string>>())
@@ -46,13 +48,22 @@ const Page: NextPage = () => {
     return () => {}
   }, [copyAndInvokeRunningTest])
 
-  const selectedKeys = useMemo(() => [...keysMap.values()].flatMap((set) => [...set]), [keysMap])
+  const selectedKeys = useMemo(
+    () =>
+      [...keysMap.values()]
+        .flatMap((set) => [...set])
+        .map((contentKey) => ({
+          contentKey,
+          jsonKey: jsonKeyMap.get(contentKey),
+        })),
+    [jsonKeyMap, keysMap]
+  )
 
   const runPutObjectTest = useCallback(() => {}, [])
 
   const runCopyAndInvokeTest = useCallback(async () => {
     await api.dev.test.works.copy_and_invoke.$post({
-      body: { bucket, objectKeys: selectedKeys, concurrency },
+      body: { bucket, keys: selectedKeys, concurrency },
     })
     await copyAndInvokeRunningTest.mutate()
   }, [
@@ -73,6 +84,16 @@ const Page: NextPage = () => {
       </div>
       <div>
         <label>
+          <input
+            type="checkbox"
+            checked={isUriEncoded}
+            onChange={(ev) => setIsUriEncoded(ev.target.checked)}
+          />
+          URI エンコードする
+        </label>
+      </div>
+      <div>
+        <label>
           <input type="text" value={newBucket} onChange={(ev) => setNewBucket(ev.target.value)} />
           S3 バケット名
         </label>
@@ -84,7 +105,10 @@ const Page: NextPage = () => {
         S3 バケット名: <b>{bucket}</b>
       </div>
       {copyAndInvokeRunningTest.data && (
-        <CopyAndInvokeRunningTestStatus status={copyAndInvokeRunningTest.data} />
+        <CopyAndInvokeRunningTestStatus
+          status={copyAndInvokeRunningTest.data}
+          isUriEncoded={isUriEncoded}
+        />
       )}
       <fieldset>
         <legend>Test Run</legend>
@@ -133,6 +157,7 @@ const Page: NextPage = () => {
                     copy.set(suite, newSelectedKeys)
                     setKeysMap(copy)
                   }}
+                  isUriEncoded={isUriEncoded}
                 />
               </li>
             ))}

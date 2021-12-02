@@ -1,4 +1,5 @@
 import type { Credentials, Provider } from '@aws-sdk/types'
+import { fileTypes } from '@violet/def/constants'
 import { worksConvertedKeyPrefix, worksOriginalKeyPrefix } from '@violet/def/constants/s3'
 import type { VioletEnv } from '@violet/def/env/violet'
 import { CONTENT_TYPES, FALLBACK_EXTS } from '@violet/lib/constants/file'
@@ -17,6 +18,12 @@ export const LOCAL_DIR_NAMES = {
   original: '/tmp/original',
   converted: '/tmp/converted',
 } as const
+
+const verifyExtension = (ext: string) => {
+  if (!fileTypes.map(({ ex }) => ex as string).includes(ext)) {
+    throw new Error(`unimplemented extension ${ext}`)
+  }
+}
 
 interface ConvertS3DataToPdfParams {
   data: IncomingMessage
@@ -79,7 +86,9 @@ export const convertObject = async ({
     worksConvertedKeyPrefix
   )
 
-  const filename = `${Date.now()}-${uuidv4()}-${key.split('/').pop()}`
+  verifyExtension(path.extname(key))
+
+  const filename = `${Date.now()}-${uuidv4()}-${path.basename(key)}`
   const convertedDir = path.join(LOCAL_DIR_NAMES.converted, filename.replace(/\.[^.]+$/, ''))
   fs.mkdirSync(convertedDir, { recursive: true })
   logger.info('Destination directory created.')

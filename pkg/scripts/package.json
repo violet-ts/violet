@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "_:typecheck": "tsc --noEmit"
+    "_:typecheck": "tsc --noEmit",
+    "_:test:ci:conv2img": "cd ../.. && ts-node -T ./pkg/scripts/test-runners/test-conv2img.ts"
   },
   "dependencies": {
     "@violet/def": "workspace:*",

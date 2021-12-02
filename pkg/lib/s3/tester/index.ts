@@ -4,19 +4,19 @@ import { dockerComposeNameToContainerName } from '@violet/lib/docker/docker-comp
 import { execThrow } from '@violet/lib/exec'
 import type { winston } from '@violet/lib/logger'
 import { createChildLogger } from '@violet/lib/logger'
-import { replaceKeyPrefix } from '@violet/lib/s3'
-import { downloadObjectTo } from '@violet/lib/s3/public-server'
+import { downloadJson, downloadObjectTo } from '@violet/lib/s3/public-server'
 import type {
   RunningStatusInternal,
   S3PutObjectTestContext,
   StartParams,
+  TestCaseJson,
 } from '@violet/lib/s3/tester/types'
 import { createTmpdirContext } from '@violet/lib/tmpdir'
-import type { InfoJson } from '@violet/lib/types/files'
 import { Sema } from 'async-sema'
-import fetch from 'node-fetch'
 import PLazy from 'p-lazy'
 import * as path from 'path'
+import { check } from './check'
+import { constructInput } from './construct-input'
 
 export const createS3PutObjectTestContext = (): S3PutObjectTestContext => {
   let status: RunningStatusInternal | null = null
@@ -24,7 +24,8 @@ export const createS3PutObjectTestContext = (): S3PutObjectTestContext => {
   const minioContainerName = PLazy.from(() => dockerComposeNameToContainerName('minio'))
   const startKey = async (
     bucket: string,
-    key: string,
+    contentKey: string,
+    jsonKey: string | undefined,
     tmpContentPath: string,
     env: VioletEnv,
     logger: winston.Logger
@@ -34,13 +35,14 @@ export const createS3PutObjectTestContext = (): S3PutObjectTestContext => {
 
     const main = async (): Promise<void> => {
       if (!status) throw new Error('status not set')
-      status.results[key] = {
+      status.results[contentKey] = {
         type: 'running',
         startTime: Date.now(),
       }
 
-      await downloadObjectTo(bucket, key, tmpContentPath)
-      const [suite, filename] = key.split('/').slice(-2)
+      await downloadObjectTo(bucket, contentKey, tmpContentPath)
+      const caseJson = jsonKey ? ((await downloadJson(bucket, jsonKey)) as TestCaseJson) : {}
+      const [suite, filename] = contentKey.split('/').slice(-2)
 
       // '%' を使うと convert とかぶるので避ける
       const destKeyPrefix = `${worksOriginalKeyPrefix}/projects/test-works-proj-${
@@ -50,27 +52,13 @@ export const createS3PutObjectTestContext = (): S3PutObjectTestContext => {
       const minioContentPath = `${minioContentDirPath}${filename}`
       const destKey = `${destKeyPrefix}${filename}`
 
-      const convertedKeyPrefix = replaceKeyPrefix(
-        destKeyPrefix,
-        worksOriginalKeyPrefix,
-        worksConvertedKeyPrefix
+      const json = JSON.stringify(
+        constructInput({
+          env,
+          destKey,
+          caseJson,
+        })
       )
-      const convertedInfoJsonKey = `${convertedKeyPrefix}info.json`
-
-      const json = JSON.stringify({
-        Records: [
-          {
-            s3: {
-              bucket: {
-                name: env.S3_BUCKET_ORIGINAL,
-              },
-              object: {
-                key: encodeURIComponent(destKey).replace(/ /g, '+'),
-              },
-            },
-          },
-        ],
-      })
 
       await execThrow(
         'docker-compose',
@@ -95,18 +83,12 @@ export const createS3PutObjectTestContext = (): S3PutObjectTestContext => {
         ],
         false
       )
-
-      const infoJson = (await fetch(
-        `${env.S3_ENDPOINT}/${env.S3_BUCKET_CONVERTED}/${convertedInfoJsonKey}`
-      ).then((res) => {
-        if (!res.ok) throw new Error('info.json not found')
-        return res.json()
-      })) as InfoJson
-      logger.debug('info.json found', { infoJson })
-      if (infoJson.fallbackImageExts.length === 0)
-        throw Object.assign(new Error('no image generated'), { infoJson })
-
-      // TODO: 事前定義したページ数と一致するかテストする機能を追加
+      await check({
+        env,
+        logger,
+        destKeyPrefix,
+        caseJson,
+      })
     }
 
     try {
@@ -128,7 +110,9 @@ export const createS3PutObjectTestContext = (): S3PutObjectTestContext => {
       minioOriginalDir,
       minioConvertedDir,
       tmpdir,
-      results: Object.fromEntries(keys.map((key) => [key, { type: 'waiting' }] as const)),
+      results: Object.fromEntries(
+        keys.map((key) => [key.contentKey, { type: 'waiting' }] as const)
+      ),
     }
     status = thisStatus
     try {
@@ -136,27 +120,28 @@ export const createS3PutObjectTestContext = (): S3PutObjectTestContext => {
         keys.map((key, i) =>
           startKey(
             bucket,
-            key,
+            key.contentKey,
+            key.jsonKey,
             path.resolve(tmpdir, `content-${`000${i}`.slice(-4)}`),
             env,
-            createChildLogger(logger, key)
+            createChildLogger(logger, key.contentKey)
           )
             .then(() => {
-              thisStatus.results[key] = {
-                ...thisStatus.results[key],
+              thisStatus.results[key.contentKey] = {
+                ...thisStatus.results[key.contentKey],
                 type: 'succeeded',
                 endTime: Date.now(),
               }
             })
             .catch((err: unknown) => {
               const errorMessage = String(err)
-              thisStatus.results[key] = {
-                ...thisStatus.results[key],
+              thisStatus.results[key.contentKey] = {
+                ...thisStatus.results[key.contentKey],
                 type: 'failed',
                 endTime: Date.now(),
                 errorMessage,
               }
-              createChildLogger(logger, 'error').error(`Failed to convert ${key}`, {
+              createChildLogger(logger, 'error').error(`Failed to convert ${key.contentKey}`, {
                 key,
                 i,
                 err,
