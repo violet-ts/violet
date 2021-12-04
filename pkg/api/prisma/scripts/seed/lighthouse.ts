@@ -1,6 +1,10 @@
+// Lighthouse 用の seed
+// TODO: 削除も行って、パフォーマンス的に程度同じような結果になるようにする
+// TODO: revesion が多いページを作成する
+
 import type { PrismaClient } from '@prisma/client'
-import { dirData, projectData, revisionData, workData } from './specials-data/basic'
-import { messageData, replyData } from './specials-data/stream'
+import { dirData, projectData, revisionData, workData } from './lighthouse-data/basic'
+import { messageData, replyData } from './lighthouse-data/stream'
 
 export const main = async (prisma: PrismaClient) => {
   await Promise.all(
