@@ -23,13 +23,16 @@ import {
 import { toApiMessageWithReply } from './streamBar'
 
 const bucketConverted = dotenv.S3_BUCKET_CONVERTED
-const s3Endpoint = dotenv.S3_ENDPOINT ?? `https://${bucketConverted}.s3.amazonaws.com`
+const endPoint = dotenv.S3_ENDPOINT
+  ? `${dotenv.S3_ENDPOINT}/${bucketConverted}`
+  : `https://${bucketConverted}.s3.amazonaws.com`
+
 const prisma = new PrismaClient()
 const orderByCreatedAtAsc = { orderBy: { createdAt: 'asc' } } as const
 const orderByWorkNameAsc = { orderBy: { workName: 'asc' } } as const
 
 const infoJsonPath = (projectId: ProjectId, revisionId: RevisionId) =>
-  `${s3Endpoint}/works/converted/projects/${projectId}/revisions/${revisionId}/info.json` as RevisionPath
+  `${endPoint}/works/converted/projects/${projectId}/revisions/${revisionId}/info.json` as RevisionPath
 
 export const getProject = async (projectId: ProjectId): Promise<ApiProject | undefined> => {
   const project = await prisma.project.findFirst({ where: { projectId } })
