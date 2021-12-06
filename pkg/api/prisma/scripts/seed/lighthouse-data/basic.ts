@@ -1,8 +1,8 @@
 import type { Prisma } from '@prisma/client'
 
 const projectIds = {
-  id1: '82116895-a386-8a33-f6e0-347408413e33',
-  id2: 'f1ba8e31-1f45-bc16-fb72-c10355cae08b',
+  id1: 'lighthou-se00-8a33-f6e0-347408413e33',
+  id2: 'lighthou-se00-bc16-fb72-c10355cae08b',
 }
 const dirs = [
   [{ id: '3d978a72-8c15-47b9-3fc1-320f700a3ea4', name: 'Dir1' }],
@@ -39,8 +39,8 @@ export const revisionIds = {
 }
 
 const projectName = {
-  project1: 'Violet',
-  project2: 'frourio',
+  project1: 'Lighthouse Basic',
+  project2: 'Lighthouse Huge (TODO)',
 }
 
 const workName = {
