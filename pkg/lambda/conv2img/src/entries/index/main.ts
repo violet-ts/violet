@@ -1,5 +1,5 @@
 import { parseVioletEnv } from '@violet/def/env/violet'
-import { convertObject } from '@violet/lambda-conv2img/src/convert-object'
+import { convertObject } from '@violet/lambda-conv2img/src/convertObject'
 import { createCredentials } from '@violet/lambda-conv2img/src/credentials'
 import { findS3LocationsInEvent } from '@violet/lib/lambda/s3'
 import { createChildLogger, createLogger } from '@violet/lib/logger'
