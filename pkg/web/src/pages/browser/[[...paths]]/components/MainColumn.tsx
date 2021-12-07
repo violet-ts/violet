@@ -81,9 +81,9 @@ export const MainColumn = (props: {
     }
     e.target.value = ''
   }
-  const clickPagenation = (pageDirection: pageDirection, tIndex: number) => {
+  const clickPagenation = (pageDirection: pageDirection, index: number) => {
     const targetIndex =
-      pageDirection === 'previousPage' ? refs.current[tIndex - 1] : refs.current[tIndex + 1]
+      pageDirection === 'previousPage' ? refs.current[index - 1] : refs.current[index + 1]
     targetIndex?.current?.scrollIntoView()
   }
 
