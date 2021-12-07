@@ -1,13 +1,13 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
-import type { ProjectId, RevisionId, WorkId } from '@violet/lib/types/branded'
+import type { ProjectId, WorkId } from '@violet/lib/types/branded'
 import { AddButton } from '@violet/web/src/components/atoms/AddButton'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
+import type { pageDirection } from '@violet/web/src/types/tools'
 import { mainColumnHeight } from '@violet/web/src/utils/constants'
-import { scroller } from '@violet/web/src/utils/scroller'
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Revision } from '../components/Revision'
 import { StreamBar } from '../components/StreamBar'
@@ -49,11 +49,8 @@ export const MainColumn = (props: {
   const { api, onErr } = useApiContext()
   const { wholeDict, updateWholeDict } = useBrowserContext()
   const [open, setOpen] = useState(false)
-  const [scrollId, setScrollId] = useState<string>('0')
+  const refs = useRef(props.revisions.map(() => React.createRef<HTMLDivElement>()))
 
-  useEffect(() => {
-    scroller(scrollId)
-  }, [scrollId])
   const sendFormData = async (file: File) => {
     const revisionRes = await api.browser.projects
       ._projectId(props.projectId)
@@ -70,15 +67,13 @@ export const MainColumn = (props: {
       ],
     })
   }
-  const unsupportedFileType = (state: boolean) => {
-    setOpen(state)
-  }
+
   const dropFile = (file: File) => {
     const searchFileType = fileTypes.some((f) => file.type === f.type)
     if (searchFileType) {
       void sendFormData(file)
     }
-    unsupportedFileType(!searchFileType)
+    setOpen(!searchFileType)
   }
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -86,20 +81,18 @@ export const MainColumn = (props: {
     }
     e.target.value = ''
   }
-  const clickChevron = (id: RevisionId, chevronUp: boolean) => {
-    const arrRevisionId = props.revisions.map((r) => r.id)
-    const index = arrRevisionId.findIndex((d) => d === id)
-    const scrollId = chevronUp ? arrRevisionId[index - 1] : arrRevisionId[index + 1]
-    setScrollId(scrollId)
-
-    return chevronUp
+  const clickPagenation = (pageDirection: pageDirection, tIndex: number) => {
+    const targetIndex =
+      pageDirection === 'previousPage' ? refs.current[tIndex - 1] : refs.current[tIndex + 1]
+    targetIndex?.current?.scrollIntoView()
   }
+
   return (
     <Container>
-      {props.revisions.map((revision) => (
-        <MainContent key={revision.id} data-search-id={revision.id}>
+      {props.revisions.map((revision, i) => (
+        <MainContent key={revision.id} ref={refs.current[i]}>
           <ToolBar>
-            <PaginationBar clickChevron={(result: boolean) => clickChevron(revision.id, result)} />
+            <PaginationBar clickPagenation={(result) => clickPagenation(result, i)} />
             <AddButton>
               <FileUpload type="file" accept={acceptExtensions} onChange={onChange} />
             </AddButton>
@@ -118,7 +111,7 @@ export const MainColumn = (props: {
           </StreamBarColumn>
         </MainContent>
       ))}
-      <AlertModal open={open} onClose={(state: boolean) => unsupportedFileType(state)} />
+      <AlertModal open={open} onClose={() => setOpen(false)} />
     </Container>
   )
 }

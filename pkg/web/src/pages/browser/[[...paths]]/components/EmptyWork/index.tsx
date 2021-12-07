@@ -1,31 +1,16 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { ProjectId, WorkId } from '@violet/lib/types/branded'
-import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { AlertModal } from '../Revision/AlertModal'
 
 const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-`
-
-const Column = styled.div`
-  display: flex;
-  justify-content: end;
-`
-
-const SecondaryButton = styled.button`
-  padding: 0.3em;
-  font-size: ${fontSizes.large};
-  color: ${colors.white};
-  cursor: pointer;
-  background-color: ${colors.gray};
-  border: none;
-  border-radius: 16px;
 `
 
 const DraggingPanel = styled.div<{ dragging: boolean }>`
@@ -59,17 +44,12 @@ const Dropper = styled.input`
   cursor: pointer;
   opacity: 0;
 `
-const AlertMessage = styled.div`
-  white-space: nowrap;
-`
 
 export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
   const { api, onErr } = useApiContext()
   const { wholeDict, updateWholeDict } = useBrowserContext()
   const [dragging, setDragging] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
-  const dragEnter = () => setDragging(true)
-  const dragLeave = () => setDragging(false)
 
   const drop = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
@@ -108,12 +88,7 @@ export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
   return (
     <Container>
       {openAlert ? (
-        <CardModal open={openAlert} onClose={closeModal}>
-          <AlertMessage>Unsupported File Format!</AlertMessage>
-          <Column>
-            <SecondaryButton onClick={closeModal}>Confirm</SecondaryButton>
-          </Column>
-        </CardModal>
+        <AlertModal open={openAlert} onClose={closeModal} />
       ) : (
         <>
           <DraggingPanel dragging={dragging}>
@@ -122,8 +97,8 @@ export const EmptyWork = (props: { projectId: ProjectId; workId: WorkId }) => {
           <Dropper
             type="file"
             accept={acceptExtensions}
-            onDragEnter={dragEnter}
-            onDragLeave={dragLeave}
+            onDragEnter={() => setDragging(true)}
+            onDragEnd={() => setDragging(false)}
             onChange={drop}
           />
         </>

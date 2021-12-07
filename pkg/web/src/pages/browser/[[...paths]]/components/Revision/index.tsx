@@ -95,7 +95,7 @@ export const Revision = (props: {
   return (
     <Container
       onDragEnter={() => setIsFile(true)}
-      onDragLeave={() => setIsFile(false)}
+      onDragEnd={() => setIsFile(false)}
       onChange={onChange}
     >
       {isFile && <Dropper type="file" accept={acceptExtensions} />}

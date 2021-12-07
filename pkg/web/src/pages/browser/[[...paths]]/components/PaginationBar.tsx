@@ -1,4 +1,5 @@
 import { Chevron } from '@violet/web/src/components/atoms/Chevron'
+import type { pageDirection } from '@violet/web/src/types/tools'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -10,23 +11,25 @@ const Container = styled.div`
   width: 48px;
   height: 100%;
 `
-const ChevronUp = styled.div`
+const PreviousPage = styled.div`
   text-align: inherit;
 `
-const ChevronDown = styled.div`
+const NextPage = styled.div`
   text-align: inherit;
   transform: rotate(180deg);
 `
 
-export const PaginationBar = (props: { clickChevron: (chevronUp: boolean) => boolean }) => {
+export const PaginationBar = (props: {
+  clickPagenation: (pageDirection: pageDirection) => void
+}) => {
   return (
     <Container>
-      <ChevronUp onClick={() => props.clickChevron(true)}>
+      <PreviousPage onClick={() => props.clickPagenation('previousPage')}>
         <Chevron />
-      </ChevronUp>
-      <ChevronDown onClick={() => props.clickChevron(false)}>
+      </PreviousPage>
+      <NextPage onClick={() => props.clickPagenation('nextPage')}>
         <Chevron />
-      </ChevronDown>
+      </NextPage>
     </Container>
   )
 }
