@@ -1,1 +1,1 @@
-export type pageDirection = 'nextPage' | 'previousPage'
+export type PageDirection = 'nextPage' | 'previousPage'

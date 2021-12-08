@@ -1,5 +1,5 @@
 import { Chevron } from '@violet/web/src/components/atoms/Chevron'
-import type { pageDirection } from '@violet/web/src/types/tools'
+import type { PageDirection } from '@violet/web/src/types/tools'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -20,7 +20,7 @@ const NextPage = styled.div`
 `
 
 export const PaginationBar = (props: {
-  clickPagenation: (pageDirection: pageDirection) => void
+  clickPagenation: (pageDirection: PageDirection) => void
 }) => {
   return (
     <Container>

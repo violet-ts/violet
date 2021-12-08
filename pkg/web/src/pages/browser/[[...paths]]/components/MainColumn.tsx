@@ -5,14 +5,14 @@ import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
-import type { pageDirection } from '@violet/web/src/types/tools'
+import type { PageDirection } from '@violet/web/src/types/tools'
 import { mainColumnHeight } from '@violet/web/src/utils/constants'
 import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
-import { Revision } from '../components/Revision'
-import { StreamBar } from '../components/StreamBar'
 import { PaginationBar } from './PaginationBar'
-import { AlertModal } from './Revision/AlertModal'
+import { AlertModal } from './Parts/AlertModal'
+import { Revision } from './Revision'
+import { StreamBar } from './StreamBar'
 
 const Container = styled.div`
   display: flex;
@@ -81,10 +81,10 @@ export const MainColumn = (props: {
     }
     e.target.value = ''
   }
-  const clickPagenation = (pageDirection: pageDirection, index: number) => {
-    const targetIndex =
+  const clickPagenation = (pageDirection: PageDirection, index: number) => {
+    const targetRef =
       pageDirection === 'previousPage' ? refs.current[index - 1] : refs.current[index + 1]
-    targetIndex?.current?.scrollIntoView()
+    targetRef?.current?.scrollIntoView()
   }
 
   return (

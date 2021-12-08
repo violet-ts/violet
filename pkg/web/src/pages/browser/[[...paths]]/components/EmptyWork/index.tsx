@@ -5,7 +5,7 @@ import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { AlertModal } from '../Revision/AlertModal'
+import { AlertModal } from '../Parts/AlertModal'
 
 const Container = styled.div`
   position: relative;
