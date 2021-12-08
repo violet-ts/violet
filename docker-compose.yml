@@ -74,6 +74,7 @@ services:
         mc alias set minio http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD
         mc mb minio/$$S3_BUCKET_ORIGINAL || true
         mc mb minio/$$S3_BUCKET_CONVERTED || true
+        mc policy set public minio/$$S3_BUCKET_ORIGINAL
         mc policy set public minio/$$S3_BUCKET_CONVERTED
         mc admin config set minio notify_webhook:1 queue_limit='0' endpoint='http://lambda:8080/2015-03-31/functions/function/invocations' queue_dir=''
         mc admin service restart minio

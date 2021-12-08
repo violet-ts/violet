@@ -156,6 +156,7 @@ export const convertObject = async ({
           Key: `${convertedKeyPrefix}/${i}.${e}`,
           ContentType: CONTENT_TYPES[e],
           Body: fs.readFileSync(path.join(convertedDir, `${i}.${e}`)),
+          ACL: 'public-read',
         })
       )
     )
@@ -167,6 +168,7 @@ export const convertObject = async ({
     Key: `${convertedKeyPrefix}/info.json`,
     ContentType: 'application/json',
     Body: JSON.stringify(info),
+    ACL: 'public-read',
   })
   logger.info('Uploaded info.json.')
 }
