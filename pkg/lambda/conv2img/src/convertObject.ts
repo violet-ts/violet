@@ -1,7 +1,7 @@
 import type { Credentials, Provider } from '@aws-sdk/types'
 import { worksConvertedKeyPrefix, worksOriginalKeyPrefix } from '@violet/def/constants/s3'
 import type { VioletEnv } from '@violet/def/env/violet'
-import { FALLBACK_EXTS } from '@violet/lib/constants/file'
+import { CONTENT_TYPES, FALLBACK_EXTS } from '@violet/lib/constants/file'
 import { exec } from '@violet/lib/exec'
 import type { winston } from '@violet/lib/logger'
 import { replaceKeyPrefix } from '@violet/lib/s3'
@@ -11,12 +11,6 @@ import type { IncomingMessage } from 'http'
 import * as path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import { createS3Client, getObject } from './s3'
-
-const CONTENT_TYPES = {
-  webp: 'image/webp',
-  jpg: 'image/jpeg',
-  png: 'image/png',
-} as const
 
 export const LOCAL_DIR_NAMES = {
   tmp: '/tmp/tmp',

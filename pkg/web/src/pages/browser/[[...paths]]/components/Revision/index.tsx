@@ -1,4 +1,5 @@
 import { acceptExtensions } from '@violet/def/constants'
+import { CONTENT_TYPES } from '@violet/lib/constants/file'
 import type { ApiRevision } from '@violet/lib/types/api'
 import type { ProjectId, RevisionPath, WorkId } from '@violet/lib/types/branded'
 import type { InfoJson } from '@violet/lib/types/files'
@@ -101,7 +102,13 @@ export const Revision = (props: {
       {isFile && <Dropper type="file" accept={acceptExtensions} />}
       <DisplayWorksFrame>
         {workPath.map((p) => (
-          <DisplayWorksViewer key={p} src={p} />
+          <picture key={p}>
+            <source
+              type={CONTENT_TYPES.webp}
+              srcSet={`${p.substring(0, p.lastIndexOf('.'))}.webp`}
+            />
+            <DisplayWorksViewer src={p} />
+          </picture>
         ))}
       </DisplayWorksFrame>
     </Container>
