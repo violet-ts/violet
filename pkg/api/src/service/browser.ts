@@ -53,8 +53,8 @@ export const getProjects = async () => {
     (p): ApiProject => ({
       id: getProjectId(p),
       name: p.projectName,
-      iconUrl: p.iconExt
-        ? (`${s3Endpoint}/${bucketOriginal}/icon/${p.projectId}/${p.projectId}.${p.iconExt}` as ProjectIconPath)
+      iconUrl: p.iconName
+        ? (`${s3Endpoint}/${bucketOriginal}/icon/${p.projectId}/${p.iconName}` as ProjectIconPath)
         : null,
     })
   )
@@ -70,15 +70,15 @@ export const createProject = async (projectName: ApiProject['name']) => {
 export const updateProject = async (
   projectId: ProjectId,
   projectName: ApiProject['name'],
-  iconExt?: string | null
+  iconName?: string | null
 ): Promise<ApiProject> => {
-  await prisma.project.update({ where: { projectId }, data: { projectName, iconExt } })
+  await prisma.project.update({ where: { projectId }, data: { projectName, iconName } })
 
   return {
     id: projectId,
     name: projectName,
-    iconUrl: iconExt
-      ? (`${s3Endpoint}/${bucketOriginal}/icon/${projectId}/${projectId}.${iconExt}` as ProjectIconPath)
+    iconUrl: iconName
+      ? (`${s3Endpoint}/${bucketOriginal}/icon/${projectId}/${iconName}` as ProjectIconPath)
       : null,
   }
 }

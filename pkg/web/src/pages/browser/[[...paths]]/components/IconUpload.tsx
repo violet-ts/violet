@@ -1,8 +1,10 @@
 import { acceptImageExtensions } from '@violet/def/constants'
 import type { ApiProject } from '@violet/lib/types/api'
+import type { ProjectId } from '@violet/lib/types/branded'
 import { ImageIcon } from '@violet/web/src/components/atoms/ImageIcon'
 import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
+import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import type { ChangeEvent, Dispatch } from 'react'
 import { useRef, useState } from 'react'
@@ -56,12 +58,13 @@ const IconImage = styled.img`
 `
 
 export const IconUpload = (props: {
-  projectName: ApiProject['name']
+  project: ApiProject
   setIconImageFile: Dispatch<File | undefined>
 }) => {
   const inputImageElement = useRef<HTMLInputElement>(null)
   const [iconImageUrl, setIconImageUrl] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const { projects } = useBrowserContext()
   const loadImageFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) return
 
@@ -76,15 +79,18 @@ export const IconUpload = (props: {
     setIsLoading(false)
   }
 
+  const getIconImageUrl = (projectId: ProjectId) => {
+    const iconUrl = projects.find((d) => d.id === projectId)?.iconUrl
+    return iconUrl ? <IconImage src={iconUrl} /> : <Icon>{props.project.name.slice(0, 2)}</Icon>
+  }
+
   return (
     <Container>
       {isLoading && <Loading />}
       {iconImageUrl ? (
         <IconImage src={iconImageUrl} />
       ) : (
-        <IconWrapper>
-          <Icon>{props.projectName.slice(0, 2)}</Icon>
-        </IconWrapper>
+        <IconWrapper>{getIconImageUrl(props.project.id)}</IconWrapper>
       )}
       <Spacer axis="x" size={10} />
       <StyleImageIcon>

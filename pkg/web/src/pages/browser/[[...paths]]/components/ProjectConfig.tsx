@@ -58,11 +58,11 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
 
     setIsUpdating(true)
     const projectName = newProjectName ? newProjectName : props.project.name
-    const iconExt = iconImageFile?.name.substring(iconImageFile.name.lastIndexOf('.') + 1)
+    const iconName = createIconName()
     const projectRes = await api.browser.projects
       ._projectId(projectId)
       .$put({
-        body: { name: projectName, iconExt, imageFile: iconImageFile },
+        body: { name: projectName, iconName, imageFile: iconImageFile },
       })
       .catch(onErr)
     if (projectRes) updateProject(projectRes)
@@ -70,12 +70,18 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
     setIsUpdating(false)
     return props.onComplete?.()
   }
+
+  const createIconName = () => {
+    if (!iconImageFile) return props.project.iconUrl?.split('/').slice(-1)[0]
+    return `${Date.now()}.${iconImageFile.name.substring(iconImageFile.name.lastIndexOf('.') + 1)}`
+  }
+
   return (
     <Container>
       {isUpdating && <Loading />}
       <Spacer axis="y" size={20} />
       <Message>Project icon</Message>
-      <IconUpload projectName={props.project.name} setIconImageFile={setIconImageFile} />
+      <IconUpload project={props.project} setIconImageFile={setIconImageFile} />
       <Spacer axis="y" size={20} />
       <Message>Project name</Message>
       <ProjectNameUpdate

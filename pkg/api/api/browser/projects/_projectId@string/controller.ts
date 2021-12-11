@@ -10,13 +10,13 @@ export default defineController(() => ({
     return project ? { status: 200, body: project } : { status: 404 }
   },
   put: async ({ params, body }) => {
-    const project = await updateProject(params.projectId as ProjectId, body.name, body.iconExt)
+    const project = await updateProject(params.projectId as ProjectId, body.name, body.iconName)
     if (body.imageFile) {
       await sendNewProjectIcon({
         imageFile: body.imageFile,
         path: await createS3SaveProjectIconPath({
           projectId: params.projectId as ProjectId,
-          iconExt: body.iconExt,
+          iconName: body.iconName,
         }),
       })
     }

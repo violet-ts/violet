@@ -31,8 +31,12 @@ export const ProjectNameUpdate: React.FC<Props> = ({
   )
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApiContext()
-  const { updateProject } = useBrowserContext()
+  const { projects, updateProject } = useBrowserContext()
   const [isUpdating, setIsUpdating] = useState(false)
+  const iconName = projects
+    .find((d) => d.id === projectId)
+    ?.iconUrl?.split('/')
+    .slice(-1)[0]
   useEffect(() => {
     inputElement.current?.focus()
   }, [])
@@ -40,7 +44,7 @@ export const ProjectNameUpdate: React.FC<Props> = ({
   const updateProjectName = async (name: string) => {
     const projectRes = await api.browser.projects
       ._projectId(projectId)
-      .$put({ body: { name } })
+      .$put({ body: { name, iconName } })
       .catch(onErr)
 
     if (projectRes) updateProject(projectRes)
