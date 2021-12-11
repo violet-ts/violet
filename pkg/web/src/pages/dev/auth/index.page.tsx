@@ -1,9 +1,10 @@
+import Dev from '@violet/web/src/components/layout/Dev'
 import { pagesPath } from '@violet/web/src/utils/$path'
 import Link from 'next/link'
 
 const Home = () => {
   return (
-    <div>
+    <Dev>
       <h1>開発用デモ: 認証デモ</h1>
       <Link href={pagesPath.dev.$url()}>
         <a>デモトップ</a>
@@ -22,7 +23,7 @@ const Home = () => {
           </li>
         </ul>
       </div>
-    </div>
+    </Dev>
   )
 }
 

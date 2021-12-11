@@ -1,7 +1,7 @@
 import type { Credentials, Provider } from '@aws-sdk/types'
 import { worksConvertedKeyPrefix, worksOriginalKeyPrefix } from '@violet/def/constants/s3'
 import type { VioletEnv } from '@violet/def/env/violet'
-import { FALLBACK_EXTS } from '@violet/lib/constants/file'
+import { CONTENT_TYPES, FALLBACK_EXTS } from '@violet/lib/constants/file'
 import { exec } from '@violet/lib/exec'
 import type { winston } from '@violet/lib/logger'
 import { replaceKeyPrefix } from '@violet/lib/s3'
@@ -9,13 +9,8 @@ import type { InfoJson } from '@violet/lib/types/files'
 import * as fs from 'fs'
 import type { IncomingMessage } from 'http'
 import * as path from 'path'
+import { v4 as uuidv4 } from 'uuid'
 import { createS3Client, getObject } from './s3'
-
-const CONTENT_TYPES = {
-  webp: 'image/webp',
-  jpg: 'image/jpeg',
-  png: 'image/png',
-} as const
 
 export const LOCAL_DIR_NAMES = {
   tmp: '/tmp/tmp',
@@ -84,7 +79,7 @@ export const convertObject = async ({
     worksConvertedKeyPrefix
   )
 
-  const filename = `${Date.now()}-${key.split('/').pop()}`
+  const filename = `${Date.now()}-${uuidv4()}-${key.split('/').pop()}`
   const convertedDir = path.join(LOCAL_DIR_NAMES.converted, filename.replace(/\.[^.]+$/, ''))
   fs.mkdirSync(convertedDir, { recursive: true })
   logger.info('Destination directory created.')
@@ -155,6 +150,7 @@ export const convertObject = async ({
           Key: `${convertedKeyPrefix}/${i}.${e}`,
           ContentType: CONTENT_TYPES[e],
           Body: fs.readFileSync(path.join(convertedDir, `${i}.${e}`)),
+          ACL: 'public-read',
         })
       )
     )
@@ -166,6 +162,7 @@ export const convertObject = async ({
     Key: `${convertedKeyPrefix}/info.json`,
     ContentType: 'application/json',
     Body: JSON.stringify(info),
+    ACL: 'public-read',
   })
   logger.info('Uploaded info.json.')
 }

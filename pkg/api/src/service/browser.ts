@@ -29,15 +29,21 @@ import {
 } from '../utils/getBrandedId'
 import { toApiMessageWithReply } from './streamBar'
 
-const s3Endpoint = dotenv.S3_ENDPOINT
-const bucketOriginal = dotenv.S3_BUCKET_ORIGINAL
 const bucketConverted = dotenv.S3_BUCKET_CONVERTED
+const endpoint = dotenv.S3_ENDPOINT
+  ? `${dotenv.S3_ENDPOINT}/${bucketConverted}`
+  : `https://${bucketConverted}.s3.amazonaws.com`
+const bucketOriginal = dotenv.S3_BUCKET_ORIGINAL
 const prisma = new PrismaClient()
 const orderByCreatedAtAsc = { orderBy: { createdAt: 'asc' } } as const
 const orderByWorkNameAsc = { orderBy: { workName: 'asc' } } as const
-
 const infoJsonPath = (projectId: ProjectId, revisionId: RevisionId) =>
-  `${s3Endpoint}/${bucketConverted}/works/converted/projects/${projectId}/revisions/${revisionId}/info.json` as RevisionPath
+  `${endpoint}/works/converted/projects/${projectId}/revisions/${revisionId}/info.json` as RevisionPath
+const toApiWork = (w: Work & { revisions: Revision[] }) => ({
+  id: getWorkId(w),
+  name: w.workName,
+  latestRevisionId: w.revisions.length ? (w.revisions[0].revisionId as RevisionId) : null,
+})
 
 export const getProject = async (projectId: ProjectId): Promise<ApiProject | undefined> => {
   const project = await prisma.project.findFirst({ where: { projectId } })
@@ -54,7 +60,7 @@ export const getProjects = async () => {
       id: getProjectId(p),
       name: p.projectName,
       iconUrl: p.iconName
-        ? (`${s3Endpoint}/${bucketOriginal}/icon/${p.projectId}/${p.iconName}` as ProjectIconPath)
+        ? (`${dotenv.S3_ENDPOINT}/${bucketOriginal}/icon/${p.projectId}/${p.iconName}` as ProjectIconPath)
         : null,
     })
   )
@@ -78,16 +84,10 @@ export const updateProject = async (
     id: projectId,
     name: projectName,
     iconUrl: iconName
-      ? (`${s3Endpoint}/${bucketOriginal}/icon/${projectId}/${iconName}` as ProjectIconPath)
+      ? (`${dotenv.S3_ENDPOINT}/${bucketOriginal}/icon/${projectId}/${iconName}` as ProjectIconPath)
       : null,
   }
 }
-
-const toApiWork = (w: Work & { revisions: Revision[] }) => ({
-  id: getWorkId(w),
-  name: w.workName,
-  latestRevisionId: w.revisions.length ? (w.revisions[0].revisionId as RevisionId) : null,
-})
 
 export const getDirs = async (projectId: ProjectId) => {
   const dirs = await prisma.dir.findMany({

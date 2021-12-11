@@ -16,8 +16,8 @@ const Message = styled.div`
 export const ReplyMessageCell = (props: { replies: BrowserReply[] }) => {
   return (
     <Container>
-      {props.replies.map((r, i) => (
-        <React.Fragment key={i}>
+      {props.replies.map((r) => (
+        <React.Fragment key={r.id}>
           <MessageHeader userName={r.userName} createdAt={r.createdAt} />
           <Spacer axis="y" size={8} />
           <Message>{r.content}</Message>

@@ -30,7 +30,7 @@ export const createLogger = ({ env, service }: CreateLoggerParams): Logger => {
 
   logger.add(
     new winston.transports.Console({
-      level: 'debug',
+      level: env.LOGGING_LEVEL ?? 'warn',
       format: env.PRETTY_LOGGING === '1' ? winston.format.prettyPrint() : cloudwatchLogsFormat,
     })
   )

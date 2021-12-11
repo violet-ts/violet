@@ -11,11 +11,19 @@
 /pkg/lambda/ @violet-ts/backend
 /package.json @violet-ts/backend
 
+# test
+**/test/**/* @violet-ts/test
+**/tests/**/* @violet-ts/test
+**/__test__/**/* @violet-ts/test
+**/__tests__/**/* @violet-ts/test
+*.test.* @violet-ts/test
+*.spec.* @violet-ts/test
+
 # security
 /.github/ @violet-ts/security
 package.json @violet-ts/security
 pnpm-lock.yaml @violet-ts/security
-ws-credential.ts @violet-ts/security
+**/aws/**/* @violet-ts/security
 /pkg/api/api/auth/ @violet-ts/security
 /pkg/api/api/csrf/ @violet-ts/security
 .env @violet-ts/security
@@ -36,8 +44,7 @@ package.json @violet-ts/infrastructure
 .env.production @violet-ts/infrastructure
 .env.example @violet-ts/infrastructure
 /pkg/def/ @violet-ts/infrastructure
-s3.ts @violet-ts/infrastructure
-aws-credential.ts @violet-ts/infrastructure
+**/aws/**/* @violet-ts/infrastructure
 /pkg/web/public/ @violet-ts/infrastructure
 /pkg/web/next.config.js @violet-ts/infrastructure
 /pkg/web/src/utils/firebase/ @violet-ts/infrastructure
