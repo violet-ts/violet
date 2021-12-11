@@ -16,7 +16,7 @@ model Task {
 model Project {
   projectId   String   @id
   projectName String   @unique
-  iconName String?
+  iconName    String?
   createdAt   DateTime @default(now())
   dirs        Dir[]
 }
