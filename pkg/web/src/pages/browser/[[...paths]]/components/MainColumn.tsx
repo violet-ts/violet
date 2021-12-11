@@ -68,6 +68,33 @@ export const MainColumn = (props: {
     })
   }
 
+  const onScroll = (element: React.UIEvent<HTMLDivElement>, index: number) => {
+    const clientHeight = element.currentTarget.clientHeight
+    const scrollHeight = element.currentTarget.scrollHeight
+    const scrollTop = element.currentTarget.scrollTop
+
+    if (scrollTop === 0) {
+      clickPagenation('previousPage', index)
+    }
+    if (scrollHeight === scrollTop + clientHeight) {
+      clickPagenation('nextPage', index)
+    }
+  }
+
+  const onWheel = (element: React.WheelEvent<HTMLDivElement>, index: number) => {
+    const clientHeight = element.currentTarget.clientHeight
+    const view = window.innerHeight
+    const direction = element.deltaY
+
+    if (clientHeight > view) onScroll(element, index)
+    if (Math.sign(direction) === -1) {
+      clickPagenation('previousPage', index)
+    }
+    if (Math.sign(direction) === 1) {
+      clickPagenation('nextPage', index)
+    }
+  }
+
   const dropFile = (file: File) => {
     const searchFileType = fileTypes.some((f) => file.type === f.type)
     if (searchFileType) {
@@ -84,7 +111,7 @@ export const MainColumn = (props: {
   const clickPagenation = (pageDirection: PageDirection, index: number) => {
     const targetRef =
       pageDirection === 'previousPage' ? refs.current[index - 1] : refs.current[index + 1]
-    targetRef?.current?.scrollIntoView()
+    targetRef?.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -97,7 +124,7 @@ export const MainColumn = (props: {
               <FileUpload type="file" accept={acceptExtensions} onChange={onChange} />
             </AddButton>
           </ToolBar>
-          <RevisionContent>
+          <RevisionContent onWheel={(e) => onWheel(e, i)}>
             <Revision
               projectId={props.projectId}
               workId={props.workId}
