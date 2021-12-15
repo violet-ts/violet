@@ -24,7 +24,7 @@ const Container = styled.div`
 `
 const MainContent = styled.div`
   display: flex;
-  width: calc(100% - 22px);
+  width: 100%;
   scroll-snap-align: start;
 `
 const RevisionContent = styled.div`
