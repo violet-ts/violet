@@ -17,11 +17,15 @@ import { StreamBar } from './StreamBar'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100% + 18px);
   height: ${mainColumnHeight};
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
 `
 const MainContent = styled.div`
   display: flex;
+  width: calc(100% - 22px);
+  scroll-snap-align: start;
 `
 const RevisionContent = styled.div`
   flex: 1;
@@ -68,33 +72,6 @@ export const MainColumn = (props: {
     })
   }
 
-  const onScroll = (element: React.UIEvent<HTMLDivElement>, index: number) => {
-    const clientHeight = element.currentTarget.clientHeight
-    const scrollHeight = element.currentTarget.scrollHeight
-    const scrollTop = element.currentTarget.scrollTop
-
-    if (scrollTop === 0) {
-      clickPagenation('previousPage', index)
-    }
-    if (scrollHeight === scrollTop + clientHeight) {
-      clickPagenation('nextPage', index)
-    }
-  }
-
-  const onWheel = (element: React.WheelEvent<HTMLDivElement>, index: number) => {
-    const clientHeight = element.currentTarget.clientHeight
-    const view = window.innerHeight
-    const direction = element.deltaY
-
-    if (clientHeight > view) onScroll(element, index)
-    if (Math.sign(direction) === -1) {
-      clickPagenation('previousPage', index)
-    }
-    if (Math.sign(direction) === 1) {
-      clickPagenation('nextPage', index)
-    }
-  }
-
   const dropFile = (file: File) => {
     const searchFileType = fileTypes.some((f) => file.type === f.type)
     if (searchFileType) {
@@ -124,7 +101,7 @@ export const MainColumn = (props: {
               <FileUpload type="file" accept={acceptExtensions} onChange={onChange} />
             </AddButton>
           </ToolBar>
-          <RevisionContent onWheel={(e) => onWheel(e, i)}>
+          <RevisionContent>
             <Revision
               projectId={props.projectId}
               workId={props.workId}
