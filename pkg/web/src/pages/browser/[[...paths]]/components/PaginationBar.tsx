@@ -20,14 +20,14 @@ const NextPage = styled.div`
 `
 
 export const PaginationBar = (props: {
-  clickPagenation: (pageDirection: PageDirection) => void
+  clickPagination: (pageDirection: PageDirection) => void
 }) => {
   return (
     <Container>
-      <PreviousPage onClick={() => props.clickPagenation('previousPage')}>
+      <PreviousPage onClick={() => props.clickPagination('previousPage')}>
         <Chevron />
       </PreviousPage>
-      <NextPage onClick={() => props.clickPagenation('nextPage')}>
+      <NextPage onClick={() => props.clickPagination('nextPage')}>
         <Chevron />
       </NextPage>
     </Container>

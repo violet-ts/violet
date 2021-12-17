@@ -17,11 +17,15 @@ import { StreamBar } from './StreamBar'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100% + 18px);
   height: ${mainColumnHeight};
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
 `
 const MainContent = styled.div`
   display: flex;
+  width: 100%;
+  scroll-snap-align: start;
 `
 const RevisionContent = styled.div`
   flex: 1;
@@ -81,10 +85,10 @@ export const MainColumn = (props: {
     }
     e.target.value = ''
   }
-  const clickPagenation = (pageDirection: PageDirection, index: number) => {
+  const clickPagination = (pageDirection: PageDirection, index: number) => {
     const targetRef =
       pageDirection === 'previousPage' ? refs.current[index - 1] : refs.current[index + 1]
-    targetRef?.current?.scrollIntoView()
+    targetRef?.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -92,7 +96,7 @@ export const MainColumn = (props: {
       {props.revisions.map((revision, i) => (
         <MainContent key={revision.id} ref={refs.current[i]}>
           <ToolBar>
-            <PaginationBar clickPagenation={(result) => clickPagenation(result, i)} />
+            <PaginationBar clickPagination={(result) => clickPagination(result, i)} />
             <AddButton>
               <FileUpload type="file" accept={acceptExtensions} onChange={onChange} />
             </AddButton>

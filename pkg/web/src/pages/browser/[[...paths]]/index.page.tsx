@@ -30,7 +30,7 @@ const WorksView = styled.div`
 `
 const WorksMain = styled.div`
   height: ${mainColumnHeight};
-  overflow-y: auto;
+  overflow: hidden;
 `
 
 const Columns = (props: {

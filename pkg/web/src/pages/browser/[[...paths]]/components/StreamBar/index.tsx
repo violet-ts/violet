@@ -20,6 +20,7 @@ const StreamBox = styled.div`
   bottom: 0;
   flex: 1;
   min-height: 80px;
+  overflow-x: hidden;
   overflow-y: auto;
 `
 const MessageBox = styled.div`
