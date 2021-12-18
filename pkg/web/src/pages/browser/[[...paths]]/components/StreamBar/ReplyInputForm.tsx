@@ -18,7 +18,10 @@ const InputForm = styled.textarea`
   }
 `
 const ClickableArea = styled.div`
+  display: flex;
+  flex-direction: column;
   justify-content: flex-end;
+  width: 24px;
   cursor: pointer;
 `
 export const ReplyInputForm = (props: { sendContent: (content: string) => void }) => {
@@ -31,10 +34,10 @@ export const ReplyInputForm = (props: { sendContent: (content: string) => void }
     <Container>
       <Spacer axis="x" size={4} />
       <InputForm placeholder="reply" value={content} onChange={(e) => setContent(e.target.value)} />
-      <Spacer axis="x" size={8} />
+      <Spacer axis="x" size={4} />
       <ClickableArea onClick={replyButtonClick}>
-        <Spacer axis="y" size={40} />
         <PencilIcon />
+        <Spacer axis="y" size={16} />
       </ClickableArea>
     </Container>
   )
