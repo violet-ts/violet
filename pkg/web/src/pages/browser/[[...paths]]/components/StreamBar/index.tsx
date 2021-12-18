@@ -99,7 +99,7 @@ export const StreamBar = (props: {
 
   useEffect(() => {
     scrollBottomRef.current?.scrollTo(0, scrollBottomRef.current?.scrollHeight || 0)
-  }, [scrollBottomRef.current?.scrollHeight])
+  }, [messages?.length])
 
   const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
