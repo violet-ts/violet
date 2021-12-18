@@ -6,7 +6,7 @@ import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
 import type { PageDirection } from '@violet/web/src/types/tools'
-import { mainColumnHeight } from '@violet/web/src/utils/constants'
+import { colors, mainColumnHeight } from '@violet/web/src/utils/constants'
 import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { PaginationBar } from './PaginationBar'
@@ -24,6 +24,7 @@ const Container = styled.div`
   scrollbar-width: none;
   ::-webkit-scrollbar {
     width: 0;
+    background-color: ${colors.white};
   }
 `
 const MainContent = styled.div`
