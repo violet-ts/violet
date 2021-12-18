@@ -88,8 +88,8 @@ export const StreamBar = (props: {
   ])
 
   useEffect(() => {
-    scrollBottomRef?.current?.scrollIntoView()
-  }, [messages?.length])
+    scrollBottomRef.current?.scrollTo(0, scrollBottomRef.current?.scrollHeight || 0)
+  }, [scrollBottomRef.current?.scrollHeight])
 
   const replyMessage = useCallback(
     async (messageId: MessageId, content: string) => {
@@ -124,11 +124,10 @@ export const StreamBar = (props: {
 
   return (
     <Container>
-      <StreamBox>
+      <StreamBox ref={scrollBottomRef}>
         {messages?.map((m) => (
           <MessageCell key={m.id} message={m} replyMessage={replyMessage} />
         ))}
-        <div ref={scrollBottomRef} />
       </StreamBox>
       <MessageBox>
         <InputForm
