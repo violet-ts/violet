@@ -69,7 +69,7 @@ export const Revision = (props: {
   dropFile: (file: File) => void
 }) => {
   const [isFile, setIsFile] = useState(false)
-  const [workPath, setWorkPath] = useState([props.revision.url])
+  const [workPath, setWorkPath] = useState<RevisionPath[]>()
   const { data, error } = useSWR(props.revision.url, fetcher)
   useEffect(() => {
     if (data !== undefined) setWorkPath(data)
@@ -101,7 +101,7 @@ export const Revision = (props: {
     >
       {isFile && <Dropper type="file" accept={acceptExtensions} />}
       <DisplayWorksFrame>
-        {workPath.map((p) => (
+        {workPath?.map((p) => (
           <picture key={p}>
             <source
               type={CONTENT_TYPES.webp}
