@@ -6,7 +6,7 @@ import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
 import type { PageDirection } from '@violet/web/src/types/tools'
-import { mainColumnHeight } from '@violet/web/src/utils/constants'
+import { colors, mainColumnHeight } from '@violet/web/src/utils/constants'
 import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { PaginationBar } from './PaginationBar'
@@ -17,10 +17,15 @@ import { StreamBar } from './StreamBar'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: calc(100% + 18px);
+  width: 100%;
   height: ${mainColumnHeight};
   scroll-snap-type: y mandatory;
   overflow-y: auto;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    width: 0;
+    background-color: ${colors.white};
+  }
 `
 const MainContent = styled.div`
   display: flex;
@@ -95,12 +100,6 @@ export const MainColumn = (props: {
     <Container>
       {props.revisions.map((revision, i) => (
         <MainContent key={revision.id} ref={refs.current[i]}>
-          <ToolBar>
-            <PaginationBar clickPagination={(result) => clickPagination(result, i)} />
-            <AddButton>
-              <FileUpload type="file" accept={acceptExtensions} onChange={onChange} />
-            </AddButton>
-          </ToolBar>
           <RevisionContent>
             <Revision
               projectId={props.projectId}
@@ -113,6 +112,12 @@ export const MainColumn = (props: {
           <StreamBarColumn>
             <StreamBar projectId={props.projectId} workId={props.workId} revision={revision} />
           </StreamBarColumn>
+          <ToolBar>
+            <PaginationBar clickPagination={(result) => clickPagination(result, i)} />
+            <AddButton>
+              <FileUpload type="file" accept={acceptExtensions} onChange={onChange} />
+            </AddButton>
+          </ToolBar>
         </MainContent>
       ))}
       <AlertModal open={open} onClose={() => setOpen(false)} />

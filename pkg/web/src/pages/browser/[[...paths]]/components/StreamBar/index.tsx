@@ -14,6 +14,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 300px;
   height: 100%;
+  border-right: 1px solid ${colors.violet}${alphaLevel[2]};
   border-left: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const StreamBox = styled.div`
@@ -22,12 +23,17 @@ const StreamBox = styled.div`
   min-height: 80px;
   overflow-x: hidden;
   overflow-y: auto;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    width: 0;
+    background-color: ${colors.white};
+  }
 `
 const MessageBox = styled.div`
   display: flex;
   flex-shrink: 0;
   justify-content: flex-end;
-  padding: 8px;
+  padding: 4px;
 `
 const InputForm = styled.textarea`
   flex: 1;
@@ -39,6 +45,10 @@ const InputForm = styled.textarea`
   }
 `
 const ClickableArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 24px;
   cursor: pointer;
 `
 
@@ -88,7 +98,7 @@ export const StreamBar = (props: {
   ])
 
   useEffect(() => {
-    scrollBottomRef?.current?.scrollIntoView()
+    scrollBottomRef.current?.scrollTo(0, scrollBottomRef.current?.scrollHeight || 0)
   }, [messages?.length])
 
   const replyMessage = useCallback(
@@ -124,11 +134,10 @@ export const StreamBar = (props: {
 
   return (
     <Container>
-      <StreamBox>
+      <StreamBox ref={scrollBottomRef}>
         {messages?.map((m) => (
           <MessageCell key={m.id} message={m} replyMessage={replyMessage} />
         ))}
-        <div ref={scrollBottomRef} />
       </StreamBox>
       <MessageBox>
         <InputForm
@@ -137,8 +146,8 @@ export const StreamBar = (props: {
           onChange={(e) => setContent(e.target.value)}
         />
         <ClickableArea onClick={submitMessage}>
-          <Spacer axis="y" size={88} />
           <PencilIcon />
+          <Spacer axis="y" size={16} />
         </ClickableArea>
       </MessageBox>
     </Container>
