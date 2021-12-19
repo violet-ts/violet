@@ -1,11 +1,14 @@
+import { acceptImageExtensions } from '@violet/def/constants'
 import type { ProjectId } from '@violet/lib/types/branded'
+import { ImageIcon } from '@violet/web/src/components/atoms/ImageIcon'
 import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserProject } from '@violet/web/src/types/browser'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
-import React, { useState } from 'react'
+import type { ChangeEvent } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { IconUpload } from './IconUpload'
 import { ProjectNameUpdate } from './ProjectNameUpdate'
@@ -46,14 +49,33 @@ const SecondaryButton = styled.button`
   border-radius: 16px;
 `
 
+const StyleInput = styled.input`
+  display: none;
+`
+
+const StyleImageIcon = styled.label`
+  opacity: 0.2;
+  transition: opacity 0.5s;
+  &:hover {
+    opacity: 1;
+  }
+`
+
+const StyleProjectIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: left;
+`
+
 export const ProjectConfig = (props: { onComplete?: () => void; project: BrowserProject }) => {
-  const [iconImageFile, setIconImageFile] = useState<File | undefined>(undefined)
+  const [iconImageFile, setIconImageFile] = useState<File>()
   const [newProjectName, setNewProjectName] = useState('')
   const { updateProject } = useBrowserContext()
   const { api, onErr } = useApiContext()
   const [isUpdating, setIsUpdating] = useState(false)
+  const inputImageElement = useRef<HTMLInputElement>(null)
 
-  const updateProjectName = async (projectId: ProjectId) => {
+  const updateProjectNameAndIcon = async (projectId: ProjectId) => {
     if (!newProjectName && !iconImageFile) return props.onComplete?.()
 
     setIsUpdating(true)
@@ -73,7 +95,15 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
 
   const createIconName = () => {
     if (!iconImageFile) return props.project.iconUrl?.split('/').slice(-1)[0]
+
     return `${Date.now()}.${iconImageFile.name.substring(iconImageFile.name.lastIndexOf('.') + 1)}`
+  }
+
+  const loadImageFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.length !== 1) return
+
+    const imageFile = e.target.files[0]
+    setIconImageFile(imageFile)
   }
 
   return (
@@ -81,7 +111,19 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
       {isUpdating && <Loading />}
       <Spacer axis="y" size={20} />
       <Message>Project icon</Message>
-      <IconUpload project={props.project} setIconImageFile={setIconImageFile} />
+      <StyleProjectIcon>
+        <IconUpload project={props.project} iconImageFile={iconImageFile} />
+        <Spacer axis="x" size={10} />
+        <StyleImageIcon>
+          <ImageIcon />
+          <StyleInput
+            type="file"
+            accept={acceptImageExtensions}
+            ref={inputImageElement}
+            onChange={loadImageFile}
+          />
+        </StyleImageIcon>
+      </StyleProjectIcon>
       <Spacer axis="y" size={20} />
       <Message>Project name</Message>
       <ProjectNameUpdate
@@ -91,7 +133,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
       />
       <Spacer axis="y" size={10} />
       <Column>
-        <Button onClick={() => updateProjectName(props.project.id)}>Update</Button>
+        <Button onClick={() => updateProjectNameAndIcon(props.project.id)}>Update</Button>
         <Spacer axis="x" size={50} />
         <SecondaryButton onClick={props.onComplete}>Cancel</SecondaryButton>
       </Column>

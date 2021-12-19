@@ -1,6 +1,8 @@
 import type { Revision, Work } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
+import { sendNewProjectIcon } from '@violet/api/src/service/s3'
 import dotenv from '@violet/api/src/utils/envValues'
+import { createS3SaveProjectIconPath } from '@violet/api/src/utils/s3'
 import { generateId } from '@violet/lib/generateId'
 import type {
   ApiDir,
@@ -19,6 +21,7 @@ import type {
   RevisionPath,
   WorkId,
 } from '@violet/lib/types/branded'
+import { MultipartFile } from 'fastify-multipart'
 import {
   getDirId,
   getMessageId,
@@ -59,9 +62,7 @@ export const getProjects = async () => {
     (p): ApiProject => ({
       id: getProjectId(p),
       name: p.projectName,
-      iconUrl: p.iconName
-        ? (`${dotenv.S3_ENDPOINT}/${bucketOriginal}/icon/${p.projectId}/${p.iconName}` as ProjectIconPath)
-        : null,
+      iconUrl: createProjectIconPath(p.iconName, p.projectId),
     })
   )
 }
@@ -76,16 +77,26 @@ export const createProject = async (projectName: ApiProject['name']) => {
 export const updateProject = async (
   projectId: ProjectId,
   projectName: ApiProject['name'],
-  iconName?: string | null
+  iconName?: string,
+  imageFile?: MultipartFile
 ): Promise<ApiProject> => {
   await prisma.project.update({ where: { projectId }, data: { projectName, iconName } })
+  if (imageFile) {
+    await sendNewProjectIcon({
+      imageFile: imageFile,
+      path: await createS3SaveProjectIconPath({
+        projectId: projectId as ProjectId,
+        iconName: iconName,
+      }),
+    })
+  }
 
   return {
     id: projectId,
     name: projectName,
     iconUrl: iconName
       ? (`${dotenv.S3_ENDPOINT}/${bucketOriginal}/icon/${projectId}/${iconName}` as ProjectIconPath)
-      : null,
+      : undefined,
   }
 }
 
@@ -198,3 +209,8 @@ export const createRevision = async (
 
   return { id: revisionId, url: infoJsonPath(projectId, revisionId), latestMessageId: null }
 }
+
+export const createProjectIconPath = (iconName: string | null, projectId: string) =>
+  iconName
+    ? (`${dotenv.S3_ENDPOINT}/${bucketOriginal}/icon/${projectId}/${iconName}` as ProjectIconPath)
+    : undefined

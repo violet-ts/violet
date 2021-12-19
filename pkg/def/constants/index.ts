@@ -28,7 +28,7 @@ export const imageTypes = [
   },
   {
     ex: '.png',
-    type: 'image/',
+    type: 'image/png',
   },
   {
     ex: '.svg',
