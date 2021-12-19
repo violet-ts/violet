@@ -1,3 +1,4 @@
+import { StyledCross } from '@violet/web/src/components/atoms/Cross'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import type {
   BrowserProject,
@@ -25,6 +26,17 @@ const TabItem = styled.a`
   ${ActiveStyle};
 `
 
+const CrossButton = styled.button`
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  opacity: 0;
+  :hover {
+    border: none;
+    opacity: 1;
+  }
+`
+
 export const TabBar = (props: {
   project: BrowserProject
   operationData: OperationData
@@ -45,9 +57,19 @@ export const TabBar = (props: {
                 <ExtIcon name={getWorkFullName(props.worksDict[t.id])} />
                 <Spacer axis="x" size={6} />
                 <span>{getWorkFullName(props.worksDict[t.id])}</span>
+                <Spacer axis="x" size={6} />
+                <CrossButton>
+                  <StyledCross size={12} />
+                </CrossButton>
               </>
             ) : (
-              <span>{props.dirsDict[t.id].name}</span>
+              <>
+                <span>{props.dirsDict[t.id].name}</span>
+                <Spacer axis="x" size={6} />
+                <CrossButton>
+                  <StyledCross size={12} />
+                </CrossButton>
+              </>
             )}
           </TabItem>
         </Link>
