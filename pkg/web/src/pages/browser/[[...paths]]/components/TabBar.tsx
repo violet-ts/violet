@@ -1,5 +1,7 @@
+import type { DirId } from '@violet/lib/types/branded'
 import { StyledCross } from '@violet/web/src/components/atoms/Cross'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
+import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type {
   BrowserProject,
   DirsDict,
@@ -9,6 +11,7 @@ import type {
 import { getWorkFullName, tabToHref } from '@violet/web/src/utils'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import Link from 'next/link'
+import React from 'react'
 import styled from 'styled-components'
 import { ActiveStyle } from './ActiveStyle'
 import { ExtIcon } from './ExtIcon'
@@ -43,6 +46,16 @@ export const TabBar = (props: {
   dirsDict: DirsDict
   worksDict: WorksDict
 }) => {
+  const { wholeDict, updateWholeDict } = useBrowserContext()
+
+  const onClickCrossDirTab = (dirId: DirId) => {
+    updateWholeDict('dirsForProjectId', {
+      [props.project.id]: wholeDict.dirsForProjectId[props.project.id].filter(
+        (d) => d.id !== dirId
+      ),
+    })
+  }
+
   return (
     <Container>
       {props.operationData.tabs.map((t) => (
@@ -66,7 +79,7 @@ export const TabBar = (props: {
               <>
                 <span>{props.dirsDict[t.id].name}</span>
                 <Spacer axis="x" size={6} />
-                <CrossButton>
+                <CrossButton onClick={() => onClickCrossDirTab(t.id)}>
                   <StyledCross size={12} />
                 </CrossButton>
               </>
