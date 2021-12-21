@@ -1,4 +1,4 @@
-import type { DirId } from '@violet/lib/types/branded'
+import type { DirId, WorkId } from '@violet/lib/types/branded'
 import { StyledCross } from '@violet/web/src/components/atoms/Cross'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
@@ -48,13 +48,19 @@ export const TabBar = (props: {
 }) => {
   const { wholeDict, updateWholeDict } = useBrowserContext()
 
-  const onClickCrossDirTab = (dirId: DirId) => {
+  const onClickCrossDirTab = (dirId: DirId) =>
     updateWholeDict('dirsForProjectId', {
       [props.project.id]: wholeDict.dirsForProjectId[props.project.id].filter(
         (d) => d.id !== dirId
       ),
     })
-  }
+
+  const onClickCrossWorkTab = (dirId: DirId, workId: WorkId) =>
+    updateWholeDict('dirsForProjectId', {
+      [props.project.id]: wholeDict.dirsForProjectId[props.project.id].filter((d) =>
+        d.works.filter((work) => work.id !== workId)
+      ),
+    })
 
   return (
     <Container>
@@ -71,7 +77,7 @@ export const TabBar = (props: {
                 <Spacer axis="x" size={6} />
                 <span>{getWorkFullName(props.worksDict[t.id])}</span>
                 <Spacer axis="x" size={6} />
-                <CrossButton>
+                <CrossButton onClick={() => onClickCrossWorkTab(props.worksDict[t.id].dirId, t.id)}>
                   <StyledCross size={12} />
                 </CrossButton>
               </>
