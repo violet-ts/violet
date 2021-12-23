@@ -33,10 +33,11 @@ export const ProjectNameUpdate: React.FC<Props> = ({
   const { api, onErr } = useApiContext()
   const { projects, updateProject } = useBrowserContext()
   const [isUpdating, setIsUpdating] = useState(false)
-  const iconName = projects
-    .find((d) => d.id === projectId)
-    ?.iconUrl?.split('/')
-    .slice(-1)[0]
+  const iconName =
+    projects
+      .find((d) => d.id === projectId)
+      ?.iconUrl?.split('/')
+      .slice(-1)[0] ?? null
   useEffect(() => {
     inputElement.current?.focus()
   }, [])

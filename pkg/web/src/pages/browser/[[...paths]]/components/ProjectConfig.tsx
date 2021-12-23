@@ -94,7 +94,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
   }
 
   const createIconName = () => {
-    if (!iconImageFile) return props.project.iconUrl?.split('/').slice(-1)[0]
+    if (!iconImageFile) return props.project.iconUrl?.split('/').slice(-1)[0] ?? null
 
     return `${Date.now()}.${iconImageFile.name.substring(iconImageFile.name.lastIndexOf('.') + 1)}`
   }

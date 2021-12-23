@@ -15,5 +15,5 @@ export const createS3SaveRevisionPath = (
 
 export const createS3SaveProjectIconPath = (props: {
   projectId: ProjectId
-  iconName?: string | null
+  iconName: string | null
 }) => `icon/${props.projectId}/${props.iconName}` as ProjectIconPath

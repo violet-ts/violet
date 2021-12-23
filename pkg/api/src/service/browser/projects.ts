@@ -16,7 +16,7 @@ export const getProject = async (projectId: ProjectId): Promise<ApiProject | und
   const project = await prisma.project.findFirst({ where: { projectId } })
   if (!project) return undefined
 
-  return { id: projectId, name: project.projectName }
+  return { id: projectId, name: project.projectName, iconUrl: null }
 }
 
 export const getProjects = async () => {
@@ -41,7 +41,7 @@ export const createProject = async (projectName: ApiProject['name']) => {
 export const updateProject = async (
   projectId: ProjectId,
   projectName: ApiProject['name'],
-  iconName?: string,
+  iconName: string | null,
   imageFile?: MultipartFile
 ): Promise<ApiProject> => {
   await prisma.project.update({ where: { projectId }, data: { projectName, iconName } })
@@ -62,10 +62,7 @@ export const updateProject = async (
   }
 }
 
-export const createProjectIconPath = (
-  iconName: string | undefined,
-  projectId: string | undefined
-) =>
+export const createProjectIconPath = (iconName: string | null, projectId: string | null) =>
   iconName
     ? (`${dotenv.S3_ENDPOINT}/${bucketOriginal}/icon/${projectId}/${iconName}` as ProjectIconPath)
-    : undefined
+    : null
