@@ -50,24 +50,30 @@ const IconImageUrl = (props: { projects: ApiProject[]; project: ApiProject }) =>
   )
 }
 
-export const IconUpload = (props: { project: ApiProject; iconImageFile: File | undefined }) => {
+interface Props {
+  project: ApiProject
+  iconImageFile: File | undefined
+}
+
+export const IconUpload: React.FC<Props> = ({ project, iconImageFile }: Props) => {
   const { projects } = useBrowserContext()
-  const [iconImageUrl, seticonImageUrl] = useState<string | undefined>(undefined)
+  const [objectURL, setObjectURL] = useState<string | null>(null)
   useEffect(() => {
-    if (!props.iconImageFile) return
-    seticonImageUrl(URL.createObjectURL(props.iconImageFile))
+    let iconImageUrl = ''
+    if (iconImageFile) iconImageUrl = URL.createObjectURL(iconImageFile)
+    setObjectURL(iconImageUrl)
     return () => {
-      if (!iconImageUrl) return
       URL.revokeObjectURL(iconImageUrl)
+      setObjectURL(null)
     }
-  }, [props.iconImageFile])
+  }, [iconImageFile])
 
   return (
     <Container>
-      {iconImageUrl ? (
-        <UploadedIcon src={iconImageUrl} />
+      {objectURL ? (
+        <UploadedIcon src={objectURL} />
       ) : (
-        <IconImageUrl projects={projects} project={props.project} />
+        <IconImageUrl projects={projects} project={project} />
       )}
     </Container>
   )

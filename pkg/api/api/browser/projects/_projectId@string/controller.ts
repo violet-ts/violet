@@ -1,4 +1,4 @@
-import { getProject, updateProject } from '@violet/api/src/service/browser'
+import { getProject, updateProject } from '@violet/api/src/service/browser/projects'
 import type { ProjectId } from '@violet/lib/types/branded'
 import { defineController } from './$relay'
 

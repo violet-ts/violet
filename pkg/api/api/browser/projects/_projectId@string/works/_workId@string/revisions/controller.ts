@@ -1,4 +1,4 @@
-import { createRevision, getRevisions } from '@violet/api/src/service/browser'
+import { createRevision, getRevisions } from '@violet/api/src/service/browser/revisions'
 import { sendNewWork } from '@violet/api/src/service/s3'
 import { createS3SaveRevisionPath } from '@violet/api/src/utils/s3'
 import type { ProjectId, WorkId } from '@violet/lib/types/branded'
