@@ -55,12 +55,14 @@ export const TabBar = (props: {
       ),
     })
 
-  const onClickCrossWorkTab = (dirId: DirId, workId: WorkId) =>
+  const onClickCrossWorkTab = (dirId: DirId, workId: WorkId) => {
+    const works = props.dirsDict[dirId].works.filter((w) => w.id !== workId)
     updateWholeDict('dirsForProjectId', {
-      [props.project.id]: wholeDict.dirsForProjectId[props.project.id].filter((d) =>
-        d.works.filter((work) => work.id !== workId)
+      [props.project.id]: wholeDict.dirsForProjectId[props.project.id].map((d) =>
+        d.id === dirId ? { ...d, works: works.map((w) => ({ ...w, dirId: d.id })) } : d
       ),
     })
+  }
 
   return (
     <Container>
