@@ -46,21 +46,23 @@ export const TabBar = (props: {
   dirsDict: DirsDict
   worksDict: WorksDict
 }) => {
-  const { wholeDict, updateWholeDict } = useBrowserContext()
+  const { operationDataDict, updateOperationData } = useBrowserContext()
+  const { tabs, openedDirDict } = operationDataDict[props.project.id]
 
-  const onClickCrossDirTab = (dirId: DirId) =>
-    updateWholeDict('dirsForProjectId', {
-      [props.project.id]: wholeDict.dirsForProjectId[props.project.id].filter(
-        (d) => d.id !== dirId
-      ),
+  const onClickCrossDirTab = (dirId: DirId) => {
+    updateOperationData(props.project.id, {
+      tabs: [],
+      activeTab: undefined,
+      openedDirDict: { ...openedDirDict, [dirId]: !openedDirDict[dirId] },
     })
+  }
 
   const onClickCrossWorkTab = (dirId: DirId, workId: WorkId) => {
-    const works = props.dirsDict[dirId].works.filter((w) => w.id !== workId)
-    updateWholeDict('dirsForProjectId', {
-      [props.project.id]: wholeDict.dirsForProjectId[props.project.id].map((d) =>
-        d.id === dirId ? { ...d, works: works.map((w) => ({ ...w, dirId: d.id })) } : d
-      ),
+    const remainTabs = tabs.filter((t) => t.id !== workId)
+    updateOperationData(props.project.id, {
+      tabs: remainTabs,
+      activeTab: undefined,
+      openedDirDict: { ...openedDirDict, [dirId]: !openedDirDict[dirId] },
     })
   }
 
