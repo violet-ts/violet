@@ -98,7 +98,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
     return `${Date.now()}.${iconImageFile.name.substring(iconImageFile.name.lastIndexOf('.') + 1)}`
   }
 
-  const loadImageFile = async (e: ChangeEvent<HTMLInputElement>) => {
+  const loadImageFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length !== 1) return
 
     const imageFile = e.target.files[0]

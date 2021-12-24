@@ -106,9 +106,7 @@ export const ProjectBar = (props: {
   }
 
   const getIconImageUrl = (projectId: ProjectId) => {
-    const iconUrl = projects.find((d) => d.id === projectId)?.iconUrl
-
-    return iconUrl ? iconUrl : undefined
+    return projects.find((d) => d.id === projectId)?.iconUrl ?? undefined
   }
 
   return (
