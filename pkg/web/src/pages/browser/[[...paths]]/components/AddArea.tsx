@@ -6,7 +6,7 @@ const StyledWorkAdd = styled.i`
   float: right;
   width: 12px;
   height: 13px;
-  margin: 1px 0 1px 0;
+  margin: 1px 0;
   margin-right: 10px;
   overflow: hidden;
   color: #333;
@@ -20,6 +20,7 @@ const StyledWorkAdd = styled.i`
   opacity: 0.3;
   transition: opacity 0.5s;
   transform: scale(var(--ggs, 1));
+
   &::after,
   &::before {
     position: absolute;
@@ -29,12 +30,14 @@ const StyledWorkAdd = styled.i`
     color: #333;
     content: '';
   }
+
   &::before {
     top: 4px;
     left: 3px;
     width: 2px;
     background: #333;
   }
+
   &::after {
     top: -1px;
     right: -1px;
@@ -54,7 +57,7 @@ const StyledDirAdd = styled.i`
   float: right;
   width: 20px;
   height: 13px;
-  margin: 1.5px 0 1px 0;
+  margin: 1.5px 0 1px;
   margin-right: 10px;
   color: #333;
   background: linear-gradient(to left, #333 10px, transparent 0) no-repeat 7px 2px/2px 6px;
@@ -72,6 +75,7 @@ const StyledDirAdd = styled.i`
     color: #333;
     content: '';
   }
+
   &::before {
     top: 4px;
     left: 5px;
@@ -79,16 +83,14 @@ const StyledDirAdd = styled.i`
     height: 2px;
     background: #333;
   }
+
   &::after {
     top: -5px;
     width: 9px;
     height: 4px;
     border: 2px solid;
     border-bottom: 0;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+    border-radius: 2px 4px 0 0;
   }
 
   &:hover {

@@ -11,6 +11,7 @@ export const ImageIcon = styled.i`
     box-shadow: 0 0 0 2px;
     transform: scale(var(--ggs, 1));
   }
+
   &::after,
   &::before {
     position: absolute;
@@ -19,6 +20,7 @@ export const ImageIcon = styled.i`
     content: '';
     border: 2px solid;
   }
+
   &::after {
     top: 8px;
     left: 5px;
@@ -27,6 +29,7 @@ export const ImageIcon = styled.i`
     border-radius: 3px;
     transform: rotate(45deg);
   }
+
   &::before {
     top: 2px;
     left: 2px;

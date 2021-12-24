@@ -12,6 +12,7 @@ export const AddButton = styled.label`
   background-color: ${colors.transparent};
   border: none;
   transform: scale(var(--ggs, 1));
+
   ::after,
   ::before {
     position: absolute;
@@ -25,6 +26,7 @@ export const AddButton = styled.label`
     content: '';
     background: currentColor;
   }
+
   ::after {
     top: 8px;
     left: 16px;

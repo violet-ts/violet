@@ -13,6 +13,7 @@ const InputForm = styled.textarea`
   min-height: 64px;
   resize: none;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
+
   ::placeholder {
     color: ${colors.violet}${alphaLevel[2]};
   }

@@ -10,6 +10,7 @@ export const RenameIcon = styled.i`
       22px;
     transform: scale(var(--ggs, 1));
   }
+
   &::after,
   &::before {
     position: absolute;
@@ -21,11 +22,13 @@ export const RenameIcon = styled.i`
     content: '';
     border: 2px solid;
   }
+
   &::before {
     border-right: 0;
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
   }
+
   &::after {
     right: 0;
     width: 8px;

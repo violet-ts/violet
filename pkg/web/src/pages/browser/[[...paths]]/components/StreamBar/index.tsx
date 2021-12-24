@@ -24,6 +24,7 @@ const StreamBox = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: none;
+
   ::-webkit-scrollbar {
     width: 0;
     background-color: ${colors.white};
@@ -40,6 +41,7 @@ const InputForm = styled.textarea`
   min-height: 120px;
   resize: none;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
+
   ::placeholder {
     color: ${colors.violet}${alphaLevel[2]};
   }

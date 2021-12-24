@@ -13,6 +13,7 @@ export const Chevron = styled.button`
   border: 2px solid transparent;
   border-radius: 100px;
   transform: scale(var(--ggs, 1));
+
   ::after {
     position: absolute;
     bottom: 8px;

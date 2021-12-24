@@ -17,6 +17,7 @@ export const PlusIcon = styled.i`
     transition: opacity 0.5s;
     transform: scale(var(--ggs, 1));
   }
+
   &::after,
   &::before {
     position: absolute;
@@ -31,12 +32,14 @@ export const PlusIcon = styled.i`
     background: currentColor;
     border-radius: 5px;
   }
+
   &::after {
     top: 8px;
     left: 11px;
     width: 2px;
     height: 10px;
   }
+
   &:hover {
     opacity: 1;
   }

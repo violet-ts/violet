@@ -6,6 +6,7 @@ export const PencilIcon = styled.button`
   cursor: pointer;
   background-color: transparent;
   border: none;
+
   & {
     position: relative;
     width: 16px;
@@ -16,6 +17,7 @@ export const PencilIcon = styled.button`
     box-shadow: 0 0 0 2px, inset -2px 0 0;
     transform: rotate(-45deg);
   }
+
   ::before {
     position: absolute;
     top: -2px;
