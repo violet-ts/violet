@@ -26,7 +26,7 @@ export const getProjects = async () => {
     (p): ApiProject => ({
       id: getProjectId(p),
       name: p.projectName,
-      iconUrl: createProjectIconPath(p.iconName, p.projectId),
+      iconUrl: createProjectIconPath(p.iconName, p.projectId as ProjectId),
     })
   )
 }
@@ -62,7 +62,7 @@ export const updateProject = async (
   }
 }
 
-export const createProjectIconPath = (iconName: string | null, projectId: string | null) =>
+export const createProjectIconPath = (iconName: string | null, projectId: ProjectId | null) =>
   iconName
     ? (`${dotenv.S3_ENDPOINT}/${bucketOriginal}/icon/${projectId}/${iconName}` as ProjectIconPath)
     : null
