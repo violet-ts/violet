@@ -42,6 +42,7 @@ const StyleIcon = styled.i`
   align-items: center;
   opacity: 0.2;
   transition: opacity 0.5s;
+
   &:hover {
     opacity: 1;
   }

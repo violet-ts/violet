@@ -56,6 +56,7 @@ const StyleInput = styled.input`
 const StyleImageIcon = styled.label`
   opacity: 0.2;
   transition: opacity 0.5s;
+
   &:hover {
     opacity: 1;
   }

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 export const DataIcon = styled.i`
   color: ${colors.gray};
   transform: scale(var(--ggs, 1));
+
   &,
   ::after,
   ::before {
@@ -15,6 +16,7 @@ export const DataIcon = styled.i`
     border: 2px solid;
     border-radius: 50%;
   }
+
   ::after,
   ::before {
     position: absolute;
@@ -24,6 +26,7 @@ export const DataIcon = styled.i`
     height: 6px;
     content: '';
   }
+
   ::after {
     top: -6px;
     left: -6px;
@@ -32,6 +35,7 @@ export const DataIcon = styled.i`
     background: linear-gradient(to left, currentColor 8px, transparent 0) no-repeat bottom
       center/2px 8px;
   }
+
   &,
   ::after {
     border-top-color: transparent;

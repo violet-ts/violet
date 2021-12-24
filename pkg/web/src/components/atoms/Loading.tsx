@@ -17,11 +17,10 @@ const Loader = styled.div`
   left: 50%;
   font-size: 10px;
   text-indent: -9999em;
-  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-right: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-top: 1.1em solid rgb(255 255 255 / 20%);
+  border-right: 1.1em solid rgb(255 255 255 / 20%);
+  border-bottom: 1.1em solid rgb(255 255 255 / 20%);
   border-left: 1.1em solid #fff;
-  -webkit-animation: load 1.1s infinite linear;
   animation: load 1.1s infinite linear;
 
   &,
@@ -31,24 +30,22 @@ const Loader = styled.div`
     border-radius: 50%;
   }
 
-  @-webkit-keyframes load {
+  @keyframes load {
     0% {
-      -webkit-transform: translate(-50%, -50%) rotate(0deg);
       transform: translate(-50%, -50%) rotate(0deg);
     }
+
     100% {
-      -webkit-transform: translate(-50%, -50%) rotate(360deg);
       transform: translate(-50%, -50%) rotate(360deg);
     }
   }
 
   @keyframes load {
     0% {
-      -webkit-transform: translate(-50%, -50%) rotate(0deg);
       transform: translate(-50%, -50%) rotate(0deg);
     }
+
     100% {
-      -webkit-transform: translate(-50%, -50%) rotate(360deg);
       transform: translate(-50%, -50%) rotate(360deg);
     }
   }
