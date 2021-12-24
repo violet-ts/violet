@@ -8,7 +8,7 @@ import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserProject } from '@violet/web/src/types/browser'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import type { ChangeEvent } from 'react'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { IconUpload } from './IconUpload'
 import { ProjectNameUpdate } from './ProjectNameUpdate'
@@ -73,7 +73,6 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
   const { updateProject } = useBrowserContext()
   const { api, onErr } = useApiContext()
   const [isUpdating, setIsUpdating] = useState(false)
-  const inputImageElement = useRef<HTMLInputElement>(null)
 
   const updateProjectNameAndIcon = async (projectId: ProjectId) => {
     if (!newProjectName && !iconImageFile) return props.onComplete?.()
@@ -116,12 +115,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
         <Spacer axis="x" size={10} />
         <StyleImageIcon>
           <ImageIcon />
-          <StyleInput
-            type="file"
-            accept={acceptImageExtensions}
-            ref={inputImageElement}
-            onChange={loadImageFile}
-          />
+          <StyleInput type="file" accept={acceptImageExtensions} onChange={loadImageFile} />
         </StyleImageIcon>
       </StyleProjectIcon>
       <Spacer axis="y" size={20} />

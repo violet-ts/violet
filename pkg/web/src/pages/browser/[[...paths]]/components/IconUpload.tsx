@@ -59,8 +59,8 @@ export const IconUpload: React.FC<Props> = ({ project, iconImageFile }: Props) =
   const { projects } = useBrowserContext()
   const [objectURL, setObjectURL] = useState<string | null>(null)
   useEffect(() => {
-    let iconImageUrl = ''
-    if (iconImageFile) iconImageUrl = URL.createObjectURL(iconImageFile)
+    if (!iconImageFile) return undefined
+    const iconImageUrl = URL.createObjectURL(iconImageFile)
     setObjectURL(iconImageUrl)
     return () => {
       URL.revokeObjectURL(iconImageUrl)

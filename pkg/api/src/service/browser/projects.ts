@@ -58,7 +58,7 @@ export const updateProject = async (
   return {
     id: projectId,
     name: projectName,
-    iconUrl: createProjectIconPath(iconName, projectName),
+    iconUrl: createProjectIconPath(iconName, projectId),
   }
 }
 
