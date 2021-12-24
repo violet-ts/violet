@@ -1,4 +1,4 @@
-import { updateDir } from '@violet/api/src/service/browser'
+import { updateDir } from '@violet/api/src/service/browser/dirs'
 import type { DirId } from '@violet/lib/types/branded'
 import { defineController } from './$relay'
 

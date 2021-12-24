@@ -11,6 +11,7 @@ import type {
 export type ApiProject = {
   id: ProjectId
   name: string
+  iconUrl: string | null
 }
 
 export type ApiRootDir = {

@@ -2,29 +2,50 @@ import type { ProjectId } from '@violet/lib/types/branded'
 import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
-import type { ChangeEvent, FormEvent } from 'react'
+import type { ChangeEvent, Dispatch, FormEvent } from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const InputFormProject = styled.form`
-  text-align: center;
+  text-align: left;
 `
 
-export const ProjectNameUpdate = (props: { confirmName: () => void; projectId: ProjectId }) => {
+interface Props {
+  onConfirmName?: () => void
+  projectId: ProjectId
+  setNewProjectName: Dispatch<string>
+}
+
+export const ProjectNameUpdate: React.FC<Props> = ({
+  onConfirmName,
+  projectId,
+  setNewProjectName,
+}: Props) => {
   const [label, setLabel] = useState('')
-  const inputLabel = useCallback((e: ChangeEvent<HTMLInputElement>) => setLabel(e.target.value), [])
+  const inputLabel = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setLabel(e.target.value)
+      setNewProjectName(e.target.value)
+    },
+    [setNewProjectName]
+  )
   const inputElement = useRef<HTMLInputElement>(null)
   const { api, onErr } = useApiContext()
-  const { updateProject } = useBrowserContext()
+  const { projects, updateProject } = useBrowserContext()
   const [isUpdating, setIsUpdating] = useState(false)
+  const iconName =
+    projects
+      .find((d) => d.id === projectId)
+      ?.iconUrl?.split('/')
+      .slice(-1)[0] ?? null
   useEffect(() => {
     inputElement.current?.focus()
   }, [])
 
   const updateProjectName = async (name: string) => {
     const projectRes = await api.browser.projects
-      ._projectId(props.projectId)
-      .$put({ body: { name } })
+      ._projectId(projectId)
+      .$put({ body: { name, iconName } })
       .catch(onErr)
 
     if (projectRes) updateProject(projectRes)
@@ -37,7 +58,7 @@ export const ProjectNameUpdate = (props: { confirmName: () => void; projectId: P
     setIsUpdating(true)
     await updateProjectName(label)
     setIsUpdating(false)
-    props.confirmName()
+    onConfirmName?.()
   }
   return (
     <InputFormProject onSubmit={updateName}>

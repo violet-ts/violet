@@ -2,6 +2,7 @@ import type { ProjectId } from '@violet/lib/types/branded'
 import { PlusIcon } from '@violet/web/src/components/atoms/PlusIcon'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
+import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type {
   BrowserProject,
   DirsDictForProjectId,
@@ -73,6 +74,18 @@ const Icon = styled.div`
 const Message = styled.div`
   white-space: nowrap;
 `
+const StyleIconImage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`
+
+const IconImage = styled.img`
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+`
 
 export const ProjectBar = (props: {
   projects: BrowserProject[]
@@ -82,12 +95,18 @@ export const ProjectBar = (props: {
   worksDictForProjectId: WorksDictForProjectId
 }) => {
   const [isClickAddProject, setIsClickAddProject] = useState(false)
+  const { projects } = useBrowserContext()
+
   const addNewProject = () => {
     setIsClickAddProject(true)
   }
 
   const closeModal = () => {
     setIsClickAddProject(false)
+  }
+
+  const getIconImageUrl = (projectId: ProjectId) => {
+    return projects.find((d) => d.id === projectId)?.iconUrl ?? undefined
   }
 
   return (
@@ -104,7 +123,13 @@ export const ProjectBar = (props: {
           passHref
         >
           <IconWrapper title={p.name} selected={p.id === props.currentProject?.id}>
-            <Icon>{p.name.slice(0, 2)}</Icon>
+            {getIconImageUrl(p.id) ? (
+              <StyleIconImage>
+                <IconImage src={getIconImageUrl(p.id)} />
+              </StyleIconImage>
+            ) : (
+              <Icon>{p.name.slice(0, 2)}</Icon>
+            )}
           </IconWrapper>
         </Link>
       ))}

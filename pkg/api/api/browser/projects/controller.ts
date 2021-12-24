@@ -1,4 +1,4 @@
-import { createProject, getProjects } from '@violet/api/src/service/browser'
+import { createProject, getProjects } from '@violet/api/src/service/browser/projects'
 import { defineController } from './$relay'
 
 export default defineController({ getProjects, createProject }, () => ({

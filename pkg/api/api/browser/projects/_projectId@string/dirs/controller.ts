@@ -1,4 +1,4 @@
-import { createDirs, getDirs } from '@violet/api/src/service/browser'
+import { createDirs, getDirs } from '@violet/api/src/service/browser/dirs'
 import type { ProjectId } from '@violet/lib/types/branded'
 import { defineController } from './$relay'
 

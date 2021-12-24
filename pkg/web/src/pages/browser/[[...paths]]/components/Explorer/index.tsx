@@ -1,5 +1,4 @@
-import { RenameIcon } from '@violet/web/src/components/atoms/RenameIcon'
-import { Spacer } from '@violet/web/src/components/atoms/Spacer'
+import { ConfigIcon } from '@violet/web/src/components/atoms/ConfigIcon'
 import { CardModal } from '@violet/web/src/components/organisms/CardModal'
 import type {
   BrowserDir,
@@ -8,10 +7,10 @@ import type {
   DirsDict,
   OperationData,
 } from '@violet/web/src/types/browser'
-import { colors, fontSizes } from '@violet/web/src/utils/constants'
+import { fontSizes } from '@violet/web/src/utils/constants'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { ProjectNameUpdate } from '../ProjectNameUpdate'
+import { ProjectConfig } from '../ProjectConfig'
 import { DirectoryCell } from './DirectoryCell'
 
 const Container = styled.div`
@@ -19,21 +18,6 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
   user-select: none;
-`
-
-const Column = styled.div`
-  display: flex;
-  justify-content: end;
-`
-
-const SecondaryButton = styled.button`
-  padding: 0.3em;
-  font-size: ${fontSizes.large};
-  color: ${colors.white};
-  cursor: pointer;
-  background-color: ${colors.gray};
-  border: none;
-  border-radius: 16px;
 `
 
 const ProjectName = styled.div`
@@ -53,16 +37,14 @@ const ProjectArea = styled.div`
   justify-content: flex-start;
 `
 
-const StyleRenameIcon = styled.i`
+const StyleIcon = styled.i`
+  display: flex;
+  align-items: center;
   opacity: 0.2;
   transition: opacity 0.5s;
   &:hover {
     opacity: 1;
   }
-`
-
-const Message = styled.div`
-  white-space: nowrap;
 `
 
 type Props = {
@@ -73,31 +55,26 @@ type Props = {
 }
 
 export const Explorer = ({ operationData, project, dirs, dirsDict }: Props) => {
-  const [openRename, setOpenRename] = useState(false)
+  const [openConfiguration, setOpenConfiguration] = useState(false)
   const rootDirs = useMemo(() => dirs.filter((d): d is BrowserRootDir => !d.parentDirId), [dirs])
-  const rename = () => {
-    setOpenRename(true)
-  }
   const closeModal = () => {
-    setOpenRename(false)
+    setOpenConfiguration(false)
+  }
+
+  const openConfigModal = () => {
+    setOpenConfiguration(true)
   }
 
   return (
     <Container>
       <ProjectArea>
         <ProjectName>{project.name}</ProjectName>
-        <StyleRenameIcon onClick={rename}>
-          <RenameIcon />
-        </StyleRenameIcon>
+        <StyleIcon onClick={openConfigModal}>
+          <ConfigIcon size={22} />
+        </StyleIcon>
       </ProjectArea>
-      <CardModal onClose={closeModal} open={openRename}>
-        <Spacer axis="y" size={8} />
-        <Message>Enter a new project name</Message>
-        <ProjectNameUpdate confirmName={closeModal} projectId={project.id} />
-        <Spacer axis="y" size={8} />
-        <Column>
-          <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
-        </Column>
+      <CardModal onClose={closeModal} open={openConfiguration}>
+        <ProjectConfig project={project} onComplete={closeModal} />
       </CardModal>
       <TreeViewer>
         {rootDirs.map((rootDir) => (

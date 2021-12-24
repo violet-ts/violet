@@ -1,4 +1,4 @@
-import { getProject, updateProject } from '@violet/api/src/service/browser'
+import { getProject, updateProject } from '@violet/api/src/service/browser/projects'
 import type { ProjectId } from '@violet/lib/types/branded'
 import { defineController } from './$relay'
 
@@ -8,7 +8,12 @@ export default defineController(() => ({
     return project ? { status: 200, body: project } : { status: 404 }
   },
   put: async ({ params, body }) => {
-    const project = await updateProject(params.projectId as ProjectId, body.name)
+    const project = await updateProject(
+      params.projectId as ProjectId,
+      body.name,
+      body.iconName,
+      body.imageFile
+    )
     return { status: 200, body: project }
   },
 }))

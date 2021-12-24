@@ -1,4 +1,4 @@
-import { createWork } from '@violet/api/src/service/browser'
+import { createWork } from '@violet/api/src/service/browser/works'
 import { defineController } from './$relay'
 
 export default defineController(() => ({

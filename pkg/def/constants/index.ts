@@ -17,4 +17,24 @@ export const fileTypes = [
   },
 ] as const
 
+export const imageTypes = [
+  {
+    ex: '.gif',
+    type: 'image/gif',
+  },
+  {
+    ex: '.jpeg',
+    type: 'image/jpeg',
+  },
+  {
+    ex: '.png',
+    type: 'image/png',
+  },
+  {
+    ex: '.svg',
+    type: 'image/svg+xml',
+  },
+] as const
+
 export const acceptExtensions = fileTypes.map((x) => x.ex).join()
+export const acceptImageExtensions = imageTypes.map((x) => x.ex).join()

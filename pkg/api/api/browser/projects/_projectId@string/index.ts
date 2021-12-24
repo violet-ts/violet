@@ -5,7 +5,8 @@ export type Methods = {
     resBody: ApiProject
   }
   put: {
-    reqBody: Pick<ApiProject, 'name'>
+    reqFormat: FormData
+    reqBody: { name: string; iconName: string | null; imageFile?: Blob }
     resBody: ApiProject
   }
 }
