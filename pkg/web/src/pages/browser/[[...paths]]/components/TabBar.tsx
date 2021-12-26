@@ -1,4 +1,4 @@
-import type { DirId, WorkId } from '@violet/lib/types/branded'
+import type { WorkId } from '@violet/lib/types/branded'
 import { StyledCross } from '@violet/web/src/components/atoms/Cross'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
@@ -8,8 +8,9 @@ import type {
   OperationData,
   WorksDict,
 } from '@violet/web/src/types/browser'
-import { getWorkFullName, tabToHref } from '@violet/web/src/utils'
+import { getWorkFullName, pathForChangeTab, tabToHref } from '@violet/web/src/utils'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
+import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
@@ -48,21 +49,22 @@ export const TabBar = (props: {
 }) => {
   const { operationDataDict, updateOperationData } = useBrowserContext()
   const { tabs, openedDirDict } = operationDataDict[props.project.id]
+  const { push } = useRouter()
 
-  const onClickCrossDirTab = (dirId: DirId) => {
-    updateOperationData(props.project.id, {
-      tabs: [],
-      activeTab: undefined,
-      openedDirDict: { ...openedDirDict, [dirId]: !openedDirDict[dirId] },
-    })
-  }
-
-  const onClickCrossWorkTab = (dirId: DirId, workId: WorkId) => {
+  const onClickCrossWorkTab = async (
+    element: React.MouseEvent<HTMLButtonElement>,
+    workId: WorkId
+  ) => {
+    element.preventDefault()
     const remainTabs = tabs.filter((t) => t.id !== workId)
+
+    const changeTab = remainTabs ? remainTabs.slice(-1)[0] : undefined
+    const path = pathForChangeTab(changeTab, props.project, props.dirsDict, props.worksDict)
+    await push(path)
     updateOperationData(props.project.id, {
       tabs: remainTabs,
-      activeTab: undefined,
-      openedDirDict: { ...openedDirDict, [dirId]: !openedDirDict[dirId] },
+      activeTab: changeTab,
+      openedDirDict,
     })
   }
 
@@ -81,17 +83,15 @@ export const TabBar = (props: {
                 <Spacer axis="x" size={6} />
                 <span>{getWorkFullName(props.worksDict[t.id])}</span>
                 <Spacer axis="x" size={6} />
-                <CrossButton onClick={() => onClickCrossWorkTab(props.worksDict[t.id].dirId, t.id)}>
+                <CrossButton
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => onClickCrossWorkTab(e, t.id)}
+                >
                   <StyledCross size={12} />
                 </CrossButton>
               </>
             ) : (
               <>
                 <span>{props.dirsDict[t.id].name}</span>
-                <Spacer axis="x" size={6} />
-                <CrossButton onClick={() => onClickCrossDirTab(t.id)}>
-                  <StyledCross size={12} />
-                </CrossButton>
               </>
             )}
           </TabItem>
