@@ -48,26 +48,29 @@ export const TabBar = (props: {
   worksDict: WorksDict
 }) => {
   const { operationDataDict, updateOperationData } = useBrowserContext()
-  const { tabs, openedDirDict } = operationDataDict[props.project.id]
-  const { push } = useRouter()
+  const { tabs, activeTab, openedDirDict } = operationDataDict[props.project.id]
+  const { asPath, push } = useRouter()
 
   const onClickCrossWorkTab = async (
     element: React.MouseEvent<HTMLButtonElement>,
     workId: WorkId
   ) => {
     element.preventDefault()
+    console.log('click!!!!!')
     const remainTabs = tabs.filter((t) => t.id !== workId)
 
     const changeTab = remainTabs ? remainTabs.slice(-1)[0] : undefined
     const path = pathForChangeTab(changeTab, props.project, props.dirsDict, props.worksDict)
-    await push(path)
-    updateOperationData(props.project.id, {
-      tabs: remainTabs,
-      activeTab: changeTab,
-      openedDirDict,
+    console.log('remainsTabs->', remainTabs, 'changeTab->', changeTab)
+    await push(path).then(() => {
+      updateOperationData(props.project.id, {
+        tabs: remainTabs,
+        activeTab: changeTab,
+        openedDirDict,
+      })
+      console.log('Tabs->', tabs)
     })
   }
-
   return (
     <Container>
       {props.operationData.tabs.map((t) => (
