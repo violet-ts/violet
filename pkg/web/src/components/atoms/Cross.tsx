@@ -7,6 +7,7 @@ export const Cross = styled.div<Props>`
   box-sizing: border-box;
   display: block;
   transform: scale(var(--ggs, 1));
+
   ::after,
   ::before {
     position: absolute;
@@ -19,6 +20,7 @@ export const Cross = styled.div<Props>`
     border-radius: 8px;
     transform: rotate(45deg);
   }
+
   ::after {
     transform: rotate(-45deg);
   }

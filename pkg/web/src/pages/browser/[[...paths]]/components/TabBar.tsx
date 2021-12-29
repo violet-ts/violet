@@ -39,6 +39,7 @@ const CrossButton = styled.button`
   cursor: pointer;
   border: none;
   opacity: 0;
+
   :hover {
     background-color: ${colors.transparent};
     outline: none;
