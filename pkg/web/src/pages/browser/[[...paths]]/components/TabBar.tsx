@@ -8,7 +8,7 @@ import type {
   OperationData,
   WorksDict,
 } from '@violet/web/src/types/browser'
-import { getWorkFullName, pathForChangeTab, tabToHref } from '@violet/web/src/utils'
+import { getWorkFullName, tabToHref } from '@violet/web/src/utils'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
@@ -48,28 +48,18 @@ export const TabBar = (props: {
   worksDict: WorksDict
 }) => {
   const { operationDataDict, updateOperationData } = useBrowserContext()
-  const { tabs, activeTab, openedDirDict } = operationDataDict[props.project.id]
-  const { asPath, push } = useRouter()
+  const { tabs } = operationDataDict[props.project.id]
+  const { push } = useRouter()
 
   const onClickCrossWorkTab = async (
     element: React.MouseEvent<HTMLButtonElement>,
     workId: WorkId
   ) => {
     element.preventDefault()
-    console.log('click!!!!!')
     const remainTabs = tabs.filter((t) => t.id !== workId)
 
-    const changeTab = remainTabs ? remainTabs.slice(-1)[0] : undefined
-    const path = pathForChangeTab(changeTab, props.project, props.dirsDict, props.worksDict)
-    console.log('remainsTabs->', remainTabs, 'changeTab->', changeTab)
-    await push(path).then(() => {
-      updateOperationData(props.project.id, {
-        tabs: remainTabs,
-        activeTab: changeTab,
-        openedDirDict,
-      })
-      console.log('Tabs->', tabs)
-    })
+    updateOperationData(props.project.id, { ...props.operationData, tabs: remainTabs })
+    await push(tabToHref(remainTabs.slice(-1)[0], props.project, props.dirsDict, props.worksDict))
   }
   return (
     <Container>
