@@ -41,18 +41,3 @@ export const tabToHref = (
         : [project.name]
     )
     .$url()
-
-export const pathForChangeTab = (
-  tab: Tab | undefined,
-  project: BrowserProject,
-  dirsDict: DirsDict,
-  worksDict: WorksDict
-) => {
-  const pathData = tabToHref(tab, project, dirsDict, worksDict)
-  return pathData.query.paths
-    ? `${pathData.pathname.substring(
-        0,
-        pathData.pathname.lastIndexOf('/')
-      )}/${pathData.query.paths.join('/')}`
-    : pathData.pathname
-}

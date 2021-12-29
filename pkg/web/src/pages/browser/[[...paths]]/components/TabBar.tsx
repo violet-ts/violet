@@ -1,5 +1,5 @@
 import type { WorkId } from '@violet/lib/types/branded'
-import { StyledCross } from '@violet/web/src/components/atoms/Cross'
+import { Cross } from '@violet/web/src/components/atoms/Cross'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type {
@@ -25,7 +25,10 @@ const Container = styled.div`
 `
 
 const TabItem = styled.a`
-  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 8px;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};
   ${ActiveStyle};
 `
@@ -34,9 +37,11 @@ const CrossButton = styled.button`
   width: 18px;
   height: 18px;
   cursor: pointer;
+  border: none;
   opacity: 0;
   :hover {
-    border: none;
+    background-color: ${colors.transparent};
+    outline: none;
     opacity: 1;
   }
 `
@@ -47,8 +52,7 @@ export const TabBar = (props: {
   dirsDict: DirsDict
   worksDict: WorksDict
 }) => {
-  const { operationDataDict, updateOperationData } = useBrowserContext()
-  const { tabs } = operationDataDict[props.project.id]
+  const { updateOperationData } = useBrowserContext()
   const { push } = useRouter()
 
   const onClickCrossWorkTab = async (
@@ -56,10 +60,11 @@ export const TabBar = (props: {
     workId: WorkId
   ) => {
     element.preventDefault()
-    const remainTabs = tabs.filter((t) => t.id !== workId)
-
+    const remainTabs = props.operationData.tabs.filter((t) => t.id !== workId)
     updateOperationData(props.project.id, { ...props.operationData, tabs: remainTabs })
-    await push(tabToHref(remainTabs.slice(-1)[0], props.project, props.dirsDict, props.worksDict))
+    if (props.operationData.activeTab?.id === workId) {
+      await push(tabToHref(remainTabs.slice(-1)[0], props.project, props.dirsDict, props.worksDict))
+    }
   }
   return (
     <Container>
@@ -79,13 +84,11 @@ export const TabBar = (props: {
                 <CrossButton
                   onClick={(e: React.MouseEvent<HTMLButtonElement>) => onClickCrossWorkTab(e, t.id)}
                 >
-                  <StyledCross size={12} />
+                  <Cross size={12} />
                 </CrossButton>
               </>
             ) : (
-              <>
-                <span>{props.dirsDict[t.id].name}</span>
-              </>
+              <span>{props.dirsDict[t.id].name}</span>
             )}
           </TabItem>
         </Link>
