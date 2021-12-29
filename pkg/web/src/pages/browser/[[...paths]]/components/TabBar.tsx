@@ -57,10 +57,10 @@ export const TabBar = (props: {
   const { push } = useRouter()
 
   const onClickCrossWorkTab = async (
-    element: React.MouseEvent<HTMLButtonElement>,
+    event: React.MouseEvent<HTMLButtonElement>,
     workId: WorkId
   ) => {
-    element.preventDefault()
+    event.preventDefault()
     const remainTabs = props.operationData.tabs.filter((t) => t.id !== workId)
     updateOperationData(props.project.id, { ...props.operationData, tabs: remainTabs })
     if (props.operationData.activeTab?.id === workId) {
@@ -82,9 +82,7 @@ export const TabBar = (props: {
                 <Spacer axis="x" size={6} />
                 <span>{getWorkFullName(props.worksDict[t.id])}</span>
                 <Spacer axis="x" size={6} />
-                <CrossButton
-                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => onClickCrossWorkTab(e, t.id)}
-                >
+                <CrossButton onClick={(e) => onClickCrossWorkTab(e, t.id)}>
                   <Cross size={12} />
                 </CrossButton>
               </>
