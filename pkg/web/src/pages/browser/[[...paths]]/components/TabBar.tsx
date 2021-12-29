@@ -56,10 +56,7 @@ export const TabBar = (props: {
   const { updateOperationData } = useBrowserContext()
   const { push } = useRouter()
 
-  const onClickCrossWorkTab = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-    workId: WorkId
-  ) => {
+  const onClickCrossWorkTab = async (event: React.MouseEvent, workId: WorkId) => {
     event.preventDefault()
     const remainTabs = props.operationData.tabs.filter((t) => t.id !== workId)
     updateOperationData(props.project.id, { ...props.operationData, tabs: remainTabs })
