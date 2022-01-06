@@ -12,10 +12,13 @@ import { getWorkFullName, tabToHref } from '@violet/web/src/utils'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
-import React from 'react'
+import React, { useCallback } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import styled from 'styled-components'
 import { ActiveStyle } from './ActiveStyle'
 import { ExtIcon } from './ExtIcon'
+import { Draggable } from './Tab/Dragable'
 
 const Container = styled.div`
   display: flex;
@@ -24,7 +27,7 @@ const Container = styled.div`
   border-bottom: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 
-const TabItem = styled.a`
+const TabItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -64,31 +67,46 @@ export const TabBar = (props: {
       await push(tabToHref(remainTabs.slice(-1)[0], props.project, props.dirsDict, props.worksDict))
     }
   }
+
+  const onMove = useCallback(
+    (dragIndex: number, targetIndex: number) => {
+      const swapTab = props.operationData.tabs[dragIndex]
+      const otherTabs = props.operationData.tabs.filter((_, index) => index !== dragIndex)
+      updateOperationData(props.project.id, {
+        ...props.operationData,
+        tabs: otherTabs.splice(targetIndex, 0, swapTab),
+      })
+    },
+    [props.project, props.operationData, updateOperationData]
+  )
+
   return (
-    <Container>
-      {props.operationData.tabs.map((t) => (
-        <Link
-          key={t.id}
-          href={tabToHref(t, props.project, props.dirsDict, props.worksDict)}
-          passHref
-        >
-          <TabItem active={props.operationData.activeTab?.id === t.id}>
-            {t.type === 'work' ? (
-              <>
-                <ExtIcon name={getWorkFullName(props.worksDict[t.id])} />
-                <Spacer axis="x" size={6} />
-                <span>{getWorkFullName(props.worksDict[t.id])}</span>
-                <Spacer axis="x" size={6} />
-                <CrossButton onClick={(e) => onClickCrossWorkTab(e, t.id)}>
-                  <Cross size={12} />
-                </CrossButton>
-              </>
-            ) : (
-              <span>{props.dirsDict[t.id].name}</span>
-            )}
-          </TabItem>
-        </Link>
-      ))}
-    </Container>
+    <DndProvider backend={HTML5Backend}>
+      <Container>
+        {props.operationData.tabs.map((t) => (
+          <Link
+            key={t.id}
+            href={tabToHref(t, props.project, props.dirsDict, props.worksDict)}
+            passHref
+          >
+            <TabItem active={props.operationData.activeTab?.id === t.id}>
+              {t.type === 'work' ? (
+                <Draggable onMove={() => onMove} tabs={props.operationData.tabs} workId={t.id}>
+                  <ExtIcon name={getWorkFullName(props.worksDict[t.id])} />
+                  <Spacer axis="x" size={6} />
+                  <span>{getWorkFullName(props.worksDict[t.id])}</span>
+                  <Spacer axis="x" size={6} />
+                  <CrossButton onClick={(e) => onClickCrossWorkTab(e, t.id)}>
+                    <Cross size={12} />
+                  </CrossButton>
+                </Draggable>
+              ) : (
+                <span>{props.dirsDict[t.id].name}</span>
+              )}
+            </TabItem>
+          </Link>
+        ))}
+      </Container>
+    </DndProvider>
   )
 }

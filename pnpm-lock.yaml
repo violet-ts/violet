@@ -46,6 +46,8 @@ importers:
       postcss-syntax: ^0.36.2
       prettier: ^2.3.2
       prettier-plugin-organize-imports: ^2.3.3
+      react-dnd: ^14.0.4
+      react-dnd-html5-backend: ^14.1.0
       stylelint: ^14.1.0
       stylelint-config-prettier: ^9.0.3
       stylelint-config-recess-order: ^2.6.0
@@ -98,6 +100,8 @@ importers:
       postcss-syntax: 0.36.2_postcss@8.3.11
       prettier: 2.4.1
       prettier-plugin-organize-imports: 2.3.4_prettier@2.4.1+typescript@4.4.4
+      react-dnd: 14.0.4_b20fdb2d498c00a4056aece296f6a2b9
+      react-dnd-html5-backend: 14.1.0
       stylelint: 14.1.0
       stylelint-config-prettier: 9.0.3_stylelint@14.1.0
       stylelint-config-recess-order: 2.6.0_stylelint@14.1.0
@@ -2912,6 +2916,18 @@ packages:
   /@protobufjs/utf8/1.1.0:
     resolution: {integrity: sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=}
 
+  /@react-dnd/asap/4.0.0:
+    resolution: {integrity: sha512-0XhqJSc6pPoNnf8DhdsPHtUhRzZALVzYMTzRwV4VI6DJNJ/5xxfL9OQUwb8IH5/2x7lSf7nAZrnzUD+16VyOVQ==}
+    dev: true
+
+  /@react-dnd/invariant/2.0.0:
+    resolution: {integrity: sha512-xL4RCQBCBDJ+GRwKTFhGUW8GXa4yoDfJrPbLblc3U09ciS+9ZJXJ3Qrcs/x2IODOdIE5kQxvMmE2UKyqUictUw==}
+    dev: true
+
+  /@react-dnd/shallowequal/2.0.0:
+    resolution: {integrity: sha512-Pc/AFTdwZwEKJxFJvlxrSmGe/di+aAOBn60sremrpLo6VI/6cmiUYNNwlI5KNYttg7uypzA3ILPMPgxB2GYZEg==}
+    dev: true
+
   /@sinonjs/commons/1.8.3:
     resolution: {integrity: sha512-xkNcLAn/wZaX14RPlwizcKicDk9G3F8m2nU3L7Ukm5zBgTwiT0wsoFAHx9Jq56fJA1z/7uKGtCRu16sOUCLIHQ==}
     dependencies:
@@ -4556,6 +4572,14 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       path-type: 4.0.0
+    dev: true
+
+  /dnd-core/14.0.1:
+    resolution: {integrity: sha512-+PVS2VPTgKFPYWo3vAFEA8WPbTf7/xo43TifH9G8S1KqnrQu0o77A3unrF5yOugy4mIz7K5wAVFHUcha7wsz6A==}
+    dependencies:
+      '@react-dnd/asap': 4.0.0
+      '@react-dnd/invariant': 2.0.0
+      redux: 4.1.2
     dev: true
 
   /doctrine/2.1.0:
@@ -8377,6 +8401,36 @@ packages:
       unpipe: 1.0.0
     dev: false
 
+  /react-dnd-html5-backend/14.1.0:
+    resolution: {integrity: sha512-6ONeqEC3XKVf4eVmMTe0oPds+c5B9Foyj8p/ZKLb7kL2qh9COYxiBHv3szd6gztqi/efkmriywLUVlPotqoJyw==}
+    dependencies:
+      dnd-core: 14.0.1
+    dev: true
+
+  /react-dnd/14.0.4_b20fdb2d498c00a4056aece296f6a2b9:
+    resolution: {integrity: sha512-AFJJXzUIWp5WAhgvI85ESkDCawM0lhoVvfo/lrseLXwFdH3kEO3v8I2C81QPqBW2UEyJBIPStOhPMGYGFtq/bg==}
+    peerDependencies:
+      '@types/hoist-non-react-statics': '>= 3.3.1'
+      '@types/node': '>= 12'
+      '@types/react': '>= 16'
+      react: '>= 16.14'
+    peerDependenciesMeta:
+      '@types/hoist-non-react-statics':
+        optional: true
+      '@types/node':
+        optional: true
+      '@types/react':
+        optional: true
+    dependencies:
+      '@react-dnd/invariant': 2.0.0
+      '@react-dnd/shallowequal': 2.0.0
+      '@types/node': 16.11.6
+      '@types/react': 17.0.33
+      dnd-core: 14.0.1
+      fast-deep-equal: 3.1.3
+      hoist-non-react-statics: 3.3.2
+    dev: true
+
   /react-dom/17.0.2_react@17.0.2:
     resolution: {integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==}
     peerDependencies:
@@ -8485,6 +8539,12 @@ packages:
     dependencies:
       indent-string: 4.0.0
       strip-indent: 3.0.0
+    dev: true
+
+  /redux/4.1.2:
+    resolution: {integrity: sha512-SH8PglcebESbd/shgf6mii6EIoRM0zrQyjcuQ+ojmfxjTtE0z9Y8pa62iA/OJ58qjP6j27uyW4kUF4jl/jd6sw==}
+    dependencies:
+      '@babel/runtime': 7.16.0
     dev: true
 
   /regenerator-runtime/0.13.9:
