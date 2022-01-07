@@ -87,10 +87,11 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
         body: { name: projectName, iconName, imageFile: iconImageFile },
       })
       .catch(onErr)
+    setIsUpdating(false)
     if (projectRes) updateProject(projectRes)
 
-    setIsUpdating(false)
-    return props.onComplete?.()
+    props.onComplete?.()
+    return undefined
   }
 
   const createIconName = () => {
