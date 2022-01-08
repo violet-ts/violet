@@ -31,11 +31,6 @@ export const Draggable: React.FC<Props> = ({
   const ref = useRef<HTMLDivElement>(null)
   const [, drop] = useDrop({
     accept: itemType,
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId(),
-      }
-    },
     hover() {
       if (!ref.current) return
 

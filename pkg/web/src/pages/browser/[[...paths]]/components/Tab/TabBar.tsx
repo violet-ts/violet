@@ -16,9 +16,9 @@ import Link from 'next/link'
 import React, { useCallback, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
-import { ActiveStyle, MoveStyle } from './ActiveStyle'
-import { ExtIcon } from './ExtIcon'
-import { Draggable } from './Tab/Dragable'
+import { ActiveStyle, MoveStyle } from '../ActiveStyle'
+import { ExtIcon } from '../ExtIcon'
+import { Draggable } from './Dragable'
 
 const Container = styled.div`
   display: flex;
@@ -92,9 +92,12 @@ export const TabBar = (props: {
         ...props.operationData,
         tabs: swapTabs,
       })
+      if (props.operationData.activeTab?.id !== dragTab.id) {
+        void push(tabToHref(dragTab, props.project, props.dirsDict, props.worksDict))
+      }
       setHoverItem(null)
     },
-    [props.project, props.operationData, updateOperationData]
+    [props.operationData, props.project, props.dirsDict, props.worksDict, updateOperationData, push]
   )
   const [, dropRef] = useDrop({
     accept: ItemType,

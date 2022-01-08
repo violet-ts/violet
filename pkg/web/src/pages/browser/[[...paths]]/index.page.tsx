@@ -17,7 +17,7 @@ import { Explorer } from './components/Explorer'
 import { LeftColumn } from './components/LeftColumn'
 import { MainColumn } from './components/MainColumn'
 import { ProjectBar } from './components/ProjectBar'
-import { TabBar } from './components/TabBar'
+import { TabBar } from './components/Tab/TabBar'
 import { usePage } from './usePage'
 
 const Container = styled.div`
