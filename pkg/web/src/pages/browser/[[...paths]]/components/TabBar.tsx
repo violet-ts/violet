@@ -99,7 +99,6 @@ export const TabBar = (props: {
   const [, dropRef] = useDrop({
     accept: ItemType,
     hover() {
-      console.log(hoverItem)
       setHoverItem('EmptyArea')
     },
     drop(item: DragItemType) {
