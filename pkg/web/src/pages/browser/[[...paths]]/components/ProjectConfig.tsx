@@ -88,9 +88,9 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
       })
       .catch(onErr)
     setIsUpdating(false)
+    props.onComplete?.()
     if (projectRes) updateProject(projectRes)
 
-    props.onComplete?.()
     return undefined
   }
 

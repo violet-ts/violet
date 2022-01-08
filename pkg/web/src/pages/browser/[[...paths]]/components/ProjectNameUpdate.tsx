@@ -42,24 +42,20 @@ export const ProjectNameUpdate: React.FC<Props> = ({
     inputElement.current?.focus()
   }, [])
 
-  const updateProjectName = async (name: string) => {
-    const projectRes = await api.browser.projects
-      ._projectId(projectId)
-      .$put({ body: { name, iconName } })
-      .catch(onErr)
-
-    if (projectRes) updateProject(projectRes)
-  }
-
   const updateName = async (e: FormEvent) => {
     e.preventDefault()
     if (!label) return
 
     setIsUpdating(true)
-    await updateProjectName(label)
+    const projectRes = await api.browser.projects
+      ._projectId(projectId)
+      .$put({ body: { name: label, iconName } })
+      .catch(onErr)
     setIsUpdating(false)
     onConfirmName?.()
+    if (projectRes) updateProject(projectRes)
   }
+
   return (
     <InputFormProject onSubmit={updateName}>
       <input ref={inputElement} type="text" onChange={inputLabel} />
