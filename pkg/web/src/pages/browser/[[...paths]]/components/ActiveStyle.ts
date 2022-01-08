@@ -3,6 +3,8 @@ import { css } from 'styled-components'
 
 export type ActiveStyleProps = { active: boolean }
 
+export type MoveStyleProps = { move: boolean }
+
 const alpha = (active: boolean) => (active ? alphaLevel[2] : alphaLevel[1])
 
 export const ActiveStyle = css<ActiveStyleProps>`
@@ -13,4 +15,9 @@ export const ActiveStyle = css<ActiveStyleProps>`
   :hover {
     background: ${colors.violet}${(props) => alpha(props.active)};
   }
+`
+export const MoveStyle = css<MoveStyleProps>`
+  cursor: pointer;
+  background: ${(props) => (props.move ? `${colors.blue}${alpha(true)}` : 'none')};
+  transition: background 0.2s;
 `
