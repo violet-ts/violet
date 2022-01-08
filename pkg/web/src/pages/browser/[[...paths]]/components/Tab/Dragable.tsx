@@ -32,30 +32,24 @@ export const Draggable: React.FC<Props> = ({
   const [, drop] = useDrop({
     accept: itemType,
     hover() {
-      if (!ref.current) return
-
       changeStyleOfHoverItem(workId)
     },
     drop(item: DragItemType) {
-      if (!ref.current) return
-
       onMove(item.index, index)
     },
   })
-  const [{ isDragging, canDrag }, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag({
     item: () => {
       return { workId, index }
     },
     type: itemType,
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
-      canDrag: monitor.canDrag(),
-      index,
     }),
   })
   drag(drop(ref))
   return (
-    <DragItem ref={ref} isDragging={isDragging} canDrag={canDrag}>
+    <DragItem ref={ref} isDragging={isDragging}>
       {children}
     </DragItem>
   )
