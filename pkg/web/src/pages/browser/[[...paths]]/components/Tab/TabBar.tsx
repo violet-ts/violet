@@ -1,20 +1,22 @@
+import type { WorkId } from '@violet/lib/types/branded'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type {
   BrowserProject,
   DirsDict,
   OperationData,
+  Tab,
   WorksDict,
 } from '@violet/web/src/types/browser'
 import type { DragItemType } from '@violet/web/src/types/dragTab'
 import { tabToHref } from '@violet/web/src/utils'
-import { alphaLevel, colors, scrollbarSize, tabHeight } from '@violet/web/src/utils/constants'
+import { alphaLevel, colors, tabHeight } from '@violet/web/src/utils/constants'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import React, { useCallback, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
 import { MoveStyle } from '../MoveStyle'
-import { WorkTab } from './WorkTab'
+import { WorkTabs } from './WorkTab'
 
 const Container = styled.div`
   display: flex;
@@ -34,7 +36,7 @@ const DirTab = styled.div`
 `
 
 const HoverItem = styled.div`
-  height: calc(${tabHeight} - ${scrollbarSize});
+  height: ${tabHeight};
   ${MoveStyle};
 `
 
@@ -48,7 +50,10 @@ export const TabBar = (props: {
 }) => {
   const { updateOperationData } = useBrowserContext()
   const { push } = useRouter()
-  const [hoverItem, setHoverItem] = useState<'EmptyArea' | null>(null)
+  const [hoverItem, setHoverItem] = useState<WorkId | 'EmptyArea' | null>(null)
+
+  const changeStyleOfHoverItem = (hoverItem: WorkId) => setHoverItem(hoverItem)
+  const createUrl = (tab: Tab) => tabToHref(tab, props.project, props.dirsDict, props.worksDict)
 
   const onMove = useCallback(
     (dragIndex: number, hoverIndex: number) => {
@@ -81,28 +86,25 @@ export const TabBar = (props: {
 
   return (
     <Container>
-      {props.operationData.tabs[0]?.type === 'dir' && (
-        <DirTab>
+      <DirTab>
+        {props.operationData.tabs[0]?.type === 'dir' && (
           <Link
             key={props.operationData.tabs[0].id}
-            href={tabToHref(
-              props.operationData.tabs[0],
-              props.project,
-              props.dirsDict,
-              props.worksDict
-            )}
+            href={createUrl(props.operationData.tabs[0])}
             passHref
           >
             {props.dirsDict[props.operationData.tabs[0].id].name}
           </Link>
-        </DirTab>
-      )}
-      <WorkTab
-        dirsDict={props.dirsDict}
+        )}
+      </DirTab>
+      <WorkTabs
         worksDict={props.worksDict}
         operationData={props.operationData}
-        project={props.project}
+        projectId={props.project.id}
+        hoverItem={hoverItem}
         onMove={onMove}
+        changeStyleOfHoverItem={changeStyleOfHoverItem}
+        createUrl={createUrl}
       />
       <EmptyArea ref={dropRef}>
         <HoverItem move={hoverItem === 'EmptyArea'} />
