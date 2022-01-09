@@ -7,11 +7,12 @@ import { getWorkFullName } from '@violet/web/src/utils'
 import { alphaLevel, colors, scrollbarSize, tabHeight } from '@violet/web/src/utils/constants'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
+import type { PropsWithChildren } from 'react'
 import styled from 'styled-components'
-import { ActiveStyle } from '../ActiveStyle'
 import { ExtIcon } from '../ExtIcon'
-import { MoveStyle } from '../MoveStyle'
+import { ActiveStyle } from '../Styles/ActiveStyle'
 import { Draggable } from './Dragable'
+import { HoverItem } from './TabBar'
 
 const Container = styled.div`
   display: flex;
@@ -27,11 +28,11 @@ const Container = styled.div`
   :hover {
     ::-webkit-scrollbar {
       height: ${scrollbarSize};
-      background-color: ${colors.violet}${alphaLevel[2]};
+      background-color: ${colors.transparent};
     }
 
     ::-webkit-scrollbar-thumb {
-      background: ${colors.violet}${alphaLevel[5]};
+      background: ${colors.gray}${alphaLevel[5]};
       border-radius: 4px;
     }
   }
@@ -59,19 +60,13 @@ const CrossButton = styled.button`
   }
 `
 
-const HoverItem = styled.div`
-  height: calc(${tabHeight} - ${scrollbarSize});
-  ${MoveStyle};
-`
-
-interface Props {
-  children?: React.ReactNode
+type ComponentPoprs = PropsWithChildren<{
   projectId: ProjectId
   operationData: OperationData
   worksDict: WorksDict
   hoverItem: WorkId | 'EmptyArea' | null
   onMove: (dragIndex: number, hoverIndex: number) => void
-  changeStyleOfHoverItem: (hoverItem: WorkId) => void
+  setHoverItem: (value: React.SetStateAction<WorkId | 'EmptyArea' | null>) => void
   createUrl: (tab: Tab) => {
     pathname: '/browser/[[...paths]]'
     query: {
@@ -79,7 +74,7 @@ interface Props {
     }
     hash: string | undefined
   }
-}
+}>
 
 export const WorkTabs = ({
   children,
@@ -88,9 +83,9 @@ export const WorkTabs = ({
   worksDict,
   hoverItem,
   onMove,
-  changeStyleOfHoverItem,
+  setHoverItem,
   createUrl,
-}: Props) => {
+}: ComponentPoprs) => {
   const { updateOperationData } = useBrowserContext()
   const { push } = useRouter()
 
@@ -114,9 +109,8 @@ export const WorkTabs = ({
                 <TabItem active={operationData.activeTab?.id === t.id}>
                   <Draggable
                     onMove={onMove}
-                    changeStyleOfHoverItem={changeStyleOfHoverItem}
+                    setHoverItem={setHoverItem}
                     workId={t.id}
-                    itemType={t.type}
                     index={index}
                   >
                     <ExtIcon name={getWorkFullName(worksDict[t.id])} />

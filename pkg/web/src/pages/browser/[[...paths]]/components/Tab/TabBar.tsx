@@ -15,7 +15,8 @@ import Link from 'next/link'
 import React, { useCallback, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
-import { MoveStyle } from '../MoveStyle'
+import { MoveStyle } from '../Styles/MoveStyle'
+import { itemType } from './Dragable'
 import { WorkTabs } from './WorkTab'
 
 const Container = styled.div`
@@ -35,12 +36,10 @@ const DirTab = styled.div`
   padding: 8px;
 `
 
-const HoverItem = styled.div`
+export const HoverItem = styled.div`
   height: ${tabHeight};
   ${MoveStyle};
 `
-
-const ItemType = 'work' as const
 
 export const TabBar = (props: {
   project: BrowserProject
@@ -52,21 +51,20 @@ export const TabBar = (props: {
   const { push } = useRouter()
   const [hoverItem, setHoverItem] = useState<WorkId | 'EmptyArea' | null>(null)
 
-  const changeStyleOfHoverItem = (hoverItem: WorkId) => setHoverItem(hoverItem)
   const createUrl = (tab: Tab) => tabToHref(tab, props.project, props.dirsDict, props.worksDict)
 
   const onMove = useCallback(
     (dragIndex: number, hoverIndex: number) => {
-      const dragTab = props.operationData.tabs[dragIndex]
-      const swapTabs = props.operationData.tabs.filter((_, index) => index !== dragIndex)
-      swapTabs.splice(hoverIndex, 0, dragTab)
+      const draggedTab = props.operationData.tabs[dragIndex]
+      const swappedTabs = props.operationData.tabs.filter((_, index) => index !== dragIndex)
+      swappedTabs.splice(hoverIndex, 0, draggedTab)
 
       updateOperationData(props.project.id, {
         ...props.operationData,
-        tabs: swapTabs,
+        tabs: swappedTabs,
       })
-      if (props.operationData.activeTab?.id !== dragTab.id) {
-        void push(tabToHref(dragTab, props.project, props.dirsDict, props.worksDict))
+      if (props.operationData.activeTab?.id !== draggedTab.id) {
+        void push(tabToHref(draggedTab, props.project, props.dirsDict, props.worksDict))
       }
       setHoverItem(null)
     },
@@ -74,7 +72,7 @@ export const TabBar = (props: {
   )
 
   const [, dropRef] = useDrop({
-    accept: ItemType,
+    accept: itemType,
     hover() {
       setHoverItem('EmptyArea')
     },
@@ -103,7 +101,7 @@ export const TabBar = (props: {
         projectId={props.project.id}
         hoverItem={hoverItem}
         onMove={onMove}
-        changeStyleOfHoverItem={changeStyleOfHoverItem}
+        setHoverItem={setHoverItem}
         createUrl={createUrl}
       />
       <EmptyArea ref={dropRef}>

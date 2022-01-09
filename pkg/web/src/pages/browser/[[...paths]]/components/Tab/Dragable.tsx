@@ -1,12 +1,12 @@
 import type { WorkId } from '@violet/lib/types/branded'
 import type { DragItemType } from '@violet/web/src/types/dragTab'
+import type { PropsWithChildren } from 'react'
 import { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import styled from 'styled-components'
 
 const DragItem = styled.div<{
   isDragging?: boolean
-  canDrag?: boolean
 }>`
   display: flex;
   align-items: center;
@@ -14,37 +14,28 @@ const DragItem = styled.div<{
   opacity: ${(props) => (props.isDragging ? 0.4 : 1)};
 `
 
-interface Props {
-  children?: React.ReactNode
+type ComponentProps = PropsWithChildren<{
   workId: WorkId
   index: number
-  itemType: 'work'
   onMove: (dragIndex: number, hoverIndex: number) => void
-  changeStyleOfHoverItem: (hoverItem: WorkId) => void
-}
+  setHoverItem: (value: React.SetStateAction<WorkId | 'EmptyArea' | null>) => void
+}>
 
-export const Draggable: React.FC<Props> = ({
-  children,
-  workId,
-  itemType,
-  index,
-  onMove,
-  changeStyleOfHoverItem,
-}: Props) => {
+export const itemType = 'work'
+
+export const Draggable = ({ children, workId, index, onMove, setHoverItem }: ComponentProps) => {
   const ref = useRef<HTMLDivElement>(null)
   const [, drop] = useDrop({
     accept: itemType,
     hover() {
-      changeStyleOfHoverItem(workId)
+      setHoverItem(workId)
     },
     drop(item: DragItemType) {
       onMove(item.index, index)
     },
   })
   const [{ isDragging }, drag] = useDrag({
-    item: () => {
-      return { workId, index }
-    },
+    item: { workId, index },
     type: itemType,
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
