@@ -19,7 +19,7 @@ import styled from 'styled-components'
 import { ExtIcon } from '../ExtIcon'
 import { ActiveStyle } from '../Styles/ActiveStyle'
 import { MoveStyle } from '../Styles/MoveStyle'
-import { Draggable } from './Dragable'
+import { Draggable, itemType } from './Dragable'
 
 const Container = styled.div`
   display: flex;
@@ -60,8 +60,6 @@ const HoverItem = styled.div`
   ${MoveStyle};
 `
 
-const ItemType = 'work' as const
-
 export const TabBar = (props: {
   project: BrowserProject
   operationData: OperationData
@@ -80,28 +78,26 @@ export const TabBar = (props: {
       await push(tabToHref(remainTabs.slice(-1)[0], props.project, props.dirsDict, props.worksDict))
     }
   }
-  const changeStyleOfHoverItem = (hoverItem: WorkId) => {
-    setHoverItem(hoverItem)
-  }
+
   const onMove = useCallback(
     (dragIndex: number, hoverIndex: number) => {
-      const dragTab = props.operationData.tabs[dragIndex]
-      const swapTabs = props.operationData.tabs.filter((_, index) => index !== dragIndex)
-      swapTabs.splice(hoverIndex, 0, dragTab)
+      const draggedTab = props.operationData.tabs[dragIndex]
+      const swappedTabs = props.operationData.tabs.filter((_, index) => index !== dragIndex)
+      swappedTabs.splice(hoverIndex, 0, draggedTab)
 
       updateOperationData(props.project.id, {
         ...props.operationData,
-        tabs: swapTabs,
+        tabs: swappedTabs,
       })
-      if (props.operationData.activeTab?.id !== dragTab.id) {
-        void push(tabToHref(dragTab, props.project, props.dirsDict, props.worksDict))
+      if (props.operationData.activeTab?.id !== draggedTab.id) {
+        void push(tabToHref(draggedTab, props.project, props.dirsDict, props.worksDict))
       }
       setHoverItem(null)
     },
     [props.operationData, props.project, props.dirsDict, props.worksDict, updateOperationData, push]
   )
   const [, dropRef] = useDrop({
-    accept: ItemType,
+    accept: itemType,
     hover() {
       setHoverItem('EmptyArea')
     },
@@ -122,23 +118,15 @@ export const TabBar = (props: {
           <HoverItem move={hoverItem === t.id}>
             <TabItem active={props.operationData.activeTab?.id === t.id}>
               {t.type === 'work' ? (
-                <>
-                  <Draggable
-                    onMove={onMove}
-                    changeStyleOfHoverItem={changeStyleOfHoverItem}
-                    workId={t.id}
-                    itemType={t.type}
-                    index={index}
-                  >
-                    <ExtIcon name={getWorkFullName(props.worksDict[t.id])} />
-                    <Spacer axis="x" size={6} />
-                    <span>{getWorkFullName(props.worksDict[t.id])}</span>
-                    <Spacer axis="x" size={6} />
-                    <CrossButton onClick={(e) => onClickCrossWorkTab(e, t.id)}>
-                      <Cross size={12} />
-                    </CrossButton>
-                  </Draggable>
-                </>
+                <Draggable onMove={onMove} setHoverItem={setHoverItem} workId={t.id} index={index}>
+                  <ExtIcon name={getWorkFullName(props.worksDict[t.id])} />
+                  <Spacer axis="x" size={6} />
+                  <span>{getWorkFullName(props.worksDict[t.id])}</span>
+                  <Spacer axis="x" size={6} />
+                  <CrossButton onClick={(e) => onClickCrossWorkTab(e, t.id)}>
+                    <Cross size={12} />
+                  </CrossButton>
+                </Draggable>
               ) : (
                 <span>{props.dirsDict[t.id].name}</span>
               )}
