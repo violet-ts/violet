@@ -29,6 +29,7 @@ const Container = styled.div`
 `
 const WorksView = styled.div`
   flex: 1;
+  width: 100vh;
 `
 const WorksMain = styled.div`
   height: ${mainColumnHeight};

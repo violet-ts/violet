@@ -27,4 +27,8 @@ export const fontSizes = {
 
 export const forceToggleHash = '#forceToggle'
 
+export const tabHeight = '40px'
+
+export const scrollbarSize = '4px'
+
 export const mainColumnHeight = 'calc(100vh - 48px)'
