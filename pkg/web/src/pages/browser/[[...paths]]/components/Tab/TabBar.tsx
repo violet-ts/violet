@@ -16,8 +16,9 @@ import Link from 'next/link'
 import React, { useCallback, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
-import { ActiveStyle, MoveStyle } from '../ActiveStyle'
 import { ExtIcon } from '../ExtIcon'
+import { ActiveStyle } from '../Styles/ActiveStyle'
+import { MoveStyle } from '../Styles/MoveStyle'
 import { Draggable } from './Dragable'
 
 const Container = styled.div`
