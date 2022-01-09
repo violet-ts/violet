@@ -70,7 +70,6 @@ export const TabBar = (props: {
     },
     [props.operationData, props.project, props.dirsDict, props.worksDict, updateOperationData, push]
   )
-
   const [, dropRef] = useDrop({
     accept: itemType,
     hover() {

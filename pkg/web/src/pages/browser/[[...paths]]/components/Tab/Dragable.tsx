@@ -8,9 +8,6 @@ import styled from 'styled-components'
 const DragItem = styled.div<{
   isDragging?: boolean
 }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   opacity: ${(props) => (props.isDragging ? 0.4 : 1)};
 `
 

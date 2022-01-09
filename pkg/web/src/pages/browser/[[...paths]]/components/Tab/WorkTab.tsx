@@ -26,12 +26,8 @@ const Container = styled.div`
   }
 
   :hover {
-    ::-webkit-scrollbar {
-      height: ${scrollbarSize};
-      background-color: ${colors.transparent};
-    }
-
     ::-webkit-scrollbar-thumb {
+      height: ${scrollbarSize};
       background: ${colors.gray}${alphaLevel[5]};
       border-radius: 4px;
     }
@@ -40,8 +36,9 @@ const Container = styled.div`
 
 const TabItem = styled.div`
   display: flex;
+  gap: 4px;
+  align-items: center;
   height: ${tabHeight};
-  padding: 8px;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};
   ${ActiveStyle};
 `
@@ -105,24 +102,18 @@ export const WorkTabs = ({
         (t, index) =>
           t.type === 'work' && (
             <Link key={t.id} href={createUrl(t)} passHref>
-              <HoverItem move={hoverItem === t.id}>
-                <TabItem active={operationData.activeTab?.id === t.id}>
-                  <Draggable
-                    onMove={onMove}
-                    setHoverItem={setHoverItem}
-                    workId={t.id}
-                    index={index}
-                  >
+              <Draggable onMove={onMove} setHoverItem={setHoverItem} workId={t.id} index={index}>
+                <HoverItem move={hoverItem === t.id}>
+                  <TabItem active={operationData.activeTab?.id === t.id}>
+                    <Spacer axis="x" size={4} />
                     <ExtIcon name={getWorkFullName(worksDict[t.id])} />
-                    <Spacer axis="x" size={6} />
                     <span>{getWorkFullName(worksDict[t.id])}</span>
-                    <Spacer axis="x" size={6} />
                     <CrossButton onClick={(e) => onClickCrossWorkTab(e, t.id)}>
                       <Cross size={12} />
                     </CrossButton>
-                  </Draggable>
-                </TabItem>
-              </HoverItem>
+                  </TabItem>
+                </HoverItem>
+              </Draggable>
             </Link>
           )
       )}
