@@ -9,13 +9,15 @@ import type {
   WorksDictForProjectId,
 } from '@violet/web/src/types/browser'
 import { mainColumnHeight } from '@violet/web/src/utils/constants'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import styled from 'styled-components'
 import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
 import { LeftColumn } from './components/LeftColumn'
 import { MainColumn } from './components/MainColumn'
 import { ProjectBar } from './components/ProjectBar'
-import { TabBar } from './components/TabBar'
+import { TabBar } from './components/Tab/TabBar'
 import { usePage } from './usePage'
 
 const Container = styled.div`
@@ -56,12 +58,14 @@ const Columns = (props: {
         />
       </LeftColumn>
       <WorksView>
-        <TabBar
-          project={props.currentProject}
-          operationData={props.operationData}
-          dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
-          worksDict={props.worksDictForProjectId[props.currentProject.id]}
-        />
+        <DndProvider backend={HTML5Backend}>
+          <TabBar
+            project={props.currentProject}
+            operationData={props.operationData}
+            dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
+            worksDict={props.worksDictForProjectId[props.currentProject.id]}
+          />
+        </DndProvider>
         {props.currentDirsAndWork?.work ? (
           revisions && revisions.length > 0 ? (
             <WorksMain>

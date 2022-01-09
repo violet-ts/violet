@@ -15,9 +15,9 @@ import Link from 'next/link'
 import type { ChangeEvent, FormEvent } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { ActiveStyle } from '../ActiveStyle'
 import { AddArea } from '../AddArea'
 import { ExtIcon } from '../ExtIcon'
+import { ActiveStyle } from '../Styles/ActiveStyle'
 
 const Container = styled.a<{ depth: number; active: boolean }>`
   display: block;
