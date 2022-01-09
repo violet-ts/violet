@@ -102,8 +102,8 @@ export const WorkTabs = ({
         (t, index) =>
           t.type === 'work' && (
             <Link key={t.id} href={createUrl(t)} passHref>
-              <Draggable onMove={onMove} setHoverItem={setHoverItem} workId={t.id} index={index}>
-                <HoverItem move={hoverItem === t.id}>
+              <HoverItem move={hoverItem === t.id}>
+                <Draggable onMove={onMove} setHoverItem={setHoverItem} workId={t.id} index={index}>
                   <TabItem active={operationData.activeTab?.id === t.id}>
                     <Spacer axis="x" size={4} />
                     <ExtIcon name={getWorkFullName(worksDict[t.id])} />
@@ -112,8 +112,8 @@ export const WorkTabs = ({
                       <Cross size={12} />
                     </CrossButton>
                   </TabItem>
-                </HoverItem>
-              </Draggable>
+                </Draggable>
+              </HoverItem>
             </Link>
           )
       )}
