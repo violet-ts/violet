@@ -7,6 +7,7 @@ import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserProject } from '@violet/web/src/types/browser'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
+import { useRouter } from 'next/dist/client/router'
 import type { ChangeEvent } from 'react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
@@ -73,6 +74,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
   const [newProjectName, setNewProjectName] = useState('')
   const { updateProject } = useBrowserContext()
   const { api, onErr } = useApiContext()
+  const { asPath, replace } = useRouter()
   const [isUpdating, setIsUpdating] = useState(false)
 
   const updateProjectNameAndIcon = async (projectId: ProjectId) => {
@@ -80,6 +82,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
 
     setIsUpdating(true)
     const projectName = newProjectName ? newProjectName : props.project.name
+    const projectUrl = asPath.replace(props.project.name, projectName)
     const iconName = createIconName()
     const projectRes = await api.browser.projects
       ._projectId(projectId)
@@ -89,7 +92,10 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
       .catch(onErr)
     setIsUpdating(false)
     props.onComplete?.()
-    if (projectRes) updateProject(projectRes)
+    if (projectRes) {
+      updateProject(projectRes)
+      await replace(projectUrl)
+    }
 
     return undefined
   }
