@@ -24,7 +24,6 @@ const Container = styled.div`
 
   ::-webkit-scrollbar {
     height: 0;
-    background-color: ${colors.transparent};
   }
 
   :hover {
