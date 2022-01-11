@@ -9,6 +9,7 @@ import type {
   WorksDictForProjectId,
 } from '@violet/web/src/types/browser'
 import { mainColumnHeight } from '@violet/web/src/utils/constants'
+import { useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import styled from 'styled-components'
@@ -27,9 +28,12 @@ const Container = styled.div`
   display: flex;
   width: 100%;
 `
-const WorksView = styled.div`
+const WorksView = styled.div.attrs<{ width: number }>((props) => ({
+  style: { width: `calc(100% - ${props.width}px)` },
+}))<{
+  width: number
+}>`
   flex: 1;
-  width: 100vh;
 `
 const WorksMain = styled.div`
   height: ${mainColumnHeight};
@@ -44,13 +48,14 @@ const Columns = (props: {
   dirsDictForProjectId: DirsDictForProjectId
   worksDictForProjectId: WorksDictForProjectId
 }) => {
+  const [leftColumnWidth, setLeftColumnWidth] = useState(300)
   const revisions =
     props.currentDirsAndWork?.work &&
     props.wholeDict.revisionsForWorkId[props.currentDirsAndWork.work.id]
 
   return (
     <>
-      <LeftColumn>
+      <LeftColumn leftColumnWidth={leftColumnWidth} setLeftColumnWidth={setLeftColumnWidth}>
         <Explorer
           operationData={props.operationData}
           project={props.currentProject}
@@ -58,7 +63,7 @@ const Columns = (props: {
           dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
         />
       </LeftColumn>
-      <WorksView>
+      <WorksView width={leftColumnWidth}>
         <DndProvider backend={HTML5Backend}>
           <TabBar
             project={props.currentProject}

@@ -1,9 +1,10 @@
-import type { ProjectId, WorkId } from '@violet/lib/types/branded'
+import type { ApiProject } from '@violet/lib/types/api'
+import type { WorkId } from '@violet/lib/types/branded'
 import { Cross } from '@violet/web/src/components/atoms/Cross'
 import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
-import type { OperationData, Tab, WorksDict } from '@violet/web/src/types/browser'
-import { getWorkFullName } from '@violet/web/src/utils'
+import type { DirsDict, OperationData, WorksDict } from '@violet/web/src/types/browser'
+import { getWorkFullName, tabToHref } from '@violet/web/src/utils'
 import { alphaLevel, colors, scrollbarSize, tabHeight } from '@violet/web/src/utils/constants'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
@@ -16,19 +17,24 @@ import { HoverItem } from './TabBar'
 
 const Container = styled.div`
   display: flex;
+  width: 100%;
   height: ${tabHeight};
   overflow-x: scroll;
   overflow-y: hidden;
 
   ::-webkit-scrollbar {
-    height: ${scrollbarSize};
+    height: 0;
     background-color: ${colors.transparent};
   }
 
   :hover {
-    ::-webkit-scrollbar-thumb {
+    ::-webkit-scrollbar {
       height: ${scrollbarSize};
-      background: ${colors.gray}${alphaLevel[5]};
+      background: ${colors.transparent};
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: ${colors.gray}${alphaLevel[3]};
       border-radius: 4px;
     }
   }
@@ -58,30 +64,24 @@ const CrossButton = styled.button`
 `
 
 type ComponentPoprs = PropsWithChildren<{
-  projectId: ProjectId
+  project: ApiProject
   operationData: OperationData
+  dirsDict: DirsDict
   worksDict: WorksDict
   hoverItem: WorkId | 'EmptyArea' | null
   onMove: (dragIndex: number, hoverIndex: number) => void
   setHoverItem: (value: React.SetStateAction<WorkId | 'EmptyArea' | null>) => void
-  createUrl: (tab: Tab) => {
-    pathname: '/browser/[[...paths]]'
-    query: {
-      paths: string[] | undefined
-    }
-    hash: string | undefined
-  }
 }>
 
 export const WorkTabs = ({
   children,
-  projectId,
+  project,
   operationData,
+  dirsDict,
   worksDict,
   hoverItem,
   onMove,
   setHoverItem,
-  createUrl,
 }: ComponentPoprs) => {
   const { updateOperationData } = useBrowserContext()
   const { push } = useRouter()
@@ -89,9 +89,9 @@ export const WorkTabs = ({
   const onClickCrossWorkTab = async (event: React.MouseEvent, workId: WorkId) => {
     event.preventDefault()
     const remainTabs = operationData.tabs.filter((t) => t.id !== workId)
-    updateOperationData(projectId, { ...operationData, tabs: remainTabs })
+    updateOperationData(project.id, { ...operationData, tabs: remainTabs })
     if (operationData.activeTab?.id === workId) {
-      await push(createUrl(remainTabs.slice(-1)[0]))
+      await push(tabToHref(remainTabs.slice(-1)[0], project, dirsDict, worksDict))
     }
   }
 
@@ -101,7 +101,7 @@ export const WorkTabs = ({
       {operationData.tabs.map(
         (t, index) =>
           t.type === 'work' && (
-            <Link key={t.id} href={createUrl(t)} passHref>
+            <Link key={t.id} href={tabToHref(t, project, dirsDict, worksDict)} passHref>
               <HoverItem move={hoverItem === t.id}>
                 <Draggable onMove={onMove} setHoverItem={setHoverItem} workId={t.id} index={index}>
                   <TabItem active={operationData.activeTab?.id === t.id}>

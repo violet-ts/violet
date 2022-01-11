@@ -4,7 +4,6 @@ import type {
   BrowserProject,
   DirsDict,
   OperationData,
-  Tab,
   WorksDict,
 } from '@violet/web/src/types/browser'
 import type { DragItemType } from '@violet/web/src/types/dragTab'
@@ -21,7 +20,7 @@ import { WorkTabs } from './WorkTab'
 
 const Container = styled.div`
   display: flex;
-  max-width: 100%;
+  width: 100%;
   height: ${tabHeight};
   overflow: hidden;
   user-select: none;
@@ -34,6 +33,7 @@ const EmptyArea = styled.div`
 
 const DirTab = styled.div`
   padding: 8px;
+  border-right: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 
 export const HoverItem = styled.div`
@@ -50,8 +50,6 @@ export const TabBar = (props: {
   const { updateOperationData } = useBrowserContext()
   const { push } = useRouter()
   const [hoverItem, setHoverItem] = useState<WorkId | 'EmptyArea' | null>(null)
-
-  const createUrl = (tab: Tab) => tabToHref(tab, props.project, props.dirsDict, props.worksDict)
 
   const onMove = useCallback(
     (dragIndex: number, hoverIndex: number) => {
@@ -87,7 +85,12 @@ export const TabBar = (props: {
         {props.operationData.tabs[0]?.type === 'dir' && (
           <Link
             key={props.operationData.tabs[0].id}
-            href={createUrl(props.operationData.tabs[0])}
+            href={tabToHref(
+              props.operationData.tabs[0],
+              props.project,
+              props.dirsDict,
+              props.worksDict
+            )}
             passHref
           >
             {props.dirsDict[props.operationData.tabs[0].id].name}
@@ -95,13 +98,13 @@ export const TabBar = (props: {
         )}
       </DirTab>
       <WorkTabs
+        project={props.project}
+        dirsDict={props.dirsDict}
         worksDict={props.worksDict}
         operationData={props.operationData}
-        projectId={props.project.id}
         hoverItem={hoverItem}
         onMove={onMove}
         setHoverItem={setHoverItem}
-        createUrl={createUrl}
       />
       <EmptyArea ref={dropRef}>
         <HoverItem move={hoverItem === 'EmptyArea'} />
