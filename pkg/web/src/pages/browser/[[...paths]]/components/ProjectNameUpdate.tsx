@@ -2,7 +2,8 @@ import type { ProjectId } from '@violet/lib/types/branded'
 import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
-import { useRouter } from 'next/dist/client/router'
+import { pagesPath } from '@violet/web/src/utils/$path'
+import { useRouter } from 'next/router'
 import type { ChangeEvent, Dispatch, FormEvent } from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -34,8 +35,8 @@ export const ProjectNameUpdate: React.FC<Props> = ({
   const { api, onErr } = useApiContext()
   const { projects, updateProject } = useBrowserContext()
   const [isUpdating, setIsUpdating] = useState(false)
-  const { asPath, replace } = useRouter()
-  const currentProjectName = asPath.split('/')[2]
+  const { push, asPath } = useRouter()
+  const projectUrlArray = asPath.split('/')
   const iconName =
     projects
       .find((d) => d.id === projectId)
@@ -50,7 +51,6 @@ export const ProjectNameUpdate: React.FC<Props> = ({
     if (!label) return
 
     setIsUpdating(true)
-    const projectUrl = asPath.replace(currentProjectName, label)
     const projectRes = await api.browser.projects
       ._projectId(projectId)
       .$put({ body: { name: label, iconName } })
@@ -59,7 +59,7 @@ export const ProjectNameUpdate: React.FC<Props> = ({
     onConfirmName?.()
     if (projectRes) {
       updateProject(projectRes)
-      await replace(projectUrl)
+      await push(pagesPath.browser._paths([label, ...projectUrlArray.slice(3)]).$url())
     }
   }
 

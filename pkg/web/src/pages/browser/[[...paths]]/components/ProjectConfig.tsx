@@ -6,8 +6,9 @@ import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserProject } from '@violet/web/src/types/browser'
+import { pagesPath } from '@violet/web/src/utils/$path'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
-import { useRouter } from 'next/dist/client/router'
+import { useRouter } from 'next/router'
 import type { ChangeEvent } from 'react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
@@ -74,7 +75,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
   const [newProjectName, setNewProjectName] = useState('')
   const { updateProject } = useBrowserContext()
   const { api, onErr } = useApiContext()
-  const { asPath, replace } = useRouter()
+  const { push, asPath } = useRouter()
   const [isUpdating, setIsUpdating] = useState(false)
 
   const updateProjectNameAndIcon = async (projectId: ProjectId) => {
@@ -82,7 +83,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
 
     setIsUpdating(true)
     const projectName = newProjectName ? newProjectName : props.project.name
-    const projectUrl = asPath.replace(props.project.name, projectName)
+    const projectUrlArray = asPath.split('/')
     const iconName = createIconName()
     const projectRes = await api.browser.projects
       ._projectId(projectId)
@@ -94,7 +95,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
     props.onComplete?.()
     if (projectRes) {
       updateProject(projectRes)
-      await replace(projectUrl)
+      await push(pagesPath.browser._paths([projectName, ...projectUrlArray.slice(3)]).$url())
     }
 
     return undefined
