@@ -41,3 +41,8 @@ export const tabToHref = (
         : [project.name]
     )
     .$url()
+
+export const parsePath = (projectPath: string) => ({
+  projectName: projectPath.split('/')[2],
+  dirOrWorkNames: projectPath.split('/').slice(3),
+})

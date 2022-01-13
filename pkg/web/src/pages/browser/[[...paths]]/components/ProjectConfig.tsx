@@ -6,6 +6,7 @@ import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserProject } from '@violet/web/src/types/browser'
+import { parsePath } from '@violet/web/src/utils'
 import { pagesPath } from '@violet/web/src/utils/$path'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
 import { useRouter } from 'next/router'
@@ -83,7 +84,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
 
     setIsUpdating(true)
     const projectName = newProjectName ? newProjectName : props.project.name
-    const projectUrlArray = asPath.split('/')
+    const { dirOrWorkNames } = parsePath(asPath)
     const iconName = createIconName()
     const projectRes = await api.browser.projects
       ._projectId(projectId)
@@ -95,7 +96,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
     props.onComplete?.()
     if (projectRes) {
       updateProject(projectRes)
-      await push(pagesPath.browser._paths([projectName, ...projectUrlArray.slice(3)]).$url())
+      await push(pagesPath.browser._paths([projectName, ...dirOrWorkNames]).$url())
     }
 
     return undefined
