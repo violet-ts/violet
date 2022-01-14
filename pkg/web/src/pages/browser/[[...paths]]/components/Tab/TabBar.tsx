@@ -11,10 +11,11 @@ import { tabToHref } from '@violet/web/src/utils'
 import { alphaLevel, colors, tabHeight } from '@violet/web/src/utils/constants'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
 import { MoveStyle } from '../Styles/MoveStyle'
+import { FocusByTabKeyStyle } from '../Styles/PartsStyles'
 import { itemType } from './Dragable'
 import { WorkTabs } from './WorkTab'
 
@@ -31,7 +32,8 @@ const EmptyArea = styled.div`
   flex: 1;
 `
 
-const DirTab = styled.div`
+const DirTab = styled.button`
+  ${FocusByTabKeyStyle}
   padding: 8px;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};
 `
@@ -46,10 +48,23 @@ export const TabBar = (props: {
   operationData: OperationData
   dirsDict: DirsDict
   worksDict: WorksDict
+  leftColumnWidth: number
 }) => {
   const { updateOperationData } = useBrowserContext()
   const { push } = useRouter()
+  const tabRef = useRef<HTMLInputElement>(null)
   const [hoverItem, setHoverItem] = useState<WorkId | 'EmptyArea' | null>(null)
+  const [displayedScrollBar, setDisplayedScrollBar] = useState(false)
+  useEffect(() => {
+    if (
+      tabRef.current?.clientWidth &&
+      tabRef.current.clientWidth + props.leftColumnWidth >= window.innerWidth
+    ) {
+      setDisplayedScrollBar(true)
+    } else {
+      setDisplayedScrollBar(false)
+    }
+  }, [props.leftColumnWidth, displayedScrollBar, tabRef.current?.clientWidth])
 
   const onMove = useCallback(
     (dragIndex: number, hoverIndex: number) => {
@@ -80,23 +95,21 @@ export const TabBar = (props: {
   })
 
   return (
-    <Container>
-      <DirTab>
-        {props.operationData.tabs[0]?.type === 'dir' && (
-          <Link
-            key={props.operationData.tabs[0].id}
-            href={tabToHref(
-              props.operationData.tabs[0],
-              props.project,
-              props.dirsDict,
-              props.worksDict
-            )}
-            passHref
-          >
-            {props.dirsDict[props.operationData.tabs[0].id].name}
-          </Link>
-        )}
-      </DirTab>
+    <Container ref={tabRef}>
+      {props.operationData.tabs[0]?.type === 'dir' && (
+        <Link
+          key={props.operationData.tabs[0].id}
+          href={tabToHref(
+            props.operationData.tabs[0],
+            props.project,
+            props.dirsDict,
+            props.worksDict
+          )}
+          passHref
+        >
+          <DirTab>{props.dirsDict[props.operationData.tabs[0].id].name}</DirTab>
+        </Link>
+      )}
       <WorkTabs
         project={props.project}
         dirsDict={props.dirsDict}
@@ -105,6 +118,7 @@ export const TabBar = (props: {
         hoverItem={hoverItem}
         onMove={onMove}
         setHoverItem={setHoverItem}
+        displayedScroll={displayedScrollBar}
       />
       <EmptyArea ref={dropRef}>
         <HoverItem move={hoverItem === 'EmptyArea'} />

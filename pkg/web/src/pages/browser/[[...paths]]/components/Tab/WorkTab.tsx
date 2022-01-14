@@ -5,13 +5,14 @@ import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { DirsDict, OperationData, WorksDict } from '@violet/web/src/types/browser'
 import { getWorkFullName, tabToHref } from '@violet/web/src/utils'
-import { alphaLevel, colors, scrollbarSize, tabHeight } from '@violet/web/src/utils/constants'
+import { alphaLevel, colors, tabHeight } from '@violet/web/src/utils/constants'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import type { PropsWithChildren } from 'react'
 import styled from 'styled-components'
 import { ExtIcon } from '../ExtIcon'
 import { ActiveStyle } from '../Styles/ActiveStyle'
+import { DisplayScrollBarStyle, FocusByTabKeyStyle } from '../Styles/PartsStyles'
 import { Draggable } from './Dragable'
 import { HoverItem } from './TabBar'
 
@@ -26,20 +27,11 @@ const Container = styled.div`
     height: 0;
   }
 
-  :hover {
-    ::-webkit-scrollbar {
-      height: ${scrollbarSize};
-      background: ${colors.transparent};
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: ${colors.gray}${alphaLevel[3]};
-      border-radius: 4px;
-    }
-  }
+  ${DisplayScrollBarStyle}
 `
 
-const TabItem = styled.div`
+const TabItem = styled.button`
+  ${FocusByTabKeyStyle}
   display: flex;
   gap: 4px;
   align-items: center;
@@ -68,6 +60,7 @@ type ComponentPoprs = PropsWithChildren<{
   dirsDict: DirsDict
   worksDict: WorksDict
   hoverItem: WorkId | 'EmptyArea' | null
+  displayedScroll: boolean
   onMove: (dragIndex: number, hoverIndex: number) => void
   setHoverItem: (value: React.SetStateAction<WorkId | 'EmptyArea' | null>) => void
 }>
@@ -79,6 +72,7 @@ export const WorkTabs = ({
   dirsDict,
   worksDict,
   hoverItem,
+  displayedScroll,
   onMove,
   setHoverItem,
 }: ComponentPoprs) => {
@@ -95,7 +89,7 @@ export const WorkTabs = ({
   }
 
   return (
-    <Container>
+    <Container displayedScroll={displayedScroll}>
       {children}
       {operationData.tabs.map(
         (t, index) =>
@@ -107,7 +101,7 @@ export const WorkTabs = ({
                     <Spacer axis="x" size={4} />
                     <ExtIcon name={getWorkFullName(worksDict[t.id])} />
                     <span>{getWorkFullName(worksDict[t.id])}</span>
-                    <CrossButton onClick={(e) => onClickCrossWorkTab(e, t.id)}>
+                    <CrossButton onClick={(e) => onClickCrossWorkTab(e, t.id)} tabIndex={-1}>
                       <Cross size={12} />
                     </CrossButton>
                   </TabItem>
