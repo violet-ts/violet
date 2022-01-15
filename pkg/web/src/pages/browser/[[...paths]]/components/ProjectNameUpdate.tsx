@@ -2,7 +2,7 @@ import type { ProjectId } from '@violet/lib/types/branded'
 import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
-import { parsePath } from '@violet/web/src/utils'
+import { useWorkPath } from '@violet/web/src/utils'
 import { pagesPath } from '@violet/web/src/utils/$path'
 import { useRouter } from 'next/router'
 import type { ChangeEvent, Dispatch, FormEvent } from 'react'
@@ -36,8 +36,8 @@ export const ProjectNameUpdate: React.FC<Props> = ({
   const { api, onErr } = useApiContext()
   const { projects, updateProject } = useBrowserContext()
   const [isUpdating, setIsUpdating] = useState(false)
-  const { push, asPath } = useRouter()
-  const { dirOrWorkNames } = parsePath(asPath)
+  const { push } = useRouter()
+  const dirOrWorkNames = useWorkPath().dirOrWorkNames ?? []
   const iconName =
     projects
       .find((d) => d.id === projectId)
