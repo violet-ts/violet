@@ -4,9 +4,13 @@ import { css } from 'styled-components'
 export type DisplayScrollBarStyleProps = { displayedScroll: boolean }
 
 export const DisplayScrollBarStyle = css<DisplayScrollBarStyleProps>`
+  ::-webkit-scrollbar {
+    height: 0;
+  }
+
   :hover {
     ::-webkit-scrollbar {
-      height: ${scrollbarSize};
+      height: ${(props) => (props.displayedScroll ? `${scrollbarSize}` : `0`)};
       background-color: ${colors.gray}${alphaLevel[1]};
     }
 

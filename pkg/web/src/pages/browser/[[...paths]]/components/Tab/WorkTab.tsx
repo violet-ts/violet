@@ -22,11 +22,6 @@ const Container = styled.div`
   height: ${tabHeight};
   overflow-x: scroll;
   overflow-y: hidden;
-
-  ::-webkit-scrollbar {
-    height: 0;
-  }
-
   ${DisplayScrollBarStyle}
 `
 
