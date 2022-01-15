@@ -4,6 +4,8 @@ import { css } from 'styled-components'
 export type DisplayScrollBarStyleProps = { displayedScroll: boolean }
 
 export const DisplayScrollBarStyle = css<DisplayScrollBarStyleProps>`
+  overflow: overlay;
+
   ::-webkit-scrollbar {
     height: 0;
   }
@@ -11,7 +13,6 @@ export const DisplayScrollBarStyle = css<DisplayScrollBarStyleProps>`
   :hover {
     ::-webkit-scrollbar {
       height: ${(props) => (props.displayedScroll ? `${scrollbarSize}` : `0`)};
-      background-color: ${colors.gray}${alphaLevel[1]};
     }
 
     ::-webkit-scrollbar-thumb {
@@ -23,4 +24,8 @@ export const DisplayScrollBarStyle = css<DisplayScrollBarStyleProps>`
 export const FocusByTabKeyStyle = css`
   border: none;
   outline-color: ${colors.gray}${alphaLevel[5]};
+`
+
+export const FontStyle = css`
+  color: ${colors.black}${alphaLevel[7]};
 `

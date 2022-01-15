@@ -17,6 +17,7 @@ import { EmptyWork } from './components/EmptyWork'
 import { Explorer } from './components/Explorer'
 import { LeftColumn } from './components/LeftColumn'
 import { MainColumn } from './components/MainColumn'
+import { DirTab } from './components/MainColumn/DirTab'
 import { ProjectBar } from './components/ProjectBar'
 import { TabBar } from './components/Tab/TabBar'
 import { usePage } from './usePage'
@@ -89,7 +90,12 @@ const Columns = (props: {
             />
           )
         ) : (
-          <div>Choose work</div>
+          <DirTab
+            project={props.currentProject}
+            operationData={props.operationData}
+            dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
+            worksDict={props.worksDictForProjectId[props.currentProject.id]}
+          />
         )}
       </WorksView>
     </>
