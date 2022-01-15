@@ -34,7 +34,8 @@ const EmptyArea = styled.div`
 
 const DirTab = styled.button`
   ${FocusByTabKeyStyle}
-  padding: 8px;
+  padding: 4px;
+  white-space: nowrap;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 
