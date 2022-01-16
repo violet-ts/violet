@@ -21,7 +21,7 @@ import { ActiveStyle } from '../Styles/ActiveStyle'
 
 const Container = styled.a<{ depth: number; active: boolean }>`
   display: block;
-  padding: 6px 8px;
+  padding: 5px 8px;
   padding-left: ${(props) => props.depth * 8}px;
   ${ActiveStyle};
 `
@@ -41,6 +41,7 @@ const LabelArea = styled.div`
 
 const Label = styled.div`
   flex: 1;
+  height: 18px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
