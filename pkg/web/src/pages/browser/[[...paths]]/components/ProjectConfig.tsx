@@ -6,7 +6,10 @@ import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserProject } from '@violet/web/src/types/browser'
+import { useWorkPath } from '@violet/web/src/utils'
+import { pagesPath } from '@violet/web/src/utils/$path'
 import { colors, fontSizes } from '@violet/web/src/utils/constants'
+import { useRouter } from 'next/router'
 import type { ChangeEvent } from 'react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
@@ -73,8 +76,9 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
   const [newProjectName, setNewProjectName] = useState('')
   const { updateProject } = useBrowserContext()
   const { api, onErr } = useApiContext()
+  const { push } = useRouter()
   const [isUpdating, setIsUpdating] = useState(false)
-
+  const dirOrWorkNames = useWorkPath().dirOrWorkNames ?? []
   const updateProjectNameAndIcon = async (projectId: ProjectId) => {
     if (!newProjectName && !iconImageFile) return props.onComplete?.()
 
@@ -87,10 +91,14 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
         body: { name: projectName, iconName, imageFile: iconImageFile },
       })
       .catch(onErr)
-    if (projectRes) updateProject(projectRes)
-
     setIsUpdating(false)
-    return props.onComplete?.()
+    props.onComplete?.()
+    if (projectRes) {
+      updateProject(projectRes)
+      await push(pagesPath.browser._paths([projectName, ...dirOrWorkNames]).$url())
+    }
+
+    return undefined
   }
 
   const createIconName = () => {

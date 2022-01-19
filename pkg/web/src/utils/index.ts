@@ -1,4 +1,6 @@
 import { pagesPath } from '@violet/web/src/utils/$path'
+import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 import type {
   BrowserDir,
   BrowserProject,
@@ -41,3 +43,13 @@ export const tabToHref = (
         : [project.name]
     )
     .$url()
+
+export const useWorkPath = () => {
+  const { query } = useRouter()
+  const { paths } = query
+  const { projectName, dirOrWorkNames } = useMemo(
+    () => (Array.isArray(paths) ? { projectName: paths[0], dirOrWorkNames: paths.slice(1) } : {}),
+    [paths]
+  )
+  return { projectName, dirOrWorkNames }
+}
