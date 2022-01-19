@@ -1,15 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any -- predicate function */
-
+import { isKeyDataNode } from '@violet/lib/s3'
 import type { Node } from 'domhandler'
 import { DomUtils, parseDocument } from 'htmlparser2'
-
-const isKeyDataNode = (elem: Node): elem is Node & { data: string } => {
-  return (
-    elem.parent?.type === 'tag' &&
-    (elem.parent as any)?.name === 'key' &&
-    typeof (elem as any).data === 'string'
-  )
-}
 
 export const listAllKeysForPublicBucket = async (bucket: string): Promise<string[]> => {
   const url = `https://${bucket}.s3.amazonaws.com/`

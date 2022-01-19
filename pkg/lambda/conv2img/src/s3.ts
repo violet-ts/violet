@@ -10,11 +10,10 @@ interface CreateS3ClientParams {
   credentials: Credentials | Provider<Credentials>
   logger: winston.Logger
 }
-export const createS3Client = ({ env, logger, credentials }: CreateS3ClientParams) => {
+export const createS3Client = ({ env, credentials }: CreateS3ClientParams) => {
   return new S3({
     region: env.S3_REGION,
     credentials,
-    logger,
     endpoint: env.S3_ENDPOINT,
     forcePathStyle: true,
   })
