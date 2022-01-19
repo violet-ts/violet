@@ -1,5 +1,11 @@
 import type { ApiProject } from '@violet/lib/types/api'
-import type { DirsDict, OperationData, WorksDict } from '@violet/web/src/types/browser'
+import type { WorkId } from '@violet/lib/types/branded'
+import type {
+  BrowserRevision,
+  DirsDict,
+  OperationData,
+  WorksDict,
+} from '@violet/web/src/types/browser'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import Link from 'next/link'
 import { useCallback } from 'react'
@@ -36,7 +42,7 @@ const DirsFrame = styled.button`
   ${FontStyle}
 `
 
-const Message = styled.div`
+const EmptyMessage = styled.div`
   width: fit-content;
   padding: 8px;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
@@ -49,6 +55,7 @@ type ComponentProps = {
   operationData: OperationData
   dirsDict: DirsDict
   worksDict: WorksDict
+  revisionsForWorkId: Record<WorkId, BrowserRevision[] | undefined>
 }
 
 export const DirTab = ({ project, operationData, dirsDict, worksDict }: ComponentProps) => {
@@ -99,7 +106,7 @@ export const DirTab = ({ project, operationData, dirsDict, worksDict }: Componen
       {displayedWorks() ? (
         <Label>Works</Label>
       ) : (
-        <Message>Directly and Works has not been, yet. </Message>
+        <EmptyMessage>Directly and Works has not been , yet.</EmptyMessage>
       )}
     </Container>
   )
