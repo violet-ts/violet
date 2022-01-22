@@ -9,6 +9,7 @@ import { alphaLevel, colors, tabHeight } from '@violet/web/src/utils/constants'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import type { PropsWithChildren } from 'react'
+import { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import { ExtIcon } from '../ExtIcon'
 import { ActiveStyle } from '../Styles/ActiveStyle'
@@ -36,7 +37,8 @@ const TabItem = styled.button`
   ${ActiveStyle};
 `
 
-const CrossButton = styled.button`
+const CrossButton = styled.div`
+  display: flex;
   width: 18px;
   height: 18px;
   cursor: pointer;
@@ -44,6 +46,7 @@ const CrossButton = styled.button`
   opacity: 0;
 
   :hover {
+    align-items: center;
     background-color: ${colors.transparent};
     outline: none;
     opacity: 1;
@@ -56,7 +59,6 @@ type ComponentPoprs = PropsWithChildren<{
   dirsDict: DirsDict
   worksDict: WorksDict
   hoverItem: WorkId | 'EmptyArea' | null
-  displayedScroll: boolean
   onMove: (dragIndex: number, hoverIndex: number) => void
   setHoverItem: (value: React.SetStateAction<WorkId | 'EmptyArea' | null>) => void
 }>
@@ -68,12 +70,19 @@ export const WorkTabs = ({
   dirsDict,
   worksDict,
   hoverItem,
-  displayedScroll,
   onMove,
   setHoverItem,
 }: ComponentPoprs) => {
   const { updateOperationData } = useBrowserContext()
   const { push } = useRouter()
+  const tabRef = useRef<HTMLInputElement>(null)
+
+  const displayedScrollBar = useCallback(
+    () =>
+      tabRef.current?.scrollWidth !== undefined &&
+      tabRef.current.scrollWidth > tabRef.current.offsetWidth,
+    []
+  )
 
   const onClickCrossWorkTab = async (event: React.MouseEvent, workId: WorkId) => {
     event.preventDefault()
@@ -85,7 +94,7 @@ export const WorkTabs = ({
   }
 
   return (
-    <Container displayedScroll={displayedScroll}>
+    <Container ref={tabRef} displayedScrollBar={displayedScrollBar()}>
       {children}
       {operationData.tabs.map(
         (t, index) =>

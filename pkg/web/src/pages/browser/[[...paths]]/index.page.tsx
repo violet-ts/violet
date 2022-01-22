@@ -8,8 +8,7 @@ import type {
   OperationData,
   WorksDictForProjectId,
 } from '@violet/web/src/types/browser'
-import { mainColumnHeight, projectBarWidth } from '@violet/web/src/utils/constants'
-import { useMemo, useState } from 'react'
+import { mainColumnHeight } from '@violet/web/src/utils/constants'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import styled from 'styled-components'
@@ -28,12 +27,9 @@ const Container = styled.div`
   display: flex;
   width: 100%;
 `
-const WorksView = styled.div.attrs<{ width: number }>((props) => ({
-  style: { width: props.width },
-}))<{
-  width: number
-}>`
+const WorksView = styled.div`
   flex: 1;
+  width: 100%;
 `
 const WorksMain = styled.div`
   height: ${mainColumnHeight};
@@ -48,19 +44,13 @@ const Columns = (props: {
   dirsDictForProjectId: DirsDictForProjectId
   worksDictForProjectId: WorksDictForProjectId
 }) => {
-  const [leftColumnWidth, setLeftColumnWidth] = useState(300)
   const revisions =
     props.currentDirsAndWork?.work &&
     props.wholeDict.revisionsForWorkId[props.currentDirsAndWork.work.id]
 
-  const worksViewWidth = useMemo(
-    () => window.innerWidth - projectBarWidth - leftColumnWidth,
-    [leftColumnWidth]
-  )
-
   return (
     <>
-      <LeftColumn leftColumnWidth={leftColumnWidth} setLeftColumnWidth={setLeftColumnWidth}>
+      <LeftColumn>
         <Explorer
           operationData={props.operationData}
           project={props.currentProject}
@@ -68,14 +58,13 @@ const Columns = (props: {
           dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
         />
       </LeftColumn>
-      <WorksView width={worksViewWidth}>
+      <WorksView>
         <DndProvider backend={HTML5Backend}>
           <TabBar
             project={props.currentProject}
             operationData={props.operationData}
             dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
             worksDict={props.worksDictForProjectId[props.currentProject.id]}
-            leftColumnWidth={leftColumnWidth}
           />
         </DndProvider>
         {props.currentDirsAndWork?.work ? (

@@ -11,7 +11,7 @@ import { tabToHref } from '@violet/web/src/utils'
 import { alphaLevel, colors, tabHeight } from '@violet/web/src/utils/constants'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
 import { MoveStyle } from '../Styles/MoveStyle'
@@ -49,19 +49,11 @@ export const TabBar = (props: {
   operationData: OperationData
   dirsDict: DirsDict
   worksDict: WorksDict
-  leftColumnWidth: number
 }) => {
   const { updateOperationData } = useBrowserContext()
   const { push } = useRouter()
   const tabRef = useRef<HTMLInputElement>(null)
   const [hoverItem, setHoverItem] = useState<WorkId | 'EmptyArea' | null>(null)
-  const [displayedScrollBar, setDisplayedScrollBar] = useState(false)
-  useEffect(() => {
-    setDisplayedScrollBar(
-      tabRef.current?.clientWidth !== undefined &&
-        tabRef.current.clientWidth + props.leftColumnWidth >= window.innerWidth
-    )
-  }, [props.leftColumnWidth, displayedScrollBar, tabRef.current?.clientWidth])
 
   const onMove = useCallback(
     (dragIndex: number, hoverIndex: number) => {
@@ -114,7 +106,6 @@ export const TabBar = (props: {
         hoverItem={hoverItem}
         onMove={onMove}
         setHoverItem={setHoverItem}
-        displayedScroll={displayedScrollBar}
       />
       <EmptyArea ref={dropRef}>
         <HoverItem move={hoverItem === 'EmptyArea'} />
