@@ -31,6 +31,7 @@ const TabItem = styled.button`
   gap: 4px;
   align-items: center;
   height: ${tabHeight};
+  white-space: nowrap;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};
   ${ActiveStyle};
 `
