@@ -38,7 +38,7 @@ const MessageBox = styled.div`
 `
 const InputForm = styled.textarea`
   flex: 1;
-  min-height: 120px;
+  min-height: 160px;
   resize: none;
   border: 1px solid ${colors.violet}${alphaLevel[2]};
 
