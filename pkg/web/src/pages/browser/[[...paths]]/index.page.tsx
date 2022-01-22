@@ -8,8 +8,8 @@ import type {
   OperationData,
   WorksDictForProjectId,
 } from '@violet/web/src/types/browser'
-import { mainColumnHeight } from '@violet/web/src/utils/constants'
-import { useState } from 'react'
+import { mainColumnHeight, projectBarWidth } from '@violet/web/src/utils/constants'
+import { useMemo, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import styled from 'styled-components'
@@ -29,7 +29,7 @@ const Container = styled.div`
   width: 100%;
 `
 const WorksView = styled.div.attrs<{ width: number }>((props) => ({
-  style: { width: `calc(100% - ${props.width}px)` },
+  style: { width: props.width },
 }))<{
   width: number
 }>`
@@ -53,6 +53,11 @@ const Columns = (props: {
     props.currentDirsAndWork?.work &&
     props.wholeDict.revisionsForWorkId[props.currentDirsAndWork.work.id]
 
+  const worksViewWidth = useMemo(
+    () => window.innerWidth - projectBarWidth - leftColumnWidth,
+    [leftColumnWidth]
+  )
+
   return (
     <>
       <LeftColumn leftColumnWidth={leftColumnWidth} setLeftColumnWidth={setLeftColumnWidth}>
@@ -63,7 +68,7 @@ const Columns = (props: {
           dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
         />
       </LeftColumn>
-      <WorksView width={leftColumnWidth}>
+      <WorksView width={worksViewWidth}>
         <DndProvider backend={HTML5Backend}>
           <TabBar
             project={props.currentProject}

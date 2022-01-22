@@ -61,13 +61,15 @@ export const LeftColumn = ({ children, leftColumnWidth, setLeftColumnWidth }: Co
   useEffect(() => {
     let timeoutId = 0
     const resize = () => {
-      clearTimeout(timeoutId)
       timeoutId = window.setTimeout(() => setLeftColumnWidth(clampX), 100)
     }
 
     window.addEventListener('resize', resize, false)
 
-    return () => window.removeEventListener('resize', resize, false)
+    return () => {
+      window.removeEventListener('resize', resize, false)
+      clearTimeout(timeoutId)
+    }
   }, [setLeftColumnWidth])
 
   return (

@@ -57,14 +57,10 @@ export const TabBar = (props: {
   const [hoverItem, setHoverItem] = useState<WorkId | 'EmptyArea' | null>(null)
   const [displayedScrollBar, setDisplayedScrollBar] = useState(false)
   useEffect(() => {
-    if (
-      tabRef.current?.clientWidth &&
-      tabRef.current.clientWidth + props.leftColumnWidth >= window.innerWidth
-    ) {
-      setDisplayedScrollBar(true)
-    } else {
-      setDisplayedScrollBar(false)
-    }
+    setDisplayedScrollBar(
+      tabRef.current?.clientWidth !== undefined &&
+        tabRef.current.clientWidth + props.leftColumnWidth >= window.innerWidth
+    )
   }, [props.leftColumnWidth, displayedScrollBar, tabRef.current?.clientWidth])
 
   const onMove = useCallback(
@@ -99,7 +95,6 @@ export const TabBar = (props: {
     <Container ref={tabRef}>
       {props.operationData.tabs[0]?.type === 'dir' && (
         <Link
-          key={props.operationData.tabs[0].id}
           href={tabToHref(
             props.operationData.tabs[0],
             props.project,
