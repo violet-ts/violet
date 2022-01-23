@@ -14,7 +14,6 @@ const Container = styled.div`
   border-bottom: 1px solid ${colors.violet}${alphaLevel[2]};
 `
 const Message = styled.div`
-  position: relative;
   padding: 0 16px;
   font-size: 12px;
   overflow-wrap: break-word;

@@ -4,6 +4,8 @@ import { css } from 'styled-components'
 export type DisplayScrollBarStyleProps = { displayedScrollBar: boolean }
 
 export const DisplayScrollBarStyle = css<DisplayScrollBarStyleProps>`
+  overflow: overlay;
+
   ::-webkit-scrollbar {
     height: 0;
   }

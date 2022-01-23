@@ -1,5 +1,6 @@
 import { Chevron } from '@violet/web/src/components/atoms/Chevron'
 import type { PageDirection } from '@violet/web/src/types/tools'
+import { toolBarWidth } from '@violet/web/src/utils/constants'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -8,7 +9,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  width: 48px;
+  width: ${toolBarWidth}px;
   height: 100%;
 `
 const PreviousPage = styled.div`
