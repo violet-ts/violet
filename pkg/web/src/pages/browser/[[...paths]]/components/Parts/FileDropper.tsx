@@ -1,4 +1,4 @@
-import { alphaLevel, colors } from '@violet/web/src/utils/constants'
+import { colors } from '@violet/web/src/utils/constants'
 import type { PropsWithChildren } from 'react'
 import { useEffect } from 'react'
 import type { DropTargetMonitor } from 'react-dnd'
@@ -13,7 +13,6 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   color: ${colors.gray};
-  border: dashed 0.8px ${colors.violet}${alphaLevel[3]};
 `
 
 type ComponentProps = PropsWithChildren<{
@@ -28,6 +27,7 @@ export const FileDropper = ({ children, onDrop, setDragging }: ComponentProps) =
       drop(item: DataTransfer) {
         if (onDrop && item !== null) {
           onDrop(item.files)
+          console.log(item.files)
         }
       },
       collect: (monitor: DropTargetMonitor) => ({

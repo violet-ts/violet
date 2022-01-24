@@ -1,16 +1,16 @@
 import { acceptExtensions, fileTypes } from '@violet/def/constants'
 import type { ProjectId, WorkId } from '@violet/lib/types/branded'
 import { AddButton } from '@violet/web/src/components/atoms/AddButton'
-import { Spacer } from '@violet/web/src/components/atoms/Spacer'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
 import type { BrowserRevision } from '@violet/web/src/types/browser'
 import type { PageDirection } from '@violet/web/src/types/tools'
-import { colors, mainColumnHeight } from '@violet/web/src/utils/constants'
+import { alphaLevel, colors, mainColumnHeight } from '@violet/web/src/utils/constants'
 import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { PaginationBar } from './PaginationBar'
 import { AlertModal } from './Parts/AlertModal'
+import { FileDropper } from './Parts/FileDropper'
 import { Revision } from './Revision'
 import { StreamBar } from './StreamBar'
 
@@ -33,10 +33,11 @@ const MainContent = styled.div`
   width: 100%;
   scroll-snap-align: start;
 `
-const RevisionContent = styled.div`
+const RevisionContent = styled.div<{ dragging: boolean }>`
   flex: 1;
   height: 100%;
   overflow-y: auto;
+  border: ${(props) => (props.dragging ? `4px ${colors.blue}${alphaLevel[3]} solid` : 'none')};
 `
 const StreamBarColumn = styled.div`
   height: ${mainColumnHeight};
@@ -59,6 +60,7 @@ export const MainColumn = (props: {
   const { api, onErr } = useApiContext()
   const { wholeDict, updateWholeDict } = useBrowserContext()
   const [open, setOpen] = useState(false)
+  const [dragging, setDragging] = useState(false)
   const refs = useRef(props.revisions.map(() => React.createRef<HTMLDivElement>()))
 
   const sendFormData = async (file: File) => {
@@ -78,16 +80,17 @@ export const MainColumn = (props: {
     })
   }
 
-  const dropFile = (file: File) => {
-    const searchFileType = fileTypes.some((f) => file.type === f.type)
-    if (searchFileType) {
-      void sendFormData(file)
+  const dropFile = (files: FileList) => {
+    if (!files) return
+
+    if (files.length === 1 && fileTypes.some((file) => file.type === files[0].type)) {
+      void sendFormData(files[0])
     }
-    setOpen(!searchFileType)
+    setOpen(!fileTypes.some((f) => f.type === files[0].type))
   }
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length === 1) {
-      dropFile(e.target.files[0])
+      dropFile(e.target.files)
     }
     e.target.value = ''
   }
@@ -101,15 +104,11 @@ export const MainColumn = (props: {
     <Container>
       {props.revisions.map((revision, i) => (
         <MainContent key={revision.id} ref={refs.current[i]}>
-          <RevisionContent>
-            <Revision
-              projectId={props.projectId}
-              workId={props.workId}
-              revision={revision}
-              dropFile={dropFile}
-            />
+          <RevisionContent dragging={dragging}>
+            <FileDropper onDrop={dropFile} setDragging={setDragging}>
+              <Revision projectId={props.projectId} workId={props.workId} revision={revision} />
+            </FileDropper>
           </RevisionContent>
-          <Spacer axis="y" size={8} />
           <StreamBarColumn>
             <StreamBar projectId={props.projectId} workId={props.workId} revision={revision} />
           </StreamBarColumn>

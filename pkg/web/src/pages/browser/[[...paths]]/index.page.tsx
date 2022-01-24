@@ -26,13 +26,13 @@ const Container = styled.div`
   width: 100%;
   overflow: hidden;
 `
-
-const WorksView = styled.div.attrs<{ width: number }>((props) => ({
-  style: { width: `calc(100% - ${props.width + toolBarWidth}px)` },
-}))<{
-  width: number
-}>`
+const ColumnsContainer = styled.div`
+  display: flex;
+  width: calc(100% - ${toolBarWidth}px);
+`
+const WorksWrap = styled.div`
   flex: 1;
+  min-width: 0;
 `
 const WorksMain = styled.div`
   height: ${mainColumnHeight};
@@ -53,7 +53,7 @@ const Columns = (props: {
     props.wholeDict.revisionsForWorkId[props.currentDirsAndWork.work.id]
 
   return (
-    <>
+    <ColumnsContainer>
       <LeftColumn leftColumnWidth={leftColumnWidth} setLeftColumnWidth={setLeftColumnWidth}>
         <Explorer
           operationData={props.operationData}
@@ -62,7 +62,7 @@ const Columns = (props: {
           dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
         />
       </LeftColumn>
-      <WorksView width={leftColumnWidth}>
+      <WorksWrap>
         <DndProvider backend={HTML5Backend}>
           <TabBar
             project={props.currentProject}
@@ -89,8 +89,8 @@ const Columns = (props: {
             <div>Choose work</div>
           )}
         </DndProvider>
-      </WorksView>
-    </>
+      </WorksWrap>
+    </ColumnsContainer>
   )
 }
 

@@ -19,7 +19,13 @@ const DraggingPanel = styled.div<{ dragging: boolean }>`
   width: 100%;
   height: 100%;
   padding: ${(props) => (props.dragging ? 32 : 160)}px;
-  background: ${(props) => (props.dragging ? colors.gray : colors.transparent)}${alphaLevel[3]};
+  background: ${(props) => (props.dragging ? colors.black : colors.transparent)}${alphaLevel[1]};
+`
+
+const DraggingFrame = styled.div`
+  width: 100%;
+  height: 100%;
+  border: dashed 4px ${colors.violet}${alphaLevel[3]};
 `
 
 type ComponentProps = PropsWithChildren<{ projectId: ProjectId; workId: WorkId }>
@@ -31,7 +37,6 @@ export const EmptyWork = ({ children, projectId, workId }: ComponentProps) => {
   const [openAlert, setOpenAlert] = useState(false)
 
   const dropFile = (files: FileList) => {
-    setDragging(false)
     if (files.length === 1) {
       const targetFileType = files[0].type
       fileTypes.some((f) => f.type === targetFileType)
@@ -41,7 +46,6 @@ export const EmptyWork = ({ children, projectId, workId }: ComponentProps) => {
   }
 
   const sendFormData = async (file: FileList) => {
-    setDragging(false)
     if (!file) return
 
     const revisionRes = await api.browser.projects
@@ -69,9 +73,11 @@ export const EmptyWork = ({ children, projectId, workId }: ComponentProps) => {
         <AlertModal open={openAlert} onClose={closeModal} />
       ) : (
         <DraggingPanel dragging={dragging}>
-          <FileDropper onDrop={dropFile} setDragging={setDragging}>
-            {dragging ? 'Release to drop' : 'Drag file here'}
-          </FileDropper>
+          <DraggingFrame>
+            <FileDropper onDrop={dropFile} setDragging={setDragging}>
+              {dragging ? 'Release to drop' : 'Drag file here'}
+            </FileDropper>
+          </DraggingFrame>
         </DraggingPanel>
       )}
     </Container>
