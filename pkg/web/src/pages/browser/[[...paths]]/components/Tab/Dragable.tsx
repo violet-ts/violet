@@ -8,6 +8,7 @@ import styled from 'styled-components'
 const DragItem = styled.div<{
   isDragging?: boolean
 }>`
+  display: flex;
   opacity: ${(props) => (props.isDragging ? 0.4 : 1)};
 `
 
