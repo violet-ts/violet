@@ -6,16 +6,17 @@ import type {
   OperationData,
   WorksDict,
 } from '@violet/web/src/types/browser'
+import { createPath } from '@violet/web/src/utils'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import Link from 'next/link'
-import { useCallback } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
-import { createPath } from '../../../../../utils'
 import { FontStyle } from '../Styles/PartsStyles'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   height: 100%;
   padding: 8px;
   overflow: overlay;
@@ -26,14 +27,24 @@ const Label = styled.div`
   ${FontStyle}
 `
 
-const DirContainer = styled.div`
+const PartsContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   padding: 8px;
 `
 
-const DirsFrame = styled.button`
+const DirFrame = styled.button`
   width: fit-content;
+  padding: 8px;
+  cursor: pointer;
+  background-color: ${colors.white};
+  border: 1px solid ${colors.violet}${alphaLevel[2]};
+  border-radius: 4px;
+  ${FontStyle}
+`
+const WorkFrame = styled.button`
+  width: 24%;
   padding: 8px;
   cursor: pointer;
   background-color: ${colors.white};
@@ -59,7 +70,7 @@ type ComponentProps = {
 }
 
 export const DirTab = ({ project, operationData, dirsDict, worksDict }: ComponentProps) => {
-  const displayedDirs = useCallback(
+  const displayedDirs = useMemo(
     () =>
       Object.values(dirsDict)
         .map((dir) => dir.parentDirId !== null && dir.parentDirId === operationData.activeTab?.id)
@@ -67,15 +78,14 @@ export const DirTab = ({ project, operationData, dirsDict, worksDict }: Componen
     [operationData, dirsDict]
   )
 
-  const displayedWorks = useCallback(
-    () =>
-      operationData.activeTab &&
-      operationData.activeTab.type === 'dir' &&
-      dirsDict[operationData.activeTab.id].works.length > 0,
-    [operationData, dirsDict]
-  )
+  const displayedWorks = useMemo(() => {
+    if (operationData.activeTab && operationData.activeTab.type === 'dir') {
+      return dirsDict[operationData.activeTab.id].works
+    }
+    return null
+  }, [operationData, dirsDict])
 
-  const childrenDir = useCallback(
+  const childrenDir = useMemo(
     () =>
       Object.values(dirsDict).filter(
         (dir) =>
@@ -87,24 +97,37 @@ export const DirTab = ({ project, operationData, dirsDict, worksDict }: Componen
 
   return (
     <Container>
-      {displayedDirs() && (
+      {displayedDirs && (
         <>
           <Label>Directlies</Label>
-          <DirContainer>
-            {childrenDir().map((dir) => (
+          <PartsContainer>
+            {childrenDir.map((dir) => (
               <Link
                 key={dir.id}
                 href={createPath(dir.id, undefined, project, dirsDict, worksDict)}
                 passHref
               >
-                <DirsFrame>{dir.name} </DirsFrame>
+                <DirFrame>{dir.name}</DirFrame>
               </Link>
             ))}
-          </DirContainer>
+          </PartsContainer>
         </>
       )}
-      {displayedWorks() ? (
-        <Label>Works</Label>
+      {displayedWorks !== null ? (
+        <>
+          <Label>Works</Label>
+          <PartsContainer>
+            {displayedWorks?.map((work) => (
+              <Link
+                key={work.id}
+                href={createPath(work.dirId, work.id, project, dirsDict, worksDict)}
+                passHref
+              >
+                <WorkFrame>{work.name}</WorkFrame>
+              </Link>
+            ))}
+          </PartsContainer>
+        </>
       ) : (
         <EmptyMessage>Directly and Works has not been , yet.</EmptyMessage>
       )}

@@ -1,4 +1,4 @@
-import { alphaLevel, colors, scrollbarSize } from '@violet/web/src/utils/constants'
+import { alphaLevel, colors, fontSizes, scrollbarSize } from '@violet/web/src/utils/constants'
 import { css } from 'styled-components'
 
 export type DisplayScrollBarStyleProps = { displayedScroll: boolean }
@@ -27,5 +27,6 @@ export const FocusByTabKeyStyle = css`
 `
 
 export const FontStyle = css`
-  color: ${colors.black}${alphaLevel[7]};
+  font-size: ${fontSizes.small};
+  color: ${colors.black}${alphaLevel[9]};
 `
