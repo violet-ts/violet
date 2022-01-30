@@ -27,7 +27,6 @@ export const FileDropper = ({ children, onDrop, setDragging }: ComponentProps) =
       drop(item: DataTransfer) {
         if (onDrop && item !== null) {
           onDrop(item.files)
-          console.log(item.files)
         }
       },
       collect: (monitor: DropTargetMonitor) => ({
