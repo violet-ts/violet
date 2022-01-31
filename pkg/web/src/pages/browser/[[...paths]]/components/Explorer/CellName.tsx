@@ -148,6 +148,10 @@ export const CellName = (props: {
     inputElement.current?.focus()
   })
 
+  const openInputBox = (e: FormEvent) => {
+    e.stopPropagation()
+  }
+
   return (
     <Link href={href}>
       <Container depth={pathChunks.length - 1} active={props.active}>
@@ -162,7 +166,7 @@ export const CellName = (props: {
             <>
               <Arrow opened={props.opened} />
               <Spacer axis="x" size={18} />
-              <AddAreaParent>
+              <AddAreaParent onClick={openInputBox}>
                 <AddArea addWork={addWork} addDir={addDir} />
               </AddAreaParent>
               <Label>{props.dir.name}</Label>
