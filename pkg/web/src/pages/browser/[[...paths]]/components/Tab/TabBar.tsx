@@ -32,6 +32,7 @@ const TabItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  height: 100%;
   padding: 8px;
   border-right: 1px solid ${colors.violet}${alphaLevel[2]};
   ${ActiveStyle};
