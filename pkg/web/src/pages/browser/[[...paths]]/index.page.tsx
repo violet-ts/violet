@@ -9,7 +9,6 @@ import type {
   WorksDictForProjectId,
 } from '@violet/web/src/types/browser'
 import { mainColumnHeight, toolBarWidth } from '@violet/web/src/utils/constants'
-import { useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import styled from 'styled-components'
@@ -47,14 +46,13 @@ const Columns = (props: {
   dirsDictForProjectId: DirsDictForProjectId
   worksDictForProjectId: WorksDictForProjectId
 }) => {
-  const [leftColumnWidth, setLeftColumnWidth] = useState(300)
   const revisions =
     props.currentDirsAndWork?.work &&
     props.wholeDict.revisionsForWorkId[props.currentDirsAndWork.work.id]
 
   return (
     <ColumnsContainer>
-      <LeftColumn leftColumnWidth={leftColumnWidth} setLeftColumnWidth={setLeftColumnWidth}>
+      <LeftColumn>
         <Explorer
           operationData={props.operationData}
           project={props.currentProject}

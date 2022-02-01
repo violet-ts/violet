@@ -1,6 +1,5 @@
 import { Portal } from '@violet/web/src/components/atoms/Portal'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
-import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -40,28 +39,24 @@ const MIN_WIDTH = 100
 const clampX = (width: number) =>
   Math.min(window.innerWidth - MIN_WIDTH, Math.max(MIN_WIDTH, width))
 
-type ComponentProps = PropsWithChildren<{
-  leftColumnWidth: number
-  setLeftColumnWidth: Dispatch<SetStateAction<number>>
-}>
-
-export const LeftColumn = ({ children, leftColumnWidth, setLeftColumnWidth }: ComponentProps) => {
+export const LeftColumn: React.FC = ({ children }) => {
   const [isResizing, setIsResizing] = useState(false)
   const [diffX, setDiffX] = useState(0)
+  const [width, setWidth] = useState(300)
   const start = (e: React.MouseEvent) => {
-    setDiffX(leftColumnWidth - e.pageX)
+    setDiffX(width - e.pageX)
     setIsResizing(true)
   }
   const move = (e: React.MouseEvent) => {
     if (!isResizing) return
 
-    setLeftColumnWidth(clampX(e.pageX + diffX))
+    setWidth(clampX(e.pageX + diffX))
   }
 
   useEffect(() => {
     let timeoutId = 0
     const resize = () => {
-      timeoutId = window.setTimeout(() => setLeftColumnWidth(clampX), 100)
+      timeoutId = window.setTimeout(() => setWidth(clampX), 100)
     }
 
     window.addEventListener('resize', resize, false)
@@ -70,10 +65,10 @@ export const LeftColumn = ({ children, leftColumnWidth, setLeftColumnWidth }: Co
       window.removeEventListener('resize', resize, false)
       clearTimeout(timeoutId)
     }
-  }, [setLeftColumnWidth])
+  }, [setWidth])
 
   return (
-    <Container width={leftColumnWidth}>
+    <Container width={width}>
       {children}
       <ResizeHandle onMouseDown={start} onMouseMove={move} onMouseUp={() => setIsResizing(false)}>
         {isResizing && (
