@@ -2,6 +2,9 @@ import type { ProjectId } from '@violet/lib/types/branded'
 import { Loading } from '@violet/web/src/components/atoms/Loading'
 import { useApiContext } from '@violet/web/src/contexts/Api'
 import { useBrowserContext } from '@violet/web/src/contexts/Browser'
+import { useWorkPath } from '@violet/web/src/utils'
+import { pagesPath } from '@violet/web/src/utils/$path'
+import { useRouter } from 'next/router'
 import type { ChangeEvent, Dispatch, FormEvent } from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -33,6 +36,8 @@ export const ProjectNameUpdate: React.FC<Props> = ({
   const { api, onErr } = useApiContext()
   const { projects, updateProject } = useBrowserContext()
   const [isUpdating, setIsUpdating] = useState(false)
+  const { push } = useRouter()
+  const dirOrWorkNames = useWorkPath().dirOrWorkNames ?? []
   const iconName =
     projects
       .find((d) => d.id === projectId)
@@ -42,24 +47,23 @@ export const ProjectNameUpdate: React.FC<Props> = ({
     inputElement.current?.focus()
   }, [])
 
-  const updateProjectName = async (name: string) => {
-    const projectRes = await api.browser.projects
-      ._projectId(projectId)
-      .$put({ body: { name, iconName } })
-      .catch(onErr)
-
-    if (projectRes) updateProject(projectRes)
-  }
-
   const updateName = async (e: FormEvent) => {
     e.preventDefault()
     if (!label) return
 
     setIsUpdating(true)
-    await updateProjectName(label)
+    const projectRes = await api.browser.projects
+      ._projectId(projectId)
+      .$put({ body: { name: label, iconName } })
+      .catch(onErr)
     setIsUpdating(false)
     onConfirmName?.()
+    if (projectRes) {
+      updateProject(projectRes)
+      await push(pagesPath.browser._paths([label, ...dirOrWorkNames]).$url())
+    }
   }
+
   return (
     <InputFormProject onSubmit={updateName}>
       <input ref={inputElement} type="text" onChange={inputLabel} />

@@ -1,6 +1,11 @@
 import type { VioletEnv } from '@violet/def/env/violet'
 import type { winston } from '@violet/lib/logger'
 
+export interface TestCaseJson {
+  readonly numOfPages?: number
+  readonly eventType?: string
+}
+
 export type ResultStatusType = 'running' | 'waiting' | 'succeeded' | 'failed'
 export interface ResultStatus {
   readonly type: ResultStatusType
@@ -24,7 +29,10 @@ export interface RunningStatus extends RunningStatusInternal {
 
 interface StartParams {
   bucket: string
-  keys: string[]
+  keys: Array<{
+    contentKey: string
+    jsonKey?: string
+  }>
   concurrency: number
   env: VioletEnv
   logger: winston.Logger

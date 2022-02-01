@@ -16,6 +16,7 @@ import type {
   OperationData,
   Tab,
 } from '@violet/web/src/types/browser'
+import { useWorkPath } from '@violet/web/src/utils'
 import { forceToggleHash } from '@violet/web/src/utils/constants'
 import { useRouter } from 'next/dist/client/router'
 import { useEffect, useMemo } from 'react'
@@ -137,12 +138,8 @@ export const usePage = ():
   | ({ error: Error } & { [P in keyof BrowserPageParams]?: undefined })
   | ({ error?: undefined } & BrowserPageParams) => {
   const { operationDataDict, projects, wholeDict, updateOperationData } = useBrowserContext()
-  const { asPath, replace, query } = useRouter()
-  const { paths } = query
-  const { projectName, dirOrWorkNames } = useMemo(
-    () => (Array.isArray(paths) ? { projectName: paths[0], dirOrWorkNames: paths.slice(1) } : {}),
-    [paths]
-  )
+  const { asPath, replace } = useRouter()
+  const { projectName, dirOrWorkNames } = useWorkPath()
   const currentProject = useMemo(
     () => projects.find((p) => p.name === projectName),
     [projects, projectName]

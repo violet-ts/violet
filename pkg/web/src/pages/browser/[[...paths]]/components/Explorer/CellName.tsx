@@ -21,7 +21,7 @@ import { ActiveStyle } from '../Styles/ActiveStyle'
 
 const Container = styled.a<{ depth: number; active: boolean }>`
   display: block;
-  padding: 6px 8px;
+  padding: 5px 8px;
   padding-left: ${(props) => props.depth * 8}px;
   ${ActiveStyle};
 `
@@ -41,6 +41,7 @@ const LabelArea = styled.div`
 
 const Label = styled.div`
   flex: 1;
+  height: 18px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -147,6 +148,10 @@ export const CellName = (props: {
     inputElement.current?.focus()
   })
 
+  const openInputBox = (e: FormEvent) => {
+    e.stopPropagation()
+  }
+
   return (
     <Link href={href}>
       <Container depth={pathChunks.length - 1} active={props.active}>
@@ -161,7 +166,7 @@ export const CellName = (props: {
             <>
               <Arrow opened={props.opened} />
               <Spacer axis="x" size={18} />
-              <AddAreaParent>
+              <AddAreaParent onClick={openInputBox}>
                 <AddArea addWork={addWork} addDir={addDir} />
               </AddAreaParent>
               <Label>{props.dir.name}</Label>

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 interface Props {
   bucket: string
@@ -7,6 +7,7 @@ interface Props {
   folder: string
   selectedKeys?: Set<string> | undefined
   onChange?: ((newSelectedKeys: Set<string>) => void) | undefined
+  isUriEncoded: boolean
 }
 
 const listObjects = (keys: string[], folder: string): string[] => {
@@ -18,24 +19,45 @@ const listObjects = (keys: string[], folder: string): string[] => {
   )
 }
 
-const TestSuite: React.FC<Props> = ({ bucket, folder, allKeys, selectedKeys, onChange }) => {
+const TestSuite: React.FC<Props> = ({
+  bucket,
+  folder,
+  allKeys,
+  selectedKeys,
+  onChange,
+  isUriEncoded,
+}) => {
   const objectKeys = listObjects(allKeys, folder)
+  const documentKeys = useMemo(
+    () => objectKeys.filter((key) => !key.toLowerCase().endsWith('.json')),
+    [objectKeys]
+  )
+  const jsonKeyMap = useMemo(
+    () =>
+      new Map(
+        objectKeys
+          .filter((key) => key.toLowerCase().endsWith('.json'))
+          .map((key) => [key.slice(0, -'.json'.length), key])
+      ),
+    [objectKeys]
+  )
   const [open, setOpen] = useState(false)
   return (
     <div>
       <label>
         <input
           type="checkbox"
-          checked={selectedKeys?.size === objectKeys.length}
+          checked={selectedKeys?.size === documentKeys.length}
           onChange={(ev) => {
             if (ev.target.checked) {
-              onChange?.(new Set(objectKeys))
+              onChange?.(new Set(documentKeys))
             } else {
               onChange?.(new Set())
             }
           }}
         />
-        {encodeURI(folder)} ({selectedKeys?.size ?? 0}/{objectKeys.length})
+        {isUriEncoded ? encodeURI(folder) : folder} ({selectedKeys?.size ?? 0}/{documentKeys.length}
+        )
       </label>
       <a
         onClick={(ev) => {
@@ -47,7 +69,7 @@ const TestSuite: React.FC<Props> = ({ bucket, folder, allKeys, selectedKeys, onC
       </a>
       {open && (
         <ul>
-          {objectKeys.map((key) => (
+          {documentKeys.map((key) => (
             <li key={key}>
               <label>
                 <input
@@ -63,12 +85,21 @@ const TestSuite: React.FC<Props> = ({ bucket, folder, allKeys, selectedKeys, onC
                     onChange?.(copy)
                   }}
                 />
-                {encodeURI(key)}
+                {isUriEncoded ? encodeURI(key) : key}
               </label>
               {'  '}
               <Link href={`https://${bucket}.s3.amazonaws.com/${encodeURIComponent(key)}`}>
                 <a target="_blank">[DL]</a>
               </Link>
+              {jsonKeyMap.has(key) && (
+                <Link
+                  href={`https://${bucket}.s3.amazonaws.com/${encodeURIComponent(
+                    jsonKeyMap.get(key) || ''
+                  )}`}
+                >
+                  <a target="_blank">[JSON]</a>
+                </Link>
+              )}
             </li>
           ))}
         </ul>
