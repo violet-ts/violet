@@ -8,7 +8,7 @@ import type {
   OperationData,
   WorksDictForProjectId,
 } from '@violet/web/src/types/browser'
-import { mainColumnHeight } from '@violet/web/src/utils/constants'
+import { mainColumnHeight, toolBarWidth } from '@violet/web/src/utils/constants'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import styled from 'styled-components'
@@ -21,14 +21,17 @@ import { TabBar } from './components/Tab/TabBar'
 import { usePage } from './usePage'
 
 const Container = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
   width: 100%;
+  overflow: hidden;
 `
-const WorksView = styled.div`
+const ColumnsContainer = styled.div`
+  display: flex;
+  width: calc(100% - ${toolBarWidth}px);
+`
+const WorksWrap = styled.div`
   flex: 1;
+  min-width: 0;
 `
 const WorksMain = styled.div`
   height: ${mainColumnHeight};
@@ -48,7 +51,7 @@ const Columns = (props: {
     props.wholeDict.revisionsForWorkId[props.currentDirsAndWork.work.id]
 
   return (
-    <>
+    <ColumnsContainer>
       <LeftColumn>
         <Explorer
           operationData={props.operationData}
@@ -57,7 +60,7 @@ const Columns = (props: {
           dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
         />
       </LeftColumn>
-      <WorksView>
+      <WorksWrap>
         <DndProvider backend={HTML5Backend}>
           <TabBar
             project={props.currentProject}
@@ -65,27 +68,27 @@ const Columns = (props: {
             dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
             worksDict={props.worksDictForProjectId[props.currentProject.id]}
           />
-        </DndProvider>
-        {props.currentDirsAndWork?.work ? (
-          revisions && revisions.length > 0 ? (
-            <WorksMain>
-              <MainColumn
+          {props.currentDirsAndWork?.work ? (
+            revisions && revisions.length > 0 ? (
+              <WorksMain>
+                <MainColumn
+                  projectId={props.currentProject.id}
+                  workId={props.currentDirsAndWork.work.id}
+                  revisions={revisions}
+                />
+              </WorksMain>
+            ) : (
+              <EmptyWork
                 projectId={props.currentProject.id}
                 workId={props.currentDirsAndWork.work.id}
-                revisions={revisions}
               />
-            </WorksMain>
+            )
           ) : (
-            <EmptyWork
-              projectId={props.currentProject.id}
-              workId={props.currentDirsAndWork.work.id}
-            />
-          )
-        ) : (
-          <div>Choose work</div>
-        )}
-      </WorksView>
-    </>
+            <div>Choose work</div>
+          )}
+        </DndProvider>
+      </WorksWrap>
+    </ColumnsContainer>
   )
 }
 

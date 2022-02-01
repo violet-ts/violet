@@ -10,7 +10,7 @@ import type {
   WorksDictForProjectId,
 } from '@violet/web/src/types/browser'
 import { tabToHref } from '@violet/web/src/utils'
-import { alphaLevel, colors, fontSizes } from '@violet/web/src/utils/constants'
+import { alphaLevel, colors, fontSizes, toolBarWidth } from '@violet/web/src/utils/constants'
 import Link from 'next/link'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -20,6 +20,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 6px;
+  width: ${toolBarWidth}px;
   height: 100vh;
   padding: 6px;
   user-select: none;
