@@ -1,7 +1,7 @@
 import { alphaLevel, colors, fontSizes, scrollbarSize } from '@violet/web/src/utils/constants'
 import { css } from 'styled-components'
 
-export type DisplayScrollBarStyleProps = { displayedScroll: boolean }
+export type DisplayScrollBarStyleProps = { displayedScrollBar: boolean }
 
 export const DisplayScrollBarStyle = css<DisplayScrollBarStyleProps>`
   overflow: overlay;
@@ -12,7 +12,8 @@ export const DisplayScrollBarStyle = css<DisplayScrollBarStyleProps>`
 
   :hover {
     ::-webkit-scrollbar {
-      height: ${(props) => (props.displayedScroll ? `${scrollbarSize}` : `0`)};
+      height: ${(props) => (props.displayedScrollBar ? `${scrollbarSize}` : `0`)};
+      background-color: ${colors.gray}${alphaLevel[1]};
     }
 
     ::-webkit-scrollbar-thumb {

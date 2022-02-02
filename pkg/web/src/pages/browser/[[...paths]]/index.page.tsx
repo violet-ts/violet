@@ -8,8 +8,7 @@ import type {
   OperationData,
   WorksDictForProjectId,
 } from '@violet/web/src/types/browser'
-import { mainColumnHeight } from '@violet/web/src/utils/constants'
-import { useState } from 'react'
+import { mainColumnHeight, toolBarWidth } from '@violet/web/src/utils/constants'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import styled from 'styled-components'
@@ -23,18 +22,17 @@ import { TabBar } from './components/Tab/TabBar'
 import { usePage } from './usePage'
 
 const Container = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
   width: 100%;
+  overflow: hidden;
 `
-const WorksView = styled.div.attrs<{ width: number }>((props) => ({
-  style: { width: `calc(100% - ${props.width}px)` },
-}))<{
-  width: number
-}>`
+const ColumnsContainer = styled.div`
+  display: flex;
+  width: calc(100% - ${toolBarWidth}px);
+`
+const WorksWrap = styled.div`
   flex: 1;
+  min-width: 0;
 `
 const WorksMain = styled.div`
   height: ${mainColumnHeight};
@@ -49,14 +47,13 @@ const Columns = (props: {
   dirsDictForProjectId: DirsDictForProjectId
   worksDictForProjectId: WorksDictForProjectId
 }) => {
-  const [leftColumnWidth, setLeftColumnWidth] = useState(300)
   const revisions =
     props.currentDirsAndWork?.work &&
     props.wholeDict.revisionsForWorkId[props.currentDirsAndWork.work.id]
 
   return (
-    <>
-      <LeftColumn leftColumnWidth={leftColumnWidth} setLeftColumnWidth={setLeftColumnWidth}>
+    <ColumnsContainer>
+      <LeftColumn>
         <Explorer
           operationData={props.operationData}
           project={props.currentProject}
@@ -64,42 +61,41 @@ const Columns = (props: {
           dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
         />
       </LeftColumn>
-      <WorksView width={leftColumnWidth}>
+      <WorksWrap>
         <DndProvider backend={HTML5Backend}>
           <TabBar
             project={props.currentProject}
             operationData={props.operationData}
             dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
             worksDict={props.worksDictForProjectId[props.currentProject.id]}
-            leftColumnWidth={leftColumnWidth}
           />
-        </DndProvider>
-        {props.currentDirsAndWork?.work ? (
-          revisions && revisions.length > 0 ? (
-            <WorksMain>
-              <MainColumn
+          {props.currentDirsAndWork?.work ? (
+            revisions && revisions.length > 0 ? (
+              <WorksMain>
+                <MainColumn
+                  projectId={props.currentProject.id}
+                  workId={props.currentDirsAndWork.work.id}
+                  revisions={revisions}
+                />
+              </WorksMain>
+            ) : (
+              <EmptyWork
                 projectId={props.currentProject.id}
                 workId={props.currentDirsAndWork.work.id}
-                revisions={revisions}
               />
-            </WorksMain>
+            )
           ) : (
-            <EmptyWork
-              projectId={props.currentProject.id}
-              workId={props.currentDirsAndWork.work.id}
+            <DirTab
+              project={props.currentProject}
+              operationData={props.operationData}
+              dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
+              worksDict={props.worksDictForProjectId[props.currentProject.id]}
+              revisionsForWorkId={props.wholeDict.revisionsForWorkId}
             />
-          )
-        ) : (
-          <DirTab
-            project={props.currentProject}
-            operationData={props.operationData}
-            dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
-            worksDict={props.worksDictForProjectId[props.currentProject.id]}
-            revisionsForWorkId={props.wholeDict.revisionsForWorkId}
-          />
-        )}
-      </WorksView>
-    </>
+          )}
+        </DndProvider>
+      </WorksWrap>
+    </ColumnsContainer>
   )
 }
 

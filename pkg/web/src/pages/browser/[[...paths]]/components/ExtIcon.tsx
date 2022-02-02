@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const Container = styled.span<{ color: string }>`
   display: inline-block;
   width: 20px;
-  padding: 2px 0 4px;
+  padding: 4px;
   font-size: ${fontSizes.mini};
   color: ${colors.white};
   text-align: center;

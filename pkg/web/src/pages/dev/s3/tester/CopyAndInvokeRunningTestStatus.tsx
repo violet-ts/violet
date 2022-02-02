@@ -52,8 +52,9 @@ const Result: React.FC<{ status: ResultStatus }> = ({ status }) => {
 
 interface Params {
   status: RunningStatus
+  isUriEncoded: boolean
 }
-const CopyAndInvokeRunningTestStatus: React.FC<Params> = ({ status }) => {
+const CopyAndInvokeRunningTestStatus: React.FC<Params> = ({ status, isUriEncoded }) => {
   return (
     <fieldset>
       <legend>Test Run Status</legend>
@@ -92,7 +93,7 @@ const CopyAndInvokeRunningTestStatus: React.FC<Params> = ({ status }) => {
             <ul>
               {Object.entries(status.results).map(([key, resultStatus]) => (
                 <li key={key}>
-                  <code>{encodeURI(key)}</code>
+                  <code>{isUriEncoded ? encodeURI(key) : key}</code>
                   {'  '}
                   <Link
                     href={`https://${status.bucket}.s3.amazonaws.com/${encodeURIComponent(key)}`}

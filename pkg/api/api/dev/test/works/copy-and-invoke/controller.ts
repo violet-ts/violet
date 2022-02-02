@@ -10,14 +10,14 @@ export default defineController(() => ({
       body: ctx.getStatus(),
     }
   },
-  post: ({ body: { objectKeys, bucket, concurrency }, env, logger }) => {
+  post: ({ body: { keys, bucket, concurrency }, env, logger }) => {
     if (ctx.isRunning()) {
       return {
         status: 400,
         body: null,
       }
     }
-    void ctx.start({ bucket, keys: objectKeys, concurrency, env, logger })
+    void ctx.start({ bucket, keys, concurrency, env, logger })
     return {
       status: 200,
       body: null,
