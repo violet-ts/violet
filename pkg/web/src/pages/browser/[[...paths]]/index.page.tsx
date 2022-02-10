@@ -90,7 +90,6 @@ const Columns = (props: {
               operationData={props.operationData}
               dirsDict={props.dirsDictForProjectId[props.currentProject.id]}
               worksDict={props.worksDictForProjectId[props.currentProject.id]}
-              revisionsForWorkId={props.wholeDict.revisionsForWorkId}
             />
           )}
         </DndProvider>

@@ -1,11 +1,5 @@
 import type { ApiProject } from '@violet/lib/types/api'
-import type { WorkId } from '@violet/lib/types/branded'
-import type {
-  BrowserRevision,
-  DirsDict,
-  OperationData,
-  WorksDict,
-} from '@violet/web/src/types/browser'
+import type { DirsDict, OperationData, WorksDict } from '@violet/web/src/types/browser'
 import { createPath } from '@violet/web/src/utils'
 import { alphaLevel, colors } from '@violet/web/src/utils/constants'
 import Link from 'next/link'
@@ -45,6 +39,7 @@ const DirFrame = styled.button`
 `
 const WorkFrame = styled.button`
   width: 24%;
+  max-width: 300px;
   padding: 8px;
   cursor: pointer;
   background-color: ${colors.white};
@@ -66,7 +61,6 @@ type ComponentProps = {
   operationData: OperationData
   dirsDict: DirsDict
   worksDict: WorksDict
-  revisionsForWorkId: Record<WorkId, BrowserRevision[] | undefined>
 }
 
 export const DirTab = ({ project, operationData, dirsDict, worksDict }: ComponentProps) => {
@@ -123,7 +117,9 @@ export const DirTab = ({ project, operationData, dirsDict, worksDict }: Componen
                 href={createPath(work.dirId, work.id, project, dirsDict, worksDict)}
                 passHref
               >
-                <WorkFrame>{work.name}</WorkFrame>
+                <WorkFrame>
+                  {work.latestRevisionId === null ? <div>No Revision</div> : <div>{work.name}</div>}
+                </WorkFrame>
               </Link>
             ))}
           </PartsContainer>
