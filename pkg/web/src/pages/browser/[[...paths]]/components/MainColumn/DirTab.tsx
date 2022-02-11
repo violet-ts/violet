@@ -93,7 +93,7 @@ export const DirTab = ({ project, operationData, dirsDict, worksDict }: Componen
     <Container>
       {displayedDirs && (
         <>
-          <Label>Directlies</Label>
+          <Label>Directories</Label>
           <PartsContainer>
             {childrenDir.map((dir) => (
               <Link
@@ -125,7 +125,7 @@ export const DirTab = ({ project, operationData, dirsDict, worksDict }: Componen
           </PartsContainer>
         </>
       ) : (
-        <EmptyMessage>Directly and Works has not been , yet.</EmptyMessage>
+        <EmptyMessage>Directory and Works has not been , yet.</EmptyMessage>
       )}
     </Container>
   )
