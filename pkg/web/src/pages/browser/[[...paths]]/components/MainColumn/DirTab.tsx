@@ -107,7 +107,7 @@ export const DirTab = ({ project, operationData, dirsDict, worksDict }: Componen
           </PartsContainer>
         </>
       )}
-      {displayedWorks !== null ? (
+      {displayedWorks && displayedWorks.length > 0 ? (
         <>
           <Label>Works</Label>
           <PartsContainer>
@@ -118,7 +118,8 @@ export const DirTab = ({ project, operationData, dirsDict, worksDict }: Componen
                 passHref
               >
                 <WorkFrame>
-                  {work.latestRevisionId === null ? <div>No Revision</div> : <div>{work.name}</div>}
+                  {work.latestRevisionId === null ? <div>No Revision</div> : <div>{work.id}</div>}
+                  <div>{work.name}</div>
                 </WorkFrame>
               </Link>
             ))}
