@@ -6,7 +6,12 @@ export type Methods = {
   }
   put: {
     reqFormat: FormData
-    reqBody: { name: string; iconName: string | null; imageFile?: Blob }
+    reqBody: {
+      oldProjectName: string
+      newProjectName: string
+      iconName: string | null
+      imageFile?: Blob
+    }
     resBody: ApiProject
   }
 }

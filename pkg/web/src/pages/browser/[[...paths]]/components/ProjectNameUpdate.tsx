@@ -17,12 +17,14 @@ interface Props {
   onConfirmName?: () => void
   projectId: ProjectId
   setNewProjectName: Dispatch<string>
+  oldProjectName: string
 }
 
 export const ProjectNameUpdate: React.FC<Props> = ({
   onConfirmName,
   projectId,
   setNewProjectName,
+  oldProjectName,
 }: Props) => {
   const [label, setLabel] = useState('')
   const inputLabel = useCallback(
@@ -52,9 +54,9 @@ export const ProjectNameUpdate: React.FC<Props> = ({
     if (!label) return
 
     setIsUpdating(true)
-    const projectRes = await api.browser.projects
+    const projectRes = await api.browser.projects.pId
       ._projectId(projectId)
-      .$put({ body: { name: label, iconName } })
+      .$put({ body: { newProjectName: label, oldProjectName, iconName } })
       .catch(onErr)
     setIsUpdating(false)
     onConfirmName?.()

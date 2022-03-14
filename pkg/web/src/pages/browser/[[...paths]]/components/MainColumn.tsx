@@ -64,7 +64,7 @@ export const MainColumn = (props: {
   const refs = useRef(props.revisions.map(() => React.createRef<HTMLDivElement>()))
 
   const sendFormData = async (file: File) => {
-    const revisionRes = await api.browser.projects
+    const revisionRes = await api.browser.projects.pId
       ._projectId(props.projectId)
       .works._workId(props.workId)
       .revisions.$post({ body: { uploadFile: file } })

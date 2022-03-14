@@ -72,7 +72,7 @@ export const StreamBar = (props: {
   const submitMessage = useCallback(async () => {
     if (!content) return
 
-    const messagesRes = await api.browser.projects
+    const messagesRes = await api.browser.projects.pId
       ._projectId(props.projectId)
       .works._workId(props.workId)
       .revisions._revisionId(props.revision.id)
@@ -107,7 +107,7 @@ export const StreamBar = (props: {
     async (messageId: MessageId, content: string) => {
       if (!content) return
 
-      const replyRes = await api.browser.projects
+      const replyRes = await api.browser.projects.pId
         ._projectId(props.projectId)
         .works._workId(props.workId)
         .revisions._revisionId(props.revision.id)

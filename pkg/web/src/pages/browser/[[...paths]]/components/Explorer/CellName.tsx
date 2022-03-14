@@ -106,7 +106,7 @@ export const CellName = (props: {
     setEditingType('dir')
   }
   const createDir = async () => {
-    const dirs = await api.browser.projects
+    const dirs = await api.browser.projects.pId
       ._projectId(props.project.id)
       .dirs.$post({ body: { parentDirId: props.dir.id, names: label.split('/') } })
       .catch(onErr)
@@ -121,7 +121,7 @@ export const CellName = (props: {
     })
   }
   const createWork = async () => {
-    const works = await api.browser.projects
+    const works = await api.browser.projects.pId
       ._projectId(props.project.id)
       .works.$post({ body: { name: label, parentDirId: props.dir.id } })
       .catch(onErr)
