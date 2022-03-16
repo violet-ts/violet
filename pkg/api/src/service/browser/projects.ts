@@ -80,7 +80,10 @@ export const createHistoryProject = async (
 }
 
 export const getNewProject = async (projectName: ApiProject['name']) => {
-  const project = await prisma.updateHistory.findFirst({ where: { projectName } })
+  const project = await prisma.updateHistory.findFirst({
+    where: { projectName },
+    orderBy: { createdAt: 'desc' },
+  })
   if (!project) return undefined
   return getProject(project.projectId as ProjectId)
 }
