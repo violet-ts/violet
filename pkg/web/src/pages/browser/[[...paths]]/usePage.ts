@@ -72,8 +72,8 @@ export const usePage = ():
   const { projectName, dirOrWorkNames } = useWorkPath()
   const { api, onErr } = useApiContext()
 
-  const getCurrentProjectName = async (projectPath: string) => {
-    const projectName = projectPath.split('/')[2]
+  const getCurrentProjectName = async (projectName: string | undefined) => {
+    if (!projectName) return
     const projectRes = await api.browser.projects.pName._projectName(projectName).get().catch(onErr)
     const currentProjectName = projectRes ? projectRes.body.name : undefined
     if (currentProjectName)
@@ -84,7 +84,8 @@ export const usePage = ():
     [projects, projectName]
   )
 
-  if (!currentProject) void getCurrentProjectName(asPath)
+  if (!currentProject) void getCurrentProjectName(projectName)
+
   const currentDirsAndWork = useMemo(() => {
     if (!currentProject || !dirOrWorkNames) return undefined
 
