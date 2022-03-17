@@ -80,7 +80,7 @@ model SignedUser {
 }
 
 model UpdateHistory {
-  id          Int   @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   projectId   String
   projectName String
   createdAt   DateTime @default(now())
