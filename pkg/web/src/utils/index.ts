@@ -1,3 +1,4 @@
+import type { DirId, WorkId } from '@violet/lib/types/branded'
 import { pagesPath } from '@violet/web/src/utils/$path'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
@@ -41,6 +42,19 @@ export const tabToHref = (
             tab.type === 'work' ? worksDict[tab.id] : undefined
           )
         : [project.name]
+    )
+    .$url()
+
+export const createPath = (
+  dirId: DirId,
+  workId: WorkId | undefined,
+  project: BrowserProject,
+  dirsDict: DirsDict,
+  worksDict: WorksDict
+) =>
+  pagesPath.browser
+    ._paths(
+      getPathNames(project, dirsDict, dirsDict[dirId], workId ? worksDict[workId] : undefined)
     )
     .$url()
 
