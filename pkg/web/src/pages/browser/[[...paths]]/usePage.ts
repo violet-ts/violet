@@ -70,21 +70,21 @@ export const usePage = ():
   const { operationDataDict, projects, wholeDict, updateOperationData } = useBrowserContext()
   const { asPath, replace, push } = useRouter()
   const { projectName, dirOrWorkNames } = useWorkPath()
-  const { api, onErr } = useApiContext()
-
-  const getCurrentProjectName = async (projectName: string | undefined) => {
-    if (!projectName) return
-    const projectRes = await api.browser.projects.pName._projectName(projectName).get().catch(onErr)
-    const currentProjectName = projectRes ? projectRes.body.name : undefined
-    if (currentProjectName)
-      await push(pagesPath.browser._paths([currentProjectName, ...(dirOrWorkNames ?? [])]).$url())
-  }
+  const { api } = useApiContext()
   const currentProject = useMemo(
     () => projects.find((p) => p.name === projectName),
     [projects, projectName]
   )
+  const enabled = !currentProject && !!projectName
+  const { data: projectRes } = useAspidaSWR(
+    api.browser.projects.pName._projectName(projectName ?? ''),
+    { enabled }
+  )
 
-  if (!currentProject) void getCurrentProjectName(projectName)
+  useEffect(() => {
+    if (!projectRes) return
+    void push(pagesPath.browser._paths([projectRes.name, ...(dirOrWorkNames ?? [])]).$url())
+  }, [projectRes, dirOrWorkNames, push])
 
   const currentDirsAndWork = useMemo(() => {
     if (!currentProject || !dirOrWorkNames) return undefined
