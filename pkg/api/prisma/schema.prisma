@@ -78,3 +78,10 @@ model SignedUser {
   userId String @default(uuid())
   name   String
 }
+
+model UpdateHistory {
+  id          Int      @id @default(autoincrement())
+  projectId   String
+  projectName String
+  createdAt   DateTime @default(now())
+}

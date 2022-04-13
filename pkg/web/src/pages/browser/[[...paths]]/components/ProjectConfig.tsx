@@ -85,10 +85,15 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
     setIsUpdating(true)
     const projectName = newProjectName ? newProjectName : props.project.name
     const iconName = createIconName()
-    const projectRes = await api.browser.projects
+    const projectRes = await api.browser.projects.pId
       ._projectId(projectId)
       .$put({
-        body: { name: projectName, iconName, imageFile: iconImageFile },
+        body: {
+          newProjectName: projectName,
+          oldProjectName: props.project.name,
+          iconName,
+          imageFile: iconImageFile,
+        },
       })
       .catch(onErr)
     setIsUpdating(false)
@@ -133,6 +138,7 @@ export const ProjectConfig = (props: { onComplete?: () => void; project: Browser
         onConfirmName={props.onComplete}
         projectId={props.project.id}
         setNewProjectName={setNewProjectName}
+        oldProjectName={props.project.name}
       />
       <Spacer axis="y" size={10} />
       <Column>

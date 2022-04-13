@@ -10,7 +10,8 @@ export default defineController(() => ({
   put: async ({ params, body }) => {
     const project = await updateProject(
       params.projectId as ProjectId,
-      body.name,
+      body.newProjectName,
+      body.oldProjectName,
       body.iconName,
       body.imageFile
     )

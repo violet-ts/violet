@@ -40,11 +40,15 @@ export const createProject = async (projectName: ApiProject['name']) => {
 
 export const updateProject = async (
   projectId: ProjectId,
-  projectName: ApiProject['name'],
+  newProjectName: ApiProject['name'],
+  oldProjectName: ApiProject['name'],
   iconName: string | null,
   imageFile?: MultipartFile
 ): Promise<ApiProject> => {
-  await prisma.project.update({ where: { projectId }, data: { projectName, iconName } })
+  await prisma.project.update({
+    where: { projectId },
+    data: { projectName: newProjectName, iconName },
+  })
   if (imageFile) {
     await sendNewProjectIcon({
       imageFile,
@@ -54,10 +58,11 @@ export const updateProject = async (
       }),
     })
   }
+  await createHistoryProject(projectId, oldProjectName)
 
   return {
     id: projectId,
-    name: projectName,
+    name: newProjectName,
     iconUrl: createProjectIconPath(iconName, projectId),
   }
 }
@@ -66,3 +71,19 @@ export const createProjectIconPath = (iconName: string | null, projectId: Projec
   iconName
     ? (`${dotenv.S3_ENDPOINT}/${bucketOriginal}/icon/${projectId}/${iconName}` as ProjectIconPath)
     : null
+
+export const createHistoryProject = async (
+  projectId: ProjectId,
+  projectName: ApiProject['name']
+) => {
+  await prisma.updateHistory.create({ data: { projectId, projectName } })
+}
+
+export const getNewProject = async (projectName: ApiProject['name']) => {
+  const project = await prisma.updateHistory.findFirst({
+    where: { projectName },
+    orderBy: { createdAt: 'desc' },
+  })
+  if (!project) return undefined
+  return getProject(project.projectId as ProjectId)
+}

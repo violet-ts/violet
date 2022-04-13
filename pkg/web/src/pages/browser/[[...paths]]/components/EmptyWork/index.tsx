@@ -48,7 +48,7 @@ export const EmptyWork = ({ children, projectId, workId }: ComponentProps) => {
   const sendFormData = async (file: FileList) => {
     if (!file) return
 
-    const revisionRes = await api.browser.projects
+    const revisionRes = await api.browser.projects.pId
       ._projectId(projectId)
       .works._workId(workId)
       .revisions.$post({ body: { uploadFile: file[0] } })
