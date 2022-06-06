@@ -107,7 +107,7 @@ export const CellName = (props: {
             <form onSubmit={sendNewName}>
               <input ref={inputElement} type="text" onBlur={sendNewName} onChange={inputLabel} />
             </form>
-            {isForbiddenChar && <SpeechBubble>{forbidenChar} は入力できません。</SpeechBubble>}
+            {isForbiddenChar && <SpeechBubble>{forbidenChar} cannot be used</SpeechBubble>}
           </NewDirWorkArea>
         )}
       </Container>

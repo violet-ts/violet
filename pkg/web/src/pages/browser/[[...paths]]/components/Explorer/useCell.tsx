@@ -106,10 +106,10 @@ export const useCell = (props: {
   const validationCheck = (label: string) => {
     if (!inputElement.current) return
     setIsForbiddenChar(false)
-    const pattern = /[\\^\\&\\'\\@\\{\\}\\,\\$\\=\\!\\#\\.\\%\\+\\~\\/\\<\\>\\"\\*\\?\\|\\:\\]+$/
+    const pattern = /[*\\.\\/\\<\\>\\"\\?\\|\\:\\]+$/
+    setForbiddenChar(inputElement.current.value.slice(-1))
     if (!pattern.test(label)) return
     inputElement.current.value = inputElement.current.value.slice(0, -1)
-    setForbiddenChar(inputElement.current.value.slice(-1))
     setLabel(inputElement.current.value)
     setIsForbiddenChar(true)
   }
