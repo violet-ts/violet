@@ -11,7 +11,6 @@ import Link from 'next/link'
 import type { PropsWithChildren } from 'react'
 import { useCallback, useRef } from 'react'
 import styled from 'styled-components'
-import { ExtIcon } from '../ExtIcon'
 import { ActiveStyle } from '../Styles/ActiveStyle'
 import { DisplayScrollBarStyle, FocusByTabKeyStyle } from '../Styles/PartsStyles'
 import { Draggable } from './Dragable'
@@ -104,7 +103,6 @@ export const WorkTabs = ({
                 <Draggable onMove={onMove} setHoverItem={setHoverItem} workId={t.id} index={index}>
                   <TabItem active={operationData.activeTab?.id === t.id}>
                     <Spacer axis="x" size={4} />
-                    <ExtIcon name={getWorkFullName(worksDict[t.id])} />
                     <span>{getWorkFullName(worksDict[t.id])}</span>
                     <CrossButton onClick={(e) => onClickCrossWorkTab(e, t.id)} tabIndex={-1}>
                       <Cross size={12} />
