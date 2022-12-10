@@ -3,21 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "generate": "pnpm run --filter=./pkg _:generate",
+    "generate": "pnpm --filter {./pkg/**}... run _:generate",
     "dev": "run-s generate dev:all",
-    "dev:all": "pnpm run --parallel --filter=./pkg _:dev",
+    "dev:all": "pnpm run --parallel --filter {./pkg/**}... _:dev",
     "lint": "run-s generate lint:js lint:prettier lint:style",
     "lint:js": "eslint --ext .ts,.tsx,.js .",
     "lint:prettier": "prettier --check \"./**/*.{ts,tsx,js}\"",
     "lint:style": "stylelint \"**/*.ts{,x}\"",
     "lint:fix": "pnpm run lint:js -- --fix && prettier --write \"./**/*.{ts,tsx,js}\" && pnpm run lint:style -- --fix && pnpm --dir=./pkg/api run prisma:format",
     "lint:hadolint": "ts-node -T ./node_modules/@violet/scripts/hadolint.ts --dir=./docker",
-    "build": "pnpm run generate && pnpm run --filter=./pkg --filter=!./pkg/lambda _:build",
-    "build-all": "pnpm run generate && pnpm run --filter=./pkg _:build",
-    "start": "pnpm run --parallel --filter=./pkg start",
-    "test": "pnpm run generate && pnpm run --filter=./pkg _:test",
+    "build": "pnpm run generate && pnpm run --filter ./pkg/web --filter ./pkg/api --filter=!./pkg/lambda _:build",
+    "build-all": "pnpm run generate && pnpm run --filter ./pkg/web --filter ./pkg/api _:build",
+    "start": "pnpm run --parallel --filter {./pkg/**}... start",
+    "test": "pnpm run generate && pnpm run --filter {./pkg/**}... _:test",
     "test:ci:conv2img": "pnpm run generate && pnpm run --dir=./pkg/scripts _:test:ci:conv2img --",
-    "typecheck": "pnpm run generate && pnpm run --filter=./pkg _:typecheck",
+    "typecheck": "pnpm run generate && pnpm run --filter {./pkg/**}... _:typecheck",
     "prepare": "husky install"
   },
   "prettier": {
@@ -85,9 +85,9 @@
     "typescript": "^4.4.2"
   },
   "engines": {
-    "node": "^14",
+    "node": "^16",
     "npm": "forbidden, use npm",
-    "pnpm": ">=6",
+    "pnpm": ">=7",
     "yarn": "forbidden, use npm"
   }
 }
