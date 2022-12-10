@@ -1,8 +1,8 @@
-FROM node:14-buster
+FROM node:16-buster
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN ( \
-  npm install -g pnpm@6.20.1 \
+  npm install -g pnpm@7.2.0 \
   && npm uninstall -g yarn \
 )
 

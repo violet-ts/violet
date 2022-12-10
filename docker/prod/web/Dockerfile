@@ -1,4 +1,4 @@
-FROM node:14-buster
+FROM node:16-buster
 ARG API_ORIGIN
 ARG API_BASE_PATH
 ARG NEXT_PUBLIC_AUTH_SHOW_EMAIL
@@ -7,7 +7,7 @@ ARG NEXT_PUBLIC_GCIP_AUTH_DOMAIN
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN ( \
-  npm install -g pnpm@6.20.1 \
+  npm install -g pnpm@7.2.0 \
   && npm uninstall -g yarn \
 )
 
