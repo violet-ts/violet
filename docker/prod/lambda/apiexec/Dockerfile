@@ -1,7 +1,7 @@
-FROM public.ecr.aws/lambda/nodejs:14
+FROM public.ecr.aws/lambda/nodejs:16
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN npm install -g pnpm@6.20.1
+RUN npm install -g pnpm@7.2.0
 
 COPY . .
 
