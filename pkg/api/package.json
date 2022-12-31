@@ -44,7 +44,7 @@
     "@aws-sdk/client-s3": "^3.41.0",
     "@aws-sdk/credential-providers": "^3.41.0",
     "@aws-sdk/s3-request-presigner": "^3.41.0",
-    "@prisma/client": "^3.2.1",
+    "@prisma/client": "3.13.0",
     "arg": "^5.0.1",
     "aspida": "^1.7.1",
     "class-validator": "^0.13.1",
@@ -61,7 +61,7 @@
     "firebase-admin": "^10.0.0",
     "google-auth-library": "^7.10.2",
     "http-errors": "^1.8.1",
-    "prisma": "^3.2.1",
+    "prisma": "3.13.0",
     "source-map-support": "^0.5.20",
     "velona": "^0.7.0"
   },
