@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-imports -- firebase/* はここだけ許可 */
 import { initializeApp } from 'firebase/app'
 import type { Auth } from 'firebase/auth'
 import { connectAuthEmulator, getAuth, inMemoryPersistence } from 'firebase/auth'
