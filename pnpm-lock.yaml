@@ -141,14 +141,14 @@ importers:
       firebase-admin: ^10.0.0
       google-auth-library: ^7.10.2
       http-errors: ^1.8.1
-      prisma: ^3.2.1
+      prisma: '4'
       source-map-support: ^0.5.20
       velona: ^0.7.0
     dependencies:
       '@aws-sdk/client-s3': 3.41.0
       '@aws-sdk/credential-providers': 3.41.0
       '@aws-sdk/s3-request-presigner': 3.41.0
-      '@prisma/client': 3.3.0_prisma@3.3.0
+      '@prisma/client': 3.3.0_prisma@4.7.1
       arg: 5.0.1
       aspida: 1.7.1
       class-validator: 0.13.1
@@ -165,7 +165,7 @@ importers:
       firebase-admin: 10.0.0
       google-auth-library: 7.10.2
       http-errors: 1.8.1
-      prisma: 3.3.0
+      prisma: 4.7.1
       source-map-support: 0.5.20
       velona: 0.7.0
     devDependencies:
@@ -2862,7 +2862,7 @@ packages:
     resolution: {integrity: sha512-UdkG3mLEqXgnlKsWanWcgb6dOjUzJ+XC5f+aWw30qrtjxeNUSfKX1cd5FBzOaXQumoe9nIqeZUvrRJS03HCCtw==}
     engines: {node: '>=10.13.0'}
 
-  /@prisma/client/3.3.0_prisma@3.3.0:
+  /@prisma/client/3.3.0_prisma@4.7.1:
     resolution: {integrity: sha512-34tonDW2v74VcG1mx+k/IUGG/eSHKwDiYKfFIZgaPLq/C0h8YQxh7pro272xpOf1pt6duX1Bi90dpGijh1MYgQ==}
     engines: {node: '>=12.6'}
     requiresBuild: true
@@ -2873,15 +2873,15 @@ packages:
         optional: true
     dependencies:
       '@prisma/engines-version': 3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c
-      prisma: 3.3.0
+      prisma: 4.7.1
     dev: false
 
   /@prisma/engines-version/3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c:
     resolution: {integrity: sha512-g21xPYq0zHoJ/xUkNxIf5Hle0oiDyelZHU8gwq7J3RNVrccjbUZ28S99KT4yUabV8SQQRNSnR0QMLGMv9Eqs/A==}
     dev: false
 
-  /@prisma/engines/3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c:
-    resolution: {integrity: sha512-T3nEnRWmoneNZJPd9IBR29G8ZDUjNelA8+cG5y8/lh6vySm6ryWSNxj1s377U9YzFYyZmXiA9vK1iyxMoRff/g==}
+  /@prisma/engines/4.7.1:
+    resolution: {integrity: sha512-zWabHosTdLpXXlMefHmnouhXMoTB1+SCbUU3t4FCmdrtIOZcarPKU3Alto7gm/pZ9vHlGOXHCfVZ1G7OIrSbog==}
     requiresBuild: true
     dev: false
 
@@ -8508,13 +8508,13 @@ packages:
       react-is: 17.0.2
     dev: true
 
-  /prisma/3.3.0:
-    resolution: {integrity: sha512-E7C9mXRwZVpcnSeJT533qGHUVrYULsE9ihFvAtQMuxhTXkxoRlMLyo/1ZOyeu9GdXP8DJ7ruLOw06kEs/N3dVg==}
-    engines: {node: '>=12.6'}
+  /prisma/4.7.1:
+    resolution: {integrity: sha512-CCQP+m+1qZOGIZlvnL6T3ZwaU0LAleIHYFPN9tFSzjs/KL6vH9rlYbGOkTuG9Q1s6Ki5D0LJlYlW18Z9EBUpGg==}
+    engines: {node: '>=14.17'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@prisma/engines': 3.3.0-30.33838b0f78f1fe9052cf9a00e9761c9dc097a63c
+      '@prisma/engines': 4.7.1
     dev: false
 
   /process-nextick-args/2.0.1:

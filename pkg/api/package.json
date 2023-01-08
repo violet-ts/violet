@@ -61,7 +61,7 @@
     "firebase-admin": "^10.0.0",
     "google-auth-library": "^7.10.2",
     "http-errors": "^1.8.1",
-    "prisma": "^3.2.1",
+    "prisma": "4",
     "source-map-support": "^0.5.20",
     "velona": "^0.7.0"
   },
